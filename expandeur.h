@@ -38,8 +38,16 @@
         static void EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
         static void EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur);
         static void EcrireSysParam(uchar Param, uchar Valeur);
-    //Paramêtres
+    //Paramêtres composés voies
         static void ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
+    //Paramêtres composés Op
+        static void ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
+        static void ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
+        static void ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);
+        static void ChangerOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR);
+        static void ChangerOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1);
+        static void ChangerOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2);
+        static void ChangerOpx07(uchar Inst, uchar Op, uchar SL, uchar RR);
     };
 
 #endif // EXPANDEUR_H

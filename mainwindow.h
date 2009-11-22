@@ -205,13 +205,137 @@ private slots:
     void on_pshBut_enable_4_clicked(bool checked)
         {EXPANDEUR::ActiverOps(InstSel, ui->pshBut_enable_1->isChecked(), ui->pshBut_enable_2->isChecked(), ui->pshBut_enable_3->isChecked(), checked);}
     void on_hzSlider_volume_1_valueChanged(int i)
-        {EXPANDEUR::EcrireOpParam(InstSel, 0, 0x00, i);}
+        {EXPANDEUR::EcrireOpParam(InstSel, 0, 0x00, 127 - i);}
     void on_hzSlider_volume_2_valueChanged(int i)
-        {EXPANDEUR::EcrireOpParam(InstSel, 1, 0x00, i);}
+        {EXPANDEUR::EcrireOpParam(InstSel, 1, 0x00, 127 - i);}
     void on_hzSlider_volume_3_valueChanged(int i)
-        {EXPANDEUR::EcrireOpParam(InstSel, 2, 0x00, i);}
+        {EXPANDEUR::EcrireOpParam(InstSel, 2, 0x00, 127 - i);}
     void on_hzSlider_volume_4_valueChanged(int i)
-        {EXPANDEUR::EcrireOpParam(InstSel, 3, 0x00, i);}
+        {EXPANDEUR::EcrireOpParam(InstSel, 3, 0x00, 127 - i);}
+    void on_spnBox_velocity_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 0, ui->cmbBox_kbcurb_1->currentIndex(), i);}
+    void on_spnBox_velocity_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 1, ui->cmbBox_kbcurb_2->currentIndex(), i);}
+    void on_spnBox_velocity_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 2, ui->cmbBox_kbcurb_3->currentIndex(), i);}
+    void on_spnBox_velocity_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 3, ui->cmbBox_kbcurb_4->currentIndex(), i);}
+    void on_spnBox_velmod_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 0, ui->pshBut_carrier_1->isChecked(), i, ui->spnBox_DR1_1->value());}
+    void on_spnBox_velmod_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 1, ui->pshBut_carrier_2->isChecked(), i, ui->spnBox_DR1_2->value());}
+    void on_spnBox_velmod_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 2, ui->pshBut_carrier_3->isChecked(), i, ui->spnBox_DR1_3->value());}
+    void on_spnBox_velmod_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 3, ui->pshBut_carrier_4->isChecked(), i, ui->spnBox_DR1_4->value());}
+    void on_spnBox_AR_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 0, ui->spnBox_rtdph_1->value(), i);}
+    void on_spnBox_AR_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 1, ui->spnBox_rtdph_2->value(), i);}
+    void on_spnBox_AR_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 2, ui->spnBox_rtdph_3->value(), i);}
+    void on_spnBox_AR_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 3, ui->spnBox_rtdph_4->value(), i);}
+    void on_spnBox_DR1_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 0, ui->pshBut_carrier_1->isChecked(), ui->spnBox_velmod_1->value(), i);}
+    void on_spnBox_DR1_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 1, ui->pshBut_carrier_2->isChecked(), ui->spnBox_velmod_2->value(), i);}
+    void on_spnBox_DR1_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 2, ui->pshBut_carrier_3->isChecked(), ui->spnBox_velmod_3->value(), i);}
+    void on_spnBox_DR1_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx05(InstSel, 3, ui->pshBut_carrier_4->isChecked(), ui->spnBox_velmod_4->value(), i);}
+    void on_spnBox_SL_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 0, 15 - i, ui->spnBox_RR_1->value());}
+    void on_spnBox_SL_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 1, 15 - i, ui->spnBox_RR_2->value());}
+    void on_spnBox_SL_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 2, 15 - i, ui->spnBox_RR_3->value());}
+    void on_spnBox_SL_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 3, 15 - i, ui->spnBox_RR_4->value());}
+    void on_spnBox_DR2_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 0, ui->spnBox_coarse_1->value(), i);}
+    void on_spnBox_DR2_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 1, ui->spnBox_coarse_2->value(), i);}
+    void on_spnBox_DR2_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 2, ui->spnBox_coarse_3->value(), i);}
+    void on_spnBox_DR2_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 3, ui->spnBox_coarse_4->value(), i);}
+    void on_spnBox_RR_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 0, 15 - ui->spnBox_SL_1->value(), i);}
+    void on_spnBox_RR_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 1, 15 - ui->spnBox_SL_2->value(), i);}
+    void on_spnBox_RR_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 2, 15 - ui->spnBox_SL_3->value(), i);}
+    void on_spnBox_RR_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx07(InstSel, 3, 15 - ui->spnBox_SL_4->value(), i);}
+    void on_pshBut_carrier_1_clicked(bool checked)
+        {EXPANDEUR::ChangerOpx05(InstSel, 0, !checked, ui->spnBox_velmod_1->value(), ui->spnBox_DR1_1->value());}
+    void on_pshBut_carrier_2_clicked(bool checked)
+        {EXPANDEUR::ChangerOpx05(InstSel, 1, !checked, ui->spnBox_velmod_2->value(), ui->spnBox_DR1_2->value());}
+    void on_pshBut_carrier_3_clicked(bool checked)
+        {EXPANDEUR::ChangerOpx05(InstSel, 2, !checked, ui->spnBox_velmod_3->value(), ui->spnBox_DR1_3->value());}
+    void on_pshBut_carrier_4_clicked(bool checked)
+        {EXPANDEUR::ChangerOpx05(InstSel, 3, !checked, ui->spnBox_velmod_4->value(), ui->spnBox_DR1_4->value());}
+    void on_spnBox_coarse_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 0, i, ui->spnBox_DR2_1->value());}
+    void on_spnBox_coarse_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 1, i, ui->spnBox_DR2_2->value());}
+    void on_spnBox_coarse_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 2, i, ui->spnBox_DR2_3->value());}
+    void on_spnBox_coarse_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx06(InstSel, 3, i, ui->spnBox_DR2_4->value());}
+    void on_spnBox_fine_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 0, ui->cmbBox_kbcurb_1->currentIndex(), i, ui->spnBox_multiple_1->value());}
+    void on_spnBox_fine_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 1, ui->cmbBox_kbcurb_2->currentIndex(), i, ui->spnBox_multiple_2->value());}
+    void on_spnBox_fine_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 2, ui->cmbBox_kbcurb_3->currentIndex(), i, ui->spnBox_multiple_3->value());}
+    void on_spnBox_fine_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 3, ui->cmbBox_kbcurb_4->currentIndex(), i, ui->spnBox_multiple_4->value());}
+    void on_spnBox_multiple_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 0, ui->cmbBox_kbcurb_1->currentIndex(), ui->spnBox_fine_1->value(), i);}
+    void on_spnBox_multiple_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 1, ui->cmbBox_kbcurb_2->currentIndex(), ui->spnBox_fine_2->value(), i);}
+    void on_spnBox_multiple_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 2, ui->cmbBox_kbcurb_3->currentIndex(), ui->spnBox_fine_3->value(), i);}
+    void on_spnBox_multiple_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx03(InstSel, 3, ui->cmbBox_kbcurb_4->currentIndex(), ui->spnBox_fine_4->value(), i);}
+    void on_spnBox_kbcurb_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 0, i, ui->spnBox_velocity_1->value());
+         EXPANDEUR::ChangerOpx03(InstSel, 0, i, ui->spnBox_fine_1->value(), ui->spnBox_multiple_1->value());}
+    void on_spnBox_kbcurb_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 1, i, ui->spnBox_velocity_2->value());
+         EXPANDEUR::ChangerOpx03(InstSel, 1, i, ui->spnBox_fine_2->value(), ui->spnBox_multiple_2->value());}
+    void on_spnBox_kbcurb_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 2, i, ui->spnBox_velocity_3->value());
+         EXPANDEUR::ChangerOpx03(InstSel, 2, i, ui->spnBox_fine_3->value(), ui->spnBox_multiple_3->value());}
+    void on_spnBox_kbcurb_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx01(InstSel, 3, i, ui->spnBox_velocity_4->value());
+         EXPANDEUR::ChangerOpx03(InstSel, 3, i, ui->spnBox_fine_4->value(), ui->spnBox_multiple_4->value());}
+    void on_spnBox_lvldph_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 0, i, ui->spnBox_adjTL_1->value());}
+    void on_spnBox_lvldph_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 1, i, ui->spnBox_adjTL_2->value());}
+    void on_spnBox_lvldph_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 2, i, ui->spnBox_adjTL_3->value());}
+    void on_spnBox_lvldph_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 3, i, ui->spnBox_adjTL_4->value());}
+    void on_spnBox_rtdph_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 0, i, ui->spnBox_AR_1->value());}
+   void on_spnBox_rtdph_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 1, i, ui->spnBox_AR_2->value());}
+   void on_spnBox_rtdph_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 2, i, ui->spnBox_AR_3->value());}
+   void on_spnBox_rtdph_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx04(InstSel, 3, i, ui->spnBox_AR_4->value());}
+   void on_spnBox_adjTL_1_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 0, ui->spnBox_lvldph_1->value(), i);}
+   void on_spnBox_adjTL_2_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 1, ui->spnBox_lvldph_2->value(), i);}
+   void on_spnBox_adjTL_3_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 2, ui->spnBox_lvldph_3->value(), i);}
+   void on_spnBox_adjTL_4_valueChanged(int i)
+        {EXPANDEUR::ChangerOpx02(InstSel, 3, ui->spnBox_lvldph_4->value(), i);}
 };
 
 #endif // MAINWINDOW_H

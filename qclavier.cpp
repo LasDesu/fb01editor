@@ -69,10 +69,13 @@ void QClavier::mousePressEvent(QMouseEvent * event)
         else if (Reste > 48 && Reste < 56) Note += 11;
     }
 //Produit la note
+    if (Note > 127) Note = 127;
     if (Note != NoteJouee)
     {
+    //Arrête la note
         if (NoteJouee != -1)
             MIDI::Note(0, NoteJouee, 0);
+    //Joue la nouvelle
         MIDI::Note(0, Note, 100);
         NoteJouee = Note;
     }

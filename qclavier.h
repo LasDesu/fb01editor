@@ -22,16 +22,17 @@
 #ifndef QCLAVIER_H
 #define QCLAVIER_H
 
-    #include <QWidget>
     #include <QLabel>
     #include <QMouseEvent>
 
     class QClavier : public QLabel
     {
     public:
+    //Constructeurs
         QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
         ~QClavier();
     private:
+    //Note en cours
         int NoteJouee;
     //Réimplémentation de la souris
         virtual void mouseMoveEvent(QMouseEvent * event);

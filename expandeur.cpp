@@ -58,6 +58,72 @@ void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
 }
 
 /*****************************************************************************/
+void EXPANDEUR::ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (KeyCurb & 0x1) << 7;
+    Octet += (Velocity & 0x7) << 4;
+    EcrireOpParam(Inst, Op, 0x01, Octet);
+}
+
+void EXPANDEUR::ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (LvlDph & 0xF) << 4;
+    Octet += Adjust & 0xF;
+    EcrireOpParam(Inst, Op, 0x02, Octet);
+}
+
+void EXPANDEUR::ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (KeyCurb & 0x2) << 6;
+    Octet += (Fine & 0x7) << 4;
+    Octet += Multiple & 0x7;
+    EcrireOpParam(Inst, Op, 0x03, Octet);
+}
+
+void EXPANDEUR::ChangerOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (RateDph & 0x3) << 6;
+    Octet += AR & 0x1F;
+    EcrireOpParam(Inst, Op, 0x04, Octet);
+}
+
+void EXPANDEUR::ChangerOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    if (Carrier) Octet += 0x80;
+    Octet += (VeloSens & 0x3) << 5;
+    Octet += DR1 & 0x1F;
+    EcrireOpParam(Inst, Op, 0x05, Octet);
+}
+
+void EXPANDEUR::ChangerOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Coarse & 0x3) << 6;
+    Octet += DR2 & 0x1F;
+    EcrireOpParam(Inst, Op, 0x06, Octet);
+}
+
+void EXPANDEUR::ChangerOpx07(uchar Inst, uchar Op, uchar SL, uchar RR)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (SL & 0xF) << 4;
+    Octet += RR & 0xF;
+    EcrireOpParam(Inst, Op, 0x07, Octet);
+}
+
+/*****************************************************************************/
 void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
 {
     MMSG Msg[2];

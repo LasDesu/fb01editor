@@ -1,6 +1,5 @@
 <RCC>
-    <qresource prefix="/" />
-    <qresource prefix="/imgs" >
+    <qresource prefix="/" >
         <file>imgs/algo1.bmp</file>
         <file>imgs/algo2.bmp</file>
         <file>imgs/algo3.bmp</file>
