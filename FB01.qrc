@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/" />
+    <qresource prefix="/imgs" >
+        <file>imgs/algo1.bmp</file>
+        <file>imgs/algo2.bmp</file>
+        <file>imgs/algo3.bmp</file>
+        <file>imgs/algo4.bmp</file>
+        <file>imgs/algo5.bmp</file>
+        <file>imgs/algo6.bmp</file>
+        <file>imgs/algo7.bmp</file>
+        <file>imgs/algo8.bmp</file>
+        <file>imgs/algo.bmp</file>
+        <file>imgs/clavier.bmp</file>
+    </qresource>
+</RCC>
