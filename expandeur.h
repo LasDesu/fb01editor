@@ -24,15 +24,20 @@
 
     #include "types.h"
 
+    #define BANQUES 7
+    #define VOIX 48
+
     class EXPANDEUR
     {
     private:
-    //Etats de configuration
-        static uchar SysChan;
+    //Banques
+        static uchar Banques[BANQUES][VOIX];
     public:
     //Configuration
-        static bool Detecter();
-        static void DefinirSysChan(uchar Chan);
+        static uchar SysChan;
+    //Chargement/déchargement
+        static void ChargerBanque(uchar Banque);
+        static void SauverBanque(uchar Banque);
     //Communication
         static void EcrireInstParam(uchar Inst, uchar Param, uchar Valeur);
         static void EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
@@ -40,7 +45,6 @@
         static void EcrireSysParam(uchar Param, uchar Valeur);
     //Paramêtres composés voies
         static void ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
-    //Paramêtres composés Op
         static void ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
         static void ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
         static void ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);

@@ -19,13 +19,23 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
+#include <QtGui/QApplication>
+#include <QtGui/QMessageBox>
+#include <QTime>
 #include "midi.h"
 
-//Initialise
+//Application
+    extern QApplication * mainApp;
+
+//Nombre de drivers
     int MIDI::NbIns  = 0;
     int MIDI::NbOuts = 0;
-
+//Tampon
+    MIDIHDR MIDI::TampHDR;
+    uchar MIDI::Tampon[TAMPON];
+    uchar MIDI::Donnees[TAMPON];
+    bool MIDI::Prepare = false;
+    bool MIDI::Recu    = false;
 //Prototypes
     ulong MIDI::HndIn = 0;
     ulong MIDI::HndOut = 0;
@@ -73,32 +83,58 @@ void MIDI::ActiverIn(int Index)
 {
     uint Resultat;
 //Désactive le port
-    if (HndIn != 0)
-    {
-        midiInStop(HndIn);
-        midiInClose(HndIn);
-        HndIn = 0;
-    }
+    DesactiverIn();
     if (Index == -1) return;
 //Active le port in
     Resultat = midiInOpen(&HndIn, Index, 0, 0, 0);
     if (Resultat) AfficherErrIn(Resultat);
+//Configure le tampon
+    memset(&TampHDR, 0, sizeof(MIDIHDR));
+    TampHDR.dwBufferLength = TAMPON;
+    TampHDR.lpData = (char *) Tampon;
+//Prépare le tampon
+    Resultat = midiInPrepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
+    if (Resultat) AfficherErrIn(Resultat);
+    Prepare = true;
+    Recu    = false;
+//Active le tampon
+    midiInAddBuffer(HndIn, &TampHDR, sizeof(MIDIHDR));
     midiInStart(HndIn);
 }
 
+void MIDI::DesactiverIn()
+{
+//Vérifie l'activation
+    if (HndIn == 0) return;
+//Arrête l'écoute
+    midiInStop(HndIn);
+    while(Prepare)
+        midiInReset(HndIn);
+//Ferme le port
+    midiInClose(HndIn);
+    HndIn = 0;
+}
+
+/*****************************************************************************/
 void MIDI::ActiverOut(int Index)
 {
     uint Resultat;
-//Initialise
-    if (HndOut != 0)
-    {
-        midiOutClose(HndOut);
-        HndOut = 0;
-    }
+//Désactive le port
+    DesactiverOut();
     if (Index == -1) return;
-//Active le port in
+//Active le port out
     Resultat = midiOutOpen(&HndOut, Index, 0, 0, 0);
     if (Resultat) AfficherErrOut(Resultat);
+}
+
+void MIDI::DesactiverOut()
+{
+//Vérifie l'activation
+    if (HndOut == 0) return;
+//Ferme le port
+    midiOutReset(HndOut);
+    midiOutClose(HndOut);
+    HndOut = 0;
 }
 
 /*****************************************************************************/
@@ -114,64 +150,44 @@ void MIDI::Note(uchar Chan, uchar Note, uchar Velo)
     EnvMsg(&Msg);
 }
 
-void MIDI::Reset(uchar Chan)
-{
-    MMSG Msg;
-//Arrête les notes
-    if (!HndOut) return;
-    Msg.data[0] = 0xB0 + (Chan & 0xF);
-    Msg.data[1] = 0x7B;
-    Msg.data[2] = 0;
-    Msg.data[3] = 0;
-    EnvMsg(&Msg);
-}
-
 /*****************************************************************************/
 void MIDI::AfficherErrIn(uint Resultat)
 {
     char Text[128];
-    QMessageBox msgBox;
+    QMessageBox MsgBox;
 //Affiche l'érreur
     midiInGetErrorTextA(Resultat, Text, 128);
-    msgBox.setText(Text);
-    msgBox.exec();
+    MsgBox.setText(Text);
+    MsgBox.exec();
 }
 
 void MIDI::AfficherErrOut(uint Resultat)
 {
     char Text[128];
-    QMessageBox msgBox;
+    QMessageBox MsgBox;
 //Affiche l'érreur
     midiOutGetErrorTextA(Resultat, Text, 128);
-    msgBox.setText(Text);
-    msgBox.exec();
+    MsgBox.setText(Text);
+    MsgBox.exec();
 }
 
 /*****************************************************************************/
-void MIDI::EchMsg(MMSG * Msg, int TMsg, MMSG * Rep, int TRep)
+void MIDI::RecMsgLng(int Secs)
 {
-    MIDIHDR HeadMsg;
-    MIDIHDR HeadRep;
-    uint    Resultat;
-//Initialise les entêtes
-    memset(&HeadMsg, 0, sizeof(MIDIHDR));
-    HeadMsg.dwBufferLength = TMsg;
-    HeadMsg.lpData = (char *) Msg;
-    midiOutPrepareHeader(HndOut, &HeadMsg, sizeof(MIDIHDR));
-    memset(&HeadRep, 0, sizeof(MIDIHDR));
-    HeadRep.dwBufferLength = TRep;
-    HeadRep.lpData = (char *) Rep;
-    midiInPrepareHeader(HndIn, &HeadRep, sizeof(MIDIHDR));
-//Effectue l'échange
-    Resultat = midiOutLongMsg(HndOut, &HeadMsg, sizeof(MIDIHDR));
-    if(Resultat) AfficherErrOut(Resultat);
-    Resultat = midiInAddBuffer(HndIn, &HeadRep, sizeof(MIDIHDR));
-    if(Resultat) AfficherErrIn(Resultat);
-//Réinitialise
-    midiOutUnprepareHeader(HndOut, &HeadMsg, sizeof(MIDIHDR));
-    midiInUnprepareHeader(HndIn, &HeadRep, sizeof(MIDIHDR));
+//Démarre l'attente
+    int Millis = Secs * 1000;
+    /*
+    QTime::start();
+    while(QTime::elapsed() < Millis)
+    {
+        if (Recu == true) goto Suite;
+        mainApp->processEvents();
+    }
+Suite :
+*/
 }
 
+/*****************************************************************************/
 void MIDI::EnvMsgLng(MMSG * Msg, int Taille)
 {
     MIDIHDR Header;
@@ -180,16 +196,38 @@ void MIDI::EnvMsgLng(MMSG * Msg, int Taille)
     memset(&Header, 0, sizeof(MIDIHDR));
     Header.dwBufferLength = Taille;
     Header.lpData = (char *) Msg;
-    midiOutPrepareHeader(HndOut, &Header, sizeof(MIDIHDR));
+    Resultat = midiOutPrepareHeader(HndOut, &Header, sizeof(MIDIHDR));
+    if(Resultat)AfficherErrOut(Resultat);
 //Envoie le message
     Resultat = midiOutLongMsg(HndOut, &Header, sizeof(MIDIHDR));
-    if(Resultat) AfficherErrOut(Resultat);
+    if(Resultat)AfficherErrOut(Resultat);
     midiOutUnprepareHeader(HndOut, &Header, sizeof(MIDIHDR));
 }
 
 void MIDI::EnvMsg(MMSG * Msg)
 {
+//Envoie le message
     uint Resultat = midiOutShortMsg(HndOut, Msg->word);
     if(Resultat) AfficherErrOut(Resultat);
+}
+
+/*****************************************************************************/
+void MIDI::Callback(ulong hmi, uint msg, ulong instance, ulong param1, ulong param2)
+{
+//SysEX
+    if (msg == MIM_LONGDATA)
+    {
+    //Libère le tampon
+        midiInUnprepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
+        Prepare = false;
+    //Copie les données
+        memcpy(Donnees, Tampon, TAMPON);
+        Recu = true;
+    //Reprépare le tampon
+        if (TampHDR.dwBytesRecorded == 0) return;
+        midiInPrepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
+        midiInAddBuffer(HndIn, &TampHDR, sizeof(MIDIHDR));
+        Prepare = true;
+    }
 }
 

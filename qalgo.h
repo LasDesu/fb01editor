@@ -19,25 +19,26 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QCLAVIER_H
-#define QCLAVIER_H
+#ifndef QALGO_H
+#define QALGO_H
 
     #include <QtGui/QLabel>
     #include <QtGui/QMouseEvent>
 
-    class QClavier : public QLabel
+    class QAlgo : public QLabel
     {
     public:
     //Constructeurs
-        QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
-        ~QClavier();
+        QAlgo(QWidget * parent = 0, Qt::WindowFlags f = 0);
+        ~QAlgo();
+    //Accesseurs
+        void  ChangerAlgo(uchar Algo);
+        uchar RecupererAlgo();
     private:
-    //Note en cours
-        int NoteJouee;
+    //Algo en cours
+        uchar AlgoSel;
     //Réimplémentation de la souris
-        virtual void mouseMoveEvent(QMouseEvent * event);
         virtual void mousePressEvent(QMouseEvent * event);
-        virtual void mouseReleaseEvent(QMouseEvent * event);
     };
 
-#endif // QCLAVIER_H
+#endif // QALGO_H

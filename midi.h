@@ -28,7 +28,7 @@
 
     #define MAXINS  5
     #define MAXOUTS 5
-
+    #define TAMPON  4096
     typedef union
     {
         ulong word;
@@ -39,32 +39,39 @@
     {
     private:
     //Objets internes
-        static int NbIns, NbOuts;
-        static ulong HndIn;
-        static ulong HndOut;
+        static int   NbIns, NbOuts;
+        static ulong HndIn, HndOut;
         static MIDIINCAPS  Ins[MAXINS];
         static MIDIOUTCAPS Outs[MAXOUTS];
-
+    //Tampon de réception
+        static uchar Tampon[TAMPON];
+        static uchar Donnees[TAMPON];
+        static MIDIHDR TampHDR;
+        static bool Prepare;
+        static bool Recu;
+    //Callback
+        static void WINAPI Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2);
     //Utilitaires
         static void AfficherErrIn(uint Resultat);
         static void AfficherErrOut(uint Resultat);
 
     public:
-    //Initialisation
+    //Enumération
         static void Lister();
         static int  NbDriversIn();
         static int  NbDriversOut();
         static char * DriverIn(int Index);
         static char * DriverOut(int Index);
+    //Initialisation
         static void ActiverIn(int Index);
+        static void DesactiverIn();
         static void ActiverOut(int Index);
-
+        static void DesactiverOut();
     //Communication
-        static void EchMsg(MMSG * Msg, int TMsg, MMSG * Rep, int TRep);
+        static void RecMsgLng(int Secs);
         static void EnvMsgLng(MMSG * Msg, int Taille);
         static void EnvMsg(MMSG * Msg);
         static void Note(uchar Chan, uchar Note, uchar Velo);
-        static void Reset(uchar Chan);
     };
 
 #endif // MIDI_H

@@ -19,15 +19,21 @@ SOURCES += main.cpp \
     midi.cpp \
     qclavier.cpp \
     expandeur.cpp \
-    qalgo.cpp
+    qalgo.cpp \
+    qinstrument.cpp \
+    qoperateur.cpp
 HEADERS += mainwindow.h \
     midi.h \
     qclavier.h \
     expandeur.h \
     types.h \
     win32.h \
-    qalgo.h
-FORMS += mainwindow.ui
+    qalgo.h \
+    qinstrument.h \
+    qoperateur.h
+FORMS += mainwindow.ui \
+    qinstrument.ui \
+    qoperateur.ui
 LIBS += -luser32 \
     -lwinmm
 RESOURCES += FB01.qrc

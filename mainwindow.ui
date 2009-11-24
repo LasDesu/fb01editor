@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>600</height>
+    <height>620</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
     <width>620</width>
-    <height>600</height>
+    <height>620</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
    <property name="maximumSize">
     <size>
      <width>620</width>
-     <height>600</height>
+     <height>620</height>
     </size>
    </property>
    <widget class="QTabWidget" name="tabWidget">
@@ -38,7 +38,7 @@
       <x>0</x>
       <y>0</y>
       <width>641</width>
-      <height>531</height>
+      <height>551</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -69,8 +69,8 @@
      <widget class="QGroupBox" name="grpBox_MIDI">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>20</x>
+        <y>20</y>
         <width>321</width>
         <height>111</height>
        </rect>
@@ -110,7 +110,7 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_refresh">
+      <widget class="QPushButton" name="pshBut_refresh_midi">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -165,9 +165,9 @@
      <widget class="QGroupBox" name="grpBox_config">
       <property name="geometry">
        <rect>
-        <x>350</x>
-        <y>10</y>
-        <width>251</width>
+        <x>360</x>
+        <y>20</y>
+        <width>231</width>
         <height>171</height>
        </rect>
       </property>
@@ -177,7 +177,7 @@
       <widget class="QLabel" name="lbl_combine">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>20</y>
          <width>101</width>
          <height>16</height>
@@ -196,7 +196,7 @@
       <widget class="QLabel" name="lbl_reception">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>50</y>
          <width>101</width>
          <height>16</height>
@@ -215,7 +215,7 @@
       <widget class="QComboBox" name="cmbBox_reception">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>140</x>
          <y>50</y>
          <width>81</width>
          <height>22</height>
@@ -240,7 +240,7 @@
       <widget class="QPushButton" name="pshBut_combine">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>140</x>
          <y>20</y>
          <width>81</width>
          <height>21</height>
@@ -256,7 +256,7 @@
       <widget class="QPushButton" name="pshBut_memory">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>140</x>
          <y>80</y>
          <width>81</width>
          <height>21</height>
@@ -272,7 +272,7 @@
       <widget class="QLabel" name="lbl_memory">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>80</y>
          <width>101</width>
          <height>16</height>
@@ -291,7 +291,7 @@
       <widget class="QSpinBox" name="spnBox_confnum">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>140</x>
          <y>110</y>
          <width>81</width>
          <height>22</height>
@@ -310,7 +310,7 @@
       <widget class="QLabel" name="lbl_confnum">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>110</y>
          <width>101</width>
          <height>20</height>
@@ -329,7 +329,7 @@
       <widget class="QLabel" name="lbl_mastvol">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>140</y>
          <width>101</width>
          <height>20</height>
@@ -348,7 +348,7 @@
       <widget class="QSlider" name="hzSlider_mastvol">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>140</x>
          <y>140</y>
          <width>81</width>
          <height>21</height>
@@ -367,281 +367,110 @@
      <attribute name="title">
       <string>Banks</string>
      </attribute>
+     <widget class="QTableView" name="tabView_bank">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>601</width>
+        <height>451</height>
+       </rect>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_refresh_bank">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>470</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Refresh</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshButton">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>470</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Bank</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sort">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>474</y>
+        <width>46</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Sort by :</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshButton_2">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>470</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Patch</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshButton_3">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>470</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Style</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_instruments">
      <attribute name="title">
-      <string>Instruments</string>
+      <string>Current Set</string>
      </attribute>
-     <widget class="QGroupBox" name="grpBox_inst_1">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>10</y>
-        <width>101</width>
-        <height>481</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Instrument 1</string>
-      </property>
-      <widget class="QSpinBox" name="spnBox_notes_1">
-       <property name="geometry">
-        <rect>
-         <x>11</x>
-         <y>20</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_chan_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>16</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_upper_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lower_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_bank_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>6</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_voice_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>47</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_trans_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-2 Octaves</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>2 Octave</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_det_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>230</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-64</number>
-       </property>
-       <property name="maximum">
-        <number>63</number>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_level_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>260</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_pan_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>290</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_LFO_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>320</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_poly_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>350</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Poly</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_porta_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>380</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_pitch_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>410</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>12</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_pmdctl_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>440</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Not assigned</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>After touch</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mod. wheel</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Breath ctl.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Foot ctl.</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
@@ -927,2725 +756,127 @@
        <string>PMD Control.</string>
       </property>
      </widget>
-     <widget class="QGroupBox" name="grpBox_inst_2">
-      <property name="geometry">
-       <rect>
-        <x>240</x>
-        <y>10</y>
-        <width>101</width>
-        <height>481</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Instrument 2</string>
-      </property>
-      <widget class="QSpinBox" name="spnBox_notes_2">
-       <property name="geometry">
-        <rect>
-         <x>11</x>
-         <y>20</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_chan_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>16</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_upper_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lower_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_bank_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>6</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_voice_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>47</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_trans_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-2 Octaves</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>2 Octave</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_det_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>230</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>63</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_level_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>260</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_pan_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>290</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_LFO_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>320</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_poly_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>350</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Poly</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_porta_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>380</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_pitch_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>410</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>12</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_pmdctl_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>440</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Not assigned</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>After touch</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mod. wheel</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Breath ctl.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Foot ctl.</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="grpBox_inst_3">
-      <property name="geometry">
-       <rect>
-        <x>370</x>
-        <y>10</y>
-        <width>101</width>
-        <height>481</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Instrument 3</string>
-      </property>
-      <widget class="QSpinBox" name="spnBox_notes_3">
-       <property name="geometry">
-        <rect>
-         <x>11</x>
-         <y>20</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_chan_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>16</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_upper_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lower_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_bank_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>6</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_voice_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>47</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_trans_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-2 Octaves</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>2 Octave</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_det_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>230</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-64</number>
-       </property>
-       <property name="maximum">
-        <number>63</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_level_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>260</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_pan_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>290</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_LFO_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>320</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_poly_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>350</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Poly</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_porta_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>380</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_pitch_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>410</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>12</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_pmdctl_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>440</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Not assigned</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>After touch</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mod. wheel</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Breath ctl.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Foot ctl.</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="grpBox_inst_4">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>10</y>
-        <width>101</width>
-        <height>481</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Instrument 4</string>
-      </property>
-      <widget class="QSpinBox" name="spnBox_notes_4">
-       <property name="geometry">
-        <rect>
-         <x>11</x>
-         <y>20</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_chan_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>16</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_upper_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lower_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_bank_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>6</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_voice_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>47</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_trans_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-2 Octaves</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>1 Octave</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>2 Octave</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_det_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>230</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-64</number>
-       </property>
-       <property name="maximum">
-        <number>63</number>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_level_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>260</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_pan_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>290</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_LFO_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>320</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_poly_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>350</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Poly</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_porta_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>380</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_pitch_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>410</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>12</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_pmdctl_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>440</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Not assigned</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>After touch</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mod. wheel</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Breath ctl.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Foot ctl.</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
      <widget class="QPushButton" name="pshBut_next">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>473</y>
-        <width>91</width>
-        <height>20</height>
+        <y>480</y>
+        <width>71</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Next page</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_voiceops">
-     <attribute name="title">
-      <string>Voice Op.</string>
-     </attribute>
-     <widget class="QGroupBox" name="grpBox_op1">
+     <widget class="QInstrument" name="widget_instru_1" native="true">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>20</y>
-        <width>261</width>
-        <height>221</height>
+        <x>110</x>
+        <y>10</y>
+        <width>111</width>
+        <height>474</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Operator 1</string>
-      </property>
-      <widget class="QSpinBox" name="spnBox_AR_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR1_1">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_SL_1">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR2_1">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_RR_1">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_AR_1">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>AR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR1_1">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_SL_1">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>SL</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR2_1">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_RR_1">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>RR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_velmod_1">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Vel. mod</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velmod_1">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velocity_1">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_velocity_1">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Velocity</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_enable_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>41</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_detune_1">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fine</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_coarse_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_coarse_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Coarse</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_multiple_1">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_multiple_1">
-       <property name="geometry">
-        <rect>
-         <x>69</x>
-         <y>120</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Mult.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_fine_1">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-4</number>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_lvldph_1">
-       <property name="geometry">
-        <rect>
-         <x>109</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Lvl. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lvldph_1">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_kbcurb_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Keyboard curb</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_rtdph_1">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Rt. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_rtdph_1">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_adjTL_1">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_adjTL_1">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Adj. TL</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_carrier_1">
-       <property name="geometry">
-        <rect>
-         <x>164</x>
-         <y>140</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_carrmod_1">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>120</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier / modulator</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_volume_1">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>40</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_volume_1">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Volume</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_kbcurb_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>190</y>
-         <width>91</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-Exp</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Exp</string>
-        </property>
-       </item>
-      </widget>
      </widget>
-     <widget class="QGroupBox" name="grpBox_op2">
+     <widget class="QInstrument" name="widget_instru_2" native="true">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>20</y>
-        <width>261</width>
-        <height>221</height>
+        <x>240</x>
+        <y>10</y>
+        <width>111</width>
+        <height>474</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Operator 2</string>
-      </property>
-      <widget class="QLabel" name="lbl_velmod_2">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Vel. mod</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velmod_2">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velocity_2">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_velocity_2">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Velocity</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_enable_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>41</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_fine_2">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fine</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_coarse_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_coarse_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Coarse</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_multiple_2">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_multiple_2">
-       <property name="geometry">
-        <rect>
-         <x>69</x>
-         <y>120</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Mult.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_fine_2">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-4</number>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_lvldph_2">
-       <property name="geometry">
-        <rect>
-         <x>109</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Lvl. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lvldph_2">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_kbcurb_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Keyboard curb</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_rtdph_2">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Rt. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_rtdph_2">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_adjTL_2">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>192</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_adjTL_2">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Adj. TL</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_carrier_2">
-       <property name="geometry">
-        <rect>
-         <x>164</x>
-         <y>140</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_carrmod_2">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>120</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier / modulator</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_volume_2">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>40</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_volume_2">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Volume</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_kbcurb_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>190</y>
-         <width>91</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-Exp</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Exp</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="lbl_AR_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>AR</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR1_2">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_SL_2">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>SL</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_AR_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR2_2">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_RR_2">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR1_2">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_SL_2">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR2_2">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_RR_2">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>RR</string>
-       </property>
-      </widget>
      </widget>
-     <widget class="QGroupBox" name="grpBox_op3">
+     <widget class="QInstrument" name="widget_instru_3" native="true">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>260</y>
-        <width>261</width>
-        <height>221</height>
+        <x>370</x>
+        <y>10</y>
+        <width>111</width>
+        <height>474</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Operator 3</string>
-      </property>
-      <widget class="QLabel" name="lbl_velmod_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Vel. mod</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velmod_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velocity_3">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_velocity_3">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Velocity</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_enable_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>41</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_fine_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fine</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_coarse_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_coarse_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Coarse</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_multiple_3">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_multiple_3">
-       <property name="geometry">
-        <rect>
-         <x>69</x>
-         <y>120</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Mult.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_fine_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-4</number>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_lvldph_3">
-       <property name="geometry">
-        <rect>
-         <x>109</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Lvl. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lvldph_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_kbcurb_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Keyboard curb</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_rtdph_3">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Rt. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_rtdph_3">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_adjTL_3">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_adjTL_3">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Adj. TL</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_carrier_3">
-       <property name="geometry">
-        <rect>
-         <x>164</x>
-         <y>140</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_carrmod_3">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>120</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier / modulator</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_volume_3">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>40</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_volume_3">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Volume</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_kbcurb_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>190</y>
-         <width>91</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-Exp</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Exp</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="lbl_AR_3">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>AR</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR1_3">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_SL_3">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>SL</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_AR_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR2_3">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_RR_3">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR1_3">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_SL_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR2_3">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_RR_3">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>RR</string>
-       </property>
-      </widget>
      </widget>
-     <widget class="QGroupBox" name="grpBox_op4">
+     <widget class="QInstrument" name="widget_instru_4" native="true">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>260</y>
-        <width>261</width>
-        <height>221</height>
+        <x>500</x>
+        <y>10</y>
+        <width>111</width>
+        <height>474</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Operator 4</string>
+     </widget>
+     <widget class="QPushButton" name="pshBut_current_1">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>490</y>
+        <width>81</width>
+        <height>23</height>
+       </rect>
       </property>
-      <widget class="QLabel" name="lbl_velmod_4">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Vel. mod</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velmod_4">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_velocity_4">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>40</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_velocity_4">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Velocity</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_enable_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>41</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_fine_4">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fine</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_coarse_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_coarse_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>120</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Coarse</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_multiple_4">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_multiple_4">
-       <property name="geometry">
-        <rect>
-         <x>69</x>
-         <y>120</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Mult.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_fine_4">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>140</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>-4</number>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_lvldph_4">
-       <property name="geometry">
-        <rect>
-         <x>109</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Lvl. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_lvldph_4">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_kbcurb_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Keyboard curb</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_rtdph_4">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Rt. Dph.</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_rtdph_4">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>3</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_adjTL_4">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>190</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_adjTL_4">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>170</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Adj. TL</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_carrier_4">
-       <property name="geometry">
-        <rect>
-         <x>164</x>
-         <y>140</y>
-         <width>81</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_carrmod_4">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>120</y>
-         <width>91</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Carrier / modulator</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_volume_4">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>40</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_volume_4">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>20</y>
-         <width>41</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Volume</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_kbcurb_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>190</y>
-         <width>91</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>-Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Lin</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>-Exp</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>+Exp</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="lbl_AR_4">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>AR</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR1_4">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_SL_4">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>SL</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_AR_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_DR2_4">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>31</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_RR_4">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR1_4">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_SL_4">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>90</y>
-         <width>41</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_DR2_4">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DR</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_RR_4">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>70</y>
-         <width>20</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>RR</string>
-       </property>
-      </widget>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_current_2">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>490</y>
+        <width>81</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_current_3">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>490</y>
+        <width>81</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_current_4">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>490</y>
+        <width>81</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Voice Conf.</string>
+      <string>Current Voice</string>
      </attribute>
      <widget class="QGroupBox" name="grpBox_algos">
       <property name="geometry">
@@ -3875,12 +1106,57 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_voiceops">
+     <attribute name="title">
+      <string>Current Operators</string>
+     </attribute>
+     <widget class="QOperateur" name="widget_opera_1" native="true">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>264</width>
+        <height>224</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QOperateur" name="widget_opera_2" native="true">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>20</y>
+        <width>264</width>
+        <height>224</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QOperateur" name="widget_opera_3" native="true">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>270</y>
+        <width>264</width>
+        <height>224</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QOperateur" name="widget_opera_4" native="true">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>270</y>
+        <width>264</width>
+        <height>224</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
    </widget>
    <widget class="QClavier" name="lbl_clavier">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>530</y>
+      <y>550</y>
       <width>601</width>
       <height>51</height>
      </rect>
@@ -3909,6 +1185,9 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionLoad_bank"/>
+    <addaction name="actionSave_bank"/>
+    <addaction name="separator"/>
     <addaction name="actionLoad_instrument_set"/>
     <addaction name="actionSave_instrument_set"/>
     <addaction name="separator"/>
@@ -3969,6 +1248,16 @@
     <string>Read this ...</string>
    </property>
   </action>
+  <action name="actionLoad_bank">
+   <property name="text">
+    <string>Load bank ...</string>
+   </property>
+  </action>
+  <action name="actionSave_bank">
+   <property name="text">
+    <string>Save bank ...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -3981,6 +1270,18 @@
    <class>QAlgo</class>
    <extends>QLabel</extends>
    <header>qalgo.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QInstrument</class>
+   <extends>QWidget</extends>
+   <header>qinstrument.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QOperateur</class>
+   <extends>QWidget</extends>
+   <header>qoperateur.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

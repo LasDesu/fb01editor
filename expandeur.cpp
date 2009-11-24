@@ -25,31 +25,33 @@
 uchar EXPANDEUR::SysChan = 0;
 
 /*****************************************************************************/
-bool EXPANDEUR::Detecter()
+void EXPANDEUR::ChargerBanque(uchar Banque)
 {
-    MMSG Msg[2], Rep[4];
-//Construit le message
+    MMSG Msg[2];
+    MMSG Rep[815];
+//Envoi la commande
     Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x7E;
-    Msg[0].data[2] = 0x7F;
-    Msg[0].data[3] = 0x06;
-    Msg[1].data[0] = 0x01;
-    Msg[1].data[1] = 0xF7;
-//Demande d'indentification
-    memset(Rep, 0, 16);
-    MIDI::EchMsg(Msg, 6, Rep, 15);
-    return true;
+    Msg[0].data[1] = 0x43;
+    Msg[0].data[2] = 0x75;
+    Msg[0].data[3] = SysChan;
+    Msg[1].data[0] = 0x20;
+    Msg[1].data[1] = 0x00;
+    Msg[1].data[2] = Banque & 0xF;
+    Msg[1].data[3] = 0xF7;
+    //MIDI::EchMsg(Msg, 8, Rep, 3258);
+//Vérifie la réponse
+
 }
 
-void EXPANDEUR::DefinirSysChan(uchar Chan)
+void EXPANDEUR::SauverBanque(uchar Banque)
 {
-    SysChan = Chan;
 }
 
 /*****************************************************************************/
 void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
 {
     uchar Octet = 0;
+//Active les opérateurs
     if (Op1) Octet += 0x8;
     if (Op2) Octet += 0x10;
     if (Op3) Octet += 0x20;
@@ -57,7 +59,6 @@ void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
     EcrireVoiceParam(Inst, 0x0B, Octet);
 }
 
-/*****************************************************************************/
 void EXPANDEUR::ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity)
 {
     uchar Octet = 0;
