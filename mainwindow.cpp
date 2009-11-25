@@ -47,16 +47,24 @@ void MainWindow::InitialiserEditeur()
 //Désactive les controles
     ActiverEditeur(false);
     on_pshBut_refresh_midi_pressed();
-//Initialise les instruments
+//Initialise la page 1
     ui->widget_instru_1->ChangerID(0);
     ui->widget_instru_2->ChangerID(1);
     ui->widget_instru_3->ChangerID(2);
     ui->widget_instru_4->ChangerID(3);
+//Initialise la page 2
+    ui->widget_instru_5->ChangerID(4);
+    ui->widget_instru_6->ChangerID(5);
+    ui->widget_instru_7->ChangerID(6);
+    ui->widget_instru_8->ChangerID(7);
 //Initialise les opérateurs
     ui->widget_opera_1->ChangerID(0);
     ui->widget_opera_2->ChangerID(1);
     ui->widget_opera_3->ChangerID(2);
     ui->widget_opera_4->ChangerID(3);
+//Coniguration par défaut
+    ChangerPage(0);
+    ChangerInst(0);
 }
 
 void MainWindow::ActiverEditeur(bool Actif)
@@ -68,18 +76,53 @@ void MainWindow::ActiverEditeur(bool Actif)
 }
 
 /*****************************************************************************/
+void MainWindow::ChangerPage(int Page)
+{
+//Change de page
+    PageSel = Page;
+    if (PageSel == 0)
+    {//Affiche la page 1
+        ui->frame_page_1->show();
+        ui->frame_page_2->hide();
+    }else
+    {//Affiche la page 2
+        ui->frame_page_2->show();
+        ui->frame_page_1->hide();
+    }
+}
+
+void MainWindow::ChangerInst(int Inst)
+{
+//Active l'instrument
+    ui->pshBut_current_1->setChecked(Inst == 0);
+    ui->pshBut_current_2->setChecked(Inst == 1);
+    ui->pshBut_current_3->setChecked(Inst == 2);
+    ui->pshBut_current_4->setChecked(Inst == 3);
+    ui->pshBut_current_5->setChecked(Inst == 4);
+    ui->pshBut_current_6->setChecked(Inst == 5);
+    ui->pshBut_current_7->setChecked(Inst == 6);
+    ui->pshBut_current_8->setChecked(Inst == 7);
+//Sélectionne l'instrument
+    ui->widget_opera_1->ChangerInst(Inst);
+    ui->widget_opera_2->ChangerInst(Inst);
+    ui->widget_opera_3->ChangerInst(Inst);
+    ui->widget_opera_4->ChangerInst(Inst);
+    InstSel = Inst;
+}
+
+/*****************************************************************************/
 void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 {
     if (Index != -1) MIDI::ActiverIn(Index);
     if (ui->cmbBox_MIDIOut->currentIndex() != -1)
-        ActiverEditeur();
+        ActiverEditeur(true);
 }
 
 void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
 {
     if (Index != -1) MIDI::ActiverOut(Index);
     if (ui->cmbBox_MIDIIn->currentIndex() != -1)
-        ActiverEditeur();
+        ActiverEditeur(true);
 }
 
 void MainWindow::on_pshBut_refresh_midi_pressed()
@@ -99,10 +142,6 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
     ActiverEditeur(false);
 }
 
-/*****************************************************************************/
-void MainWindow::on_pshBut_next_pressed()
-{
-}
 
 /*****************************************************************************/
 void MainWindow::on_actionQuit_triggered(bool checked)

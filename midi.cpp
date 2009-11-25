@@ -108,8 +108,8 @@ void MIDI::DesactiverIn()
     if (HndIn == 0) return;
 //Arrête l'écoute
     midiInStop(HndIn);
-    while(Prepare)
-        midiInReset(HndIn);
+    midiInReset(HndIn);
+
 //Ferme le port
     midiInClose(HndIn);
     HndIn = 0;

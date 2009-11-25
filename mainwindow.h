@@ -43,11 +43,13 @@ private:
 //Objets
     Ui::MainWindow *ui;
 //Configuration
-    uchar PageSel;
-    uchar InstSel;
+    int PageSel;
+    int InstSel;
 //Utilitaires
     void InitialiserEditeur();
-    void ActiverEditeur(bool Actif = true);
+    void ActiverEditeur(bool Actif);
+    void ChangerPage(int Page);
+    void ChangerInst(int Inst);
 private slots:    
 //Sélection des drivers
     void on_cmbBox_MIDIIn_activated(int Index);
@@ -56,8 +58,25 @@ private slots:
 //Menus
     void on_actionQuit_triggered(bool checked = false);
     void on_actionAbout_triggered(bool checked = false);
-//Changement de pages
-    void on_pshBut_next_pressed();
+//Edition des instruments
+    void on_pshBut_next_pressed()
+        {ChangerPage(1-PageSel);}
+    void on_pshBut_current_1_clicked(bool checked)
+        {ChangerInst(0);}
+    void on_pshBut_current_2_clicked(bool checked)
+        {ChangerInst(1);}
+    void on_pshBut_current_3_clicked(bool checked)
+        {ChangerInst(2);}
+    void on_pshBut_current_4_clicked(bool checked)
+        {ChangerInst(3);}
+    void on_pshBut_current_5_clicked(bool checked)
+        {ChangerInst(4);}
+    void on_pshBut_current_6_clicked(bool checked)
+        {ChangerInst(5);}
+    void on_pshBut_current_7_clicked(bool checked)
+        {ChangerInst(6);}
+    void on_pshBut_current_8_clicked(bool checked)
+        {ChangerInst(7);}
 //Gestion des banques
     void on_pshBut_refresh_bank_pressed()
         {EXPANDEUR::ChargerBanque(0);}

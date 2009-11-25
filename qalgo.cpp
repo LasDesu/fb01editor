@@ -24,7 +24,6 @@
 /*****************************************************************************/
 QAlgo::QAlgo(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
-    ChangerAlgo(0);
 }
 
 QAlgo::~QAlgo()
