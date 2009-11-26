@@ -20,7 +20,7 @@ public:
     uchar RecupererID();
 //Chargement/enregistrement
     bool Enregistrer(QFile * File);
-    bool Charger(QFile * File);
+    bool Charger(QFile * File, int Version);
 //Communication
     void Envoyer();
 protected:
@@ -51,9 +51,9 @@ private slots:
     void on_hzSlider_pan_valueChanged(int i)
         {EXPANDEUR::EcrireInstParam(IDSel, 0x09, (uchar) i);}
     void on_pshBut_LFO_clicked(bool checked)
-        {EXPANDEUR::EcrireInstParam(IDSel, 0x0A, (uchar) checked);}
+        {EXPANDEUR::EcrireInstParam(IDSel, 0x0A, !checked);}
     void on_pshBut_poly_clicked(bool checked)
-        {EXPANDEUR::EcrireInstParam(IDSel, 0x0D, (uchar) checked);}
+        {EXPANDEUR::EcrireInstParam(IDSel, 0x0D, !checked);}
     void on_spnBox_porta_valueChanged(int i)
         {EXPANDEUR::EcrireInstParam(IDSel, 0x0B, (uchar) i);}
     void on_spnBox_pitch_valueChanged(int i)

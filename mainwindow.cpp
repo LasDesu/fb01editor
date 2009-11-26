@@ -120,6 +120,7 @@ void MainWindow::ChangerInst(int Inst)
 /*****************************************************************************/
 void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 {
+//Sélectionne le driver
     if (Index != -1) MIDI::ActiverIn(Index);
     if (ui->cmbBox_MIDIOut->currentIndex() != -1)
         ActiverEditeur(true);
@@ -127,6 +128,7 @@ void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 
 void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
 {
+//Sélectionne le driver
     if (Index != -1) MIDI::ActiverOut(Index);
     if (ui->cmbBox_MIDIIn->currentIndex() != -1)
         ActiverEditeur(true);
@@ -149,10 +151,11 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
     ActiverEditeur(false);
 }
 
-
 /*****************************************************************************/
 void MainWindow::on_actionLoad_inst_triggered(bool checked)
 {
+    int  Version;
+    char Text[3];
 //Ouvre le sélecteur
     QString Nom =
     QFileDialog::getOpenFileName(this, "Load an instrument set", "", "*.fbi");
@@ -160,17 +163,26 @@ void MainWindow::on_actionLoad_inst_triggered(bool checked)
     if (Nom.isEmpty()) return;
     QFile Fichier(Nom);
     if (!Fichier.open(QIODevice::ReadOnly)) goto Error;
+//Lit l'entete
+
 //Charge le set d'instruments
-    if (ui->widget_instru_1->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_2->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_3->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_4->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_5->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_6->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_7->Charger(&Fichier)) goto Error;
-    if (ui->widget_instru_8->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_1->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_2->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_3->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_4->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_5->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_6->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_7->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_8->Charger(&Fichier, Version)) goto Error;
 //Actualise l'instrument
     ui->widget_instru_1->Envoyer();
+    ui->widget_instru_2->Envoyer();
+    ui->widget_instru_3->Envoyer();
+    ui->widget_instru_4->Envoyer();
+    ui->widget_instru_5->Envoyer();
+    ui->widget_instru_6->Envoyer();
+    ui->widget_instru_7->Envoyer();
+    ui->widget_instru_8->Envoyer();
 //Ferme le fichier
     Fichier.close();
     return;

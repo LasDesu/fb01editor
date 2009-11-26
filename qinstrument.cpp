@@ -69,7 +69,7 @@ bool QInstrument::Enregistrer(QFile * File)
     return false;
 }
 
-bool QInstrument::Charger(QFile * File)
+bool QInstrument::Charger(QFile * File, int Version)
 {
     char Octet;
 //Lit chaque donnée
@@ -94,13 +94,13 @@ bool QInstrument::Charger(QFile * File)
     File->read(&Octet, 1);
     m_ui->hzSlider_pan->setValue((int)Octet);
     File->read(&Octet, 1);
-    m_ui->pshBut_LFO->setChecked((int)Octet);
+    m_ui->pshBut_LFO->setChecked((bool)Octet);
     File->read(&Octet, 1);
     m_ui->spnBox_porta->setValue((int)Octet);
     File->read(&Octet, 1);
     m_ui->spnBox_pitch->setValue((int)Octet);
     File->read(&Octet, 1);
-    m_ui->pshBut_poly->setChecked((int)Octet);
+    m_ui->pshBut_poly->setChecked((bool)Octet);
     File->read(&Octet, 1);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
     File->read(&Octet, 1);

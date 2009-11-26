@@ -1076,7 +1076,7 @@
         <height>224</height>
        </rect>
       </property>
-      <widget class="QPushButton" name="pshBut_on_1">
+      <widget class="QPushButton" name="pshBut_OPon_1">
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -1102,7 +1102,7 @@
         <height>224</height>
        </rect>
       </property>
-      <widget class="QPushButton" name="pshBut_on_2">
+      <widget class="QPushButton" name="pshBut_OPon_2">
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -1128,7 +1128,7 @@
         <height>224</height>
        </rect>
       </property>
-      <widget class="QPushButton" name="pshBut_on_3">
+      <widget class="QPushButton" name="pshBut_OPon_3">
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -1154,7 +1154,7 @@
         <height>224</height>
        </rect>
       </property>
-      <widget class="QPushButton" name="pshBut_on_4">
+      <widget class="QPushButton" name="pshBut_OPon_4">
        <property name="geometry">
         <rect>
          <x>210</x>

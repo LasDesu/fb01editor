@@ -83,7 +83,7 @@ bool QOperateur::Enregistrer(QFile * File)
     return false;
 }
 
-bool QOperateur::Charger(QFile * File)
+bool QOperateur::Charger(QFile * File, int Version)
 {
     char Octet;
 //Lit chaque donnée
@@ -106,7 +106,7 @@ bool QOperateur::Charger(QFile * File)
     File->read(&Octet, 1);
     m_ui->spnBox_AR->setValue((int)Octet);
     File->read(&Octet, 1);
-    m_ui->pshBut_carrier->isChecked();
+    m_ui->pshBut_carrier->setChecked((bool)Octet);
     File->read(&Octet, 1);
     m_ui->spnBox_velmod->setValue((int)Octet);
     File->read(&Octet, 1);

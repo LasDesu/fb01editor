@@ -58,7 +58,7 @@ void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
     EcrireVoiceParam(Inst, 0x0B, Octet);
 }
 
-void EXPANDEUR::ChangerNom(uchar Inst, char * Nom)
+void EXPANDEUR::ChangerNom(uchar Inst, const char * Nom)
 {
     uchar Octet[7];
 //Recopie la chaine
@@ -69,20 +69,20 @@ void EXPANDEUR::ChangerNom(uchar Inst, char * Nom)
         EcrireVoiceParam(Inst, i, Octet[i]);
 }
 
-void EXPANDEUR::ChangerVoicex09(uchar Inst, uchar Load, uchar AMD)
+void EXPANDEUR::ChangerVoicex09(uchar Inst, bool Load, uchar AMD)
 {
     uchar Octet = 0;
 //Compose le paquet
-    Octet += (Load & 0x1) << 7;
+    if (Load) Octet += 0x80;
     Octet += AMD & 0x7F;
     EcrireVoiceParam(Inst, 0x09, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex0A(uchar Inst, uchar Sync, uchar PMD)
+void EXPANDEUR::ChangerVoicex0A(uchar Inst, bool Sync, uchar PMD)
 {
     uchar Octet = 0;
 //Compose le paquet
-    Octet += (Sync & 0x1) << 7;
+    if (Sync) Octet += 0x80;
     Octet += PMD & 0x7F;
     EcrireVoiceParam(Inst, 0x0A, Octet);
 }
@@ -113,11 +113,11 @@ void EXPANDEUR::ChangerVoicex0E(uchar Inst, uchar Wave)
     EcrireVoiceParam(Inst, 0x0E, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex3A(uchar Inst, uchar Poly, uchar Porta)
+void EXPANDEUR::ChangerVoicex3A(uchar Inst, bool Poly, uchar Porta)
 {
     uchar Octet = 0;
 //Compose le paquet
-    Octet += (Poly & 0x1) << 7;
+    if (Poly) Octet += 0x80;
     Octet += Porta & 0x7F;
     EcrireVoiceParam(Inst, 0x3A, Octet);
 }
@@ -156,7 +156,7 @@ void EXPANDEUR::ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uc
 //Compose le paquet
     Octet += (KeyCurb & 0x2) << 6;
     Octet += (Fine & 0x7) << 4;
-    Octet += Multiple & 0x7;
+    Octet += Multiple & 0xF;
     EcrireOpParam(Inst, Op, 0x03, Octet);
 }
 

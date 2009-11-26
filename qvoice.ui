@@ -420,7 +420,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="FB01.qrc">:/imgs/algo1.bmp</pixmap>
+     <pixmap>:/imgs/algo1.bmp</pixmap>
     </property>
    </widget>
    <widget class="QSpinBox" name="spnBox_algo">
@@ -433,13 +433,13 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="maximum">
-     <number>7</number>
+     <number>8</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>1</number>
     </property>
    </widget>
   </widget>
@@ -766,8 +766,6 @@
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

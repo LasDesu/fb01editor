@@ -178,7 +178,7 @@
      </rect>
     </property>
     <property name="maximum">
-     <number>15</number>
+     <number>3</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="spnBox_velocity">

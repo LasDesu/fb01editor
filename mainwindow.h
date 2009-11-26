@@ -64,9 +64,24 @@ private slots:
     void on_actionAbout_triggered(bool checked = false);
     void on_actionRead_this_triggered(bool checked = false);
     void on_actionOnline_help_triggered(bool checked = false);
+//Gestion des banques
+
+//Configuration globale
+    void on_spnBox_syschan_valueChanged(int i)
+        {EXPANDEUR::SysChan = i - 1;}
+    void on_pshBut_combine_clicked(bool checked)
+        {EXPANDEUR::EcrireSysParam(0x08, (uchar) checked);}
+    void on_cmbBox_reception_activated(int i)
+        {EXPANDEUR::EcrireSysParam(0x0D, (uchar) i);}
+    void on_pshBut_memory_clicked(bool checked)
+        {EXPANDEUR::EcrireSysParam(0x21, (uchar) checked);}
+    void on_spnBox_confnum_valueChanged(int i)
+        {EXPANDEUR::EcrireSysParam(0x22, (uchar) i);}
+    void on_hzSlider_mastvol_valueChanged(int i)
+        {EXPANDEUR::EcrireSysParam(0x24, (uchar) i);}
 //Edition des instruments
     void on_pshBut_next_pressed()
-        {ChangerPage(1-PageSel);}
+        {ChangerPage(1 - PageSel);}
     void on_pshBut_current_1_clicked(bool checked)
         {ChangerInst(0);}
     void on_pshBut_current_2_clicked(bool checked)
@@ -83,22 +98,19 @@ private slots:
         {ChangerInst(6);}
     void on_pshBut_current_8_clicked(bool checked)
         {ChangerInst(7);}
-//Gestion des banques
-    void on_pshBut_refresh_bank_pressed()
-        {EXPANDEUR::ChargerBanque(0);}
-//Configuration globale
-    void on_spnBox_syschan_valueChanged(int i)
-        {EXPANDEUR::SysChan = i - 1;}
-    void on_pshBut_combine_clicked(bool checked)
-        {EXPANDEUR::EcrireSysParam(0x08, checked == true ? 0 : 1);}
-    void on_cmbBox_reception_activated(int i)
-        {EXPANDEUR::EcrireSysParam(0x0D, i);}
-    void on_pshBut_memory_clicked(bool checked)
-        {EXPANDEUR::EcrireSysParam(0x21, checked == true ? 0 : 1);}
-    void on_spnBox_confnum_valueChanged(int i)
-        {EXPANDEUR::EcrireSysParam(0x22, i);}
-    void on_hzSlider_mastvol_valueChanged(int i)
-        {EXPANDEUR::EcrireSysParam(0x24, i);}
-    };
+//Edition des opérateurs
+    void on_pshBut_OPon_1_clicked(bool checked)
+        {EXPANDEUR::ActiverOps(InstSel, (uchar) checked, (uchar) ui->pshBut_OPon_2->isChecked(),
+                               (uchar) ui->pshBut_OPon_3->isChecked(), (uchar) ui->pshBut_OPon_4->isChecked());}
+    void on_pshBut_OPon_2_clicked(bool checked)
+        {EXPANDEUR::ActiverOps(InstSel, (uchar) ui->pshBut_OPon_2->isChecked(), (uchar) checked,
+                               (uchar) ui->pshBut_OPon_3->isChecked(), (uchar) ui->pshBut_OPon_4->isChecked());}
+    void on_pshBut_OPon_3_clicked(bool checked)
+        {EXPANDEUR::ActiverOps(InstSel, (uchar) ui->pshBut_OPon_1->isChecked(), (uchar) ui->pshBut_OPon_2->isChecked(),
+                               (uchar) checked, (uchar) ui->pshBut_OPon_4->isChecked());}
+    void on_pshBut_OPon_4_clicked(bool checked)
+        {EXPANDEUR::ActiverOps(InstSel, (uchar) ui->pshBut_OPon_1->isChecked(), (uchar) ui->pshBut_OPon_2->isChecked(),
+                               (uchar) ui->pshBut_OPon_3->isChecked(), (uchar) checked);}
+};
 
 #endif // MAINWINDOW_H

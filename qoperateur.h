@@ -22,7 +22,7 @@ public:
     uchar RecupererInst();
 //Chargement/enregistrement
     bool Enregistrer(QFile * File);
-    bool Charger(QFile * File);
+    bool Charger(QFile * File, int Version);
 //Communication
     void Envoyer();
 protected:
@@ -39,11 +39,11 @@ private slots:
     void on_spnBox_velocity_valueChanged(int i)
         {EXPANDEUR::ChangerOpx01(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) i);}
     void on_spnBox_velmod_valueChanged(int i)
-        {EXPANDEUR::ChangerOpx05(InstSel, IDSel, (uchar) m_ui->pshBut_carrier->isChecked(), (uchar) i, (uchar) m_ui->spnBox_DR1->value());}
+        {EXPANDEUR::ChangerOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) i, (uchar) m_ui->spnBox_DR1->value());}
     void on_spnBox_AR_valueChanged(int i)
         {EXPANDEUR::ChangerOpx04(InstSel, IDSel, (uchar) m_ui->spnBox_rtdph->value(), (uchar) i);}
     void on_spnBox_DR1_valueChanged(int i)
-        {EXPANDEUR::ChangerOpx05(InstSel, IDSel, (uchar) m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) i);}
+        {EXPANDEUR::ChangerOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) i);}
     void on_spnBox_SL_valueChanged(int i)
         {EXPANDEUR::ChangerOpx07(InstSel, IDSel, (uchar) (15 - i), (uchar) m_ui->spnBox_RR->value());}
     void on_spnBox_DR2_valueChanged(int i)
@@ -51,7 +51,7 @@ private slots:
     void on_spnBox_RR_valueChanged(int i)
         {EXPANDEUR::ChangerOpx07(InstSel, IDSel, (uchar) (15 - m_ui->spnBox_SL->value()), (uchar) i);}
     void on_pshBut_carrier_clicked(bool checked)
-        {EXPANDEUR::ChangerOpx05(InstSel, IDSel, (uchar) !checked, (uchar) m_ui->spnBox_velmod->value(), (uchar) m_ui->spnBox_DR1->value());}
+        {EXPANDEUR::ChangerOpx05(InstSel, IDSel, !checked, (uchar) m_ui->spnBox_velmod->value(), (uchar) m_ui->spnBox_DR1->value());}
     void on_spnBox_coarse_valueChanged(int i)
         {EXPANDEUR::ChangerOpx06(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_DR2->value());}
     void on_spnBox_fine_valueChanged(int i)
