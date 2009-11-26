@@ -40,9 +40,8 @@ public:
     ~MainWindow();
 
 private:
-//Objets
-    Ui::MainWindow *ui;
 //Configuration
+    Ui::MainWindow *ui;
     int PageSel;
     int InstSel;
 //Utilitaires
@@ -55,9 +54,16 @@ private slots:
     void on_cmbBox_MIDIIn_activated(int Index);
     void on_cmbBox_MIDIOut_activated(int Index);
     void on_pshBut_refresh_midi_pressed();
-//Menus
+//Menu fichier
     void on_actionQuit_triggered(bool checked = false);
+    void on_actionLoad_voice_triggered(bool checked = false);
+    void on_actionSave_voice_triggered(bool checked = false);
+    void on_actionLoad_inst_triggered(bool checked = false);
+    void on_actionSave_inst_triggered(bool checked = false);
+//Menu aide
     void on_actionAbout_triggered(bool checked = false);
+    void on_actionRead_this_triggered(bool checked = false);
+    void on_actionOnline_help_triggered(bool checked = false);
 //Edition des instruments
     void on_pshBut_next_pressed()
         {ChangerPage(1-PageSel);}

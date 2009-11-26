@@ -43,8 +43,17 @@
         static void EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
         static void EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur);
         static void EcrireSysParam(uchar Param, uchar Valeur);
-    //Paramêtres composés voies
+    //Paramètres composés voies
         static void ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
+        static void ChangerNom(uchar Inst, char * Nom);
+        static void ChangerVoicex09(uchar Inst, uchar Load, uchar AMD);
+        static void ChangerVoicex0A(uchar Inst, uchar Sync, uchar PMD);
+        static void ChangerVoicex0C(uchar Inst, uchar Feedback, uchar Algo);
+        static void ChangerVoicex0D(uchar Inst, uchar PMS, uchar AMS);
+        static void ChangerVoicex0E(uchar Inst, uchar Wave);
+        static void ChangerVoicex3A(uchar Inst, uchar Poly, uchar Porta);
+        static void ChangerVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch);
+    //Paramètres composés opérateurs
         static void ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
         static void ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
         static void ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);

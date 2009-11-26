@@ -28,6 +28,7 @@ public:
 protected:
     void changeEvent(QEvent *e);
 private:
+//Configuration
     uchar IDSel;
     uchar InstSel;
     Ui::QOperateur *m_ui;

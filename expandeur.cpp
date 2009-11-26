@@ -38,7 +38,6 @@ void EXPANDEUR::ChargerBanque(uchar Banque)
     Msg[1].data[1] = 0x00;
     Msg[1].data[2] = Banque & 0xF;
     Msg[1].data[3] = 0xF7;
-    //MIDI::EchMsg(Msg, 8, Rep, 3258);
 //Vérifie la réponse
 
 }
@@ -59,6 +58,80 @@ void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
     EcrireVoiceParam(Inst, 0x0B, Octet);
 }
 
+void EXPANDEUR::ChangerNom(uchar Inst, char * Nom)
+{
+    uchar Octet[7];
+//Recopie la chaine
+    memset(Octet, 0, 7);
+    strncpy((char *)Octet, Nom, 7);
+//Envoie le nom
+    for (uchar i = 0; i < 7; i++)
+        EcrireVoiceParam(Inst, i, Octet[i]);
+}
+
+void EXPANDEUR::ChangerVoicex09(uchar Inst, uchar Load, uchar AMD)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Load & 0x1) << 7;
+    Octet += AMD & 0x7F;
+    EcrireVoiceParam(Inst, 0x09, Octet);
+}
+
+void EXPANDEUR::ChangerVoicex0A(uchar Inst, uchar Sync, uchar PMD)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Sync & 0x1) << 7;
+    Octet += PMD & 0x7F;
+    EcrireVoiceParam(Inst, 0x0A, Octet);
+}
+
+void EXPANDEUR::ChangerVoicex0C(uchar Inst, uchar Feedback, uchar Algo)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Feedback & 0x7) << 3;
+    Octet += Algo & 0x7;
+    EcrireVoiceParam(Inst, 0x0C, Octet);
+}
+
+void EXPANDEUR::ChangerVoicex0D(uchar Inst, uchar PMS, uchar AMS)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (PMS & 0x7) << 4;
+    Octet += AMS & 0x3;
+    EcrireVoiceParam(Inst, 0x0D, Octet);
+}
+
+void EXPANDEUR::ChangerVoicex0E(uchar Inst, uchar Wave)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Wave & 0x3) << 5;
+    EcrireVoiceParam(Inst, 0x0E, Octet);
+}
+
+void EXPANDEUR::ChangerVoicex3A(uchar Inst, uchar Poly, uchar Porta)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Poly & 0x1) << 7;
+    Octet += Porta & 0x7F;
+    EcrireVoiceParam(Inst, 0x3A, Octet);
+}
+
+void EXPANDEUR::ChangerVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch)
+{
+    uchar Octet = 0;
+//Compose le paquet
+    Octet += (Pmdctl & 0x7) << 4;
+    Octet += Pitch & 0xF;
+    EcrireVoiceParam(Inst, 0x3B, Octet);
+}
+
+/*****************************************************************************/
 void EXPANDEUR::ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity)
 {
     uchar Octet = 0;

@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -70,7 +70,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>20</y>
+        <y>50</y>
         <width>321</width>
         <height>111</height>
        </rect>
@@ -1048,678 +1048,22 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="tab_voice">
      <attribute name="title">
       <string>Current Voice</string>
      </attribute>
-     <widget class="QGroupBox" name="grpBox_algos">
+     <widget class="QVoice" name="widget_voice" native="true">
       <property name="geometry">
        <rect>
         <x>30</x>
         <y>20</y>
-        <width>111</width>
-        <height>111</height>
+        <width>564</width>
+        <height>264</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Algorythm</string>
-      </property>
-      <widget class="QAlgo" name="lbl_algo">
-       <property name="geometry">
-        <rect>
-         <x>24</x>
-         <y>40</y>
-         <width>64</width>
-         <height>40</height>
-        </rect>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="FB01.qrc">:/imgs/algo1.bmp</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>false</bool>
-       </property>
-       <property name="openExternalLinks">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>20</y>
-        <width>191</width>
-        <height>201</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>LFO</string>
-      </property>
-      <widget class="QSpinBox" name="spnBox_PMD">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>140</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_LFOwave">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>LFO wave :</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_AMD">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>80</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_LFOwave">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>50</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Saw</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Square</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Triangle</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>S&amp;H</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="lbl_AMD">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>AMD :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_PMD">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>PMD :</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_LFOspeed">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>20</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_LFOspeed">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>LFO speed :</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_PMS">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>170</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_AMS">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>110</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_AMS">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>AMS :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_PMS">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>PMS :</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>20</y>
-        <width>191</width>
-        <height>261</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Global</string>
-      </property>
-      <widget class="QLabel" name="lbl_style">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Style :</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_style">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>50</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Piano</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Keys</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Organ</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Guitar</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bass</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Orch</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Brass</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Synth</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Pad</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Ethnic</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bells</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Rythm</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>SFX</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Other</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="lbl_name">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Name :</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="txtEdit_name">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>20</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_feedback">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>80</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_feedback">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Feedback :</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_trans">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>110</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_trans">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Transpose :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_porta_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>170</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Porta. time :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_pmdctl_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>230</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>PMD Control.</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_pitch_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>200</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Pitch bender :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_poly_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Mono / Poly :</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_pitch">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>200</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>12</number>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_poly">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>140</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Poly</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_pmdctl">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>230</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Not assigned</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>After touch</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mod. wheel</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Breath ctl.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Foot ctl.</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_porta">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>170</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_voiceops">
+    <widget class="QWidget" name="tab_operas">
      <attribute name="title">
       <string>Current Operators</string>
      </attribute>
@@ -1845,7 +1189,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="FB01.qrc">:/imgs/clavier.bmp</pixmap>
+     <pixmap>:/imgs/clavier.bmp</pixmap>
     </property>
    </widget>
   </widget>
@@ -1862,11 +1206,8 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionLoad_bank"/>
-    <addaction name="actionSave_bank"/>
-    <addaction name="separator"/>
-    <addaction name="actionLoad_instrument_set"/>
-    <addaction name="actionSave_instrument_set"/>
+    <addaction name="actionLoad_inst"/>
+    <addaction name="actionSave_inst"/>
     <addaction name="separator"/>
     <addaction name="actionLoad_voice"/>
     <addaction name="actionSave_voice"/>
@@ -1900,12 +1241,12 @@
     <string>Online help ...</string>
    </property>
   </action>
-  <action name="actionLoad_instrument_set">
+  <action name="actionLoad_inst">
    <property name="text">
     <string>Load instrument set ...</string>
    </property>
   </action>
-  <action name="actionSave_instrument_set">
+  <action name="actionSave_inst">
    <property name="text">
     <string>Save instrument set ...</string>
    </property>
@@ -1944,11 +1285,6 @@
    <header>qclavier.h</header>
   </customwidget>
   <customwidget>
-   <class>QAlgo</class>
-   <extends>QLabel</extends>
-   <header>qalgo.h</header>
-  </customwidget>
-  <customwidget>
    <class>QInstrument</class>
    <extends>QWidget</extends>
    <header>qinstrument.h</header>
@@ -1960,9 +1296,13 @@
    <header>qoperateur.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QVoice</class>
+   <extends>QWidget</extends>
+   <header>qvoice.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

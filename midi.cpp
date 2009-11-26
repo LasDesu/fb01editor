@@ -154,21 +154,17 @@ void MIDI::Note(uchar Chan, uchar Note, uchar Velo)
 void MIDI::AfficherErrIn(uint Resultat)
 {
     char Text[128];
-    QMessageBox MsgBox;
 //Affiche l'érreur
     midiInGetErrorTextA(Resultat, Text, 128);
-    MsgBox.setText(Text);
-    MsgBox.exec();
+    QMessageBox::critical(NULL, "FB01 SE :", Text);
 }
 
 void MIDI::AfficherErrOut(uint Resultat)
 {
     char Text[128];
-    QMessageBox MsgBox;
 //Affiche l'érreur
     midiOutGetErrorTextA(Resultat, Text, 128);
-    MsgBox.setText(Text);
-    MsgBox.exec();
+    QMessageBox::critical(NULL, "FB01 SE :", Text);
 }
 
 /*****************************************************************************/
@@ -192,6 +188,8 @@ void MIDI::EnvMsgLng(MMSG * Msg, int Taille)
 {
     MIDIHDR Header;
     uint    Resultat;
+//Vérifie l'ouverture
+    if (HndOut == 0) return;
 //Initialise l'entête
     memset(&Header, 0, sizeof(MIDIHDR));
     Header.dwBufferLength = Taille;
@@ -206,6 +204,8 @@ void MIDI::EnvMsgLng(MMSG * Msg, int Taille)
 
 void MIDI::EnvMsg(MMSG * Msg)
 {
+//Vérifie l'ouverture
+    if (HndOut == 0) return;
 //Envoie le message
     uint Resultat = midiOutShortMsg(HndOut, Msg->word);
     if(Resultat) AfficherErrOut(Resultat);

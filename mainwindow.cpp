@@ -19,9 +19,13 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
 #include "mainwindow.h"
 #include "midi.h"
+
+extern QApplication * mainApp;
 
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -72,7 +76,8 @@ void MainWindow::ActiverEditeur(bool Actif)
 //Active ou désactive
     ui->tab_banks->setEnabled(Actif);
     ui->tab_instruments->setEnabled(Actif);
-    ui->tab_voiceops->setEnabled(Actif);
+    ui->tab_voice->setEnabled(Actif);
+    ui->tab_operas->setEnabled(Actif);
 }
 
 /*****************************************************************************/
@@ -107,6 +112,8 @@ void MainWindow::ChangerInst(int Inst)
     ui->widget_opera_2->ChangerInst(Inst);
     ui->widget_opera_3->ChangerInst(Inst);
     ui->widget_opera_4->ChangerInst(Inst);
+    ui->widget_voice->ChangerInst(Inst);
+//Mémorise
     InstSel = Inst;
 }
 
@@ -144,15 +151,101 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
 
 
 /*****************************************************************************/
-void MainWindow::on_actionQuit_triggered(bool checked)
+void MainWindow::on_actionLoad_inst_triggered(bool checked)
+{
+//Ouvre le sélecteur
+    QString Nom =
+    QFileDialog::getOpenFileName(this, "Load an instrument set", "", "*.fbi");
+//Ouvre le fichier
+    if (Nom.isEmpty()) return;
+    QFile Fichier(Nom);
+    if (!Fichier.open(QIODevice::ReadOnly)) goto Error;
+//Charge le set d'instruments
+    if (ui->widget_instru_1->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_2->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_3->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_4->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_5->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_6->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_7->Charger(&Fichier)) goto Error;
+    if (ui->widget_instru_8->Charger(&Fichier)) goto Error;
+//Actualise l'instrument
+    ui->widget_instru_1->Envoyer();
+//Ferme le fichier
+    Fichier.close();
+    return;
+//Erreur apparue
+Error :
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+}
+
+void MainWindow::on_actionSave_inst_triggered(bool checked)
+{
+//Ouvre le sélecteur
+    QString Nom =
+    QFileDialog::getOpenFileName(this, "Save an instrument set", "", "*.fbi");
+//Ouvre le fichier
+    if (Nom.isEmpty()) return;
+    QFile Fichier(Nom);
+    if (!Fichier.open(QIODevice::WriteOnly)) goto Error;
+//Enregistre le set d'instruments
+    if (ui->widget_instru_1->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_2->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_3->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_4->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_5->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_6->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_7->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_8->Enregistrer(&Fichier)) goto Error;
+//Ferme le fichier
+    Fichier.close();
+    return;
+//Erreur apparue
+Error :
+    QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
+}
+
+/*****************************************************************************/
+void MainWindow::on_actionLoad_voice_triggered(bool checked)
+{
+}
+void MainWindow::on_actionSave_voice_triggered(bool checked)
 {
 }
 
+/*****************************************************************************/
+void MainWindow::on_actionQuit_triggered(bool checked)
+{
+    mainApp->quit();
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionAbout_triggered(bool checked)
 {
-    QMessageBox msgBox;
-    msgBox.setText("FB01 Editor :\nMeslin Frederic 2009\nfredericmeslin@hotmail.com\n\nA free computer editor for the Yamaha FB01 sound module");
-    msgBox.exec();
+    QString Text;
+//Informations sur le logiciel
+    Text.append("FB01 Sound Editor :\nCopyright Meslin Frederic 2009\nfredericmeslin@hotmail.com\n\n");
+    Text.append("A free computer editor for the Yamaha FB01 sound module\n");
+    Text.append("This program is under a GPL license, please read the COPYING file.\n\n");
+    Text.append("Main website : http://sourceforge.net/projects/fb01editor/\n");
+    QMessageBox::information(this, "FB01 SE :", Text);
+}
+
+void MainWindow::on_actionRead_this_triggered(bool checked)
+{
+    QString Text;
+//Informations supplémentaires
+    Text.append("First thank you for using this program.\n\n");
+    Text.append("If you want to improve or get involved in the project,\n");
+    Text.append("go and visit the FB01SE website.\n\n");
+    Text.append("You can also share your presets on the internet\n");
+    Text.append("and participate in the creation of a common patch\n");
+    Text.append("bank for all the FB01 users.\n");
+    QMessageBox::information(this, "FB01 SE :", Text);
+}
+
+void MainWindow::on_actionOnline_help_triggered(bool checked)
+{
 }
 
 /*****************************************************************************/
