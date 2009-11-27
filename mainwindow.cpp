@@ -30,18 +30,13 @@ extern QApplication * mainApp;
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-//Initialise l'interface
     ui->setupUi(this);
     InitialiserEditeur();
-//Initialise les données
-
 }
 
 MainWindow::~MainWindow()
 {
-//Réinitialise le MIDI
-    MIDI::DesactiverIn();
-    MIDI::DesactiverOut();
+    TerminerEditeur();
     delete ui;
 }
 
@@ -71,13 +66,28 @@ void MainWindow::InitialiserEditeur()
     ChangerInst(0);
 }
 
+void MainWindow::TerminerEditeur()
+{
+//Réinitialise le MIDI
+    MIDI::DesactiverIn();
+    MIDI::DesactiverOut();
+}
+
+/*****************************************************************************/
 void MainWindow::ActiverEditeur(bool Actif)
 {
-//Active ou désactive
+//Active les onglets
     ui->tab_banks->setEnabled(Actif);
-    ui->tab_instruments->setEnabled(Actif);
+    ui->tab_set->setEnabled(Actif);
     ui->tab_voice->setEnabled(Actif);
     ui->tab_operas->setEnabled(Actif);
+//Active les menus
+    ui->actionLoad_bank->setEnabled(Actif);
+    ui->actionLoad_set->setEnabled(Actif);
+    ui->actionLoad_voice->setEnabled(Actif);
+    ui->actionSave_bank->setEnabled(Actif);
+    ui->actionSave_set->setEnabled(Actif);
+    ui->actionSave_voice->setEnabled(Actif);
 }
 
 /*****************************************************************************/
@@ -96,6 +106,7 @@ void MainWindow::ChangerPage(int Page)
     }
 }
 
+/*****************************************************************************/
 void MainWindow::ChangerInst(int Inst)
 {
 //Active l'instrument
@@ -152,28 +163,31 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
 }
 
 /*****************************************************************************/
-void MainWindow::on_actionLoad_inst_triggered(bool checked)
+void MainWindow::on_actionLoad_set_triggered(bool checked)
 {
-    int  Version;
-    char Text[3];
 //Ouvre le sélecteur
     QString Nom =
-    QFileDialog::getOpenFileName(this, "Load an instrument set", "", "*.fbi");
+    QFileDialog::getOpenFileName(this, "Load a set", "", "*.fbi");
 //Ouvre le fichier
     if (Nom.isEmpty()) return;
     QFile Fichier(Nom);
-    if (!Fichier.open(QIODevice::ReadOnly)) goto Error;
-//Lit l'entete
-
+    if (!Fichier.open(QIODevice::ReadOnly)) goto Error1;
+//Lit l'entète
+    char Text[3];
+    Fichier.read(Text, 3);
+    if (strncmp("FBI", Text, 3)) goto BadFile1;
+    short Version;
+    Fichier.read((char *) &Version, (sizeof(short)));
+    if (Version > 1) goto NewFile1;
 //Charge le set d'instruments
-    if (ui->widget_instru_1->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_2->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_3->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_4->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_5->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_6->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_7->Charger(&Fichier, Version)) goto Error;
-    if (ui->widget_instru_8->Charger(&Fichier, Version)) goto Error;
+    if (ui->widget_instru_1->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_2->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_3->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_4->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_5->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_6->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_7->Charger(&Fichier, Version)) goto BadFile1;
+    if (ui->widget_instru_8->Charger(&Fichier, Version)) goto BadFile1;
 //Actualise l'instrument
     ui->widget_instru_1->Envoyer();
     ui->widget_instru_2->Envoyer();
@@ -187,42 +201,109 @@ void MainWindow::on_actionLoad_inst_triggered(bool checked)
     Fichier.close();
     return;
 //Erreur apparue
-Error :
+Error1 :
     QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    return;
+BadFile1:
+    QMessageBox::warning(this, "FB01 SE :", "Bad instrument set file !");
+    Fichier.close();
+    return;
+NewFile1:
+    QMessageBox::warning(this, "FB01 SE :", "This is a new editor's file !");
+    Fichier.close();
 }
 
-void MainWindow::on_actionSave_inst_triggered(bool checked)
+
+void MainWindow::on_actionSave_set_triggered(bool checked)
 {
 //Ouvre le sélecteur
+    short Version = 1;
     QString Nom =
-    QFileDialog::getOpenFileName(this, "Save an instrument set", "", "*.fbi");
+    QFileDialog::getSaveFileName(this, "Save a set", "", "*.fbi");
 //Ouvre le fichier
     if (Nom.isEmpty()) return;
     QFile Fichier(Nom);
-    if (!Fichier.open(QIODevice::WriteOnly)) goto Error;
+    if (!Fichier.open(QIODevice::WriteOnly)) goto Error2;
+//Ecrit un header
+    Fichier.write("FBI", 3);
+    Fichier.write((char *) &Version, (sizeof(short)));
 //Enregistre le set d'instruments
-    if (ui->widget_instru_1->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_2->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_3->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_4->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_5->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_6->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_7->Enregistrer(&Fichier)) goto Error;
-    if (ui->widget_instru_8->Enregistrer(&Fichier)) goto Error;
+    if (ui->widget_instru_1->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_2->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_3->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_4->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_5->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_6->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_7->Enregistrer(&Fichier)) goto Error2;
+    if (ui->widget_instru_8->Enregistrer(&Fichier)) goto Error2;
 //Ferme le fichier
     Fichier.close();
     return;
 //Erreur apparue
-Error :
+Error2:
     QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
+    if (Fichier.isOpen()) Fichier.close();
 }
 
 /*****************************************************************************/
 void MainWindow::on_actionLoad_voice_triggered(bool checked)
 {
+//Ouvre le sélecteur
+    QString Nom =
+    QFileDialog::getOpenFileName(this, "Load a voice", "", "*.fbv");
+//Ouvre le fichier
+    if (Nom.isEmpty()) return;
+    QFile Fichier(Nom);
+    if (!Fichier.open(QIODevice::ReadOnly)) goto Error3;
+//Lit l'entète
+    char Text[3];
+    Fichier.read(Text, 3);
+    if (strncmp("FBV", Text, 3)) goto BadFile3;
+    short Version;
+    Fichier.read((char *) &Version, (sizeof(short)));
+    if (Version > 1) goto NewFile3;
+//Charge la voix
+
+//Actualise la voix
+
+//Ferme le fichier
+    Fichier.close();
+    return;
+//Erreur apparue
+Error3:
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    return;
+BadFile3:
+    QMessageBox::warning(this, "FB01 SE :", "Bad voice file !");
+    Fichier.close();
+    return;
+NewFile3:
+    QMessageBox::warning(this, "FB01 SE :", "This is a new editor's file !");
+    Fichier.close();
 }
+
 void MainWindow::on_actionSave_voice_triggered(bool checked)
 {
+//Ouvre le sélecteur
+    short Version = 1;
+    QString Nom =
+    QFileDialog::getSaveFileName(this, "Save a voice", "", "*.fbv");
+//Ouvre le fichier
+    if (Nom.isEmpty()) return;
+    QFile Fichier(Nom);
+    if (!Fichier.open(QIODevice::WriteOnly)) goto Error4;
+//Lit l'entète
+    Fichier.write("FBV", 3);
+    Fichier.write((char *) &Version, (sizeof(short)));
+//Enregistre la voix
+
+//Ferme le fichier
+    Fichier.close();
+    return;
+//Erreur apparue
+Error4:
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    if (Fichier.isOpen()) Fichier.close();
 }
 
 /*****************************************************************************/

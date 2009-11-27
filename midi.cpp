@@ -22,6 +22,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
 #include <QTime>
+#include <QFile>
 #include "midi.h"
 
 //Application
@@ -35,7 +36,7 @@
     uchar MIDI::Tampon[TAMPON];
     uchar MIDI::Donnees[TAMPON];
     bool MIDI::Prepare = false;
-    bool MIDI::Recu    = false;
+    bool MIDI::Attente = false;
 //Prototypes
     ulong MIDI::HndIn = 0;
     ulong MIDI::HndOut = 0;
@@ -86,19 +87,14 @@ void MIDI::ActiverIn(int Index)
     DesactiverIn();
     if (Index == -1) return;
 //Active le port in
-    Resultat = midiInOpen(&HndIn, Index, 0, 0, 0);
-    if (Resultat) AfficherErrIn(Resultat);
-//Configure le tampon
-    memset(&TampHDR, 0, sizeof(MIDIHDR));
-    TampHDR.dwBufferLength = TAMPON;
-    TampHDR.lpData = (char *) Tampon;
-//Prépare le tampon
-    Resultat = midiInPrepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
-    if (Resultat) AfficherErrIn(Resultat);
-    Prepare = true;
-    Recu    = false;
-//Active le tampon
-    midiInAddBuffer(HndIn, &TampHDR, sizeof(MIDIHDR));
+    Resultat = midiInOpen(&HndIn, Index, (ulong) Callback, 0, CALLBACK_FUNCTION);
+    if (Resultat)
+    {
+        AfficherErrIn(Resultat);
+        return;
+    }
+//Démarre l'écoute
+    PreparerTampon();
     midiInStart(HndIn);
 }
 
@@ -107,9 +103,13 @@ void MIDI::DesactiverIn()
 //Vérifie l'activation
     if (HndIn == 0) return;
 //Arrête l'écoute
-    midiInStop(HndIn);
+    Attente = true;
     midiInReset(HndIn);
-
+    midiInStop(HndIn);
+    if (Prepare) midiInUnprepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
+//Réinitialise
+    Prepare = false;
+    Attente = false;
 //Ferme le port
     midiInClose(HndIn);
     HndIn = 0;
@@ -161,26 +161,10 @@ void MIDI::AfficherErrIn(uint Resultat)
 
 void MIDI::AfficherErrOut(uint Resultat)
 {
-    char Text[128];
+    char Text[256];
 //Affiche l'érreur
-    midiOutGetErrorTextA(Resultat, Text, 128);
+    midiOutGetErrorTextA(Resultat, Text, 256);
     QMessageBox::critical(NULL, "FB01 SE :", Text);
-}
-
-/*****************************************************************************/
-void MIDI::RecMsgLng(int Secs)
-{
-//Démarre l'attente
-    int Millis = Secs * 1000;
-    /*
-    QTime::start();
-    while(QTime::elapsed() < Millis)
-    {
-        if (Recu == true) goto Suite;
-        mainApp->processEvents();
-    }
-Suite :
-*/
 }
 
 /*****************************************************************************/
@@ -194,11 +178,12 @@ void MIDI::EnvMsgLng(MMSG * Msg, int Taille)
     memset(&Header, 0, sizeof(MIDIHDR));
     Header.dwBufferLength = Taille;
     Header.lpData = (char *) Msg;
+//Prépare le tampon
     Resultat = midiOutPrepareHeader(HndOut, &Header, sizeof(MIDIHDR));
-    if(Resultat)AfficherErrOut(Resultat);
+    if (Resultat) AfficherErrOut(Resultat);
 //Envoie le message
     Resultat = midiOutLongMsg(HndOut, &Header, sizeof(MIDIHDR));
-    if(Resultat)AfficherErrOut(Resultat);
+    if (Resultat) AfficherErrOut(Resultat);
     midiOutUnprepareHeader(HndOut, &Header, sizeof(MIDIHDR));
 }
 
@@ -212,22 +197,78 @@ void MIDI::EnvMsg(MMSG * Msg)
 }
 
 /*****************************************************************************/
-void MIDI::Callback(ulong hmi, uint msg, ulong instance, ulong param1, ulong param2)
+bool MIDI::AttMsg()
 {
-//SysEX
-    if (msg == MIM_LONGDATA)
+    QTime Timer;
+//Passe en mode réception
+    Attente = true;
+    Timer.start();
+ //Attend un sysex
+    while(Attente)
     {
-    //Libère le tampon
-        midiInUnprepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
-        Prepare = false;
-    //Copie les données
-        memcpy(Donnees, Tampon, TAMPON);
-        Recu = true;
-    //Reprépare le tampon
-        if (TampHDR.dwBytesRecorded == 0) return;
-        midiInPrepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
-        midiInAddBuffer(HndIn, &TampHDR, sizeof(MIDIHDR));
-        Prepare = true;
+    //Gère les évenements
+        mainApp->processEvents();
+        if (Timer.elapsed() > ATTENTE)
+        {
+        //Pas de réponse
+            Attente = false;
+            QMessageBox::warning(NULL,"FB01 SE :", "No aswer from the FB01 !");
+            return false;
+        }
     }
+//Récupère les données
+    memcpy(Donnees, Tampon, TAMPON);
+    PreparerTampon();
+    return true;
 }
 
+/*****************************************************************************/
+bool MIDI::EnAttente()
+{
+    return Attente;
+}
+
+uchar MIDI::LireMsg(int Pos)
+{
+    if (Pos < TAMPON) return Donnees[Pos];
+    return 0;
+}
+
+/*****************************************************************************/
+void MIDI::PreparerTampon()
+{
+    uint Resultat;
+//Déprépare le tampon
+    if (Prepare)
+    {
+        midiInUnprepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
+        Prepare = false;
+    }
+//Initialise  le tampon
+    memset(Tampon, 0, TAMPON);
+    memset(&TampHDR, 0, sizeof(MIDIHDR));
+//Configure l'entête
+    TampHDR.dwBufferLength = TAMPON;
+    TampHDR.lpData = (char *) Tampon;
+//Prépare le tampon
+    Resultat = midiInPrepareHeader(HndIn, &TampHDR, sizeof(MIDIHDR));
+    if (Resultat)
+    {
+        AfficherErrIn(Resultat);
+        return;
+    }
+//Ajoute à la liste
+    midiInAddBuffer(HndIn, &TampHDR, sizeof(MIDIHDR));
+    Prepare = true;
+}
+
+/*****************************************************************************/
+void WINAPI MIDI::Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2)
+{
+//Réception de SysEX
+    if (msg == MIM_LONGDATA)
+    {
+        if (Attente) Attente = false;
+        else PreparerTampon();
+    }
+}

@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -505,7 +505,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_instruments">
+    <widget class="QWidget" name="tab_set">
      <attribute name="title">
       <string>Current Set</string>
      </attribute>
@@ -1206,8 +1206,8 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionLoad_inst"/>
-    <addaction name="actionSave_inst"/>
+    <addaction name="actionLoad_set"/>
+    <addaction name="actionSave_set"/>
     <addaction name="separator"/>
     <addaction name="actionLoad_voice"/>
     <addaction name="actionSave_voice"/>
@@ -1223,7 +1223,20 @@
     <addaction name="separator"/>
     <addaction name="actionOnline_help"/>
    </widget>
+   <widget class="QMenu" name="menuFB01">
+    <property name="title">
+     <string>FB01</string>
+    </property>
+    <addaction name="actionSend_current_set"/>
+    <addaction name="actionSend_current_voice"/>
+    <addaction name="actionSend_current_operators"/>
+    <addaction name="separator"/>
+    <addaction name="actionGet_current_set"/>
+    <addaction name="actionGet_current_voice"/>
+    <addaction name="actionGet_current_operators"/>
+   </widget>
    <addaction name="menuFichier"/>
+   <addaction name="menuFB01"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionQuit">
@@ -1241,14 +1254,14 @@
     <string>Online help ...</string>
    </property>
   </action>
-  <action name="actionLoad_inst">
+  <action name="actionLoad_set">
    <property name="text">
-    <string>Load instrument set ...</string>
+    <string>Load set ...</string>
    </property>
   </action>
-  <action name="actionSave_inst">
+  <action name="actionSave_set">
    <property name="text">
-    <string>Save instrument set ...</string>
+    <string>Save set ...</string>
    </property>
   </action>
   <action name="actionLoad_voice">
@@ -1274,6 +1287,36 @@
   <action name="actionSave_bank">
    <property name="text">
     <string>Save bank ...</string>
+   </property>
+  </action>
+  <action name="actionSend_current_set">
+   <property name="text">
+    <string>Send current set</string>
+   </property>
+  </action>
+  <action name="actionSend_current_voice">
+   <property name="text">
+    <string>Send current voice</string>
+   </property>
+  </action>
+  <action name="actionSend_current_operators">
+   <property name="text">
+    <string>Send current operators</string>
+   </property>
+  </action>
+  <action name="actionGet_current_set">
+   <property name="text">
+    <string>Get current set</string>
+   </property>
+  </action>
+  <action name="actionGet_current_voice">
+   <property name="text">
+    <string>Get current voice</string>
+   </property>
+  </action>
+  <action name="actionGet_current_operators">
+   <property name="text">
+    <string>Get current operators</string>
    </property>
   </action>
  </widget>

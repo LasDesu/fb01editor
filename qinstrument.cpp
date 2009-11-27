@@ -3,7 +3,9 @@
 /*****************************************************************************/
 QInstrument::QInstrument(QWidget *parent) :  QWidget(parent), m_ui(new Ui::QInstrument)
 {
+//Initialise
     m_ui->setupUi(this);
+    Attente = false;
     ChangerID(0);
 }
 
@@ -109,6 +111,7 @@ bool QInstrument::Charger(QFile * File, int Version)
     return false;
 }
 
+/*****************************************************************************/
 void QInstrument::Envoyer()
 {
 //Envoie la configuration complète
@@ -127,6 +130,12 @@ void QInstrument::Envoyer()
     EXPANDEUR::EcrireInstParam(IDSel, 0x0C, (uchar) m_ui->spnBox_pitch->value());
     EXPANDEUR::EcrireInstParam(IDSel, 0x0D, (uchar) m_ui->pshBut_poly->isChecked());
     EXPANDEUR::EcrireInstParam(IDSel, 0x0E, (uchar) m_ui->cmbBox_pmdctl->currentIndex());
+}
+
+void Recevoir()
+{
+//Reçoit la configuration de l'expandeur
+
 }
 
 /*****************************************************************************/

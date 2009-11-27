@@ -27,7 +27,6 @@ extern "C"
 //Types de données
     #define WINAPI __stdcall
     #define CALLBACK_FUNCTION 0x30000
-
 //Constantes MIDI
     #define MIM_LONGDATA 0x3C4
 
@@ -63,7 +62,7 @@ extern "C"
         void  *lpNext;
         ulong reserved;
         ulong dwOffset;
-        ulong dwReserved[8];
+        ulong dwReserved[4];
     } MIDIHDR;
 
 //Routines MIDI winmm

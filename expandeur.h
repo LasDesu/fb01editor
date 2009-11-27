@@ -23,44 +23,57 @@
 #define EXPANDEUR_H
 
     #include "types.h"
+    #include "midi.h"
 
     #define BANQUES 7
-    #define VOIX 48
+    #define VOIX    48
 
     class EXPANDEUR
     {
     private:
-    //Banques
-        static uchar Banques[BANQUES][VOIX];
+
     public:
     //Configuration
         static uchar SysChan;
     //Chargement/déchargement
-        static void ChargerBanque(uchar Banque);
-        static void SauverBanque(uchar Banque);
+        static bool ChargerBanque(uchar Banque);
+        static bool ChargerSet();
+        static bool ChargerVoix(uchar Inst);
     //Communication
-        static void EcrireInstParam(uchar Inst, uchar Param, uchar Valeur);
-        static void EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
-        static void EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur);
-        static void EcrireSysParam(uchar Param, uchar Valeur);
+        static void  EcrireInstParam(uchar Inst, uchar Param, uchar Valeur);
+        static void  EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
+        static uchar LireVoiceParam(uchar Param);
+        static void  EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur);
+        static uchar LireOpParam(uchar Op, uchar Param);
+        static void  EcrireSysParam(uchar Param, uchar Valeur);
+        static bool  Attente();
     //Paramètres composés voies
-        static void ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
-        static void ChangerNom(uchar Inst, const char * Nom);
-        static void ChangerVoicex09(uchar Inst, bool Load, uchar AMD);
-        static void ChangerVoicex0A(uchar Inst, bool Sync, uchar PMD);
-        static void ChangerVoicex0C(uchar Inst, uchar Feedback, uchar Algo);
-        static void ChangerVoicex0D(uchar Inst, uchar PMS, uchar AMS);
-        static void ChangerVoicex0E(uchar Inst, uchar Wave);
-        static void ChangerVoicex3A(uchar Inst, bool Poly, uchar Porta);
-        static void ChangerVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch);
+        static void EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
+        static void LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4);
+        static void EcrireNom(uchar Inst, const char * Nom);
+        static void LireNom(char * Nom);
+        static void EcrireVoicex09(uchar Inst, bool Load, uchar AMD);
+        static void LireVoicex09(bool * Load, uchar * AMD);
+        static void EcrireVoicex0A(uchar Inst, bool Sync, uchar PMD);
+        static void LireVoicex0A(bool * Sync, uchar * PMD);
+        static void EcrireVoicex0C(uchar Inst, uchar Feedback, uchar Algo);
+        static void LireVoicex0C(uchar * Feedback, uchar * Algo);
+        static void EcrireVoicex0D(uchar Inst, uchar PMS, uchar AMS);
+        static void LireVoicex0D(uchar * PMS, uchar * AMS);
+        static void EcrireVoicex0E(uchar Inst, uchar Wave);
+        static void LireVoicex0E(uchar * Wave);
+        static void EcrireVoicex3A(uchar Inst, bool Poly, uchar Porta);
+        static void LireVoicex3A(bool * Poly, uchar * Porta);
+        static void EcrireVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch);
+        static void LireVoicex3B(uchar * Pmdctl, uchar * Pitch);
     //Paramètres composés opérateurs
-        static void ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
-        static void ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
-        static void ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);
-        static void ChangerOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR);
-        static void ChangerOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1);
-        static void ChangerOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2);
-        static void ChangerOpx07(uchar Inst, uchar Op, uchar SL, uchar RR);
+        static void EcrireOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
+        static void EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
+        static void EcrireOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);
+        static void EcrireOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR);
+        static void EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1);
+        static void EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2);
+        static void EcrireOpx07(uchar Inst, uchar Op, uchar SL, uchar RR);
     };
 
 #endif // EXPANDEUR_H

@@ -26,9 +26,13 @@
     #include "types.h"
     #include "win32.h"
 
+//Constantes
     #define MAXINS  5
     #define MAXOUTS 5
-    #define TAMPON  4096
+    #define TAMPON  2048
+    #define ATTENTE 8000
+
+//Message midi
     typedef union
     {
         ulong word;
@@ -47,14 +51,15 @@
         static uchar Tampon[TAMPON];
         static uchar Donnees[TAMPON];
         static MIDIHDR TampHDR;
+    //Flags de réception
         static bool Prepare;
-        static bool Recu;
-    //Callback
+        static bool Attente;
+    //Callback de reception
         static void WINAPI Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2);
     //Utilitaires
         static void AfficherErrIn(uint Resultat);
         static void AfficherErrOut(uint Resultat);
-
+        static void PreparerTampon();
     public:
     //Enumération
         static void Lister();
@@ -68,9 +73,12 @@
         static void ActiverOut(int Index);
         static void DesactiverOut();
     //Communication
-        static void RecMsgLng(int Secs);
-        static void EnvMsgLng(MMSG * Msg, int Taille);
-        static void EnvMsg(MMSG * Msg);
+        static void  EnvMsgLng(MMSG * Msg, int Taille);
+        static void  EnvMsg(MMSG * Msg);
+        static bool  AttMsg();
+        static uchar LireMsg(int Pos);
+        static bool  EnAttente();
+    //Messages spécifiques
         static void Note(uchar Chan, uchar Note, uchar Velo);
     };
 

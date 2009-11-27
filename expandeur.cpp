@@ -20,16 +20,14 @@
 */
 
 #include "expandeur.h"
-#include "midi.h"
 
 uchar EXPANDEUR::SysChan = 0;
 
 /*****************************************************************************/
-void EXPANDEUR::ChargerBanque(uchar Banque)
+bool EXPANDEUR::ChargerBanque(uchar Banque)
 {
     MMSG Msg[2];
-    MMSG Rep[815];
-//Envoi la commande
+//Prépare la demande
     Msg[0].data[0] = 0xF0;
     Msg[0].data[1] = 0x43;
     Msg[0].data[2] = 0x75;
@@ -38,19 +36,38 @@ void EXPANDEUR::ChargerBanque(uchar Banque)
     Msg[1].data[1] = 0x00;
     Msg[1].data[2] = Banque & 0xF;
     Msg[1].data[3] = 0xF7;
-//Vérifie la réponse
-
+//Envoie la demande
+    MIDI::EnvMsgLng(Msg, 8);
+    return MIDI::AttMsg();
 }
 
-void EXPANDEUR::SauverBanque(uchar Banque)
+bool EXPANDEUR::ChargerSet()
 {
+    return true;
+}
+
+bool EXPANDEUR::ChargerVoix(uchar Inst)
+{
+    MMSG Msg[2];
+//Prépare la demande
+    Msg[0].data[0] = 0xF0;
+    Msg[0].data[1] = 0x43;
+    Msg[0].data[2] = 0x75;
+    Msg[0].data[3] = SysChan;
+    Msg[1].data[0] = 0x20 + ((Inst + 8) & 0xF);
+    Msg[1].data[1] = 0x00;
+    Msg[1].data[2] = 0x00;
+    Msg[1].data[3] = 0xF7;
+//Envoie la demande
+    MIDI::EnvMsgLng(Msg, 8);
+    return MIDI::AttMsg();
 }
 
 /*****************************************************************************/
-void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
+void EXPANDEUR::EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
 {
     uchar Octet = 0;
-//Active les opérateurs
+//Valide les opérateurs
     if (Op1) Octet += 0x8;
     if (Op2) Octet += 0x10;
     if (Op3) Octet += 0x20;
@@ -58,7 +75,19 @@ void EXPANDEUR::ActiverOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
     EcrireVoiceParam(Inst, 0x0B, Octet);
 }
 
-void EXPANDEUR::ChangerNom(uchar Inst, const char * Nom)
+void EXPANDEUR::LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4)
+{
+    uchar Octet;
+    Octet = EXPANDEUR::LireVoiceParam(0x0B);
+//Récupère l'état
+    *Op1 = (bool) (Octet & 0x8);
+    *Op2 = (bool) (Octet & 0x10);
+    *Op3 = (bool) (Octet & 0x20);
+    *Op4 = (bool) (Octet & 0x40);
+}
+
+/*****************************************************************************/
+void EXPANDEUR::EcrireNom(uchar Inst, const char * Nom)
 {
     uchar Octet[7];
 //Recopie la chaine
@@ -69,7 +98,15 @@ void EXPANDEUR::ChangerNom(uchar Inst, const char * Nom)
         EcrireVoiceParam(Inst, i, Octet[i]);
 }
 
-void EXPANDEUR::ChangerVoicex09(uchar Inst, bool Load, uchar AMD)
+void EXPANDEUR::LireNom(char * Nom)
+{
+//Recopie la chaine
+    for (uchar i = 0; i < 7; i++)
+        Nom[i] = (char) EXPANDEUR::LireVoiceParam(i);
+    Nom[7] = 0;
+}
+
+void EXPANDEUR::EcrireVoicex09(uchar Inst, bool Load, uchar AMD)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -78,7 +115,16 @@ void EXPANDEUR::ChangerVoicex09(uchar Inst, bool Load, uchar AMD)
     EcrireVoiceParam(Inst, 0x09, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex0A(uchar Inst, bool Sync, uchar PMD)
+void EXPANDEUR::LireVoicex09(bool * Load, uchar * AMD)
+{
+    uchar Octet;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x09);
+    *Load = (bool) (Octet >> 7);
+    *AMD = Octet & 0x7F;
+}
+
+void EXPANDEUR::EcrireVoicex0A(uchar Inst, bool Sync, uchar PMD)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -87,7 +133,16 @@ void EXPANDEUR::ChangerVoicex0A(uchar Inst, bool Sync, uchar PMD)
     EcrireVoiceParam(Inst, 0x0A, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex0C(uchar Inst, uchar Feedback, uchar Algo)
+void EXPANDEUR::LireVoicex0A(bool * Sync, uchar * PMD)
+{
+    uchar Octet;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x0A);
+    *Sync = (bool) (Octet >> 7);
+    *PMD = Octet & 0x7F;
+}
+
+void EXPANDEUR::EcrireVoicex0C(uchar Inst, uchar Feedback, uchar Algo)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -96,7 +151,16 @@ void EXPANDEUR::ChangerVoicex0C(uchar Inst, uchar Feedback, uchar Algo)
     EcrireVoiceParam(Inst, 0x0C, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex0D(uchar Inst, uchar PMS, uchar AMS)
+void EXPANDEUR::LireVoicex0C(uchar * Feedback, uchar * Algo)
+{
+    uchar Octet;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x0C);
+    *Feedback = (Octet >> 3) & 0x7;
+    *Algo = Octet & 0x7;
+}
+
+void EXPANDEUR::EcrireVoicex0D(uchar Inst, uchar PMS, uchar AMS)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -105,7 +169,16 @@ void EXPANDEUR::ChangerVoicex0D(uchar Inst, uchar PMS, uchar AMS)
     EcrireVoiceParam(Inst, 0x0D, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex0E(uchar Inst, uchar Wave)
+void EXPANDEUR::LireVoicex0D(uchar * PMS, uchar * AMS)
+{
+    uchar Octet = 0;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x0D);
+    *PMS = (Octet >> 4) & 0x7;
+    *AMS = Octet & 0x3;
+}
+
+void EXPANDEUR::EcrireVoicex0E(uchar Inst, uchar Wave)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -113,7 +186,15 @@ void EXPANDEUR::ChangerVoicex0E(uchar Inst, uchar Wave)
     EcrireVoiceParam(Inst, 0x0E, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex3A(uchar Inst, bool Poly, uchar Porta)
+void EXPANDEUR::LireVoicex0E(uchar * Wave)
+{
+    uchar Octet = 0;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x0E);
+    *Wave = (Octet >> 5) & 0x3;
+}
+
+void EXPANDEUR::EcrireVoicex3A(uchar Inst, bool Poly, uchar Porta)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -122,7 +203,16 @@ void EXPANDEUR::ChangerVoicex3A(uchar Inst, bool Poly, uchar Porta)
     EcrireVoiceParam(Inst, 0x3A, Octet);
 }
 
-void EXPANDEUR::ChangerVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch)
+void EXPANDEUR::LireVoicex3A(bool * Poly, uchar * Porta)
+{
+    uchar Octet = 0;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x3A);
+    *Poly = (bool) (Octet >> 7);
+    *Porta = Octet & 0x7F;
+}
+
+void EXPANDEUR::EcrireVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -131,8 +221,17 @@ void EXPANDEUR::ChangerVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch)
     EcrireVoiceParam(Inst, 0x3B, Octet);
 }
 
+void EXPANDEUR::LireVoicex3B(uchar * Pmdctl, uchar * Pitch)
+{
+    uchar Octet = 0;
+//Récupère le paquet
+    Octet = EXPANDEUR::LireVoiceParam(0x3B);
+    *Pmdctl = (Octet >> 4) & 0x7;
+    *Pitch = Octet & 0xF;
+}
+
 /*****************************************************************************/
-void EXPANDEUR::ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity)
+void EXPANDEUR::EcrireOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -141,7 +240,7 @@ void EXPANDEUR::ChangerOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity
     EcrireOpParam(Inst, Op, 0x01, Octet);
 }
 
-void EXPANDEUR::ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust)
+void EXPANDEUR::EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -150,7 +249,7 @@ void EXPANDEUR::ChangerOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust)
     EcrireOpParam(Inst, Op, 0x02, Octet);
 }
 
-void EXPANDEUR::ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple)
+void EXPANDEUR::EcrireOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -160,7 +259,7 @@ void EXPANDEUR::ChangerOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uc
     EcrireOpParam(Inst, Op, 0x03, Octet);
 }
 
-void EXPANDEUR::ChangerOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR)
+void EXPANDEUR::EcrireOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -169,7 +268,7 @@ void EXPANDEUR::ChangerOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR)
     EcrireOpParam(Inst, Op, 0x04, Octet);
 }
 
-void EXPANDEUR::ChangerOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1)
+void EXPANDEUR::EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -179,7 +278,7 @@ void EXPANDEUR::ChangerOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens,
     EcrireOpParam(Inst, Op, 0x05, Octet);
 }
 
-void EXPANDEUR::ChangerOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2)
+void EXPANDEUR::EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -188,7 +287,7 @@ void EXPANDEUR::ChangerOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2)
     EcrireOpParam(Inst, Op, 0x06, Octet);
 }
 
-void EXPANDEUR::ChangerOpx07(uchar Inst, uchar Op, uchar SL, uchar RR)
+void EXPANDEUR::EcrireOpx07(uchar Inst, uchar Op, uchar SL, uchar RR)
 {
     uchar Octet = 0;
 //Compose le paquet
@@ -214,6 +313,7 @@ void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
     MIDI::EnvMsgLng(Msg, 8);
 }
 
+/*****************************************************************************/
 void EXPANDEUR::EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur)
 {
     MMSG Msg[3];
@@ -231,12 +331,29 @@ void EXPANDEUR::EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur)
     MIDI::EnvMsgLng(Msg, 9);
 }
 
+uchar EXPANDEUR::LireVoiceParam(uchar Param)
+{
+    uchar Octet = 0;
+    int Pos = 0x9 + 2 * (int)Param;
+//Lit un paramêtre
+    Octet += MIDI::LireMsg(Pos) & 0xF;
+    Octet += MIDI::LireMsg(Pos+1) << 4;
+    return Octet;
+}
+
 void EXPANDEUR::EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur)
 {
 //Configure un opérateur
     EcrireVoiceParam(Inst, Param + 0x10 + Op * 0x8, Valeur);
 }
 
+uchar EXPANDEUR::LireOpParam(uchar Op, uchar Param)
+{
+//Examine un opérateur
+    return LireVoiceParam(Param + 0x10 + Op * 0x8);
+}
+
+/*****************************************************************************/
 void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
 {
     MMSG Msg[2];

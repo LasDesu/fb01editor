@@ -44,8 +44,10 @@ private:
     Ui::MainWindow *ui;
     int PageSel;
     int InstSel;
-//Utilitaires
+//Initialisation
     void InitialiserEditeur();
+    void TerminerEditeur();
+//Utilitaires
     void ActiverEditeur(bool Actif);
     void ChangerPage(int Page);
     void ChangerInst(int Inst);
@@ -58,8 +60,14 @@ private slots:
     void on_actionQuit_triggered(bool checked = false);
     void on_actionLoad_voice_triggered(bool checked = false);
     void on_actionSave_voice_triggered(bool checked = false);
-    void on_actionLoad_inst_triggered(bool checked = false);
-    void on_actionSave_inst_triggered(bool checked = false);
+    void on_actionLoad_set_triggered(bool checked = false);
+    void on_actionSave_set_triggered(bool checked = false);
+//Menu FB01
+    void on_actionGet_current_voice_triggered(bool checked = false)
+        {ui->widget_voice->Recevoir();}
+    void on_actionGet_current_operators_triggered(bool checked = false)
+        {ui->widget_opera_1->Recevoir(); ui->widget_opera_2->Recevoir();
+         ui->widget_opera_3->Recevoir(); ui->widget_opera_4->Recevoir();}
 //Menu aide
     void on_actionAbout_triggered(bool checked = false);
     void on_actionRead_this_triggered(bool checked = false);
@@ -100,16 +108,16 @@ private slots:
         {ChangerInst(7);}
 //Edition des opérateurs
     void on_pshBut_OPon_1_clicked(bool checked)
-        {EXPANDEUR::ActiverOps(InstSel, (uchar) checked, (uchar) ui->pshBut_OPon_2->isChecked(),
+        {EXPANDEUR::EcrireOps(InstSel, (uchar) checked, (uchar) ui->pshBut_OPon_2->isChecked(),
                                (uchar) ui->pshBut_OPon_3->isChecked(), (uchar) ui->pshBut_OPon_4->isChecked());}
     void on_pshBut_OPon_2_clicked(bool checked)
-        {EXPANDEUR::ActiverOps(InstSel, (uchar) ui->pshBut_OPon_2->isChecked(), (uchar) checked,
+        {EXPANDEUR::EcrireOps(InstSel, (uchar) ui->pshBut_OPon_2->isChecked(), (uchar) checked,
                                (uchar) ui->pshBut_OPon_3->isChecked(), (uchar) ui->pshBut_OPon_4->isChecked());}
     void on_pshBut_OPon_3_clicked(bool checked)
-        {EXPANDEUR::ActiverOps(InstSel, (uchar) ui->pshBut_OPon_1->isChecked(), (uchar) ui->pshBut_OPon_2->isChecked(),
+        {EXPANDEUR::EcrireOps(InstSel, (uchar) ui->pshBut_OPon_1->isChecked(), (uchar) ui->pshBut_OPon_2->isChecked(),
                                (uchar) checked, (uchar) ui->pshBut_OPon_4->isChecked());}
     void on_pshBut_OPon_4_clicked(bool checked)
-        {EXPANDEUR::ActiverOps(InstSel, (uchar) ui->pshBut_OPon_1->isChecked(), (uchar) ui->pshBut_OPon_2->isChecked(),
+        {EXPANDEUR::EcrireOps(InstSel, (uchar) ui->pshBut_OPon_1->isChecked(), (uchar) ui->pshBut_OPon_2->isChecked(),
                                (uchar) ui->pshBut_OPon_3->isChecked(), (uchar) checked);}
 };
 

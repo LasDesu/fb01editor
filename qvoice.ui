@@ -713,7 +713,7 @@
      <string>LFO load :</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pshBut_load">
+   <widget class="QPushButton" name="pshBut_LFOload">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -748,7 +748,7 @@
      <string>LFO sync :</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pshBut_sync">
+   <widget class="QPushButton" name="pshBut_LFOsync">
     <property name="geometry">
      <rect>
       <x>100</x>
