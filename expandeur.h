@@ -41,6 +41,7 @@
         static bool ChargerVoix(uchar Inst);
     //Communication
         static void  EcrireInstParam(uchar Inst, uchar Param, uchar Valeur);
+        static uchar LireInstParam(uchar Inst, uchar Param);
         static void  EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
         static uchar LireVoiceParam(uchar Param);
         static void  EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur);
@@ -68,12 +69,19 @@
         static void LireVoicex3B(uchar * Pmdctl, uchar * Pitch);
     //Paramètres composés opérateurs
         static void EcrireOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
+        static void LireOpx01(uchar Op, uchar * KeyCurb, uchar * Velocity);
         static void EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
+        static void LireOpx02(uchar Op, uchar * LvlDph, uchar * Adjust);
         static void EcrireOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);
+        static void LireOpx03(uchar Op, uchar * KeyCurb, uchar * Fine, uchar * Multiple);
         static void EcrireOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR);
+        static void LireOpx04(uchar Op, uchar * RateDph, uchar * AR);
         static void EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1);
+        static void LireOpx05(uchar Op, bool * Carrier, uchar * VeloSens, uchar * DR1);
         static void EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2);
+        static void LireOpx06(uchar Op, uchar * Coarse, uchar * DR2);
         static void EcrireOpx07(uchar Inst, uchar Op, uchar SL, uchar RR);
+        static void LireOpx07(uchar Op, uchar * SL, uchar * RR);
     };
 
 #endif // EXPANDEUR_H

@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -1229,11 +1229,9 @@
     </property>
     <addaction name="actionSend_current_set"/>
     <addaction name="actionSend_current_voice"/>
-    <addaction name="actionSend_current_operators"/>
     <addaction name="separator"/>
     <addaction name="actionGet_current_set"/>
     <addaction name="actionGet_current_voice"/>
-    <addaction name="actionGet_current_operators"/>
    </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuFB01"/>
@@ -1279,16 +1277,6 @@
     <string>Read this ...</string>
    </property>
   </action>
-  <action name="actionLoad_bank">
-   <property name="text">
-    <string>Load bank ...</string>
-   </property>
-  </action>
-  <action name="actionSave_bank">
-   <property name="text">
-    <string>Save bank ...</string>
-   </property>
-  </action>
   <action name="actionSend_current_set">
    <property name="text">
     <string>Send current set</string>
@@ -1299,11 +1287,6 @@
     <string>Send current voice</string>
    </property>
   </action>
-  <action name="actionSend_current_operators">
-   <property name="text">
-    <string>Send current operators</string>
-   </property>
-  </action>
   <action name="actionGet_current_set">
    <property name="text">
     <string>Get current set</string>
@@ -1312,11 +1295,6 @@
   <action name="actionGet_current_voice">
    <property name="text">
     <string>Get current voice</string>
-   </property>
-  </action>
-  <action name="actionGet_current_operators">
-   <property name="text">
-    <string>Get current operators</string>
    </property>
   </action>
  </widget>

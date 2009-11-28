@@ -21,8 +21,8 @@ public:
     void  ChangerInst(uchar Inst);
     uchar RecupererInst();
 //Chargement/enregistrement
-    bool Enregistrer(QFile * File);
-    bool Charger(QFile * File, int Version);
+    bool Enregistrer(QFile * Fichier);
+    bool Charger(QFile * Fichier, int Version);
 //Communication
     void Envoyer();
     void Recevoir();

@@ -32,82 +32,84 @@ uchar QInstrument::RecupererID()
 }
 
 /*****************************************************************************/
-bool QInstrument::Enregistrer(QFile * File)
+bool QInstrument::Enregistrer(QFile * Fichier)
 {
     char Octet;
 //Ecrit chaque donnée
     Octet = (char) m_ui->spnBox_notes->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_chan->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_upper->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_lower->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_bank->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_voice->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_detune->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->cmbBox_trans->currentIndex();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->hzSlider_volume->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->hzSlider_pan->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->pshBut_LFO->isChecked();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_porta->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_pitch->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->pshBut_poly->isChecked();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->cmbBox_pmdctl->currentIndex();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
 //Vérifie les erreurs
-    if (File->error()) return true;
+    if (Fichier->error()) return true;
     return false;
 }
 
-bool QInstrument::Charger(QFile * File, int Version)
+bool QInstrument::Charger(QFile * Fichier, int Version)
 {
     char Octet;
 //Lit chaque donnée
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_notes->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_chan->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_upper->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_lower->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_bank->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_voice->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_detune->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->cmbBox_trans->setCurrentIndex((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->hzSlider_volume->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->hzSlider_pan->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->pshBut_LFO->setChecked((bool)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_porta->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_pitch->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->pshBut_poly->setChecked((bool)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
 //Vérifie les erreurs
-    if (File->error()) return true;
+    if (Fichier->error()) return true;
+//Envoie les données
+    Envoyer();
     return false;
 }
 
@@ -132,10 +134,28 @@ void QInstrument::Envoyer()
     EXPANDEUR::EcrireInstParam(IDSel, 0x0E, (uchar) m_ui->cmbBox_pmdctl->currentIndex());
 }
 
-void Recevoir()
+void QInstrument::Recevoir()
 {
-//Reçoit la configuration de l'expandeur
-
+//Vérouille l'interface
+    Attente = true;
+//Interprète les données
+    m_ui->spnBox_notes->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x00));
+    m_ui->spnBox_chan->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x01));
+    m_ui->spnBox_upper->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x02));
+    m_ui->spnBox_lower->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x03));
+    m_ui->spnBox_bank->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x04));
+    m_ui->spnBox_voice->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x05));
+    m_ui->spnBox_detune->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x06));
+    m_ui->cmbBox_trans->setCurrentIndex((int) EXPANDEUR::LireInstParam(IDSel, 0x07));
+    m_ui->hzSlider_volume->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x08));
+    m_ui->hzSlider_pan->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x09));
+    m_ui->pshBut_LFO->setChecked((bool) EXPANDEUR::LireInstParam(IDSel, 0x0A));
+    m_ui->spnBox_porta->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x0B));
+    m_ui->spnBox_pitch->setValue((int) EXPANDEUR::LireInstParam(IDSel, 0x0C));
+    m_ui->pshBut_poly->setChecked(EXPANDEUR::LireInstParam(IDSel, 0x0D));
+    m_ui->cmbBox_pmdctl->setCurrentIndex(EXPANDEUR::LireInstParam(IDSel, 0x0E));
+//Déverrouille
+    Attente = false;
 }
 
 /*****************************************************************************/

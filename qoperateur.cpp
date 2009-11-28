@@ -44,85 +44,87 @@ uchar QOperateur::RecupererInst()
 }
 
 /*****************************************************************************/
-bool QOperateur::Enregistrer(QFile * File)
+bool QOperateur::Enregistrer(QFile * Fichier)
 {
     char Octet;
 //Ecrit chaque donnée
     Octet = (char) m_ui->hzSlider_volume->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->cmbBox_kbcurb->currentIndex();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_velocity->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_lvldph->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_adjTL->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_fine->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_multiple->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_rtdph->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_AR->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->pshBut_carrier->isChecked();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_velmod->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_DR1->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_coarse->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_DR2->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (uchar) m_ui->spnBox_SL->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_RR->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
 //Vérifie les erreurs
-    if (File->error()) return true;
+    if (Fichier->error()) return true;
     return false;
 }
 
-bool QOperateur::Charger(QFile * File, int Version)
+bool QOperateur::Charger(QFile * Fichier, int Version)
 {
     char Octet;
 //Lit chaque donnée
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->hzSlider_volume->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->cmbBox_kbcurb->setCurrentIndex((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_velocity->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_lvldph->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_adjTL->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_fine->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_multiple->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_rtdph->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_AR->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->pshBut_carrier->setChecked((bool)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_velmod->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_DR1->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_coarse->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_DR2->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_SL->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_RR->setValue((int)Octet);
 //Vérifie les erreurs
-    if (File->error()) return true;
+    if (Fichier->error()) return true;
+//Envoie les données
+    Envoyer();
     return false;
 }
 
@@ -142,7 +144,34 @@ void QOperateur::Envoyer()
 
 void QOperateur::Recevoir()
 {
-//Reçoit la configuration de l'expandeur
+    uchar st1, st2;
+    uchar p1, p2;
+    bool  b1;
+//Vérouille l'interface
+    Attente = true;
+//Interprète les données
+    m_ui->hzSlider_volume->setValue((int) (127 - EXPANDEUR::LireOpParam(IDSel, 0x00)));
+    EXPANDEUR::LireOpx01(IDSel, &st1, &p2);
+    m_ui->spnBox_velocity->setValue((int) p2);
+    EXPANDEUR::LireOpx02(IDSel, &p1, &p2);
+    m_ui->spnBox_lvldph->setValue((int) p1); m_ui->spnBox_adjTL->setValue((int) p2);
+    EXPANDEUR::LireOpx03(IDSel, &st2, &p1, &p2);
+    m_ui->cmbBox_kbcurb->setCurrentIndex((int)st1 + st2);
+    m_ui->spnBox_fine->setValue((int) p1);
+    m_ui->spnBox_multiple->setValue((int) p2);
+    EXPANDEUR::LireOpx04(IDSel, &p1, &p2);
+    m_ui->spnBox_rtdph->setValue((int) p1);
+    m_ui->spnBox_AR->setValue((int) p2);
+    EXPANDEUR::LireOpx05(IDSel, &b1, &p1, &p2);
+    m_ui->pshBut_carrier->setChecked(b1);
+    m_ui->spnBox_velmod->setValue((int) p1);
+    m_ui->spnBox_DR1->setValue((int) p2);
+    EXPANDEUR::LireOpx06(IDSel, &p1, &p2);
+    m_ui->spnBox_coarse->setValue((int) p1); m_ui->spnBox_DR2->setValue((int) p2);
+    EXPANDEUR::LireOpx07(IDSel, &p1, &p2);
+    m_ui->spnBox_SL->setValue((int) p1); m_ui->spnBox_RR->setValue((int) p2);
+ //Déverouille
+    Attente = false;
 }
 
 /*****************************************************************************/

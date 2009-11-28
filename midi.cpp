@@ -199,10 +199,16 @@ void MIDI::EnvMsg(MMSG * Msg)
 /*****************************************************************************/
 bool MIDI::AttMsg()
 {
-    QTime Timer;
 //Passe en mode réception
     Attente = true;
+    QTime Timer;
     Timer.start();
+ //Affiche la boite
+    QMessageBox MsgBox(NULL);
+    MsgBox.setWindowModality(Qt::WindowModal);
+    MsgBox.setWindowTitle("FB01 SE:");
+    MsgBox.setText("Waiting for device ...");
+    MsgBox.show();
  //Attend un sysex
     while(Attente)
     {
@@ -212,13 +218,18 @@ bool MIDI::AttMsg()
         {
         //Pas de réponse
             Attente = false;
-            QMessageBox::warning(NULL,"FB01 SE :", "No aswer from the FB01 !");
+            MsgBox.setText("No answer !");
+            MsgBox.done(0);
+        //Arrête l'attente
             return false;
         }
     }
 //Récupère les données
     memcpy(Donnees, Tampon, TAMPON);
     PreparerTampon();
+//Ferme la boite
+    MsgBox.setText("Well received !");
+    MsgBox.done(0);
     return true;
 }
 

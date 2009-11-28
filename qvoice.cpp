@@ -28,97 +28,110 @@ uchar QVoice::RecupererInst()
 }
 
 /*****************************************************************************/
-bool QVoice::Enregistrer(QFile * File)
+bool QVoice::Enregistrer(QFile * Fichier)
 {
+    char Infos[INFOS];
     char Nom[7];
     char Octet;
-//Ecrit le nom
-    memset(Nom, 0, 7);
-    strncpy(Nom, m_ui->txtEdit_name->toPlainText().toAscii().constData(), 7);
-    File->write(Nom, 7);
+//Ecrit les informations
+    strncpy(Infos, m_ui->txtEdit_author->toPlainText().toAscii().constData(), INFOS);
+    Fichier->write(Infos, INFOS);
+    strncpy(Infos, m_ui->txtEdit_comment->toPlainText().toAscii().constData(), INFOS);
+    Fichier->write(Infos, INFOS);
 //Ecrit la configuration globale
+    strncpy(Nom, m_ui->txtEdit_name->toPlainText().toAscii().constData(), 7);
+    Fichier->write(Nom, 7);
     Octet = (char) m_ui->spnBox_algo->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->cmbBox_style->currentIndex();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_feedback->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_trans->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->pshBut_poly->isChecked();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_porta->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_pitch->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->cmbBox_pmdctl->currentIndex();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
 //Ecrit la configuration du LFO
     Octet = (char) m_ui->spnBox_LFOspeed->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->cmbBox_LFOwave->currentIndex();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->pshBut_LFOload->isChecked();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->pshBut_LFOsync->isChecked();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_AMD->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_AMS->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_PMD->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
     Octet = (char) m_ui->spnBox_PMS->value();
-    File->write(&Octet, 1);
+    Fichier->write(&Octet, 1);
 //Vérifie les erreurs
-    if (File->error()) return true;
+    if (Fichier->error()) return true;
     return false;
 }
 
-bool QVoice::Charger(QFile * File, int Version)
+bool QVoice::Charger(QFile * Fichier, int Version)
 {
+    char Infos[INFOS];
     char Nom[7];
     char Octet;
-//Lit le nom
-    File->read(Nom, 7);
-    m_ui->txtEdit_name->setPlainText((QString)Nom);
+//Lit les informations
+    Fichier->read(Infos, INFOS);
+    Infos[INFOS-1] = 0;
+    m_ui->txtEdit_author->setPlainText((QString) Infos);
+    Fichier->read(Infos, INFOS);
+    Infos[INFOS-1] = 0;
+    m_ui->txtEdit_comment->setPlainText((QString) Infos);
 //Lit la configuration globale
-    File->read(&Octet, 1);
+    Fichier->read(Nom, 7);
+    m_ui->txtEdit_name->setPlainText((QString)Nom);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_algo->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->cmbBox_style->setCurrentIndex((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_feedback->setValue((int) Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_trans->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->pshBut_poly->setChecked((bool)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_porta->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_pitch->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
 //Ecrit la configuration du LFO
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_LFOspeed->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->cmbBox_LFOwave->setCurrentIndex((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->pshBut_LFOload->setChecked((bool)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->pshBut_LFOsync->setChecked((bool)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_AMD->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_AMS->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_PMD->setValue((int)Octet);
-    File->read(&Octet, 1);
+    Fichier->read(&Octet, 1);
     m_ui->spnBox_PMS->setValue((int)Octet);
 //Vérifie les erreurs
-    if (File->error()) return true;
+    if (Fichier->error()) return true;
+//Envoie les données
+    Envoyer();
     return false;
 }
 
@@ -142,12 +155,11 @@ void QVoice::Envoyer()
 void QVoice::Recevoir()
 {
     char  Nom[8];
-    bool  b1;
     uchar p1, p2;
-//Reçoit la configuration de l'expandeur
-    if (!EXPANDEUR::ChargerVoix(InstSel)) return;
+    bool  b1;
+//Vérouille l'interface
     Attente = true;
-//Récupère les données
+//Interprète les données
     EXPANDEUR::LireNom(Nom);
     m_ui->txtEdit_name->setPlainText((QString) Nom);
     m_ui->cmbBox_style->setCurrentIndex((int)EXPANDEUR::LireVoiceParam(0x07));
@@ -167,7 +179,7 @@ void QVoice::Recevoir()
     m_ui->pshBut_poly->setChecked(b1); m_ui->spnBox_porta->setValue((int) p1);
     EXPANDEUR::LireVoicex3B(&p1, &p2);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int) p1); m_ui->spnBox_pitch->setValue((int) p2);
-//Fin de la reception
+//Déverrouile
     Attente = false;
 }
 
