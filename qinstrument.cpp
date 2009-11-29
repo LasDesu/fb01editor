@@ -105,7 +105,6 @@ bool QInstrument::Charger(QFile * Fichier, int Version)
     m_ui->pshBut_poly->setChecked((bool)Octet);
     Fichier->read(&Octet, 1);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
-    Fichier->read(&Octet, 1);
 //Vérifie les erreurs
     if (Fichier->error()) return true;
 //Envoie les données

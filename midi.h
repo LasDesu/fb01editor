@@ -41,25 +41,6 @@
 
     class MIDI
     {
-    private:
-    //Objets internes
-        static int   NbIns, NbOuts;
-        static ulong HndIn, HndOut;
-        static MIDIINCAPS  Ins[MAXINS];
-        static MIDIOUTCAPS Outs[MAXOUTS];
-    //Tampon de réception
-        static uchar Tampon[TAMPON];
-        static uchar Donnees[TAMPON];
-        static MIDIHDR TampHDR;
-    //Flags de réception
-        static bool Prepare;
-        static bool Attente;
-    //Callback de reception
-        static void WINAPI Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2);
-    //Utilitaires
-        static void AfficherErrIn(uint Resultat);
-        static void AfficherErrOut(uint Resultat);
-        static void PreparerTampon();
     public:
     //Enumération
         static void Lister();
@@ -72,14 +53,33 @@
         static void DesactiverIn();
         static void ActiverOut(int Index);
         static void DesactiverOut();
+        static bool EstConfigure();
     //Communication
         static void  EnvMsgLng(MMSG * Msg, int Taille);
         static void  EnvMsg(MMSG * Msg);
-        static bool  AttMsg();
         static uchar LireMsg(int Pos);
+        static bool  AttMsg();
         static bool  EnAttente();
-    //Messages spécifiques
-        static void Note(uchar Chan, uchar Note, uchar Velo);
+        static void  Note(uchar Chan, uchar Note, uchar Velo);
+    private:
+    //Objets internes
+        static int   NbIns, NbOuts;
+        static ulong HndIn, HndOut;
+        static MIDIINCAPS  Ins[MAXINS];
+        static MIDIOUTCAPS Outs[MAXOUTS];
+    //Tampon de réception
+        static uchar   Tampon[TAMPON];
+        static uchar   Donnees[TAMPON];
+        static MIDIHDR TampHDR;
+    //Flags de réception
+        static bool Prepare;
+        static bool Attente;
+    //Utilitaires
+        static void AfficherErrIn(uint Resultat);
+        static void AfficherErrOut(uint Resultat);
+        static void PreparerTampon();
+    //Callback de réception
+        static void WINAPI Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2);
     };
 
 #endif // MIDI_H

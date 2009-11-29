@@ -43,6 +43,7 @@
     private:
     //Configuration
         Ui::MainWindow *ui;
+        bool Attente;
         int PageSel;
         int InstSel;
     //Initialisation
@@ -56,8 +57,10 @@
         QFile * ChargerFichier(int Type, short Version);
         QFile * EnregistrerFichier(int Type, short Version);
     //Actualisation
+        void ActualiserEditeur();
         void ActualiserSet();
-        void ActualiserInst();
+        void ActualiserVoice();
+        void ActualiserConfig();
     private slots:
     //Sélection des drivers
         void on_cmbBox_MIDIIn_activated(int Index);
@@ -70,10 +73,21 @@
         void on_actionLoad_set_triggered(bool checked = false);
         void on_actionSave_set_triggered(bool checked = false);
     //Menu FB01
+        void on_actionSend_current_voice_triggered(bool checked = false)
+            {ui->widget_voice->Envoyer();
+             ui->widget_opera_1->Envoyer(); ui->widget_opera_2->Envoyer();
+             ui->widget_opera_3->Envoyer(); ui->widget_opera_4->Envoyer();}
         void on_actionGet_current_voice_triggered(bool checked = false)
-            {ActualiserInst();}
+            {ActualiserVoice();}
+        void on_actionSend_current_set_triggered(bool checked = false)
+            {ui->widget_instru_1->Envoyer(); ui->widget_instru_2->Envoyer();
+             ui->widget_instru_3->Envoyer(); ui->widget_instru_4->Envoyer();
+             ui->widget_instru_5->Envoyer(); ui->widget_instru_6->Envoyer();
+             ui->widget_instru_7->Envoyer(); ui->widget_instru_8->Envoyer();}
         void on_actionGet_current_set_triggered(bool checked = false)
             {ActualiserSet();}
+        void on_actionGet_current_config_triggered(bool checked = false)
+            {ActualiserConfig();}
     //Menu aide
         void on_actionAbout_triggered(bool checked = false);
         void on_actionRead_this_triggered(bool checked = false);
@@ -82,45 +96,47 @@
 
     //Configuration globale
         void on_spnBox_syschan_valueChanged(int i)
-            {EXPANDEUR::SysChan = i - 1;}
+            {if (!Attente) EXPANDEUR::SysChan = i - 1;}
         void on_pshBut_combine_clicked(bool checked)
-            {EXPANDEUR::EcrireSysParam(0x08, checked);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x08, checked);}
         void on_cmbBox_reception_activated(int i)
-            {EXPANDEUR::EcrireSysParam(0x0D, (uchar) i);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x0D, (uchar) i);}
         void on_pshBut_memory_clicked(bool checked)
-            {EXPANDEUR::EcrireSysParam(0x21, checked);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x21, checked);}
         void on_spnBox_confnum_valueChanged(int i)
-            {EXPANDEUR::EcrireSysParam(0x22, (uchar) i);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x22, (uchar) i);}
         void on_hzSlider_mastvol_valueChanged(int i)
-            {EXPANDEUR::EcrireSysParam(0x24, (uchar) i);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x24, (uchar) i);}
     //Edition des instruments
         void on_pshBut_next_pressed()
             {ChangerPage(1 - PageSel); ActualiserSet();}
         void on_pshBut_current_1_clicked(bool checked)
-            {ChangerInst(0); ActualiserInst();}
+            {ChangerInst(0); ActualiserVoice();}
         void on_pshBut_current_2_clicked(bool checked)
-            {ChangerInst(1); ActualiserInst();}
+            {ChangerInst(1); ActualiserVoice();}
         void on_pshBut_current_3_clicked(bool checked)
-            {ChangerInst(2); ActualiserInst();}
+            {ChangerInst(2); ActualiserVoice();}
         void on_pshBut_current_4_clicked(bool checked)
-            {ChangerInst(3); ActualiserInst();}
+            {ChangerInst(3); ActualiserVoice();}
         void on_pshBut_current_5_clicked(bool checked)
-            {ChangerInst(4); ActualiserInst();}
+            {ChangerInst(4); ActualiserVoice();}
         void on_pshBut_current_6_clicked(bool checked)
-            {ChangerInst(5); ActualiserInst();}
+            {ChangerInst(5); ActualiserVoice();}
         void on_pshBut_current_7_clicked(bool checked)
-            {ChangerInst(6); ActualiserInst();}
+            {ChangerInst(6); ActualiserVoice();}
         void on_pshBut_current_8_clicked(bool checked)
-            {ChangerInst(7); ActualiserInst();}
+            {ChangerInst(7); ActualiserVoice();}
+        void on_txtEdit_setname_textChanged()
+            {EXPANDEUR::EcrireSetNom(ui->txtEdit_setname->toPlainText().toAscii().constData());}
     //Edition des opérateurs
         void on_pshBut_OPon_1_clicked(bool checked)
-            {EXPANDEUR::EcrireOps(InstSel, checked, ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
+            {if (!Attente) EXPANDEUR::EcrireOps(InstSel, checked, ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_2_clicked(bool checked)
-            {EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
+            {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_3_clicked(bool checked)
-            {EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_4->isChecked());}
+            {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_4_clicked(bool checked)
-            {EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), checked);}
+            {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), checked);}
     };
 
 #endif // MAINWINDOW_H

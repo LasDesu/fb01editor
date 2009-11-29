@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>620</height>
+    <height>630</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
     <width>620</width>
-    <height>620</height>
+    <height>630</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,8 +28,8 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>620</width>
-     <height>620</height>
+     <width>2000</width>
+     <height>2000</height>
     </size>
    </property>
    <widget class="QTabWidget" name="tabWidget">
@@ -38,7 +38,7 @@
       <x>0</x>
       <y>0</y>
       <width>641</width>
-      <height>551</height>
+      <height>561</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -206,7 +206,7 @@
         <x>360</x>
         <y>20</y>
         <width>231</width>
-        <height>171</height>
+        <height>211</height>
        </rect>
       </property>
       <property name="title">
@@ -312,7 +312,7 @@
         <rect>
          <x>10</x>
          <y>80</y>
-         <width>101</width>
+         <width>111</width>
          <height>21</height>
         </rect>
        </property>
@@ -323,16 +323,16 @@
         </font>
        </property>
        <property name="text">
-        <string>Memory protect :</string>
+        <string>Memory protect * :</string>
        </property>
       </widget>
       <widget class="QSpinBox" name="spnBox_confnum">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>110</y>
+         <y>112</y>
          <width>81</width>
-         <height>22</height>
+         <height>20</height>
         </rect>
        </property>
        <property name="minimum">
@@ -361,7 +361,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Config. number :</string>
+        <string>Config. number * :</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbl_mastvol">
@@ -380,7 +380,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Master volume :</string>
+        <string>Master volume * :</string>
        </property>
       </widget>
       <widget class="QSlider" name="hzSlider_mastvol">
@@ -397,6 +397,24 @@
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>170</y>
+         <width>211</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;* These informations cannot be retrieved&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;from the FB01 sound module.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
@@ -512,8 +530,8 @@
      <widget class="QLabel" name="lbl_notes">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>30</y>
+        <x>20</x>
+        <y>40</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -531,8 +549,8 @@
      <widget class="QLabel" name="lbl_midichan">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>60</y>
+        <x>20</x>
+        <y>70</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -550,8 +568,8 @@
      <widget class="QLabel" name="lbl_upper">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>90</y>
+        <x>20</x>
+        <y>100</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -569,8 +587,8 @@
      <widget class="QLabel" name="lbl_lower">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>120</y>
+        <x>20</x>
+        <y>130</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -588,8 +606,8 @@
      <widget class="QLabel" name="lbl_bank">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>150</y>
+        <x>20</x>
+        <y>160</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -607,8 +625,8 @@
      <widget class="QLabel" name="lbl_voice">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>180</y>
+        <x>20</x>
+        <y>190</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -626,8 +644,8 @@
      <widget class="QLabel" name="lbl_detune">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>240</y>
+        <x>20</x>
+        <y>250</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -645,8 +663,8 @@
      <widget class="QLabel" name="lbl_voice_2">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>210</y>
+        <x>20</x>
+        <y>220</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -664,8 +682,8 @@
      <widget class="QLabel" name="lbl_volume">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>270</y>
+        <x>20</x>
+        <y>280</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -683,8 +701,8 @@
      <widget class="QLabel" name="lbl_pan">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>300</y>
+        <x>20</x>
+        <y>310</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -702,8 +720,8 @@
      <widget class="QLabel" name="lbl_LFO">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>330</y>
+        <x>20</x>
+        <y>340</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -721,8 +739,8 @@
      <widget class="QLabel" name="lbl_porta">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>390</y>
+        <x>20</x>
+        <y>400</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -740,8 +758,8 @@
      <widget class="QLabel" name="lbl_pitch">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>420</y>
+        <x>20</x>
+        <y>430</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -759,8 +777,8 @@
      <widget class="QLabel" name="lbl_poly">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>360</y>
+        <x>20</x>
+        <y>370</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -778,8 +796,8 @@
      <widget class="QLabel" name="lbl_pmdctl">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>450</y>
+        <x>20</x>
+        <y>460</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -798,7 +816,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>480</y>
+        <y>10</y>
         <width>71</width>
         <height>21</height>
        </rect>
@@ -810,10 +828,10 @@
      <widget class="QFrame" name="frame_page_1">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>110</x>
         <y>10</y>
         <width>501</width>
-        <height>511</height>
+        <height>521</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -826,7 +844,7 @@
        <property name="geometry">
         <rect>
          <x>390</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -836,7 +854,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -846,7 +864,7 @@
        <property name="geometry">
         <rect>
          <x>130</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -856,7 +874,7 @@
        <property name="geometry">
         <rect>
          <x>260</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -866,7 +884,7 @@
        <property name="geometry">
         <rect>
          <x>400</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -882,7 +900,7 @@
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -898,7 +916,7 @@
        <property name="geometry">
         <rect>
          <x>270</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -914,7 +932,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -926,14 +944,24 @@
         <bool>true</bool>
        </property>
       </widget>
+      <zorder>widget_instru_4</zorder>
+      <zorder>widget_instru_1</zorder>
+      <zorder>widget_instru_2</zorder>
+      <zorder>widget_instru_3</zorder>
+      <zorder>pshBut_current_4</zorder>
+      <zorder>pshBut_current_2</zorder>
+      <zorder>pshBut_current_3</zorder>
+      <zorder>pshBut_current_1</zorder>
+      <zorder>frame_page_2</zorder>
+      <zorder>frame_page_2</zorder>
      </widget>
      <widget class="QFrame" name="frame_page_2">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>110</x>
         <y>10</y>
         <width>501</width>
-        <height>511</height>
+        <height>521</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -946,7 +974,7 @@
        <property name="geometry">
         <rect>
          <x>390</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -956,7 +984,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -966,7 +994,7 @@
        <property name="geometry">
         <rect>
          <x>130</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -976,7 +1004,7 @@
        <property name="geometry">
         <rect>
          <x>260</x>
-         <y>0</y>
+         <y>10</y>
          <width>111</width>
          <height>474</height>
         </rect>
@@ -986,7 +1014,7 @@
        <property name="geometry">
         <rect>
          <x>400</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -1002,7 +1030,7 @@
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -1018,7 +1046,7 @@
        <property name="geometry">
         <rect>
          <x>270</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -1034,7 +1062,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>480</y>
+         <y>490</y>
          <width>81</width>
          <height>23</height>
         </rect>
@@ -1046,6 +1074,22 @@
         <bool>true</bool>
        </property>
       </widget>
+     </widget>
+     <widget class="QPlainTextEdit" name="txtEdit_setname">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>500</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_voice">
@@ -1177,7 +1221,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>550</y>
+      <y>560</y>
       <width>601</width>
       <height>51</height>
      </rect>
@@ -1189,7 +1233,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/imgs/clavier.bmp</pixmap>
+     <pixmap resource="FB01.qrc">:/imgs/clavier.bmp</pixmap>
     </property>
    </widget>
   </widget>
@@ -1232,6 +1276,7 @@
     <addaction name="separator"/>
     <addaction name="actionGet_current_set"/>
     <addaction name="actionGet_current_voice"/>
+    <addaction name="actionGet_current_config"/>
    </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuFB01"/>
@@ -1297,6 +1342,11 @@
     <string>Get current voice</string>
    </property>
   </action>
+  <action name="actionGet_current_config">
+   <property name="text">
+    <string>Get current config</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1324,6 +1374,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -76,30 +76,25 @@ bool EXPANDEUR::ChargerVoix(uchar Inst)
 }
 
 /*****************************************************************************/
-void EXPANDEUR::EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
+void EXPANDEUR::EcrireSetNom(const char * Nom)
 {
-    uchar Octet = 0;
-//Valide les opérateurs
-    if (Op1) Octet += 0x8;
-    if (Op2) Octet += 0x10;
-    if (Op3) Octet += 0x20;
-    if (Op4) Octet += 0x40;
-    EcrireVoiceParam(Inst, 0x0B, Octet);
+    uchar Octet[8];
+//Recopie la chaine
+    strncpy((char *)Octet, Nom, 8);
+    for (uchar i = 0; i < 8; i++)
+        EcrireSysParam(i, Octet[i]);
 }
 
-void EXPANDEUR::LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4)
+void EXPANDEUR::LireSetNom(char * Nom)
 {
-    uchar Octet;
-    Octet = EXPANDEUR::LireVoiceParam(0x0B);
-//Récupère l'état
-    *Op1 = (bool) (Octet & 0x8);
-    *Op2 = (bool) (Octet & 0x10);
-    *Op3 = (bool) (Octet & 0x20);
-    *Op4 = (bool) (Octet & 0x40);
+//Recopie la chaine
+    for (uchar i = 0; i < 8; i++)
+        Nom[i] = (char) EXPANDEUR::LireSysParam(i);
+    Nom[8] = 0;
 }
 
 /*****************************************************************************/
-void EXPANDEUR::EcrireNom(uchar Inst, const char * Nom)
+void EXPANDEUR::EcrireVoiceNom(uchar Inst, const char * Nom)
 {
     uchar Octet[7];
 //Recopie la chaine
@@ -108,7 +103,7 @@ void EXPANDEUR::EcrireNom(uchar Inst, const char * Nom)
         EcrireVoiceParam(Inst, i, Octet[i]);
 }
 
-void EXPANDEUR::LireNom(char * Nom)
+void EXPANDEUR::LireVoiceNom(char * Nom)
 {
 //Recopie la chaine
     for (uchar i = 0; i < 7; i++)
@@ -238,6 +233,29 @@ void EXPANDEUR::LireVoicex3B(uchar * Pmdctl, uchar * Pitch)
     Octet = EXPANDEUR::LireVoiceParam(0x3B);
     *Pmdctl = (Octet >> 4) & 0x7;
     *Pitch = Octet & 0xF;
+}
+
+/*****************************************************************************/
+void EXPANDEUR::EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
+{
+    uchar Octet = 0;
+//Valide les opérateurs
+    if (Op1) Octet += 0x8;
+    if (Op2) Octet += 0x10;
+    if (Op3) Octet += 0x20;
+    if (Op4) Octet += 0x40;
+    EcrireVoiceParam(Inst, 0x0B, Octet);
+}
+
+void EXPANDEUR::LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4)
+{
+    uchar Octet;
+    Octet = EXPANDEUR::LireVoiceParam(0x0B);
+//Récupère l'état
+    *Op1 = (bool) (Octet & 0x8);
+    *Op2 = (bool) (Octet & 0x10);
+    *Op3 = (bool) (Octet & 0x20);
+    *Op4 = (bool) (Octet & 0x40);
 }
 
 /*****************************************************************************/
@@ -390,9 +408,9 @@ void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
 
 uchar EXPANDEUR::LireInstParam(uchar Inst, uchar Param)
 {
-    int Pos = 0x29 + Param + 0x10 * (int) Inst;
+    int Par = Param + 0x20 + 0x10 * (int) Inst;
 //Lit un paramêtre
-    return MIDI::LireMsg(Pos) & 0x7F;
+    return LireSysParam(Par);
 }
 
 /*****************************************************************************/
@@ -449,4 +467,11 @@ void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
     Msg[2].data[3] = 0xF7;
 //Transmet le paramêtre
     MIDI::EnvMsgLng(Msg, 8);
+}
+
+uchar EXPANDEUR::LireSysParam(uchar Param)
+{
+    int Pos = 0x09 + Param;
+//Lit un paramêtre
+    return MIDI::LireMsg(Pos) & 0x7F;
 }

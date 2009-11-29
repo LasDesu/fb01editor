@@ -61,9 +61,12 @@ void MainWindow::InitialiserEditeur()
     ui->widget_opera_2->ChangerID(1);
     ui->widget_opera_3->ChangerID(2);
     ui->widget_opera_4->ChangerID(3);
+//Initialise la barre
+    ui->tabWidget->setCurrentIndex(0);
 //Coniguration par défaut
     ChangerPage(0);
     ChangerInst(0);
+    Attente = false;
 }
 
 void MainWindow::TerminerEditeur()
@@ -81,16 +84,32 @@ void MainWindow::ActiverEditeur(bool Actif)
     ui->tab_set->setEnabled(Actif);
     ui->tab_voice->setEnabled(Actif);
     ui->tab_operas->setEnabled(Actif);
-//Active les menus
+//Active le menu fichier
     ui->actionLoad_set->setEnabled(Actif);
     ui->actionLoad_voice->setEnabled(Actif);
     ui->actionSave_set->setEnabled(Actif);
     ui->actionSave_voice->setEnabled(Actif);
+//Active le menu FB01
+    ui->actionGet_current_config->setEnabled(Actif);
+    ui->actionGet_current_set->setEnabled(Actif);
+    ui->actionGet_current_voice->setEnabled(Actif);
+    ui->actionSend_current_set->setEnabled(Actif);
+    ui->actionSend_current_voice->setEnabled(Actif);
+}
+
+void MainWindow::ActualiserEditeur()
+{
+//Récupère toutes les informations
+    ActualiserConfig();
+    ActualiserSet();
+    ActualiserVoice();
 }
 
 /*****************************************************************************/
 void MainWindow::ChangerPage(int Page)
 {
+//Mémorisation de la page
+    PageSel = Page;
 //Change de page
     if (PageSel == 0)
     {//Affiche la page 1
@@ -101,8 +120,6 @@ void MainWindow::ChangerPage(int Page)
         ui->frame_page_2->show();
         ui->frame_page_1->hide();
     }
-//Mémorisation de la page
-    PageSel = Page;
 }
 
 void MainWindow::ChangerInst(int Inst)
@@ -127,10 +144,23 @@ void MainWindow::ChangerInst(int Inst)
 }
 
 /*****************************************************************************/
-void MainWindow::ActualiserSet()
+void MainWindow::ActualiserConfig()
 {
 //Reçoit la configuration
     if (!EXPANDEUR::ChargerSet()) return;
+    Attente = true;
+//Décode les données
+    ui->pshBut_combine->setChecked((bool) EXPANDEUR::LireSysParam(0x08));
+    ui->cmbBox_reception->setCurrentIndex((int) EXPANDEUR::LireSysParam(0x0D));
+    Attente = false;
+}
+
+void MainWindow::ActualiserSet()
+{
+    char Nom[8];
+//Reçoit la configuration
+    if (!EXPANDEUR::ChargerSet()) return;
+    Attente = true;
 //Décode les données
     ui->widget_instru_1->Recevoir();
     ui->widget_instru_2->Recevoir();
@@ -140,13 +170,19 @@ void MainWindow::ActualiserSet()
     ui->widget_instru_6->Recevoir();
     ui->widget_instru_7->Recevoir();
     ui->widget_instru_8->Recevoir();
+//Récupère le nom
+    EXPANDEUR::LireSetNom(Nom);
+    ui->txtEdit_setname->setPlainText((QString) Nom);
+//Dévérouille
+    Attente = false;
 }
 
-void MainWindow::ActualiserInst()
+void MainWindow::ActualiserVoice()
 {
     bool b1, b2, b3, b4;
 //Reçoit la configuration
     if (!EXPANDEUR::ChargerVoix(InstSel)) return;
+    Attente = true;
 //Décode les données
     ui->widget_voice->Recevoir();
     ui->widget_opera_1->Recevoir();
@@ -159,6 +195,7 @@ void MainWindow::ActualiserInst()
     ui->pshBut_OPon_2->setChecked(b2);
     ui->pshBut_OPon_3->setChecked(b3);
     ui->pshBut_OPon_4->setChecked(b4);
+    Attente = false;
 }
 
 /*****************************************************************************/
@@ -166,16 +203,22 @@ void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 {
 //Sélectionne le driver
     if (Index != -1) MIDI::ActiverIn(Index);
-    if (ui->cmbBox_MIDIOut->currentIndex() != -1)
+    if (MIDI::EstConfigure())
+    {
+        ActualiserEditeur();
         ActiverEditeur(true);
+    }
 }
 
 void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
 {
 //Sélectionne le driver
     if (Index != -1) MIDI::ActiverOut(Index);
-    if (ui->cmbBox_MIDIIn->currentIndex() != -1)
+    if (MIDI::EstConfigure())
+    {
+        ActualiserEditeur();
         ActiverEditeur(true);
+    }
 }
 
 /*****************************************************************************/
@@ -199,9 +242,14 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
 /*****************************************************************************/
 void MainWindow::on_actionLoad_set_triggered(bool checked)
 {
+    char Nom[8];
 //Ouvre le fichier
     QFile * Fichier = ChargerFichier(1, VERSION);
     if (Fichier == NULL) return;
+//Charge le nom du set
+    Fichier->read(Nom, 8);
+    Nom[7] = 0;
+    ui->txtEdit_setname->setPlainText((QString) Nom);
 //Charge le set d'instruments
     if (ui->widget_instru_1->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_instru_2->Charger(Fichier, VERSION)) goto BadFile;
@@ -223,9 +271,13 @@ BadFile :
 
 void MainWindow::on_actionSave_set_triggered(bool checked)
 {
+    char Nom[8];
 //Ouvre le fichier
     QFile * Fichier = EnregistrerFichier(1, VERSION);
     if (Fichier == NULL) return;
+//Enregistre le nom du set
+    strncpy(Nom, ui->txtEdit_setname->toPlainText().toAscii().constData(), 8);
+    Fichier->write(Nom, 8);
 //Enregistre le set d'instruments
     if (ui->widget_instru_1->Enregistrer(Fichier)) goto BadFile;
     if (ui->widget_instru_2->Enregistrer(Fichier)) goto BadFile;
@@ -371,12 +423,10 @@ void MainWindow::on_actionRead_this_triggered(bool checked)
 {
     QString Text;
 //Informations supplémentaires
-    Text.append("First thank you for using this program.\n\n");
-    Text.append("If you want to improve or get involved in the project,\n");
-    Text.append("go and visit the FB01SE website.\n\n");
-    Text.append("You can also share your presets on the internet\n");
-    Text.append("and participate in the creation of a common patch\n");
-    Text.append("bank for all the FB01 users.\n");
+    Text.append("Thank you for using this program.\n\n");
+    Text.append("If you want to help the author of the project,\n");
+    Text.append("you can either donate or make new patchs,\n");
+    Text.append("or post bug reports and talk about it in forums.\n");
     QMessageBox::information(this, "FB01 SE :", Text);
 }
 

@@ -37,8 +37,8 @@
         Ui::QVoice *m_ui;
     private slots:
     //Gestion des évènements
-        void on_txtEdit_name_textChanged()
-            {if (!Attente) EXPANDEUR::EcrireNom(InstSel, m_ui->txtEdit_name->toPlainText().toAscii().constData());}
+        void on_txtEdit_voicename_textChanged()
+            {if (!Attente) EXPANDEUR::EcrireVoiceNom(InstSel, m_ui->txtEdit_voicename->toPlainText().toAscii().constData());}
         void on_cmbBox_style_activated(int i)
             {if (!Attente) EXPANDEUR::EcrireVoiceParam(InstSel, 0x07, (uchar) i);}
         void on_spnBox_feedback_valueChanged(int i)

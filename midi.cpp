@@ -137,6 +137,11 @@ void MIDI::DesactiverOut()
     HndOut = 0;
 }
 
+bool MIDI::EstConfigure()
+{
+    return (HndIn != 0 && HndOut != 0);
+}
+
 /*****************************************************************************/
 void MIDI::Note(uchar Chan, uchar Note, uchar Velo)
 {
@@ -199,17 +204,17 @@ void MIDI::EnvMsg(MMSG * Msg)
 /*****************************************************************************/
 bool MIDI::AttMsg()
 {
+    QTime Timer;
 //Passe en mode réception
     Attente = true;
-    QTime Timer;
-    Timer.start();
  //Affiche la boite
     QMessageBox MsgBox(NULL);
     MsgBox.setWindowModality(Qt::WindowModal);
     MsgBox.setWindowTitle("FB01 SE:");
     MsgBox.setText("Waiting for device ...");
-    MsgBox.show();
  //Attend un sysex
+    MsgBox.show();
+    Timer.start();
     while(Attente)
     {
     //Gère les évenements
@@ -219,7 +224,6 @@ bool MIDI::AttMsg()
         //Pas de réponse
             Attente = false;
             MsgBox.setText("No answer !");
-            MsgBox.done(0);
         //Arrête l'attente
             return false;
         }
@@ -227,8 +231,6 @@ bool MIDI::AttMsg()
 //Récupère les données
     memcpy(Donnees, Tampon, TAMPON);
     PreparerTampon();
-//Ferme la boite
-    MsgBox.setText("Well received !");
     MsgBox.done(0);
     return true;
 }

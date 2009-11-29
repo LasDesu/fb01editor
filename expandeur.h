@@ -47,12 +47,15 @@
         static void  EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur);
         static uchar LireOpParam(uchar Op, uchar Param);
         static void  EcrireSysParam(uchar Param, uchar Valeur);
+        static uchar LireSysParam(uchar Param);
         static bool  Attente();
     //Paramètres composés voies
+        static void EcrireSetNom(const char * Nom);
+        static void LireSetNom(char * Nom);
+        static void EcrireVoiceNom(uchar Inst, const char * Nom);
+        static void LireVoiceNom(char * Nom);
         static void EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
         static void LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4);
-        static void EcrireNom(uchar Inst, const char * Nom);
-        static void LireNom(char * Nom);
         static void EcrireVoicex09(uchar Inst, bool Load, uchar AMD);
         static void LireVoicex09(bool * Load, uchar * AMD);
         static void EcrireVoicex0A(uchar Inst, bool Sync, uchar PMD);

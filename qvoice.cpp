@@ -39,7 +39,7 @@ bool QVoice::Enregistrer(QFile * Fichier)
     strncpy(Infos, m_ui->txtEdit_comment->toPlainText().toAscii().constData(), INFOS);
     Fichier->write(Infos, INFOS);
 //Ecrit la configuration globale
-    strncpy(Nom, m_ui->txtEdit_name->toPlainText().toAscii().constData(), 7);
+    strncpy(Nom, m_ui->txtEdit_voicename->toPlainText().toAscii().constData(), 7);
     Fichier->write(Nom, 7);
     Octet = (char) m_ui->spnBox_algo->value();
     Fichier->write(&Octet, 1);
@@ -93,7 +93,7 @@ bool QVoice::Charger(QFile * Fichier, int Version)
     m_ui->txtEdit_comment->setPlainText((QString) Infos);
 //Lit la configuration globale
     Fichier->read(Nom, 7);
-    m_ui->txtEdit_name->setPlainText((QString)Nom);
+    m_ui->txtEdit_voicename->setPlainText((QString)Nom);
     Fichier->read(&Octet, 1);
     m_ui->spnBox_algo->setValue((int)Octet);
     Fichier->read(&Octet, 1);
@@ -139,7 +139,7 @@ bool QVoice::Charger(QFile * Fichier, int Version)
 void QVoice::Envoyer()
 {
 //Envoie la configuration complète
-    EXPANDEUR::EcrireNom(InstSel, m_ui->txtEdit_name->toPlainText().toAscii().constData());
+    EXPANDEUR::EcrireVoiceNom(InstSel, m_ui->txtEdit_voicename->toPlainText().toAscii().constData());
     EXPANDEUR::EcrireVoiceParam(InstSel, 0x07, (uchar) m_ui->cmbBox_style->currentIndex());
     EXPANDEUR::EcrireVoiceParam(InstSel, 0x08, (uchar) m_ui->spnBox_LFOspeed->value());
     EXPANDEUR::EcrireVoicex09(InstSel, m_ui->pshBut_LFOload->isChecked(), (uchar) m_ui->spnBox_AMD->value());
@@ -160,8 +160,8 @@ void QVoice::Recevoir()
 //Vérouille l'interface
     Attente = true;
 //Interprète les données
-    EXPANDEUR::LireNom(Nom);
-    m_ui->txtEdit_name->setPlainText((QString) Nom);
+    EXPANDEUR::LireVoiceNom(Nom);
+    m_ui->txtEdit_voicename->setPlainText((QString) Nom);
     m_ui->cmbBox_style->setCurrentIndex((int)EXPANDEUR::LireVoiceParam(0x07));
     m_ui->spnBox_LFOspeed->setValue((int)EXPANDEUR::LireVoiceParam(0x08));
     EXPANDEUR::LireVoicex09(&b1, &p1);

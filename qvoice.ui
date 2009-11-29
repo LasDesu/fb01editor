@@ -143,7 +143,7 @@
      <string>Name :</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="txtEdit_name">
+   <widget class="QPlainTextEdit" name="txtEdit_voicename">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -420,7 +420,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/imgs/algo1.bmp</pixmap>
+     <pixmap resource="FB01.qrc">:/imgs/algo1.bmp</pixmap>
     </property>
    </widget>
    <widget class="QSpinBox" name="spnBox_algo">
@@ -849,6 +849,8 @@
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>
