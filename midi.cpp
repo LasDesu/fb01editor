@@ -275,6 +275,15 @@ void MIDI::PreparerTampon()
     Prepare = true;
 }
 
+void MIDI::BackupTampon(char * Chemin)
+{
+//Effectue un backup
+    QFile Fichier((QString)Chemin);
+    Fichier.open(QIODevice::WriteOnly);
+    Fichier.write((char *) Donnees, TAMPON);
+    Fichier.close();
+}
+
 /*****************************************************************************/
 void WINAPI MIDI::Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2)
 {

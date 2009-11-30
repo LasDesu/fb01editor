@@ -45,7 +45,7 @@ void MainWindow::InitialiserEditeur()
 {
 //Désactive les controles
     ActiverEditeur(false);
-    on_pshBut_refresh_midi_pressed();
+    on_pshBut_refresh_midi_clicked(false);
 //Initialise la page 1
     ui->widget_instru_1->ChangerID(0);
     ui->widget_instru_2->ChangerID(1);
@@ -155,9 +155,57 @@ void MainWindow::ActualiserConfig()
     Attente = false;
 }
 
+char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass",
+                          "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
+void MainWindow::ActualiserBank()
+{
+    char  Nom[8];
+    uchar Style;
+//Vide la liste
+    ui->table_bank->clearContents();
+    ui->table_bank->insertColumn(0);
+    ui->table_bank->insertColumn(1);
+    ui->table_bank->insertColumn(2);
+    Attente = true;
+//Charge chaque bank
+    for (int b = 0; b < 8; b++)
+    {
+    //Reçoit la configuration
+        if (!EXPANDEUR::ChargerBank(b)) return;
+        //MIDI::BackupTampon("Backup2.txt");
+    //Construit le nom
+        QString Num; Num.setNum(b);
+        QString Bank = "Bank ";
+        Bank.append(Num);
+    //Construit la liste
+        for (int v = 0; v < 48; v ++)
+        {
+        //Lit les infos
+            EXPANDEUR::LireBankVoiceNom(v, Nom);
+            Style = EXPANDEUR::LireBankParam(v, 0x07);
+            if (Style > 13) Style = 13;
+            Nom[7] = 0;
+        //Créé la ligne
+            ui->table_bank->insertRow(v + b * 48);
+            QTableWidgetItem * ItBank  = new QTableWidgetItem(0);
+            QTableWidgetItem * ItNom   = new QTableWidgetItem(0);
+            QTableWidgetItem * ItStyle = new QTableWidgetItem(0);
+            ItBank->setText(Bank);
+            ItNom->setText((QString) Nom);
+            ItStyle->setText((QString) BankStyles[Style]);
+        //Ajoute la ligne
+            ui->table_bank->setItem(v + b * 48, 0, ItNom);
+            ui->table_bank->setItem(v + b * 48, 1, ItStyle);
+            ui->table_bank->setItem(v + b * 48, 2, ItBank);
+        }
+    }
+//Déverrouille
+    Attente = false;
+}
+
 void MainWindow::ActualiserSet()
 {
-    char Nom[8];
+    char Nom[9];
 //Reçoit la configuration
     if (!EXPANDEUR::ChargerSet()) return;
     Attente = true;
@@ -182,7 +230,7 @@ void MainWindow::ActualiserVoice()
 {
     bool b1, b2, b3, b4;
 //Reçoit la configuration
-    if (!EXPANDEUR::ChargerVoix(InstSel)) return;
+    if (!EXPANDEUR::ChargerVoice(InstSel)) return;
     Attente = true;
 //Décode les données
     ui->widget_voice->Recevoir();
@@ -203,6 +251,17 @@ void MainWindow::ActualiserVoice()
     ui->pshBut_OPon_3->setChecked(b3);
     ui->pshBut_OPon_4->setChecked(b4);
     Attente = false;
+}
+
+/*****************************************************************************/
+void MainWindow::Envoyer()
+{
+//Envoie la config globale
+    EXPANDEUR::EcrireSysParam(0x08, ui->pshBut_combine->isChecked());
+    EXPANDEUR::EcrireSysParam(0x0D, (uchar) ui->cmbBox_reception->currentIndex());
+    EXPANDEUR::EcrireSysParam(0x21, ui->pshBut_memory->isChecked());
+    EXPANDEUR::EcrireSysParam(0x22, (uchar) ui->spnBox_confnum->value());
+    EXPANDEUR::EcrireSysParam(0x24, (uchar) ui->hzSlider_mastvol->value());
 }
 
 /*****************************************************************************/
@@ -229,7 +288,7 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
 }
 
 /*****************************************************************************/
-void MainWindow::on_pshBut_refresh_midi_pressed()
+void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 {
 //Efface les items
     ui->cmbBox_MIDIIn->clear();
@@ -249,13 +308,13 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
 /*****************************************************************************/
 void MainWindow::on_actionLoad_set_triggered(bool checked)
 {
-    char Nom[8];
+    char Nom[9];
 //Ouvre le fichier
     QFile * Fichier = ChargerFichier(1, VERSION);
     if (Fichier == NULL) return;
 //Charge le nom du set
     Fichier->read(Nom, 8);
-    Nom[7] = 0;
+    Nom[8] = 0;
 //Ecrit le nom
     Attente = true;
     ui->txtEdit_setname->setPlainText((QString) Nom);
@@ -315,7 +374,7 @@ void MainWindow::on_actionLoad_voice_triggered(bool checked)
 //Ouvre le fichier
     QFile * Fichier = ChargerFichier(2, VERSION);
     if (Fichier == NULL) return;
-//Charge la voix
+//Charge le voice
     if (ui->widget_voice->Charger(Fichier, VERSION))   goto BadFile;
     if (ui->widget_opera_1->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_opera_2->Charger(Fichier, VERSION)) goto BadFile;
@@ -341,7 +400,7 @@ void MainWindow::on_actionSave_voice_triggered(bool checked)
 //Ouvre le fichier
     QFile * Fichier = EnregistrerFichier(2, VERSION);
     if (Fichier == NULL) return;
-//Charge la voix
+//Charge le voice
     if (ui->widget_voice->Enregistrer(Fichier))   goto BadFile;
     if (ui->widget_opera_1->Enregistrer(Fichier)) goto BadFile;
     if (ui->widget_opera_2->Enregistrer(Fichier)) goto BadFile;

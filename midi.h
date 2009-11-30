@@ -29,7 +29,7 @@
 //Constantes
     #define MAXINS  5
     #define MAXOUTS 5
-    #define TAMPON  2048
+    #define TAMPON  6400
     #define ATTENTE 8000
 
 //Message midi
@@ -61,6 +61,8 @@
         static bool  AttMsg();
         static bool  EnAttente();
         static void  Note(uchar Chan, uchar Note, uchar Velo);
+    //Debugging
+        static void BackupTampon(char * Chemin);
     private:
     //Objets internes
         static int   NbIns, NbOuts;

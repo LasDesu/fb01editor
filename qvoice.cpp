@@ -87,7 +87,7 @@ bool QVoice::Enregistrer(QFile * Fichier)
 bool QVoice::Charger(QFile * Fichier, int Version)
 {
     char Infos[INFOS];
-    char Nom[7];
+    char Nom[8];
     char Octet;
 //Vérouille l'interface
     Attente = true;
@@ -98,9 +98,11 @@ bool QVoice::Charger(QFile * Fichier, int Version)
     Fichier->read(Infos, INFOS);
     Infos[INFOS-1] = 0;
     m_ui->txtEdit_comment->setPlainText((QString) Infos);
-//Lit la configuration globale
+//Lit le nom
     Fichier->read(Nom, 7);
+    Nom[7] = 0;
     m_ui->txtEdit_voicename->setPlainText((QString)Nom);
+//Lit la configuration globale
     Fichier->read(&Octet, 1);
     m_ui->spnBox_algo->setValue((int)Octet);
     Fichier->read(&Octet, 1);

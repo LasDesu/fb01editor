@@ -24,7 +24,7 @@
 uchar EXPANDEUR::SysChan = 0;
 
 /*****************************************************************************/
-bool EXPANDEUR::ChargerBanque(uchar Banque)
+bool EXPANDEUR::ChargerBank(uchar Bank)
 {
     MMSG Msg[2];
 //Prépare la demande
@@ -34,7 +34,7 @@ bool EXPANDEUR::ChargerBanque(uchar Banque)
     Msg[0].data[3] = SysChan;
     Msg[1].data[0] = 0x20;
     Msg[1].data[1] = 0x00;
-    Msg[1].data[2] = Banque & 0xF;
+    Msg[1].data[2] = Bank & 0xF;
     Msg[1].data[3] = 0xF7;
 //Envoie la demande
     MIDI::EnvMsgLng(Msg, 8);
@@ -58,7 +58,7 @@ bool EXPANDEUR::ChargerSet()
     return MIDI::AttMsg();
 }
 
-bool EXPANDEUR::ChargerVoix(uchar Inst)
+bool EXPANDEUR::ChargerVoice(uchar Inst)
 {
     MMSG Msg[2];
 //Prépare la demande
@@ -73,6 +73,23 @@ bool EXPANDEUR::ChargerVoix(uchar Inst)
 //Envoie la demande
     MIDI::EnvMsgLng(Msg, 8);
     return MIDI::AttMsg();
+}
+
+/*****************************************************************************/
+void EXPANDEUR::LireBankNom(char * Nom)
+{
+//Recopie la chaine
+    for (uchar i = 0; i < 8; i++)
+        Nom[i] = (char) EXPANDEUR::LireBankParam(0xFF, i);
+    Nom[8] = 0;
+}
+
+void EXPANDEUR::LireBankVoiceNom(uchar Voice, char * Nom)
+{
+//Recopie la chaine
+    for (uchar i = 0; i < 7; i++)
+        Nom[i] = (char) EXPANDEUR::LireBankParam(Voice, i);
+    Nom[7] = 0;
 }
 
 /*****************************************************************************/
@@ -111,6 +128,7 @@ void EXPANDEUR::LireVoiceNom(char * Nom)
     Nom[7] = 0;
 }
 
+/*****************************************************************************/
 void EXPANDEUR::EcrireVoicex09(uchar Inst, bool Load, uchar AMD)
 {
     uchar Octet = 0;
@@ -390,6 +408,39 @@ void EXPANDEUR::LireOpx07(uchar Op, uchar * SL, uchar * RR)
 }
 
 /*****************************************************************************/
+uchar EXPANDEUR::LireBankParam(uchar Voice, uchar Param)
+{
+    int Pos = 0x4C + 2 * (int) Param + 0x83 * (int) Voice;
+//Lit un paramêtre
+    return (MIDI::LireMsg(Pos) & 0xF)
+         + (MIDI::LireMsg(Pos+1) << 4);
+}
+
+/*****************************************************************************/
+void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
+{
+    MMSG Msg[2];
+//Construit le message
+    Msg[0].data[0] = 0xF0;
+    Msg[0].data[1] = 0x43;
+    Msg[0].data[2] = 0x75;
+    Msg[0].data[3] = SysChan;
+    Msg[1].data[0] = 0x10;
+    Msg[1].data[1] = Param & 0x7F;
+    Msg[1].data[2] = Valeur & 0x7F;
+    Msg[2].data[3] = 0xF7;
+//Transmet le paramêtre
+    MIDI::EnvMsgLng(Msg, 8);
+}
+
+uchar EXPANDEUR::LireSysParam(uchar Param)
+{
+    int Pos = 0x09 + (int) Param;
+//Lit un paramêtre
+    return MIDI::LireMsg(Pos) & 0x7F;
+}
+
+/*****************************************************************************/
 void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
 {
     MMSG Msg[2];
@@ -408,7 +459,7 @@ void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
 
 uchar EXPANDEUR::LireInstParam(uchar Inst, uchar Param)
 {
-    int Par = Param + 0x20 + 0x10 * (int) Inst;
+    int Par = 0x20 + 0x10 * (int) Inst + (int) Param;
 //Lit un paramêtre
     return LireSysParam(Par);
 }
@@ -433,7 +484,7 @@ void EXPANDEUR::EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur)
 
 uchar EXPANDEUR::LireVoiceParam(uchar Param)
 {
-    int Pos = 0x9 + 2 * (int)Param;
+    int Pos = 0x9 + 2 * (int) Param;
 //Lit un paramêtre
     return (MIDI::LireMsg(Pos) & 0xF)
          + (MIDI::LireMsg(Pos+1) << 4);
@@ -443,35 +494,11 @@ uchar EXPANDEUR::LireVoiceParam(uchar Param)
 void EXPANDEUR::EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur)
 {
 //Configure un opérateur
-    EcrireVoiceParam(Inst, Param + 0x10 + Op * 0x8, Valeur);
+    EcrireVoiceParam(Inst, 0x10 + Op * 0x8 + (int) Param, Valeur);
 }
 
 uchar EXPANDEUR::LireOpParam(uchar Op, uchar Param)
 {
 //Examine un opérateur
-    return LireVoiceParam(Param + 0x10 + Op * 0x8);
-}
-
-/*****************************************************************************/
-void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
-{
-    MMSG Msg[2];
-//Construit le message
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x10;
-    Msg[1].data[1] = Param & 0x7F;
-    Msg[1].data[2] = Valeur & 0x7F;
-    Msg[2].data[3] = 0xF7;
-//Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 8);
-}
-
-uchar EXPANDEUR::LireSysParam(uchar Param)
-{
-    int Pos = 0x09 + Param;
-//Lit un paramêtre
-    return MIDI::LireMsg(Pos) & 0x7F;
+    return LireVoiceParam(0x10 + Op * 0x8 + (int) Param);
 }

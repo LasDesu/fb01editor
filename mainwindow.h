@@ -56,16 +56,19 @@
     //Archivage
         QFile * ChargerFichier(int Type, short Version);
         QFile * EnregistrerFichier(int Type, short Version);
+    //Communication
+        void Envoyer();
     //Actualisation
         void ActualiserEditeur();
         void ActualiserSet();
         void ActualiserVoice();
         void ActualiserConfig();
+        void ActualiserBank();
     private slots:
     //Sélection des drivers
         void on_cmbBox_MIDIIn_activated(int Index);
         void on_cmbBox_MIDIOut_activated(int Index);
-        void on_pshBut_refresh_midi_pressed();
+        void on_pshBut_refresh_midi_clicked(bool checked);
     //Menu fichier
         void on_actionQuit_triggered(bool checked = false);
         void on_actionLoad_voice_triggered(bool checked = false);
@@ -77,13 +80,15 @@
             {ui->widget_voice->Envoyer();
              ui->widget_opera_1->Envoyer(); ui->widget_opera_2->Envoyer();
              ui->widget_opera_3->Envoyer(); ui->widget_opera_4->Envoyer();}
-        void on_actionGet_current_voice_triggered(bool checked = false)
-            {ActualiserVoice();}
         void on_actionSend_current_set_triggered(bool checked = false)
             {ui->widget_instru_1->Envoyer(); ui->widget_instru_2->Envoyer();
              ui->widget_instru_3->Envoyer(); ui->widget_instru_4->Envoyer();
              ui->widget_instru_5->Envoyer(); ui->widget_instru_6->Envoyer();
              ui->widget_instru_7->Envoyer(); ui->widget_instru_8->Envoyer();}
+        void on_actionSend_current_config_triggered(bool checked = false)
+            {Envoyer();}
+        void on_actionGet_current_voice_triggered(bool checked = false)
+            {ActualiserVoice();}
         void on_actionGet_current_set_triggered(bool checked = false)
             {ActualiserSet();}
         void on_actionGet_current_config_triggered(bool checked = false)
@@ -92,8 +97,9 @@
         void on_actionAbout_triggered(bool checked = false);
         void on_actionRead_this_triggered(bool checked = false);
         void on_actionOnline_help_triggered(bool checked = false);
-    //Gestion des banques
-
+    //Gestion des banks
+        void on_pshBut_refresh_bank_clicked(bool checked)
+            {ActualiserBank();}
     //Configuration globale
         void on_spnBox_syschan_valueChanged(int i)
             {if (!Attente) EXPANDEUR::SysChan = i - 1;}

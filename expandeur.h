@@ -25,8 +25,8 @@
     #include "types.h"
     #include "midi.h"
 
-    #define BANQUES 7
-    #define VOIX    48
+    #define BANKS 7
+    #define VOICE 48
 
     class EXPANDEUR
     {
@@ -36,10 +36,11 @@
     //Configuration
         static uchar SysChan;
     //Chargement/déchargement
-        static bool ChargerBanque(uchar Banque);
+        static bool ChargerBank(uchar Bank);
         static bool ChargerSet();
-        static bool ChargerVoix(uchar Inst);
+        static bool ChargerVoice(uchar Inst);
     //Communication
+        static uchar LireBankParam(uchar Voice, uchar Param);
         static void  EcrireInstParam(uchar Inst, uchar Param, uchar Valeur);
         static uchar LireInstParam(uchar Inst, uchar Param);
         static void  EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
@@ -49,11 +50,14 @@
         static void  EcrireSysParam(uchar Param, uchar Valeur);
         static uchar LireSysParam(uchar Param);
         static bool  Attente();
-    //Paramètres composés voies
+    //Chaines de caractères
+        static void LireBankNom(char * Nom);
+        static void LireBankVoiceNom(uchar Voice, char * Nom);
         static void EcrireSetNom(const char * Nom);
         static void LireSetNom(char * Nom);
         static void EcrireVoiceNom(uchar Inst, const char * Nom);
         static void LireVoiceNom(char * Nom);
+    //Paramètres composés voices
         static void EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
         static void LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4);
         static void EcrireVoicex09(uchar Inst, bool Load, uchar AMD);

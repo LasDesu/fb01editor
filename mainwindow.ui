@@ -423,25 +423,6 @@ p, li { white-space: pre-wrap; }
      <attribute name="title">
       <string>Banks</string>
      </attribute>
-     <widget class="QTableView" name="tabView_bank">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>601</width>
-        <height>461</height>
-       </rect>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOn</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOn</enum>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-     </widget>
      <widget class="QPushButton" name="pshBut_refresh_bank">
       <property name="geometry">
        <rect>
@@ -460,8 +441,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>350</x>
         <y>490</y>
-        <width>75</width>
-        <height>23</height>
+        <width>71</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -490,17 +471,17 @@ p, li { white-space: pre-wrap; }
        <string>Sort by :</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pshBut_bypatch">
+     <widget class="QPushButton" name="pshBut_byname">
       <property name="geometry">
        <rect>
         <x>440</x>
         <y>490</y>
         <width>71</width>
-        <height>23</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Patch</string>
+       <string>Name</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -512,7 +493,7 @@ p, li { white-space: pre-wrap; }
         <x>530</x>
         <y>490</y>
         <width>75</width>
-        <height>23</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -520,6 +501,16 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="checkable">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="table_bank">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>601</width>
+        <height>471</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -1223,7 +1214,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/imgs/clavier.bmp</pixmap>
+     <pixmap resource="FB01.qrc">:/imgs/clavier.bmp</pixmap>
     </property>
    </widget>
   </widget>
@@ -1263,6 +1254,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionSend_current_set"/>
     <addaction name="actionSend_current_voice"/>
+    <addaction name="actionSend_current_config"/>
     <addaction name="separator"/>
     <addaction name="actionGet_current_set"/>
     <addaction name="actionGet_current_voice"/>
@@ -1337,6 +1329,11 @@ p, li { white-space: pre-wrap; }
     <string>Get current config</string>
    </property>
   </action>
+  <action name="actionSend_current_config">
+   <property name="text">
+    <string>Send current config</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1364,6 +1361,8 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>
