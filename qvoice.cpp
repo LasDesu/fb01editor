@@ -1,13 +1,10 @@
 #include "qvoice.h"
-#include "ui_qvoice.h"
 
-QVoice::QVoice(QWidget *parent) :
-    QWidget(parent),
-    m_ui(new Ui::QVoice)
+/*****************************************************************************/
+QVoice::QVoice(QWidget *parent) : QWidget(parent), m_ui(new Ui::QVoice)
 {
-//Initialise
-    m_ui->setupUi(this);
     Attente = false;
+    m_ui->setupUi(this);
     ChangerInst(0);
 }
 
@@ -25,6 +22,14 @@ void QVoice::ChangerInst(uchar Inst)
 uchar QVoice::RecupererInst()
 {
     return InstSel;
+}
+
+/*****************************************************************************/
+void QVoice::Rafraichir()
+{
+    m_ui->txtEdit_author->repaint();
+    m_ui->txtEdit_comment->repaint();
+    m_ui->txtEdit_voicename->repaint();
 }
 
 /*****************************************************************************/
@@ -84,6 +89,8 @@ bool QVoice::Charger(QFile * Fichier, int Version)
     char Infos[INFOS];
     char Nom[7];
     char Octet;
+//Vérouille l'interface
+    Attente = true;
 //Lit les informations
     Fichier->read(Infos, INFOS);
     Infos[INFOS-1] = 0;
@@ -130,6 +137,7 @@ bool QVoice::Charger(QFile * Fichier, int Version)
     m_ui->spnBox_PMS->setValue((int)Octet);
 //Vérifie les erreurs
     if (Fichier->error()) return true;
+    Attente = false;
 //Envoie les données
     Envoyer();
     return false;
@@ -189,13 +197,12 @@ void QVoice::on_spnBox_algo_valueChanged(int i)
 //Vérification
     if (MIDI::EnAttente()) return;
 //Change d'image
-    QPixmap pix;
-    QString nom = ":/imgs/algo";
-    QString num; num.setNum(i);
-    nom.append(num);
-    nom.append(".bmp");
-    pix.load(nom);
-    m_ui->lbl_algo->setPixmap(pix);
+    QPixmap Pix;
+    QString Nom = ":/imgs/algo";
+    QString Num; Num.setNum(i);
+    Nom.append(Num); Nom.append(".bmp");
+    Pix.load(Nom);
+    m_ui->lbl_algo->setPixmap(Pix);
 //Envoie le code
     EXPANDEUR::EcrireVoicex0C(InstSel, (uchar) m_ui->spnBox_feedback->value(), (uchar) (i - 1));
 }

@@ -429,7 +429,7 @@ p, li { white-space: pre-wrap; }
         <x>10</x>
         <y>10</y>
         <width>601</width>
-        <height>471</height>
+        <height>461</height>
        </rect>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -944,16 +944,6 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <zorder>widget_instru_4</zorder>
-      <zorder>widget_instru_1</zorder>
-      <zorder>widget_instru_2</zorder>
-      <zorder>widget_instru_3</zorder>
-      <zorder>pshBut_current_4</zorder>
-      <zorder>pshBut_current_2</zorder>
-      <zorder>pshBut_current_3</zorder>
-      <zorder>pshBut_current_1</zorder>
-      <zorder>frame_page_2</zorder>
-      <zorder>frame_page_2</zorder>
      </widget>
      <widget class="QFrame" name="frame_page_2">
       <property name="geometry">
@@ -1117,15 +1107,15 @@ p, li { white-space: pre-wrap; }
         <x>30</x>
         <y>20</y>
         <width>264</width>
-        <height>224</height>
+        <height>234</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_1">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>32</y>
-         <width>41</width>
+         <x>220</x>
+         <y>20</y>
+         <width>31</width>
          <height>31</height>
         </rect>
        </property>
@@ -1143,15 +1133,15 @@ p, li { white-space: pre-wrap; }
         <x>330</x>
         <y>20</y>
         <width>264</width>
-        <height>224</height>
+        <height>234</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_2">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>32</y>
-         <width>41</width>
+         <x>220</x>
+         <y>20</y>
+         <width>31</width>
          <height>31</height>
         </rect>
        </property>
@@ -1169,15 +1159,15 @@ p, li { white-space: pre-wrap; }
         <x>30</x>
         <y>270</y>
         <width>264</width>
-        <height>224</height>
+        <height>234</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_3">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>32</y>
-         <width>41</width>
+         <x>220</x>
+         <y>20</y>
+         <width>31</width>
          <height>31</height>
         </rect>
        </property>
@@ -1195,15 +1185,15 @@ p, li { white-space: pre-wrap; }
         <x>330</x>
         <y>270</y>
         <width>264</width>
-        <height>224</height>
+        <height>234</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_4">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>32</y>
-         <width>41</width>
+         <x>220</x>
+         <y>20</y>
+         <width>31</width>
          <height>31</height>
         </rect>
        </property>
@@ -1233,7 +1223,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="FB01.qrc">:/imgs/clavier.bmp</pixmap>
+     <pixmap>:/imgs/clavier.bmp</pixmap>
     </property>
    </widget>
   </widget>
@@ -1374,8 +1364,6 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

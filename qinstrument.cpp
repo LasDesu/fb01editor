@@ -3,9 +3,8 @@
 /*****************************************************************************/
 QInstrument::QInstrument(QWidget *parent) :  QWidget(parent), m_ui(new Ui::QInstrument)
 {
-//Initialise
-    m_ui->setupUi(this);
     Attente = false;
+    m_ui->setupUi(this);
     ChangerID(0);
 }
 
@@ -74,6 +73,8 @@ bool QInstrument::Enregistrer(QFile * Fichier)
 bool QInstrument::Charger(QFile * Fichier, int Version)
 {
     char Octet;
+//Vérouille l'interface
+    Attente = true;
 //Lit chaque donnée
     Fichier->read(&Octet, 1);
     m_ui->spnBox_notes->setValue((int)Octet);
@@ -106,6 +107,7 @@ bool QInstrument::Charger(QFile * Fichier, int Version)
     Fichier->read(&Octet, 1);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
 //Vérifie les erreurs
+    Attente = false;
     if (Fichier->error()) return true;
 //Envoie les données
     Envoyer();

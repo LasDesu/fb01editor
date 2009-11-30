@@ -1,0 +1,4 @@
+alpha V0.1
+-SL level which were not displayed correctly fixed
+-Bugs of bad painting when loading/saving fixed
+-Transmitting too much data when loading set/instrument fixed 

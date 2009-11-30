@@ -173,6 +173,7 @@ void MainWindow::ActualiserSet()
 //Récupère le nom
     EXPANDEUR::LireSetNom(Nom);
     ui->txtEdit_setname->setPlainText((QString) Nom);
+    ui->txtEdit_setname->repaint();
 //Dévérouille
     Attente = false;
 }
@@ -189,6 +190,12 @@ void MainWindow::ActualiserVoice()
     ui->widget_opera_2->Recevoir();
     ui->widget_opera_3->Recevoir();
     ui->widget_opera_4->Recevoir();
+//Rafraichit l'interface
+    ui->widget_voice->Rafraichir();
+    ui->widget_opera_1->Rafraichir();
+    ui->widget_opera_2->Rafraichir();
+    ui->widget_opera_3->Rafraichir();
+    ui->widget_opera_4->Rafraichir();
 //Détermine le statut
     EXPANDEUR::LireOps(&b1, &b2, &b3, &b4);
     ui->pshBut_OPon_1->setChecked(b1);
@@ -249,7 +256,10 @@ void MainWindow::on_actionLoad_set_triggered(bool checked)
 //Charge le nom du set
     Fichier->read(Nom, 8);
     Nom[7] = 0;
+//Ecrit le nom
+    Attente = true;
     ui->txtEdit_setname->setPlainText((QString) Nom);
+    Attente = false;
 //Charge le set d'instruments
     if (ui->widget_instru_1->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_instru_2->Charger(Fichier, VERSION)) goto BadFile;
@@ -259,6 +269,8 @@ void MainWindow::on_actionLoad_set_triggered(bool checked)
     if (ui->widget_instru_6->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_instru_7->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_instru_8->Charger(Fichier, VERSION)) goto BadFile;
+//Rafraichit l'affichage
+    ui->txtEdit_setname->repaint();
 //Ferme le fichier
     Fichier->close();
     return;
@@ -267,7 +279,6 @@ BadFile :
     QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
     Fichier->close();
 }
-
 
 void MainWindow::on_actionSave_set_triggered(bool checked)
 {
@@ -287,6 +298,8 @@ void MainWindow::on_actionSave_set_triggered(bool checked)
     if (ui->widget_instru_6->Enregistrer(Fichier)) goto BadFile;
     if (ui->widget_instru_7->Enregistrer(Fichier)) goto BadFile;
     if (ui->widget_instru_8->Enregistrer(Fichier)) goto BadFile;
+//Rafraichit l'affichage
+    ui->txtEdit_setname->repaint();
 //Ferme le fichier
     Fichier->close();
     return;
@@ -308,6 +321,12 @@ void MainWindow::on_actionLoad_voice_triggered(bool checked)
     if (ui->widget_opera_2->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_opera_3->Charger(Fichier, VERSION)) goto BadFile;
     if (ui->widget_opera_4->Charger(Fichier, VERSION)) goto BadFile;
+//Rafraichit l'affichage
+    ui->widget_voice->Rafraichir();
+    ui->widget_opera_1->Rafraichir();
+    ui->widget_opera_2->Rafraichir();
+    ui->widget_opera_3->Rafraichir();
+    ui->widget_opera_4->Rafraichir();
 //Ferme le fichier
     Fichier->close();
     return;
@@ -328,6 +347,12 @@ void MainWindow::on_actionSave_voice_triggered(bool checked)
     if (ui->widget_opera_2->Enregistrer(Fichier)) goto BadFile;
     if (ui->widget_opera_3->Enregistrer(Fichier)) goto BadFile;
     if (ui->widget_opera_4->Enregistrer(Fichier)) goto BadFile;
+//Rafraichit l'affichage
+    ui->widget_voice->Rafraichir();
+    ui->widget_opera_1->Rafraichir();
+    ui->widget_opera_2->Rafraichir();
+    ui->widget_opera_3->Rafraichir();
+    ui->widget_opera_4->Rafraichir();
 //Ferme le fichier
     Fichier->close();
     return;

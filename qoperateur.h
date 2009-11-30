@@ -1,9 +1,9 @@
 #ifndef QOPERATEUR_H
 #define QOPERATEUR_H
 
-#include <QFile>
 #include "ui_qoperateur.h"
 #include "expandeur.h"
+#include <QFile>
 
 namespace Ui {
     class QOperateur;
@@ -23,6 +23,8 @@ public:
 //Chargement/enregistrement
     bool Enregistrer(QFile * Fichier);
     bool Charger(QFile * Fichier, int Version);
+//Interface
+    void Rafraichir();
 //Communication
     void Envoyer();
     void Recevoir();
@@ -44,15 +46,25 @@ private slots:
     void on_spnBox_velmod_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) i, (uchar) m_ui->spnBox_DR1->value());}
     void on_spnBox_AR_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx04(InstSel, IDSel, (uchar) m_ui->spnBox_rtdph->value(), (uchar) i);}
+        {if (!Attente){
+            EXPANDEUR::EcrireOpx04(InstSel, IDSel, (uchar) m_ui->spnBox_rtdph->value(), (uchar) i);
+            Rafraichir();}}
     void on_spnBox_DR1_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) i);}
+        {if (!Attente){
+            EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) i);
+            Rafraichir();}}
     void on_spnBox_SL_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - i), (uchar) m_ui->spnBox_RR->value());}
+        {if (!Attente){
+            EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - i), (uchar) m_ui->spnBox_RR->value());
+            Rafraichir();}}
     void on_spnBox_DR2_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) m_ui->spnBox_coarse->value(), (uchar) i);}
+        {if (!Attente){
+            EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) m_ui->spnBox_coarse->value(), (uchar) i);
+            Rafraichir();}}
     void on_spnBox_RR_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - m_ui->spnBox_SL->value()), (uchar) i);}
+        {if (!Attente){
+            EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - m_ui->spnBox_SL->value()), (uchar) i);
+            Rafraichir();}}
     void on_pshBut_carrier_clicked(bool checked)
         {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, !checked, (uchar) m_ui->spnBox_velmod->value(), (uchar) m_ui->spnBox_DR1->value());}
     void on_spnBox_coarse_valueChanged(int i)

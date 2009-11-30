@@ -1,7 +1,6 @@
 # FB01 : Sound editor
 # Copyright Meslin Frédéric 2009
 # fredericmeslin@hotmail.com
-
 # This file is part of FB01 SE
 # FB01 SE is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,10 +12,10 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with FB01 SE. If not, see <http://www.gnu.org/licenses/>.
-
-TARGET   = FB01
+TARGET = FB01
 TEMPLATE = app
-CONFIG  += staticlib static
+CONFIG += staticlib \
+    static
 SOURCES += main.cpp \
     mainwindow.cpp \
     midi.cpp \
@@ -24,7 +23,8 @@ SOURCES += main.cpp \
     expandeur.cpp \
     qinstrument.cpp \
     qoperateur.cpp \
-    qvoice.cpp
+    qvoice.cpp \
+    qenveloppe.cpp
 HEADERS += mainwindow.h \
     midi.h \
     qclavier.h \
@@ -33,10 +33,12 @@ HEADERS += mainwindow.h \
     win32.h \
     qinstrument.h \
     qoperateur.h \
-    qvoice.h
+    qvoice.h \
+    qenveloppe.h
 FORMS += mainwindow.ui \
     qinstrument.ui \
     qoperateur.ui \
     qvoice.ui
-LIBS += -luser32 -lwinmm
+LIBS += -luser32 \
+    -lwinmm
 RESOURCES += FB01.qrc

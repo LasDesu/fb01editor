@@ -3,11 +3,10 @@
 /*****************************************************************************/
 QOperateur::QOperateur(QWidget *parent) : QWidget(parent), m_ui(new Ui::QOperateur)
 {
-//Initialise
+    Attente = false;
     m_ui->setupUi(this);
     ChangerID(0);
     ChangerInst(0);
-    Attente = false;
 }
 
 QOperateur::~QOperateur()
@@ -41,6 +40,13 @@ void QOperateur::ChangerInst(uchar Inst)
 uchar QOperateur::RecupererInst()
 {
     return InstSel;
+}
+
+/*****************************************************************************/
+void QOperateur::Rafraichir()
+{
+    m_ui->label_env->DefinirEnveloppe(m_ui->spnBox_AR->value(), m_ui->spnBox_DR1->value(), m_ui->spnBox_SL->value(),m_ui->spnBox_DR2->value(), m_ui->spnBox_RR->value());
+    m_ui->label_env->repaint();
 }
 
 /*****************************************************************************/
@@ -88,6 +94,8 @@ bool QOperateur::Enregistrer(QFile * Fichier)
 bool QOperateur::Charger(QFile * Fichier, int Version)
 {
     char Octet;
+//Vérouille l'interface
+    Attente = true;
 //Lit chaque donnée
     Fichier->read(&Octet, 1);
     m_ui->hzSlider_volume->setValue((int)Octet);
@@ -122,6 +130,7 @@ bool QOperateur::Charger(QFile * Fichier, int Version)
     Fichier->read(&Octet, 1);
     m_ui->spnBox_RR->setValue((int)Octet);
 //Vérifie les erreurs
+    Attente = false;
     if (Fichier->error()) return true;
 //Envoie les données
     Envoyer();
@@ -169,7 +178,7 @@ void QOperateur::Recevoir()
     EXPANDEUR::LireOpx06(IDSel, &p1, &p2);
     m_ui->spnBox_coarse->setValue((int) p1); m_ui->spnBox_DR2->setValue((int) p2);
     EXPANDEUR::LireOpx07(IDSel, &p1, &p2);
-    m_ui->spnBox_SL->setValue((int) p1); m_ui->spnBox_RR->setValue((int) p2);
+    m_ui->spnBox_SL->setValue((int) (15 - p1)); m_ui->spnBox_RR->setValue((int) p2);
  //Déverouille
     Attente = false;
 }

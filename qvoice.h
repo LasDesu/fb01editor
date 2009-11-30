@@ -1,11 +1,11 @@
 #ifndef QVOICE_H
 #define QVOICE_H
 
-#include <QFile>
-#include "ui_qvoice.h"
-#include "expandeur.h"
+    #include "ui_qvoice.h"
+    #include "expandeur.h"
+    #include <QFile>
+    #include <QPixmap>
 
-//Constantes
     #define INFOS 129
 
     namespace Ui {
@@ -24,6 +24,8 @@
     //Chargement/enregistrement
         bool Enregistrer(QFile * Fichier);
         bool Charger(QFile * Fichier, int Version);
+    //Interface
+        void Rafraichir();
     //Communication
         void Envoyer();
         void Recevoir();

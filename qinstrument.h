@@ -1,9 +1,9 @@
 #ifndef QINSTRUMENT_H
 #define QINSTRUMENT_H
 
-#include <QFile>
 #include "ui_qinstrument.h"
 #include "expandeur.h"
+#include <QFile>
 
 namespace Ui {
     class QInstrument;
