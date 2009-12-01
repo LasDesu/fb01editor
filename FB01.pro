@@ -42,3 +42,5 @@ FORMS += mainwindow.ui \
 LIBS += -luser32 \
     -lwinmm
 RESOURCES += FB01.qrc
+RC_FILE = FB01.rc
+OTHER_FILES += FB01.rc
