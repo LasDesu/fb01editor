@@ -22,7 +22,6 @@
 #ifndef EXPANDEUR_H
 #define EXPANDEUR_H
 
-    #include "types.h"
     #include "midi.h"
 
     #define BANKS 7
@@ -57,6 +56,8 @@
         static void LireSetNom(char * Nom);
         static void EcrireVoiceNom(uchar Inst, const char * Nom);
         static void LireVoiceNom(char * Nom);
+    //Paramêtre spéciale instrument
+        static uchar LireInstx06(uchar Inst);
     //Paramètres composés voices
         static void EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
         static void LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4);

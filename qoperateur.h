@@ -74,12 +74,12 @@ private slots:
     void on_spnBox_coarse_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_DR2->value());}
     void on_spnBox_fine_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) i, (uchar) m_ui->spnBox_multiple->value());}
+        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) (i + 4), (uchar) m_ui->spnBox_multiple->value());}
     void on_spnBox_multiple_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) m_ui->spnBox_fine->value(), (uchar) i);}
+        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) i);}
     void on_cmbBox_kbcurb_activated(int i)
         {if (!Attente) EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_velocity->value());
-         if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_fine->value(), (uchar) m_ui->spnBox_multiple->value());}
+         if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) i, (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) m_ui->spnBox_multiple->value());}
     void on_spnBox_lvldph_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireOpx02(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_adjTL->value());}
     void on_spnBox_rtdph_valueChanged(int i)

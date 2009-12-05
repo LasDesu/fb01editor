@@ -31,6 +31,7 @@ extern QApplication * mainApp;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    InitialiserInterface();
     InitialiserEditeur();
 }
 
@@ -43,11 +44,32 @@ MainWindow::~MainWindow()
 /*****************************************************************************/
 void MainWindow::InitialiserEditeur()
 {
-//Désactive les controles
-    ActiverEditeur(false);
+//Liste les drivers
     on_pshBut_refresh_midi_clicked(false);
-//Initialise la barre
+//Initialise les opérateurs
+    for (int i = 0; i < 4; i ++)
+        Operas[i]->ChangerID(i);
+//Initialise les instrus
+    for (int i = 0; i < 8; i ++)
+        Insts[i]->ChangerID(i);
+//Initialise les sélections
+    ChangerPage(0);
+    ChangerInst(0);
+    ChangerOP(0);
+//Initialisation diverse
+    srand(QTime::currentTime().msec());
+    TypeCopie = -1;
+    Attente = false;
+}
+
+void MainWindow::InitialiserInterface()
+{
+//Choisit le premier onglet
+    ActiverEditeur(false);
     ui->tabWidget->setCurrentIndex(0);
+//Organise la table de présets
+    ui->table_bank->setRowCount(336);
+    ui->table_bank->setColumnCount(4);
 //Créé les tables des opérateurs
     Operas[0] = ui->widget_opera_1;
     Operas[1] = ui->widget_opera_2;
@@ -62,20 +84,6 @@ void MainWindow::InitialiserEditeur()
     Insts[5]  = ui->widget_instru_6;
     Insts[6]  = ui->widget_instru_7;
     Insts[7]  = ui->widget_instru_8;
-//Initialise les opérateurs
-    for (int i = 0; i < 4; i ++)
-        Operas[i]->ChangerID(i);
-//Initialise les instrus
-    for (int i = 0; i < 8; i ++)
-        Insts[i]->ChangerID(i);
-//Coniguration par défaut
-    ChangerPage(0);
-    ChangerInst(0);
-    ChangerOP(0);
-//Pas de données copiées
-    TypeCopie = -1;
-//Désactive l'attente
-    Attente = false;
 }
 
 void MainWindow::TerminerEditeur()
@@ -104,6 +112,11 @@ void MainWindow::ActiverEditeur(bool Actif)
     ui->actionGet_current_voice->setEnabled(Actif);
     ui->actionSend_current_set->setEnabled(Actif);
     ui->actionSend_current_voice->setEnabled(Actif);
+//Active le menu édition
+    ui->actionInitialize->setEnabled(Actif);
+    ui->actionRandomize->setEnabled(Actif);
+    ui->actionCopy->setEnabled(Actif);
+    ui->actionPaste->setEnabled(Actif);
 }
 
 void MainWindow::ActualiserEditeur()
@@ -176,43 +189,41 @@ const char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orc
                                 "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
 void MainWindow::ActualiserBank()
 {
-    char  Nom[8];
-    uchar Style;
 //Vide la liste
     ui->table_bank->clearContents();
-    ui->table_bank->insertColumn(0);
-    ui->table_bank->insertColumn(1);
-    ui->table_bank->insertColumn(2);
-    Attente = true;
 //Charge chaque bank
+    Attente = true;
     for (int b = 0; b < 8; b++)
     {
     //Reçoit la configuration
         if (!EXPANDEUR::ChargerBank(b)) return;
     //Construit le nom
-        QString Num; Num.setNum(b);
-        QString Bank = "Bank ";
-        Bank.append(Num);
+        QString Bank, NumB;
+        if (b < 2) {Bank.append("Ram "); NumB.setNum(b+1);}
+        else       {Bank.append("Rom "); NumB.setNum(b-1);}
+        Bank.append(NumB);
     //Construit la liste
         for (int v = 0; v < 48; v ++)
         {
-        //Lit les infos
+        //Charge le nom
+            char Nom[8];
             EXPANDEUR::LireBankVoiceNom(v, Nom);
-            Style = EXPANDEUR::LireBankParam(v, 0x07);
-            if (Style > 13) Style = 13;
             Nom[7] = 0;
+       //Charge le style
+            uchar Style = EXPANDEUR::LireBankParam(v, 0x07);
+            if (Style > 13) Style = 13;
         //Créé la ligne
-            ui->table_bank->insertRow(v + b * 48);
-            QTableWidgetItem * ItBank  = new QTableWidgetItem(0);
-            QTableWidgetItem * ItNom   = new QTableWidgetItem(0);
-            QTableWidgetItem * ItStyle = new QTableWidgetItem(0);
-            ItBank->setText(Bank);
-            ItNom->setText((QString) Nom);
-            ItStyle->setText((QString) BankStyles[Style]);
+            QString NumI; NumI.setNum(v + 1);
+            QTableWidgetItem * ItNom   = new QTableWidgetItem((QString) Nom);
+            QTableWidgetItem * ItStyle = new QTableWidgetItem((QString) BankStyles[Style]);
+            QTableWidgetItem * ItBank  = new QTableWidgetItem(Bank);
+            QTableWidgetItem * ItNum  = new QTableWidgetItem(NumI);
         //Ajoute la ligne
-            ui->table_bank->setItem(v + b * 48, 0, ItNom);
-            ui->table_bank->setItem(v + b * 48, 1, ItStyle);
-            ui->table_bank->setItem(v + b * 48, 2, ItBank);
+            int r = v + b * 48;
+            ui->table_bank->setItem(r, 0, ItNom);
+            ui->table_bank->setItem(r, 1, ItStyle);
+            ui->table_bank->setItem(r, 2, ItBank);
+            ui->table_bank->setItem(r, 3, ItNum);
         }
     }
 //Déverrouille
@@ -581,12 +592,24 @@ void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 /*****************************************************************************/
 void MainWindow::on_pshBut_bybank_clicked(bool checked)
 {
+    ui->table_bank->sortByColumn(3, Qt::AscendingOrder);
+    ui->table_bank->setSortingEnabled(checked);
+    ui->pshBut_byname->setChecked(false);
+    ui->pshBut_bystyle->setChecked(false);
 }
 
 void MainWindow::on_pshBut_byname_clicked(bool checked)
 {
+    ui->table_bank->sortByColumn(0, Qt::AscendingOrder);
+    ui->table_bank->setSortingEnabled(checked);
+    ui->pshBut_bybank->setChecked(false);
+    ui->pshBut_bystyle->setChecked(false);
 }
 
 void MainWindow::on_pshBut_bystyle_clicked(bool checked)
 {
+    ui->table_bank->sortByColumn(2, Qt::AscendingOrder);
+    ui->table_bank->setSortingEnabled(checked);
+    ui->pshBut_byname->setChecked(false);
+    ui->pshBut_bybank->setChecked(false);
 }

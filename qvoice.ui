@@ -158,6 +158,9 @@
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
+    <property name="lineWrapMode">
+     <enum>QPlainTextEdit::NoWrap</enum>
+    </property>
     <property name="plainText">
      <string/>
     </property>
@@ -420,7 +423,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="FB01.qrc">:/imgs/algo1.bmp</pixmap>
+     <pixmap>:/imgs/algo1.bmp</pixmap>
     </property>
    </widget>
    <widget class="QSpinBox" name="spnBox_algo">
@@ -811,6 +814,9 @@
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
+    <property name="lineWrapMode">
+     <enum>QPlainTextEdit::NoWrap</enum>
+    </property>
    </widget>
    <widget class="QPlainTextEdit" name="txtEdit_comment">
     <property name="geometry">
@@ -826,6 +832,9 @@
     </property>
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="lineWrapMode">
+     <enum>QPlainTextEdit::NoWrap</enum>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_author_2">
@@ -849,8 +858,6 @@
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

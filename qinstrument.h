@@ -26,6 +26,7 @@ public:
     void Recevoir();
 //Interface et édition
     void Initialiser();
+    void InitialiserLimites(QComboBox * Box);
     void Randomiser();
     void Copier(uchar Table[16]);
     void Coller(const uchar Table[16]);
@@ -42,9 +43,9 @@ private slots:
         {if (!Attente) EXPANDEUR::EcrireInstParam(IDSel, 0x00, (uchar) i);}
     void on_spnBox_chan_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireInstParam(IDSel, 0x01, (uchar) (i - 1));}
-    void on_spnBox_upper_valueChanged(int i)
+    void on_cmbBox_upper_activated(int i)
         {if (!Attente) EXPANDEUR::EcrireInstParam(IDSel, 0x02, (uchar) i);}
-    void on_spnBox_lower_valueChanged(int i)
+    void on_cmbBox_lower_activated(int i)
         {if (!Attente) EXPANDEUR::EcrireInstParam(IDSel, 0x03, (uchar) i);}
     void on_spnBox_bank_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireInstParam(IDSel, 0x04, (uchar) i);}

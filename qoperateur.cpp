@@ -82,7 +82,7 @@ void QOperateur::Envoyer()
     EXPANDEUR::EcrireOpParam(InstSel, IDSel, 0x00, (uchar) (127 - m_ui->hzSlider_volume->value()));
     EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) m_ui->spnBox_velocity->value());
     EXPANDEUR::EcrireOpx02(InstSel, IDSel, (uchar) m_ui->spnBox_lvldph->value(), (uchar) m_ui->spnBox_adjTL->value());
-    EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) m_ui->spnBox_fine->value(), (uchar) m_ui->spnBox_multiple->value());
+    EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) m_ui->spnBox_multiple->value());
     EXPANDEUR::EcrireOpx04(InstSel, IDSel, (uchar) m_ui->spnBox_rtdph->value(), (uchar) m_ui->spnBox_AR->value());
     EXPANDEUR::EcrireOpx05(InstSel, IDSel, (uchar) m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) m_ui->spnBox_DR1->value());
     EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) m_ui->spnBox_coarse->value(), (uchar) m_ui->spnBox_DR2->value());
@@ -104,7 +104,7 @@ void QOperateur::Recevoir()
     m_ui->spnBox_lvldph->setValue((int) p1); m_ui->spnBox_adjTL->setValue((int) p2);
     EXPANDEUR::LireOpx03(IDSel, &st2, &p1, &p2);
     m_ui->cmbBox_kbcurb->setCurrentIndex((int)st1 + st2);
-    m_ui->spnBox_fine->setValue((int) p1);
+    m_ui->spnBox_fine->setValue((int) (p1 - 4));
     m_ui->spnBox_multiple->setValue((int) p2);
     EXPANDEUR::LireOpx04(IDSel, &p1, &p2);
     m_ui->spnBox_rtdph->setValue((int) p1);

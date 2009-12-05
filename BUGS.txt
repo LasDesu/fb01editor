@@ -4,4 +4,6 @@ alpha V0.1
 -Transmitting too much data when loading set/instrument fixed 
 -Bad operator correspondance fixed
 -Enable buttons, enabling wrong operators fixed
--Selecting and editing set name crashed the application 
+-Fine & transpose editing bug fixed
+-Main configuration sending bug
+-Selecting and editing set name crashed the application unfixed

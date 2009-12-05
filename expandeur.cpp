@@ -111,6 +111,14 @@ void EXPANDEUR::LireSetNom(char * Nom)
 }
 
 /*****************************************************************************/
+uchar EXPANDEUR::LireInstx06(uchar Inst)
+{
+    uchar Detune = LireInstParam(Inst, 0x06);
+    if (Detune > 63) Detune +=0x80;
+    return Detune;
+}
+
+/*****************************************************************************/
 void EXPANDEUR::EcrireVoiceNom(uchar Inst, const char * Nom)
 {
     uchar Octet[7];
@@ -428,7 +436,7 @@ void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
     Msg[1].data[0] = 0x10;
     Msg[1].data[1] = Param & 0x7F;
     Msg[1].data[2] = Valeur & 0x7F;
-    Msg[2].data[3] = 0xF7;
+    Msg[1].data[3] = 0xF7;
 //Transmet le paramêtre
     MIDI::EnvMsgLng(Msg, 8);
 }

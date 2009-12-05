@@ -22,6 +22,12 @@
 #ifndef MIDI_H
 #define MIDI_H
 
+//Inclusions
+    #include <QtGui/QApplication>
+    #include <QtGui/QMessageBox>
+    #include <QTime>
+    #include <QFile>
+
     #include "memory.h"
     #include "types.h"
     #include "win32.h"
@@ -32,7 +38,7 @@
     #define TAMPON  6400
     #define ATTENTE 8000
 
-//Message midi
+//Messages MIDI
     typedef union
     {
         ulong word;

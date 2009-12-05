@@ -19,10 +19,6 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
-#include <QTime>
-#include <QFile>
 #include "midi.h"
 
 //Application

@@ -53,6 +53,7 @@
         int OPSel;
     //Initialisation
         void InitialiserEditeur();
+        void InitialiserInterface();
         void TerminerEditeur();
     //Utilitaires
         void ActiverEditeur(bool Actif);
@@ -81,6 +82,11 @@
         void on_actionSave_voice_triggered(bool checked = false);
         void on_actionLoad_set_triggered(bool checked = false);
         void on_actionSave_set_triggered(bool checked = false);
+    //Menu edit
+        void on_actionInitialize_triggered(bool checked = false);
+        void on_actionRandomize_triggered(bool checked = false);
+        void on_actionCopy_triggered(bool checked = false);
+        void on_actionPaste_triggered(bool checked = false);
     //Menu FB01
         void on_actionSend_current_voice_triggered(bool checked = false)
             {ui->widget_voice->Envoyer();
@@ -99,11 +105,6 @@
             {ActualiserSet();}
         void on_actionGet_current_config_triggered(bool checked = false)
             {ActualiserConfig();}
-     //Menu opérateurs
-        void on_actionInitialize_triggered(bool checked = false);
-        void on_actionRandomize_triggered(bool checked = false);
-        void on_actionCopy_triggered(bool checked = false);
-        void on_actionPaste_triggered(bool checked = false);
      //Menu aide
         void on_actionAbout_triggered(bool checked = false);
         void on_actionRead_this_triggered(bool checked = false);
@@ -118,11 +119,11 @@
         void on_spnBox_syschan_valueChanged(int i)
             {if (!Attente) EXPANDEUR::SysChan = i - 1;}
         void on_pshBut_combine_clicked(bool checked)
-            {if (!Attente) EXPANDEUR::EcrireSysParam(0x08, checked);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x08, !checked);}
         void on_cmbBox_reception_activated(int i)
             {if (!Attente) EXPANDEUR::EcrireSysParam(0x0D, (uchar) i);}
         void on_pshBut_memory_clicked(bool checked)
-            {if (!Attente) EXPANDEUR::EcrireSysParam(0x21, checked);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x21, !checked);}
         void on_spnBox_confnum_valueChanged(int i)
             {if (!Attente) EXPANDEUR::EcrireSysParam(0x22, (uchar) i);}
         void on_hzSlider_mastvol_valueChanged(int i)
