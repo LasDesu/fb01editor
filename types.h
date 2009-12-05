@@ -42,3 +42,7 @@
 	#define int32  long
 	#define uint32 long  unsigned
 #endif
+
+#ifndef RAND
+    #define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
+#endif

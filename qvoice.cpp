@@ -33,115 +33,46 @@ void QVoice::Rafraichir()
 }
 
 /*****************************************************************************/
+bool QVoice::Charger(QFile * Fichier, int Version)
+{
+    uchar Table[16];
+    char Infos[INFOS];
+    char Nom[8];
+//Vérouille l'interface
+    Attente = true;
+//Lit les informations
+    Fichier->read(Infos, INFOS); Infos[INFOS-1] = 0;
+    m_ui->txtEdit_author->setPlainText((QString) Infos);
+    Fichier->read(Infos, INFOS); Infos[INFOS-1] = 0;
+    m_ui->txtEdit_comment->setPlainText((QString) Infos);
+    Fichier->read(Nom, 7);  Nom[7] = 0;
+    m_ui->txtEdit_voicename->setPlainText((QString)Nom);
+//Lit la configuration globale
+    Fichier->read((char *) Table, 16);
+    if (Fichier->error()) return true;
+    Coller(Table);
+//Déverrouille
+    Attente = false;
+    return false;
+}
+
 bool QVoice::Enregistrer(QFile * Fichier)
 {
+    uchar Table[16];
     char Infos[INFOS];
     char Nom[7];
-    char Octet;
 //Ecrit les informations
     strncpy(Infos, m_ui->txtEdit_author->toPlainText().toAscii().constData(), INFOS);
     Fichier->write(Infos, INFOS);
     strncpy(Infos, m_ui->txtEdit_comment->toPlainText().toAscii().constData(), INFOS);
     Fichier->write(Infos, INFOS);
-//Ecrit la configuration globale
     strncpy(Nom, m_ui->txtEdit_voicename->toPlainText().toAscii().constData(), 7);
     Fichier->write(Nom, 7);
-    Octet = (char) m_ui->spnBox_algo->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->cmbBox_style->currentIndex();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_feedback->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_trans->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->pshBut_poly->isChecked();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_porta->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_pitch->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->cmbBox_pmdctl->currentIndex();
-    Fichier->write(&Octet, 1);
-//Ecrit la configuration du LFO
-    Octet = (char) m_ui->spnBox_LFOspeed->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->cmbBox_LFOwave->currentIndex();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->pshBut_LFOload->isChecked();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->pshBut_LFOsync->isChecked();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_AMD->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_AMS->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_PMD->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_PMS->value();
-    Fichier->write(&Octet, 1);
+//Ecrit la configuration globale
+    Copier(Table);
+    Fichier->write((char *) Table, 16);
 //Vérifie les erreurs
     if (Fichier->error()) return true;
-    return false;
-}
-
-bool QVoice::Charger(QFile * Fichier, int Version)
-{
-    char Infos[INFOS];
-    char Nom[8];
-    char Octet;
-//Vérouille l'interface
-    Attente = true;
-//Lit les informations
-    Fichier->read(Infos, INFOS);
-    Infos[INFOS-1] = 0;
-    m_ui->txtEdit_author->setPlainText((QString) Infos);
-    Fichier->read(Infos, INFOS);
-    Infos[INFOS-1] = 0;
-    m_ui->txtEdit_comment->setPlainText((QString) Infos);
-//Lit le nom
-    Fichier->read(Nom, 7);
-    Nom[7] = 0;
-    m_ui->txtEdit_voicename->setPlainText((QString)Nom);
-//Lit la configuration globale
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_algo->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->cmbBox_style->setCurrentIndex((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_feedback->setValue((int) Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_trans->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->pshBut_poly->setChecked((bool)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_porta->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_pitch->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
-    Fichier->read(&Octet, 1);
-//Ecrit la configuration du LFO
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_LFOspeed->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->cmbBox_LFOwave->setCurrentIndex((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->pshBut_LFOload->setChecked((bool)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->pshBut_LFOsync->setChecked((bool)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_AMD->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_AMS->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_PMD->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_PMS->setValue((int)Octet);
-//Vérifie les erreurs
-    if (Fichier->error()) return true;
-    Attente = false;
-//Envoie les données
-    Envoyer();
     return false;
 }
 
@@ -208,6 +139,95 @@ void QVoice::on_spnBox_algo_valueChanged(int i)
 //Envoie le code
     EXPANDEUR::EcrireVoicex0C(InstSel, (uchar) m_ui->spnBox_feedback->value(), (uchar) (i - 1));
 }
+
+/*****************************************************************************/
+const uchar InitTab[16] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
+void QVoice::Initialiser()
+{
+//Initialise les textes
+    Attente = true;
+    m_ui->txtEdit_voicename->setPlainText((QString) "Noname");
+    m_ui->txtEdit_author->setPlainText((QString) "");
+    m_ui->txtEdit_comment->setPlainText((QString) "");
+//Initialise les valeurs
+    Coller(InitTab);
+}
+
+void QVoice::Randomiser()
+{
+//Vérrouille l'interface
+    Attente = true;
+//Initialise aléatoirement
+    m_ui->spnBox_algo->setValue(RAND(1, 8));
+    m_ui->cmbBox_style->setCurrentIndex(RAND(0, 13));
+    m_ui->spnBox_feedback->setValue(RAND(0, 7));
+    m_ui->spnBox_trans->setValue(RAND(-128, 127));
+    m_ui->pshBut_poly->setChecked(RAND(0, 1));
+    m_ui->spnBox_porta->setValue(RAND(0, 127));
+    m_ui->spnBox_pitch->setValue(RAND(0, 12));
+    m_ui->cmbBox_pmdctl->setCurrentIndex(RAND(0, 4));
+    m_ui->spnBox_LFOspeed->setValue(RAND(0, 255));
+    m_ui->cmbBox_LFOwave->setCurrentIndex(RAND(0, 3));
+    m_ui->pshBut_LFOload->setChecked(RAND(0, 1));
+    m_ui->pshBut_LFOsync->setChecked(RAND(0, 1));
+    m_ui->spnBox_AMD->setValue(RAND(0, 127));
+    m_ui->spnBox_AMS->setValue(RAND(0, 3));
+    m_ui->spnBox_PMD->setValue(RAND(0, 127));
+    m_ui->spnBox_PMS->setValue(RAND(0, 7));
+//Actualise l'interface
+    Attente = false;
+    Rafraichir();
+    Envoyer();
+}
+
+/*****************************************************************************/
+void QVoice::Copier(uchar Table[16])
+{
+//Copie les données
+    Table[0]  = (uchar) m_ui->spnBox_algo->value();
+    Table[1]  = (uchar) m_ui->cmbBox_style->currentIndex();
+    Table[2]  = (uchar) m_ui->spnBox_feedback->value();
+    Table[3]  = (uchar) m_ui->spnBox_trans->value();
+    Table[4]  = (uchar) m_ui->pshBut_poly->isChecked();
+    Table[5]  = (uchar) m_ui->spnBox_porta->value();
+    Table[6]  = (uchar) m_ui->spnBox_pitch->value();
+    Table[7]  = (uchar) m_ui->cmbBox_pmdctl->currentIndex();
+    Table[8]  = (uchar) m_ui->spnBox_LFOspeed->value();
+    Table[9]  = (uchar) m_ui->cmbBox_LFOwave->currentIndex();
+    Table[10] = (uchar) m_ui->pshBut_LFOload->isChecked();
+    Table[11] = (uchar) m_ui->pshBut_LFOsync->isChecked();
+    Table[12] = (uchar) m_ui->spnBox_AMD->value();
+    Table[13] = (uchar) m_ui->spnBox_AMS->value();
+    Table[14] = (uchar) m_ui->spnBox_PMD->value();
+    Table[15] = (uchar) m_ui->spnBox_PMS->value();
+}
+
+void QVoice::Coller(const uchar Table[16])
+{
+//Vérrouille l'interface
+    Attente = true;
+//Colle les données
+    m_ui->spnBox_algo->setValue((int) Table[0]);
+    m_ui->cmbBox_style->setCurrentIndex((int) Table[1]);
+    m_ui->spnBox_feedback->setValue((int) Table[2]);
+    m_ui->spnBox_trans->setValue((int) Table[3]);
+    m_ui->pshBut_poly->setChecked((bool) Table[4]);
+    m_ui->spnBox_porta->setValue((int) Table[5]);
+    m_ui->spnBox_pitch->setValue((int) Table[6]);
+    m_ui->cmbBox_pmdctl->setCurrentIndex((int) Table[7]);
+    m_ui->spnBox_LFOspeed->setValue((int) Table[8]);
+    m_ui->cmbBox_LFOwave->setCurrentIndex((int) Table[9]);
+    m_ui->pshBut_LFOload->setChecked((bool) Table[10]);
+    m_ui->pshBut_LFOsync->setChecked((bool) Table[11]);
+    m_ui->spnBox_AMD->setValue((int) Table[12]);
+    m_ui->spnBox_AMS->setValue((int) Table[13]);
+    m_ui->spnBox_PMD->setValue((int) Table[14]);
+    m_ui->spnBox_PMS->setValue((int) Table[15]);
+    Attente = false;
+ //Actualise l'interface
+    Rafraichir();
+    Envoyer();
+ }
 
 /*****************************************************************************/
 void QVoice::changeEvent(QEvent *e)

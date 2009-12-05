@@ -24,6 +24,11 @@ public:
 //Communication
     void Envoyer();
     void Recevoir();
+//Interface et édition
+    void Initialiser();
+    void Randomiser();
+    void Copier(uchar Table[16]);
+    void Coller(const uchar Table[16]);
 protected:
     void changeEvent(QEvent *e);
 private:

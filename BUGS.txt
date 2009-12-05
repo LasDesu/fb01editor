@@ -2,3 +2,6 @@ alpha V0.1
 -SL level which were not displayed correctly fixed
 -Bugs of bad painting when loading/saving fixed
 -Transmitting too much data when loading set/instrument fixed 
+-Bad operator correspondance fixed
+-Enable buttons, enabling wrong operators fixed
+-Selecting and editing set name crashed the application 

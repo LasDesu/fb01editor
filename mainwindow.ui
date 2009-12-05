@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -427,7 +427,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>490</y>
+        <y>500</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -440,7 +440,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>350</x>
-        <y>490</y>
+        <y>500</y>
         <width>71</width>
         <height>21</height>
        </rect>
@@ -456,7 +456,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>290</x>
-        <y>494</y>
+        <y>504</y>
         <width>46</width>
         <height>14</height>
        </rect>
@@ -475,7 +475,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>440</x>
-        <y>490</y>
+        <y>500</y>
         <width>71</width>
         <height>21</height>
        </rect>
@@ -491,7 +491,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>530</x>
-        <y>490</y>
+        <y>500</y>
         <width>75</width>
         <height>21</height>
        </rect>
@@ -509,8 +509,14 @@ p, li { white-space: pre-wrap; }
         <x>10</x>
         <y>10</y>
         <width>601</width>
-        <height>471</height>
+        <height>481</height>
        </rect>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
       </property>
      </widget>
     </widget>
@@ -871,7 +877,7 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_4">
+      <widget class="QPushButton" name="pshBut_inst_cur_4">
        <property name="geometry">
         <rect>
          <x>400</x>
@@ -887,7 +893,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_2">
+      <widget class="QPushButton" name="pshBut_inst_cur_2">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -903,7 +909,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_3">
+      <widget class="QPushButton" name="pshBut_inst_cur_3">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -919,7 +925,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_1">
+      <widget class="QPushButton" name="pshBut_inst_cur_1">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -991,7 +997,7 @@ p, li { white-space: pre-wrap; }
         </rect>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_8">
+      <widget class="QPushButton" name="pshBut_inst_cur_8">
        <property name="geometry">
         <rect>
          <x>400</x>
@@ -1007,7 +1013,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_6">
+      <widget class="QPushButton" name="pshBut_inst_cur_6">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -1023,7 +1029,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_7">
+      <widget class="QPushButton" name="pshBut_inst_cur_7">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -1039,7 +1045,7 @@ p, li { white-space: pre-wrap; }
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QPushButton" name="pshBut_current_5">
+      <widget class="QPushButton" name="pshBut_inst_cur_5">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1071,6 +1077,9 @@ p, li { white-space: pre-wrap; }
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
+      <property name="maximumBlockCount">
+       <number>7</number>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_voice">
@@ -1096,9 +1105,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>20</y>
+        <y>10</y>
         <width>264</width>
-        <height>234</height>
+        <height>224</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_1">
@@ -1122,9 +1131,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>20</y>
+        <y>10</y>
         <width>264</width>
-        <height>234</height>
+        <height>224</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_2">
@@ -1150,7 +1159,7 @@ p, li { white-space: pre-wrap; }
         <x>30</x>
         <y>270</y>
         <width>264</width>
-        <height>234</height>
+        <height>224</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_3">
@@ -1176,7 +1185,7 @@ p, li { white-space: pre-wrap; }
         <x>330</x>
         <y>270</y>
         <width>264</width>
-        <height>234</height>
+        <height>224</height>
        </rect>
       </property>
       <widget class="QPushButton" name="pshBut_OPon_4">
@@ -1196,6 +1205,70 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
+     <widget class="QPushButton" name="pshBut_op_cur_1">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>240</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_op_cur_2">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>240</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_op_cur_3">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>500</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_op_cur_4">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>500</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Current</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QClavier" name="lbl_clavier">
@@ -1214,7 +1287,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="FB01.qrc">:/imgs/clavier.bmp</pixmap>
+     <pixmap>:/imgs/clavier.bmp</pixmap>
     </property>
    </widget>
   </widget>
@@ -1260,7 +1333,18 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionGet_current_voice"/>
     <addaction name="actionGet_current_config"/>
    </widget>
+   <widget class="QMenu" name="menuOperators">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionInitialize"/>
+    <addaction name="actionRandomize"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+   </widget>
    <addaction name="menuFichier"/>
+   <addaction name="menuOperators"/>
    <addaction name="menuFB01"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -1334,6 +1418,26 @@ p, li { white-space: pre-wrap; }
     <string>Send current config</string>
    </property>
   </action>
+  <action name="actionRandomize">
+   <property name="text">
+    <string>Randomize</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionInitialize">
+   <property name="text">
+    <string>Initialize</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1361,8 +1465,6 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

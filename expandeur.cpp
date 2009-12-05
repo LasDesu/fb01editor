@@ -258,10 +258,10 @@ void EXPANDEUR::EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
 {
     uchar Octet = 0;
 //Valide les opérateurs
-    if (Op1) Octet += 0x8;
-    if (Op2) Octet += 0x10;
-    if (Op3) Octet += 0x20;
-    if (Op4) Octet += 0x40;
+    if (Op4) Octet += 0x8;
+    if (Op3) Octet += 0x10;
+    if (Op2) Octet += 0x20;
+    if (Op1) Octet += 0x40;
     EcrireVoiceParam(Inst, 0x0B, Octet);
 }
 
@@ -494,11 +494,11 @@ uchar EXPANDEUR::LireVoiceParam(uchar Param)
 void EXPANDEUR::EcrireOpParam(uchar Inst, uchar Op, uchar Param, uchar Valeur)
 {
 //Configure un opérateur
-    EcrireVoiceParam(Inst, 0x10 + Op * 0x8 + (int) Param, Valeur);
+    EcrireVoiceParam(Inst, 0x10 + (3 - Op) * 0x8 + (int) Param, Valeur);
 }
 
 uchar EXPANDEUR::LireOpParam(uchar Op, uchar Param)
 {
 //Examine un opérateur
-    return LireVoiceParam(0x10 + Op * 0x8 + (int) Param);
+    return LireVoiceParam(0x10 + (3 - Op) * 0x8 + (int) Param);
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>264</width>
-    <height>234</height>
+    <height>224</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>261</width>
-     <height>231</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="title">
@@ -459,6 +459,9 @@
       <width>118</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
     </property>
     <property name="text">
      <string/>

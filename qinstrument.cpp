@@ -31,86 +31,28 @@ uchar QInstrument::RecupererID()
 }
 
 /*****************************************************************************/
-bool QInstrument::Enregistrer(QFile * Fichier)
+bool QInstrument::Charger(QFile * Fichier, int Version)
 {
-    char Octet;
-//Ecrit chaque donnée
-    Octet = (char) m_ui->spnBox_notes->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_chan->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_upper->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_lower->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_bank->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_voice->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_detune->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->cmbBox_trans->currentIndex();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->hzSlider_volume->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->hzSlider_pan->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->pshBut_LFO->isChecked();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_porta->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_pitch->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->pshBut_poly->isChecked();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->cmbBox_pmdctl->currentIndex();
-    Fichier->write(&Octet, 1);
-//Vérifie les erreurs
+    uchar Table[16];
+//Vérrouille l'interface
+    Attente = true;
+//Charge les données
+    Fichier->read((char *)Table, 15);
     if (Fichier->error()) return true;
+    Coller(Table);
+//Déverrouille
+    Attente = false;
     return false;
 }
 
-bool QInstrument::Charger(QFile * Fichier, int Version)
+bool QInstrument::Enregistrer(QFile * Fichier)
 {
-    char Octet;
-//Vérouille l'interface
-    Attente = true;
-//Lit chaque donnée
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_notes->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_chan->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_upper->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_lower->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_bank->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_voice->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_detune->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->cmbBox_trans->setCurrentIndex((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->hzSlider_volume->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->hzSlider_pan->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->pshBut_LFO->setChecked((bool)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_porta->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_pitch->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->pshBut_poly->setChecked((bool)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->cmbBox_pmdctl->setCurrentIndex((int)Octet);
+    uchar Table[16];
+//Enregistre les données
+    Copier(Table);
+    Fichier->write((char *) Table, 15);
 //Vérifie les erreurs
-    Attente = false;
     if (Fichier->error()) return true;
-//Envoie les données
-    Envoyer();
     return false;
 }
 
@@ -158,6 +100,84 @@ void QInstrument::Recevoir()
 //Déverrouille
     Attente = false;
 }
+
+/*****************************************************************************/
+const uchar InitTab[16] = {1, 0, 127, 0, 2, 0, 0, 2, 127, 63, 0, 0, 4, 1, 1, 0};
+void QInstrument::Initialiser()
+{
+    Coller(InitTab);
+}
+
+void QInstrument::Randomiser()
+{
+//Vérrouille l'interface
+    Attente = true;
+//Initialise aléatoirement
+    m_ui->spnBox_notes->setValue(RAND(0, 8));
+    m_ui->spnBox_chan->setValue(RAND(0, 15));
+    m_ui->spnBox_upper->setValue(RAND(0, 127));
+    m_ui->spnBox_lower->setValue(RAND(0, 127));
+    m_ui->spnBox_bank->setValue(RAND(0, 6));
+    m_ui->spnBox_voice->setValue(RAND(0, 47));
+    m_ui->spnBox_detune->setValue(RAND(-64, 63));
+    m_ui->cmbBox_trans->setCurrentIndex(RAND(0, 4));
+    m_ui->hzSlider_volume->setValue(RAND(0, 127));
+    m_ui->hzSlider_pan->setValue(RAND(0, 127));
+    m_ui->pshBut_LFO->setChecked(RAND(0, 1));
+    m_ui->spnBox_porta->setValue(RAND(0, 127));
+    m_ui->spnBox_pitch->setValue(RAND(0, 12));
+    m_ui->pshBut_poly->setChecked(RAND(0, 1));
+    m_ui->cmbBox_pmdctl->setCurrentIndex(RAND(0, 4));
+//Actualise l'interface
+    Attente = false;
+    Envoyer();
+}
+
+/*****************************************************************************/
+void QInstrument::Copier(uchar Table[16])
+{
+//Copie les données
+    Table[0]  = (uchar) m_ui->spnBox_notes->value();
+    Table[1]  = (uchar) m_ui->spnBox_chan->value();
+    Table[2]  = (uchar) m_ui->spnBox_upper->value();
+    Table[3]  = (uchar) m_ui->spnBox_lower->value();
+    Table[4]  = (uchar) m_ui->spnBox_bank->value();
+    Table[5]  = (uchar) m_ui->spnBox_voice->value();
+    Table[6]  = (uchar) m_ui->spnBox_detune->value();
+    Table[7]  = (uchar) m_ui->cmbBox_trans->currentIndex();
+    Table[8]  = (uchar) m_ui->hzSlider_volume->value();
+    Table[9]  = (uchar) m_ui->hzSlider_pan->value();
+    Table[10] = (uchar) m_ui->pshBut_LFO->isChecked();
+    Table[11] = (uchar) m_ui->spnBox_porta->value();
+    Table[12] = (uchar) m_ui->spnBox_pitch->value();
+    Table[13] = (uchar) m_ui->pshBut_poly->isChecked();
+    Table[14] = (uchar) m_ui->cmbBox_pmdctl->currentIndex();
+}
+
+void QInstrument::Coller(const uchar Table[16])
+{
+//Vérrouille l'interface
+    Attente = true;
+ //Colle les données
+    m_ui->spnBox_notes->setValue((int)Table[0]);
+    m_ui->spnBox_chan->setValue((int)Table[1]);
+    m_ui->spnBox_upper->setValue((int)Table[2]);
+    m_ui->spnBox_lower->setValue((int)Table[3]);
+    m_ui->spnBox_bank->setValue((int)Table[4]);
+    m_ui->spnBox_voice->setValue((int)Table[5]);
+    m_ui->spnBox_detune->setValue((int)Table[6]);
+    m_ui->cmbBox_trans->setCurrentIndex((int)Table[7]);
+    m_ui->hzSlider_volume->setValue((int)Table[8]);
+    m_ui->hzSlider_pan->setValue((int)Table[9]);
+    m_ui->pshBut_LFO->setChecked((bool)Table[10]);
+    m_ui->spnBox_porta->setValue((int)Table[11]);
+    m_ui->spnBox_pitch->setValue((int)Table[12]);
+    m_ui->pshBut_poly->setChecked((bool)Table[13]);
+    m_ui->cmbBox_pmdctl->setCurrentIndex((int)Table[14]);
+ //Actualise l'interface
+    Attente = false;
+    Envoyer();
+ }
 
 /*****************************************************************************/
 void QInstrument::changeEvent(QEvent *e)

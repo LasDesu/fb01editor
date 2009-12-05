@@ -39,13 +39,18 @@
     //Constructeurs
         MainWindow(QWidget *parent = 0);
         ~MainWindow();
-
     private:
-    //Configuration
+    //Objets d'interface
         Ui::MainWindow *ui;
+        QOperateur  * Operas[4];
+        QInstrument * Insts[8];
         bool Attente;
+    //Paramêtres d'édition
+        uchar TabCopie[16];
+        int TypeCopie;
         int PageSel;
         int InstSel;
+        int OPSel;
     //Initialisation
         void InitialiserEditeur();
         void TerminerEditeur();
@@ -53,6 +58,7 @@
         void ActiverEditeur(bool Actif);
         void ChangerPage(int Page);
         void ChangerInst(int Inst);
+        void ChangerOP(int OP);
     //Archivage
         QFile * ChargerFichier(int Type, short Version);
         QFile * EnregistrerFichier(int Type, short Version);
@@ -93,13 +99,21 @@
             {ActualiserSet();}
         void on_actionGet_current_config_triggered(bool checked = false)
             {ActualiserConfig();}
-    //Menu aide
+     //Menu opérateurs
+        void on_actionInitialize_triggered(bool checked = false);
+        void on_actionRandomize_triggered(bool checked = false);
+        void on_actionCopy_triggered(bool checked = false);
+        void on_actionPaste_triggered(bool checked = false);
+     //Menu aide
         void on_actionAbout_triggered(bool checked = false);
         void on_actionRead_this_triggered(bool checked = false);
         void on_actionOnline_help_triggered(bool checked = false);
     //Gestion des banks
         void on_pshBut_refresh_bank_clicked(bool checked)
             {ActualiserBank();}
+        void on_pshBut_bybank_clicked(bool checked);
+        void on_pshBut_byname_clicked(bool checked);
+        void on_pshBut_bystyle_clicked(bool checked);
     //Configuration globale
         void on_spnBox_syschan_valueChanged(int i)
             {if (!Attente) EXPANDEUR::SysChan = i - 1;}
@@ -116,29 +130,37 @@
     //Edition des instruments
         void on_pshBut_next_pressed()
             {ChangerPage(1 - PageSel); ActualiserSet();}
-        void on_pshBut_current_1_clicked(bool checked)
+        void on_pshBut_inst_cur_1_clicked(bool checked)
             {ChangerInst(0); ActualiserVoice();}
-        void on_pshBut_current_2_clicked(bool checked)
+        void on_pshBut_inst_cur_2_clicked(bool checked)
             {ChangerInst(1); ActualiserVoice();}
-        void on_pshBut_current_3_clicked(bool checked)
+        void on_pshBut_inst_cur_3_clicked(bool checked)
             {ChangerInst(2); ActualiserVoice();}
-        void on_pshBut_current_4_clicked(bool checked)
+        void on_pshBut_inst_cur_4_clicked(bool checked)
             {ChangerInst(3); ActualiserVoice();}
-        void on_pshBut_current_5_clicked(bool checked)
+        void on_pshBut_inst_cur_5_clicked(bool checked)
             {ChangerInst(4); ActualiserVoice();}
-        void on_pshBut_current_6_clicked(bool checked)
+        void on_pshBut_inst_cur_6_clicked(bool checked)
             {ChangerInst(5); ActualiserVoice();}
-        void on_pshBut_current_7_clicked(bool checked)
+        void on_pshBut_inst_cur_7_clicked(bool checked)
             {ChangerInst(6); ActualiserVoice();}
-        void on_pshBut_current_8_clicked(bool checked)
+        void on_pshBut_inst_cur_8_clicked(bool checked)
             {ChangerInst(7); ActualiserVoice();}
         void on_txtEdit_setname_textChanged()
-            {EXPANDEUR::EcrireSetNom(ui->txtEdit_setname->toPlainText().toAscii().constData());}
+            {if (!Attente) EXPANDEUR::EcrireSetNom(ui->txtEdit_setname->toPlainText().toAscii().constData());}
     //Edition des opérateurs
+        void on_pshBut_op_cur_1_clicked(bool checked)
+            {ChangerOP(0);}
+        void on_pshBut_op_cur_2_clicked(bool checked)
+            {ChangerOP(1);}
+        void on_pshBut_op_cur_3_clicked(bool checked)
+            {ChangerOP(2);}
+        void on_pshBut_op_cur_4_clicked(bool checked)
+            {ChangerOP(3);}
         void on_pshBut_OPon_1_clicked(bool checked)
             {if (!Attente) EXPANDEUR::EcrireOps(InstSel, checked, ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_2_clicked(bool checked)
-            {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
+            {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), checked, ui->pshBut_OPon_3->isChecked(), ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_3_clicked(bool checked)
             {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_4_clicked(bool checked)

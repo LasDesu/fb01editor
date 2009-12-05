@@ -43,98 +43,36 @@ uchar QOperateur::RecupererInst()
 }
 
 /*****************************************************************************/
+bool QOperateur::Charger(QFile * Fichier, int Version)
+{
+    uchar Table[16];
+//Vérrouille l'interface
+    Attente = true;
+//Charge les données
+    Fichier->read((char *) Table, 16);
+    if (Fichier->error()) return true;
+    Coller(Table);
+//Déverrouille
+    Attente = false;
+    return false;
+}
+
+bool QOperateur::Enregistrer(QFile * Fichier)
+{
+    uchar Table[16];
+//Enregistre les données
+    Copier(Table);
+    Fichier->write((char *) Table, 16);
+//Vérifie les erreurs
+    if (Fichier->error()) return true;
+    return false;
+}
+
+/*****************************************************************************/
 void QOperateur::Rafraichir()
 {
     m_ui->label_env->DefinirEnveloppe(m_ui->spnBox_AR->value(), m_ui->spnBox_DR1->value(), m_ui->spnBox_SL->value(),m_ui->spnBox_DR2->value(), m_ui->spnBox_RR->value());
     m_ui->label_env->repaint();
-}
-
-/*****************************************************************************/
-bool QOperateur::Enregistrer(QFile * Fichier)
-{
-    char Octet;
-//Ecrit chaque donnée
-    Octet = (char) m_ui->hzSlider_volume->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->cmbBox_kbcurb->currentIndex();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_velocity->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_lvldph->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_adjTL->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_fine->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_multiple->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_rtdph->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_AR->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->pshBut_carrier->isChecked();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_velmod->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_DR1->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_coarse->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_DR2->value();
-    Fichier->write(&Octet, 1);
-    Octet = (uchar) m_ui->spnBox_SL->value();
-    Fichier->write(&Octet, 1);
-    Octet = (char) m_ui->spnBox_RR->value();
-    Fichier->write(&Octet, 1);
-//Vérifie les erreurs
-    if (Fichier->error()) return true;
-    return false;
-}
-
-bool QOperateur::Charger(QFile * Fichier, int Version)
-{
-    char Octet;
-//Vérouille l'interface
-    Attente = true;
-//Lit chaque donnée
-    Fichier->read(&Octet, 1);
-    m_ui->hzSlider_volume->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->cmbBox_kbcurb->setCurrentIndex((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_velocity->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_lvldph->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_adjTL->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_fine->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_multiple->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_rtdph->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_AR->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->pshBut_carrier->setChecked((bool)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_velmod->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_DR1->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_coarse->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_DR2->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_SL->setValue((int)Octet);
-    Fichier->read(&Octet, 1);
-    m_ui->spnBox_RR->setValue((int)Octet);
-//Vérifie les erreurs
-    Attente = false;
-    if (Fichier->error()) return true;
-//Envoie les données
-    Envoyer();
-    return false;
 }
 
 /*****************************************************************************/
@@ -179,9 +117,92 @@ void QOperateur::Recevoir()
     m_ui->spnBox_coarse->setValue((int) p1); m_ui->spnBox_DR2->setValue((int) p2);
     EXPANDEUR::LireOpx07(IDSel, &p1, &p2);
     m_ui->spnBox_SL->setValue((int) (15 - p1)); m_ui->spnBox_RR->setValue((int) p2);
- //Déverouille
+ //Déverrouille
     Attente = false;
 }
+
+/*****************************************************************************/
+const uchar InitTab[16] = {127, 0, 0, 0, 0, 0, 0, 0, 31, 1, 0, 31, 0, 0, 15, 15};
+void QOperateur::Initialiser()
+{
+    Coller(InitTab);
+}
+
+void QOperateur::Randomiser()
+{
+//Vérrouille l'interface
+    Attente = true;
+//Initialise avec des données aléatoires
+    m_ui->hzSlider_volume->setValue(RAND(95, 127));
+    m_ui->cmbBox_kbcurb->setCurrentIndex(RAND(0, 3));
+    m_ui->spnBox_velocity->setValue(RAND(0, 31));
+    m_ui->spnBox_lvldph->setValue(RAND(0, 15));
+    m_ui->spnBox_adjTL->setValue(RAND(0, 15));
+    m_ui->spnBox_fine->setValue(RAND(-4, 3));
+    m_ui->spnBox_multiple->setValue(RAND(0, 15));
+    m_ui->spnBox_rtdph->setValue(0);
+    m_ui->spnBox_AR->setValue(31);
+    m_ui->pshBut_carrier->setChecked((bool) RAND(0, 1));
+    m_ui->spnBox_velmod->setValue(RAND(0, 3));
+    m_ui->spnBox_DR1->setValue(RAND(0, 31));
+    m_ui->spnBox_coarse->setValue(RAND(0, 3));
+    m_ui->spnBox_DR2->setValue(RAND(0, 31));
+    m_ui->spnBox_SL->setValue(RAND(0, 15));
+    m_ui->spnBox_RR->setValue(RAND(0, 15));
+//Actualise l'interface
+    Attente = false;
+    Rafraichir();
+    Envoyer();
+}
+
+/*****************************************************************************/
+void QOperateur::Copier(uchar Table[16])
+{
+//Copie les données
+    Table[0]  = (uchar) m_ui->hzSlider_volume->value();
+    Table[1]  = (uchar) m_ui->cmbBox_kbcurb->currentIndex();
+    Table[2]  = (uchar) m_ui->spnBox_velocity->value();
+    Table[3]  = (uchar) m_ui->spnBox_lvldph->value();
+    Table[4]  = (uchar) m_ui->spnBox_adjTL->value();
+    Table[5]  = (uchar) m_ui->spnBox_fine->value();
+    Table[6]  = (uchar) m_ui->spnBox_multiple->value();
+    Table[7]  = (uchar) m_ui->spnBox_rtdph->value();
+    Table[8]  = (uchar) m_ui->spnBox_AR->value();
+    Table[9]  = (uchar) m_ui->pshBut_carrier->isChecked();
+    Table[10] = (uchar) m_ui->spnBox_velmod->value();
+    Table[11] = (uchar) m_ui->spnBox_DR1->value();
+    Table[12] = (uchar) m_ui->spnBox_coarse->value();
+    Table[13] = (uchar) m_ui->spnBox_DR2->value();
+    Table[14] = (uchar) m_ui->spnBox_SL->value();
+    Table[15] = (uchar) m_ui->spnBox_RR->value();
+ }
+
+void QOperateur::Coller(const uchar Table[16])
+{
+//Vérrouille l'interface
+    Attente = true;
+ //Colle les données
+    m_ui->hzSlider_volume->setValue((int)Table[0]);
+    m_ui->cmbBox_kbcurb->setCurrentIndex((int)Table[1]);
+    m_ui->spnBox_velocity->setValue((int)Table[2]);
+    m_ui->spnBox_lvldph->setValue((int)Table[3]);
+    m_ui->spnBox_adjTL->setValue((int)Table[4]);
+    m_ui->spnBox_fine->setValue((int)Table[5]);
+    m_ui->spnBox_multiple->setValue((int)Table[6]);
+    m_ui->spnBox_rtdph->setValue((int)Table[7]);
+    m_ui->spnBox_AR->setValue((int)Table[8]);
+    m_ui->pshBut_carrier->setChecked((bool)Table[9]);
+    m_ui->spnBox_velmod->setValue((int)Table[10]);
+    m_ui->spnBox_DR1->setValue((int)Table[11]);
+    m_ui->spnBox_coarse->setValue((int)Table[12]);
+    m_ui->spnBox_DR2->setValue((int)Table[13]);
+    m_ui->spnBox_SL->setValue((int)Table[14]);
+    m_ui->spnBox_RR->setValue((int)Table[15]);
+    Attente = false;
+ //Actualise l'interface
+    Rafraichir();
+    Envoyer();
+ }
 
 /*****************************************************************************/
 void QOperateur::changeEvent(QEvent *e)

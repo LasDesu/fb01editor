@@ -23,7 +23,11 @@ public:
 //Chargement/enregistrement
     bool Enregistrer(QFile * Fichier);
     bool Charger(QFile * Fichier, int Version);
-//Interface
+//Interface et édition
+    void Initialiser();
+    void Randomiser();
+    void Copier(uchar Table[16]);
+    void Coller(const uchar Table[16]);
     void Rafraichir();
 //Communication
     void Envoyer();

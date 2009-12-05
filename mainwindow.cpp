@@ -46,26 +46,35 @@ void MainWindow::InitialiserEditeur()
 //Désactive les controles
     ActiverEditeur(false);
     on_pshBut_refresh_midi_clicked(false);
-//Initialise la page 1
-    ui->widget_instru_1->ChangerID(0);
-    ui->widget_instru_2->ChangerID(1);
-    ui->widget_instru_3->ChangerID(2);
-    ui->widget_instru_4->ChangerID(3);
-//Initialise la page 2
-    ui->widget_instru_5->ChangerID(4);
-    ui->widget_instru_6->ChangerID(5);
-    ui->widget_instru_7->ChangerID(6);
-    ui->widget_instru_8->ChangerID(7);
-//Initialise les opérateurs
-    ui->widget_opera_1->ChangerID(0);
-    ui->widget_opera_2->ChangerID(1);
-    ui->widget_opera_3->ChangerID(2);
-    ui->widget_opera_4->ChangerID(3);
 //Initialise la barre
     ui->tabWidget->setCurrentIndex(0);
+//Créé les tables des opérateurs
+    Operas[0] = ui->widget_opera_1;
+    Operas[1] = ui->widget_opera_2;
+    Operas[2] = ui->widget_opera_3;
+    Operas[3] = ui->widget_opera_4;
+//Créé les tables des instruments
+    Insts[0]  = ui->widget_instru_1;
+    Insts[1]  = ui->widget_instru_2;
+    Insts[2]  = ui->widget_instru_3;
+    Insts[3]  = ui->widget_instru_4;
+    Insts[4]  = ui->widget_instru_5;
+    Insts[5]  = ui->widget_instru_6;
+    Insts[6]  = ui->widget_instru_7;
+    Insts[7]  = ui->widget_instru_8;
+//Initialise les opérateurs
+    for (int i = 0; i < 4; i ++)
+        Operas[i]->ChangerID(i);
+//Initialise les instrus
+    for (int i = 0; i < 8; i ++)
+        Insts[i]->ChangerID(i);
 //Coniguration par défaut
     ChangerPage(0);
     ChangerInst(0);
+    ChangerOP(0);
+//Pas de données copiées
+    TypeCopie = -1;
+//Désactive l'attente
     Attente = false;
 }
 
@@ -125,22 +134,30 @@ void MainWindow::ChangerPage(int Page)
 void MainWindow::ChangerInst(int Inst)
 {
 //Actualise l'interface
-    ui->pshBut_current_1->setChecked(Inst == 0);
-    ui->pshBut_current_2->setChecked(Inst == 1);
-    ui->pshBut_current_3->setChecked(Inst == 2);
-    ui->pshBut_current_4->setChecked(Inst == 3);
-    ui->pshBut_current_5->setChecked(Inst == 4);
-    ui->pshBut_current_6->setChecked(Inst == 5);
-    ui->pshBut_current_7->setChecked(Inst == 6);
-    ui->pshBut_current_8->setChecked(Inst == 7);
+    ui->pshBut_inst_cur_1->setChecked(Inst == 0);
+    ui->pshBut_inst_cur_2->setChecked(Inst == 1);
+    ui->pshBut_inst_cur_3->setChecked(Inst == 2);
+    ui->pshBut_inst_cur_4->setChecked(Inst == 3);
+    ui->pshBut_inst_cur_5->setChecked(Inst == 4);
+    ui->pshBut_inst_cur_6->setChecked(Inst == 5);
+    ui->pshBut_inst_cur_7->setChecked(Inst == 6);
+    ui->pshBut_inst_cur_8->setChecked(Inst == 7);
 //Sélectionne l'instrument
-    ui->widget_opera_1->ChangerInst(Inst);
-    ui->widget_opera_2->ChangerInst(Inst);
-    ui->widget_opera_3->ChangerInst(Inst);
-    ui->widget_opera_4->ChangerInst(Inst);
-    ui->widget_voice->ChangerInst(Inst);
+    for (int i = 0; i < 4; i++)
+        Operas[i]->ChangerInst(Inst);
 //Mémorise l'instrument
     InstSel = Inst;
+}
+
+void MainWindow::ChangerOP(int OP)
+{
+//Actualise l'interface
+    ui->pshBut_op_cur_1->setChecked(OP == 0);
+    ui->pshBut_op_cur_2->setChecked(OP == 1);
+    ui->pshBut_op_cur_3->setChecked(OP == 2);
+    ui->pshBut_op_cur_4->setChecked(OP == 3);
+//Mémorise l'opérateur
+    OPSel = OP;
 }
 
 /*****************************************************************************/
@@ -155,8 +172,8 @@ void MainWindow::ActualiserConfig()
     Attente = false;
 }
 
-char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass",
-                          "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
+const char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass",
+                                "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
 void MainWindow::ActualiserBank()
 {
     char  Nom[8];
@@ -172,7 +189,6 @@ void MainWindow::ActualiserBank()
     {
     //Reçoit la configuration
         if (!EXPANDEUR::ChargerBank(b)) return;
-        //MIDI::BackupTampon("Backup2.txt");
     //Construit le nom
         QString Num; Num.setNum(b);
         QString Bank = "Bank ";
@@ -210,14 +226,8 @@ void MainWindow::ActualiserSet()
     if (!EXPANDEUR::ChargerSet()) return;
     Attente = true;
 //Décode les données
-    ui->widget_instru_1->Recevoir();
-    ui->widget_instru_2->Recevoir();
-    ui->widget_instru_3->Recevoir();
-    ui->widget_instru_4->Recevoir();
-    ui->widget_instru_5->Recevoir();
-    ui->widget_instru_6->Recevoir();
-    ui->widget_instru_7->Recevoir();
-    ui->widget_instru_8->Recevoir();
+    for (int i = 0; i < 8; i++)
+        Insts[i]->Recevoir();
 //Récupère le nom
     EXPANDEUR::LireSetNom(Nom);
     ui->txtEdit_setname->setPlainText((QString) Nom);
@@ -234,16 +244,12 @@ void MainWindow::ActualiserVoice()
     Attente = true;
 //Décode les données
     ui->widget_voice->Recevoir();
-    ui->widget_opera_1->Recevoir();
-    ui->widget_opera_2->Recevoir();
-    ui->widget_opera_3->Recevoir();
-    ui->widget_opera_4->Recevoir();
+    for (int i = 0; i < 4; i++)
+        Operas[i]->Recevoir();
 //Rafraichit l'interface
     ui->widget_voice->Rafraichir();
-    ui->widget_opera_1->Rafraichir();
-    ui->widget_opera_2->Rafraichir();
-    ui->widget_opera_3->Rafraichir();
-    ui->widget_opera_4->Rafraichir();
+    for (int i = 0; i < 4; i++)
+        Operas[i]->Rafraichir();
 //Détermine le statut
     EXPANDEUR::LireOps(&b1, &b2, &b3, &b4);
     ui->pshBut_OPon_1->setChecked(b1);
@@ -265,72 +271,25 @@ void MainWindow::Envoyer()
 }
 
 /*****************************************************************************/
-void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
-{
-//Sélectionne le driver
-    if (Index != -1) MIDI::ActiverIn(Index);
-    if (MIDI::EstConfigure())
-    {
-        ActualiserEditeur();
-        ActiverEditeur(true);
-    }
-}
-
-void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
-{
-//Sélectionne le driver
-    if (Index != -1) MIDI::ActiverOut(Index);
-    if (MIDI::EstConfigure())
-    {
-        ActualiserEditeur();
-        ActiverEditeur(true);
-    }
-}
-
-/*****************************************************************************/
-void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
-{
-//Efface les items
-    ui->cmbBox_MIDIIn->clear();
-    ui->cmbBox_MIDIOut->clear();
-//Ajoute les périphériques
-    MIDI::Lister();
-    int Ins = MIDI::NbDriversIn();
-    for (int i = 0; i < Ins; i++)
-        ui->cmbBox_MIDIIn->addItem(MIDI::DriverIn(i), i);
-    int Outs = MIDI::NbDriversOut();
-    for (int i = 0; i < Outs; i++)
-        ui->cmbBox_MIDIOut->addItem(MIDI::DriverOut(i), i);
-//Désactive les onglets
-    ActiverEditeur(false);
-}
-
-/*****************************************************************************/
 void MainWindow::on_actionLoad_set_triggered(bool checked)
 {
     char Nom[9];
 //Ouvre le fichier
     QFile * Fichier = ChargerFichier(1, VERSION);
     if (Fichier == NULL) return;
+    Attente = true;
 //Charge le nom du set
     Fichier->read(Nom, 8);
     Nom[8] = 0;
 //Ecrit le nom
-    Attente = true;
     ui->txtEdit_setname->setPlainText((QString) Nom);
-    Attente = false;
 //Charge le set d'instruments
-    if (ui->widget_instru_1->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_2->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_3->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_4->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_5->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_6->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_7->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_instru_8->Charger(Fichier, VERSION)) goto BadFile;
+    for (int i = 0; i < 8; i++)
+        if (Insts[i]->Charger(Fichier, VERSION)) goto BadFile;
 //Rafraichit l'affichage
     ui->txtEdit_setname->repaint();
 //Ferme le fichier
+    Attente = false;
     Fichier->close();
     return;
 //Erreur apparue
@@ -349,14 +308,8 @@ void MainWindow::on_actionSave_set_triggered(bool checked)
     strncpy(Nom, ui->txtEdit_setname->toPlainText().toAscii().constData(), 8);
     Fichier->write(Nom, 8);
 //Enregistre le set d'instruments
-    if (ui->widget_instru_1->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_2->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_3->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_4->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_5->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_6->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_7->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_instru_8->Enregistrer(Fichier)) goto BadFile;
+    for (int i = 0; i < 8; i++)
+        if (Insts[i]->Enregistrer(Fichier)) goto BadFile;
 //Rafraichit l'affichage
     ui->txtEdit_setname->repaint();
 //Ferme le fichier
@@ -374,20 +327,18 @@ void MainWindow::on_actionLoad_voice_triggered(bool checked)
 //Ouvre le fichier
     QFile * Fichier = ChargerFichier(2, VERSION);
     if (Fichier == NULL) return;
+    Attente = true;
 //Charge le voice
-    if (ui->widget_voice->Charger(Fichier, VERSION))   goto BadFile;
-    if (ui->widget_opera_1->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_opera_2->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_opera_3->Charger(Fichier, VERSION)) goto BadFile;
-    if (ui->widget_opera_4->Charger(Fichier, VERSION)) goto BadFile;
+    if (ui->widget_voice->Charger(Fichier, VERSION)) goto BadFile;
+    for (int i = 0; i < 4; i++)
+        if (Operas[i]->Charger(Fichier, VERSION)) goto BadFile;
 //Rafraichit l'affichage
     ui->widget_voice->Rafraichir();
-    ui->widget_opera_1->Rafraichir();
-    ui->widget_opera_2->Rafraichir();
-    ui->widget_opera_3->Rafraichir();
-    ui->widget_opera_4->Rafraichir();
+    for (int i = 0; i < 4; i++)
+        Operas[i]->Rafraichir();
 //Ferme le fichier
     Fichier->close();
+    Attente = false;
     return;
 //Erreur apparue
 BadFile:
@@ -401,17 +352,13 @@ void MainWindow::on_actionSave_voice_triggered(bool checked)
     QFile * Fichier = EnregistrerFichier(2, VERSION);
     if (Fichier == NULL) return;
 //Charge le voice
-    if (ui->widget_voice->Enregistrer(Fichier))   goto BadFile;
-    if (ui->widget_opera_1->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_opera_2->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_opera_3->Enregistrer(Fichier)) goto BadFile;
-    if (ui->widget_opera_4->Enregistrer(Fichier)) goto BadFile;
+    if (ui->widget_voice->Enregistrer(Fichier)) goto BadFile;
+    for (int i = 0; i < 4; i++)
+        if (Operas[i]->Enregistrer(Fichier)) goto BadFile;
 //Rafraichit l'affichage
     ui->widget_voice->Rafraichir();
-    ui->widget_opera_1->Rafraichir();
-    ui->widget_opera_2->Rafraichir();
-    ui->widget_opera_3->Rafraichir();
-    ui->widget_opera_4->Rafraichir();
+    for (int i = 0; i < 4; i++)
+        Operas[i]->Rafraichir();
 //Ferme le fichier
     Fichier->close();
     return;
@@ -422,8 +369,8 @@ BadFile:
 }
 
 /*****************************************************************************/
-char ChargeTitres[3][20] = {"Load a bank :", "Load a set :", "Load a voice :"};
-char Exts[3][4]= {"fbb", "fbs", "fbv"};
+const char ChargeTitres[3][20] = {"Load a bank :", "Load a set :", "Load a voice :"};
+const char Exts[3][4]= {"fbb", "fbs", "fbv"};
 QFile * MainWindow::ChargerFichier(int Type, short Version)
 {
     short Ver;
@@ -486,6 +433,78 @@ Error :
 }
 
 /*****************************************************************************/
+void MainWindow::on_actionInitialize_triggered(bool checked)
+{
+    if (ui->tabWidget->currentIndex() == 4)
+    //Opération sur les opérateurs
+        Operas[OPSel]->Initialiser();
+    else if (ui->tabWidget->currentIndex() == 3)
+    //Opération sur la voice
+        ui->widget_voice->Initialiser();
+    else if (ui->tabWidget->currentIndex() == 2)
+    //Opération sur les instruments
+        Insts[InstSel]->Initialiser();
+}
+
+void MainWindow::on_actionRandomize_triggered(bool checked)
+{
+    if (ui->tabWidget->currentIndex() == 4)
+    //Opération sur les opérateurs
+        Operas[OPSel]->Randomiser();
+    else if (ui->tabWidget->currentIndex() == 3)
+    //Opération sur la voice
+        ui->widget_voice->Randomiser();
+    else if (ui->tabWidget->currentIndex() == 2)
+    //Opération sur les instruments
+        Insts[InstSel]->Randomiser();
+}
+
+/*****************************************************************************/
+void MainWindow::on_actionCopy_triggered(bool checked)
+{
+    if (ui->tabWidget->currentIndex() == 4)
+    {
+    //Opération sur les opérateurs
+        Operas[OPSel]->Copier(TabCopie);
+        TypeCopie = 0;
+    }
+    else if (ui->tabWidget->currentIndex() == 3)
+    {
+    //Opération sur la voice
+        ui->widget_voice->Copier(TabCopie);
+        TypeCopie = 1;
+    }
+    else if (ui->tabWidget->currentIndex() == 2)
+    {
+    //Opération sur les instruments
+        Insts[InstSel]->Copier(TabCopie);
+        TypeCopie = 2;
+    }
+}
+
+void MainWindow::on_actionPaste_triggered(bool checked)
+{
+    if (ui->tabWidget->currentIndex() == 4)
+    {
+    //Opération sur les opérateurs
+        if (TypeCopie == 0)
+            Operas[OPSel]->Coller(TabCopie);
+    }
+    else if (ui->tabWidget->currentIndex() == 3)
+    {
+    //Opération sur la voice
+        if (TypeCopie == 1)
+            ui->widget_voice->Coller(TabCopie);
+    }
+    else if (ui->tabWidget->currentIndex() == 2)
+    {
+    //Opération sur les instruments
+        if (TypeCopie == 2)
+            Insts[InstSel]->Coller(TabCopie);
+    }
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionQuit_triggered(bool checked)
 {
     mainApp->quit();
@@ -515,5 +534,59 @@ void MainWindow::on_actionRead_this_triggered(bool checked)
 }
 
 void MainWindow::on_actionOnline_help_triggered(bool checked)
+{
+}
+
+/*****************************************************************************/
+void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
+{
+//Sélectionne le driver
+    if (Index != -1) MIDI::ActiverIn(Index);
+    if (MIDI::EstConfigure())
+    {
+        ActualiserEditeur();
+        ActiverEditeur(true);
+    }
+}
+
+void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
+{
+//Sélectionne le driver
+    if (Index != -1) MIDI::ActiverOut(Index);
+    if (MIDI::EstConfigure())
+    {
+        ActualiserEditeur();
+        ActiverEditeur(true);
+    }
+}
+
+/*****************************************************************************/
+void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
+{
+//Efface les items
+    ui->cmbBox_MIDIIn->clear();
+    ui->cmbBox_MIDIOut->clear();
+//Ajoute les périphériques
+    MIDI::Lister();
+    int Ins = MIDI::NbDriversIn();
+    for (int i = 0; i < Ins; i++)
+        ui->cmbBox_MIDIIn->addItem(MIDI::DriverIn(i), i);
+    int Outs = MIDI::NbDriversOut();
+    for (int i = 0; i < Outs; i++)
+        ui->cmbBox_MIDIOut->addItem(MIDI::DriverOut(i), i);
+//Désactive les onglets
+    ActiverEditeur(false);
+}
+
+/*****************************************************************************/
+void MainWindow::on_pshBut_bybank_clicked(bool checked)
+{
+}
+
+void MainWindow::on_pshBut_byname_clicked(bool checked)
+{
+}
+
+void MainWindow::on_pshBut_bystyle_clicked(bool checked)
 {
 }
