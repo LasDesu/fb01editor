@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -72,7 +72,7 @@
         <x>20</x>
         <y>50</y>
         <width>321</width>
-        <height>111</height>
+        <height>141</height>
        </rect>
       </property>
       <property name="title">
@@ -113,7 +113,7 @@
       <widget class="QPushButton" name="pshBut_refresh_midi">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>50</x>
          <y>80</y>
          <width>75</width>
          <height>23</height>
@@ -126,9 +126,9 @@
       <widget class="QSpinBox" name="spnBox_syschan">
        <property name="geometry">
         <rect>
-         <x>230</x>
+         <x>260</x>
          <y>80</y>
-         <width>81</width>
+         <width>51</width>
          <height>22</height>
         </rect>
        </property>
@@ -145,9 +145,9 @@
       <widget class="QLabel" name="lbl_syschan">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>140</x>
          <y>80</y>
-         <width>101</width>
+         <width>111</width>
          <height>20</height>
         </rect>
        </property>
@@ -197,6 +197,44 @@
        </property>
        <property name="text">
         <string>OUT :</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spnBox_kybchan">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>110</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>16</number>
+       </property>
+       <property name="value">
+        <number>1</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_kybchan">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>110</y>
+         <width>111</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Keyboard channel :</string>
        </property>
       </widget>
      </widget>
@@ -423,119 +461,15 @@ p, li { white-space: pre-wrap; }
      <attribute name="title">
       <string>Banks</string>
      </attribute>
-     <widget class="QPushButton" name="pshBut_refresh_bank">
+     <widget class="QBanks" name="widget_banks" native="true">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>500</y>
-        <width>75</width>
-        <height>23</height>
+        <x>0</x>
+        <y>0</y>
+        <width>620</width>
+        <height>532</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Refresh</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pshBut_bybank">
-      <property name="geometry">
-       <rect>
-        <x>350</x>
-        <y>500</y>
-        <width>71</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Bank</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_sort">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>504</y>
-        <width>46</width>
-        <height>14</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Sort by :</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pshBut_byname">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>500</y>
-        <width>71</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Name</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pshBut_bystyle">
-      <property name="geometry">
-       <rect>
-        <x>530</x>
-        <y>500</y>
-        <width>75</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Style</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QTableWidget" name="table_bank">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>601</width>
-        <height>481</height>
-       </rect>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>150</number>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>100</number>
-      </attribute>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>100</number>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>150</number>
-      </attribute>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_set">
@@ -545,7 +479,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_notes">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>40</y>
         <width>81</width>
         <height>16</height>
@@ -564,7 +498,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_midichan">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>70</y>
         <width>81</width>
         <height>16</height>
@@ -583,7 +517,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_upper">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>100</y>
         <width>81</width>
         <height>16</height>
@@ -602,7 +536,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_lower">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>130</y>
         <width>81</width>
         <height>16</height>
@@ -621,7 +555,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_bank">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>160</y>
         <width>81</width>
         <height>16</height>
@@ -640,7 +574,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_voice">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>190</y>
         <width>81</width>
         <height>16</height>
@@ -659,7 +593,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_detune">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>250</y>
         <width>81</width>
         <height>16</height>
@@ -678,7 +612,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_voice_2">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>220</y>
         <width>81</width>
         <height>16</height>
@@ -697,7 +631,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_volume">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>280</y>
         <width>81</width>
         <height>16</height>
@@ -716,7 +650,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_pan">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>310</y>
         <width>81</width>
         <height>16</height>
@@ -735,7 +669,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_LFO">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>340</y>
         <width>81</width>
         <height>16</height>
@@ -754,7 +688,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_porta">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>400</y>
         <width>81</width>
         <height>16</height>
@@ -773,7 +707,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_pitch">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>430</y>
         <width>81</width>
         <height>16</height>
@@ -792,7 +726,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_poly">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>370</y>
         <width>81</width>
         <height>16</height>
@@ -811,7 +745,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="lbl_pmdctl">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>460</y>
         <width>81</width>
         <height>16</height>
@@ -832,7 +766,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>71</width>
+        <width>81</width>
         <height>21</height>
        </rect>
       </property>
@@ -1083,9 +1017,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QPlainTextEdit" name="txtEdit_setname">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>500</y>
-        <width>81</width>
+        <width>91</width>
         <height>21</height>
        </rect>
       </property>
@@ -1342,19 +1276,30 @@ p, li { white-space: pre-wrap; }
     <addaction name="separator"/>
     <addaction name="actionOnline_help"/>
    </widget>
-   <widget class="QMenu" name="menuFB01">
+   <widget class="QMenu" name="menuConfig">
     <property name="title">
-     <string>FB01</string>
+     <string>Configuration</string>
     </property>
-    <addaction name="actionSend_current_set"/>
-    <addaction name="actionSend_current_voice"/>
+    <widget class="QMenu" name="menuSend_bank">
+     <property name="title">
+      <string>Send bank</string>
+     </property>
+     <addaction name="actionRam_1"/>
+     <addaction name="actionRam_2"/>
+    </widget>
+    <addaction name="actionGet_current_config"/>
     <addaction name="actionSend_current_config"/>
     <addaction name="separator"/>
+    <addaction name="actionGet_all_banks"/>
+    <addaction name="menuSend_bank"/>
+    <addaction name="separator"/>
     <addaction name="actionGet_current_set"/>
+    <addaction name="actionSend_current_set"/>
+    <addaction name="separator"/>
     <addaction name="actionGet_current_voice"/>
-    <addaction name="actionGet_current_config"/>
+    <addaction name="actionSend_current_voice"/>
    </widget>
-   <widget class="QMenu" name="menuOperators">
+   <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
@@ -1365,8 +1310,8 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionPaste"/>
    </widget>
    <addaction name="menuFichier"/>
-   <addaction name="menuOperators"/>
-   <addaction name="menuFB01"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuConfig"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionQuit">
@@ -1459,6 +1404,21 @@ p, li { white-space: pre-wrap; }
     <string>Initialize</string>
    </property>
   </action>
+  <action name="actionGet_all_banks">
+   <property name="text">
+    <string>Get all banks</string>
+   </property>
+  </action>
+  <action name="actionRam_1">
+   <property name="text">
+    <string>Ram 1</string>
+   </property>
+  </action>
+  <action name="actionRam_2">
+   <property name="text">
+    <string>Ram 2</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1483,6 +1443,12 @@ p, li { white-space: pre-wrap; }
    <class>QVoice</class>
    <extends>QWidget</extends>
    <header>qvoice.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QBanks</class>
+   <extends>QWidget</extends>
+   <header>qbanks.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

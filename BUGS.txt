@@ -6,4 +6,4 @@ alpha V0.1
 -Enable buttons, enabling wrong operators fixed
 -Fine & transpose editing bug fixed
 -Main configuration sending bug
--Selecting and editing set name crashed the application unfixed
+-Selecting and editing set name crashed the application 

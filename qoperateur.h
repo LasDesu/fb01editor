@@ -1,9 +1,12 @@
 #ifndef QOPERATEUR_H
 #define QOPERATEUR_H
 
-#include "ui_qoperateur.h"
-#include "expandeur.h"
-#include <QFile>
+//Inclusions générales
+    #include "ui_qoperateur.h"
+    #include <QFile>
+
+//Inclusions spécifiques
+    #include "expandeur.h"
 
 namespace Ui {
     class QOperateur;
@@ -33,35 +36,35 @@ public:
     void Envoyer();
     void Recevoir();
 protected:
+//Interne
     void changeEvent(QEvent *e);
 private:
-//Configuration
+//Interface
+    Ui::QOperateur *m_ui;
     bool  Attente;
     uchar IDSel;
     uchar InstSel;
-//Interface
-    Ui::QOperateur *m_ui;
 private slots:
 //Gestion des évènements
     void on_hzSlider_volume_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireOpParam(InstSel, IDSel, 0x00, (uchar) (127 - i));}
-    void on_spnBox_velocity_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) i);}
-    void on_spnBox_velmod_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) i, (uchar) m_ui->spnBox_DR1->value());}
+    void on_spnBox_vellvl_valueChanged(int i)
+        {if (!Attente) EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) m_ui->cmbBox_lvlcurb->currentIndex(), (uchar) i);}
+    void on_spnBox_velAR_valueChanged(int i)
+        {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) i, (uchar) m_ui->spnBox_D1R->value());}
     void on_spnBox_AR_valueChanged(int i)
         {if (!Attente){
             EXPANDEUR::EcrireOpx04(InstSel, IDSel, (uchar) m_ui->spnBox_rtdph->value(), (uchar) i);
             Rafraichir();}}
-    void on_spnBox_DR1_valueChanged(int i)
+    void on_spnBox_D1R_valueChanged(int i)
         {if (!Attente){
-            EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) i);
+            EXPANDEUR::EcrireOpx05(InstSel, IDSel, m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velAR->value(), (uchar) i);
             Rafraichir();}}
     void on_spnBox_SL_valueChanged(int i)
         {if (!Attente){
             EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - i), (uchar) m_ui->spnBox_RR->value());
             Rafraichir();}}
-    void on_spnBox_DR2_valueChanged(int i)
+    void on_spnBox_D2R_valueChanged(int i)
         {if (!Attente){
             EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) m_ui->spnBox_coarse->value(), (uchar) i);
             Rafraichir();}}
@@ -70,16 +73,17 @@ private slots:
             EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - m_ui->spnBox_SL->value()), (uchar) i);
             Rafraichir();}}
     void on_pshBut_carrier_clicked(bool checked)
-        {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, !checked, (uchar) m_ui->spnBox_velmod->value(), (uchar) m_ui->spnBox_DR1->value());}
+        {if (!Attente) EXPANDEUR::EcrireOpx05(InstSel, IDSel, !checked, (uchar) m_ui->spnBox_velAR->value(), (uchar) m_ui->spnBox_D1R->value());}
     void on_spnBox_coarse_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_DR2->value());}
+        {if (!Attente) EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_D2R->value());}
     void on_spnBox_fine_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) (i + 4), (uchar) m_ui->spnBox_multiple->value());}
+        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_lvlcurb->currentIndex(), (uchar) (i + 4), (uchar) m_ui->spnBox_multiple->value());}
     void on_spnBox_multiple_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) i);}
-    void on_cmbBox_kbcurb_activated(int i)
-        {if (!Attente) EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_velocity->value());
-         if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) i, (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) m_ui->spnBox_multiple->value());}
+        {if (!Attente) EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_lvlcurb->currentIndex(), (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) i);}
+    void on_cmbBox_lvlcurb_activated(int i)
+        {if (!Attente) {
+            EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_vellvl->value());
+            EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) i, (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) m_ui->spnBox_multiple->value());}}
     void on_spnBox_lvldph_valueChanged(int i)
         {if (!Attente) EXPANDEUR::EcrireOpx02(InstSel, IDSel, (uchar) i, (uchar) m_ui->spnBox_adjTL->value());}
     void on_spnBox_rtdph_valueChanged(int i)

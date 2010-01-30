@@ -1,14 +1,14 @@
 #include "qinstrument.h"
 
 /*****************************************************************************/
-QInstrument::QInstrument(QWidget *parent) :  QWidget(parent), m_ui(new Ui::QInstrument)
+QInstrument::QInstrument(QWidget *parent) : QWidget(parent), m_ui(new Ui::QInstrument)
 {
     Attente = false;
     m_ui->setupUi(this);
  //Initialise les controles
     ChangerID(0);
-    InitialiserLimites(m_ui->cmbBox_upper);
-    InitialiserLimites(m_ui->cmbBox_lower);
+    InitialiserNotes(m_ui->cmbBox_upper);
+    InitialiserNotes(m_ui->cmbBox_lower);
 }
 
 QInstrument::~QInstrument()
@@ -35,7 +35,7 @@ uchar QInstrument::RecupererID()
 
 /*****************************************************************************/
 const char Notes[12][3] = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
-void QInstrument::InitialiserLimites(QComboBox * Box)
+void QInstrument::InitialiserNotes(QComboBox * Box)
 {
 //Construit la liste de notes
     Box->clear();

@@ -22,24 +22,38 @@
 #ifndef EXPANDEUR_H
 #define EXPANDEUR_H
 
+//Inclusions spécifiques
     #include "midi.h"
 
-    #define BANKS 7
-    #define VOICE 48
+//Constantes
+    #define BANKS  7
+    #define VOICES 48
+    #define BULSIZ 0x18DC
+    #define BLKSIZ 0x83
+    #define BLKOFF 0x4A
 
     class EXPANDEUR
     {
     private:
-
-    public:
     //Configuration
         static uchar SysChan;
+    //Voices
+        static uchar Banks[BANKS][BULSIZ];
+        static bool Ram1Val;
+        static bool Ram2Val;
+    public:
+    //Gestion des banks
+        static void CopierVoice(int Src, int Dst);
+        static void EchangerVoice(int Src, int Dst);
     //Chargement/déchargement
-        static bool ChargerBank(uchar Bank);
-        static bool ChargerSet();
-        static bool ChargerVoice(uchar Inst);
+        static bool RecevoirBank(uchar Bank);
+        static void EnvoyerBank(uchar Bank);
+        static bool RecevoirSet();
+        static bool RecevoirVoice(uchar Inst);
     //Communication
-        static uchar LireBankParam(uchar Voice, uchar Param);
+        static void  ChoisirSysChan(uchar Chan);
+        static uchar LireBankParam(uchar Bank, uchar Voice, uchar Param);
+        static void  EcrireBankParam(uchar Bank, uchar Voice, uchar Param, uchar Valeur);
         static void  EcrireInstParam(uchar Inst, uchar Param, uchar Valeur);
         static uchar LireInstParam(uchar Inst, uchar Param);
         static void  EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur);
@@ -48,15 +62,14 @@
         static uchar LireOpParam(uchar Op, uchar Param);
         static void  EcrireSysParam(uchar Param, uchar Valeur);
         static uchar LireSysParam(uchar Param);
-        static bool  Attente();
     //Chaines de caractères
-        static void LireBankNom(char * Nom);
-        static void LireBankVoiceNom(uchar Voice, char * Nom);
+        static void LireBankNom(uchar Bank, uchar Voice, char * Nom);
+        static void EcrireBankNom(uchar Bank, uchar Voice, const char * Nom);
         static void EcrireSetNom(const char * Nom);
         static void LireSetNom(char * Nom);
         static void EcrireVoiceNom(uchar Inst, const char * Nom);
         static void LireVoiceNom(char * Nom);
-    //Paramêtre spéciale instrument
+    //Paramêtre spécial instrument
         static uchar LireInstx06(uchar Inst);
     //Paramètres composés voices
         static void EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4);
@@ -76,18 +89,18 @@
         static void EcrireVoicex3B(uchar Inst, uchar Pmdctl, uchar Pitch);
         static void LireVoicex3B(uchar * Pmdctl, uchar * Pitch);
     //Paramètres composés opérateurs
-        static void EcrireOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity);
-        static void LireOpx01(uchar Op, uchar * KeyCurb, uchar * Velocity);
-        static void EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust);
-        static void LireOpx02(uchar Op, uchar * LvlDph, uchar * Adjust);
-        static void EcrireOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple);
-        static void LireOpx03(uchar Op, uchar * KeyCurb, uchar * Fine, uchar * Multiple);
+        static void EcrireOpx01(uchar Inst, uchar Op, uchar LvlCurb, uchar VelLvl);
+        static void LireOpx01(uchar Op, uchar * LvlCurb, uchar * VelLvl);
+        static void EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar AdjTL);
+        static void LireOpx02(uchar Op, uchar * LvlDph, uchar * AdjTL);
+        static void EcrireOpx03(uchar Inst, uchar Op, uchar LvlCurb, uchar Fine, uchar Multiple);
+        static void LireOpx03(uchar Op, uchar * LvlCurb, uchar * Fine, uchar * Multiple);
         static void EcrireOpx04(uchar Inst, uchar Op, uchar RateDph, uchar AR);
         static void LireOpx04(uchar Op, uchar * RateDph, uchar * AR);
-        static void EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1);
-        static void LireOpx05(uchar Op, bool * Carrier, uchar * VeloSens, uchar * DR1);
-        static void EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2);
-        static void LireOpx06(uchar Op, uchar * Coarse, uchar * DR2);
+        static void EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VelAR, uchar D1R);
+        static void LireOpx05(uchar Op, bool * Carrier, uchar * VelAR, uchar * D1R);
+        static void EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar D2R);
+        static void LireOpx06(uchar Op, uchar * Coarse, uchar * D2R);
         static void EcrireOpx07(uchar Inst, uchar Op, uchar SL, uchar RR);
         static void LireOpx07(uchar Op, uchar * SL, uchar * RR);
     };

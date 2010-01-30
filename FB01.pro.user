@@ -46,16 +46,24 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <value key="QtVersionId" type="int" >0</value>
    <value key="addQDumper" type="" ></value>
-   <value key="buildDirectory" type="QString" >D:\Programmation\Prototypes\FB01\FB01</value>
+   <value key="buildDirectory" type="QString" >D:\Programmation\A terminer\FB01\FB01</value>
   </valuemap>
  </data>
  <data>
-  <variable>buildConfiguration-Release</variable>
+  <variable>buildConfiguration-Linux</variable>
   <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Linux</value>
    <value key="QtVersionId" type="int" >0</value>
    <value key="addQDumper" type="" ></value>
-   <value key="buildDirectory" type="QString" >D:\Programmation\Prototypes\FB01\FB01</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildConfiguration-Windows</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Windows</value>
+   <value key="QtVersionId" type="int" >0</value>
+   <value key="addQDumper" type="" ></value>
+   <value key="buildDirectory" type="QString" >/media/284C53404C530848/Programmation/A terminer/FB01/FB01</value>
   </valuemap>
  </data>
  <data>
@@ -100,14 +108,14 @@
     <value type="QString" >WINDIR=C:\WINDOWS</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >D:/Programmation/Prototypes/FB01/FB01/FB01.pro</value>
+    <value type="QString" >D:/Programmation/A terminer/FB01/FB01/FB01.pro</value>
     <value type="QString" >-spec</value>
     <value type="QString" >win32-g++</value>
     <value type="QString" >-r</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.04/qt/bin/qmake.exe</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/Prototypes/FB01/FB01</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/A terminer/FB01/FB01</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
  </data>
@@ -157,7 +165,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.04/mingw/bin/mingw32-make.exe</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/Prototypes/FB01/FB01</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/A terminer/FB01/FB01</value>
   </valuemap>
  </data>
  <data>
@@ -207,13 +215,33 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.04/mingw/bin/mingw32-make.exe</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/Prototypes/FB01/FB01</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/A terminer/FB01/FB01</value>
   </valuemap>
  </data>
  <data>
-  <variable>buildconfiguration-Release-buildstep0</variable>
+  <variable>buildconfiguration-Linux-buildstep0</variable>
   <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Linux</value>
+   <value key="buildConfiguration" type="int" >0</value>
+   <valuelist key="qmakeArgs" type="QVariantList" />
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Linux-buildstep1</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Linux</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Linux-cleanstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Linux</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Windows-buildstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Windows</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
     <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
     <value type="QString" >APPDATA=C:\Documents and Settings\Meslin FrÃ©dÃ©ric\Application Data</value>
@@ -252,22 +280,21 @@
     <value type="QString" >WINDIR=C:\WINDOWS</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >D:/Programmation/Prototypes/FB01/FB01/FB01.pro</value>
+    <value type="QString" >D:/Programmation/A terminer/FB01/FB01/FB01.pro</value>
     <value type="QString" >-spec</value>
     <value type="QString" >win32-g++</value>
     <value type="QString" >-r</value>
-    <value type="QString" >CONFIG+=release</value>
+    <value type="QString" >CONFIG+=debug_and_release</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.04/qt/bin/qmake.exe</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/Prototypes/FB01/FB01</value>
-   <value key="buildConfiguration" type="int" >0</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/A terminer/FB01/FB01</value>
   </valuemap>
  </data>
  <data>
-  <variable>buildconfiguration-Release-buildstep1</variable>
+  <variable>buildconfiguration-Windows-buildstep1</variable>
   <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Windows</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
     <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
     <value type="QString" >APPDATA=C:\Documents and Settings\Meslin FrÃ©dÃ©ric\Application Data</value>
@@ -310,13 +337,13 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.04/mingw/bin/mingw32-make.exe</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/Prototypes/FB01/FB01</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/A terminer/FB01/FB01</value>
   </valuemap>
  </data>
  <data>
-  <variable>buildconfiguration-Release-cleanstep0</variable>
+  <variable>buildconfiguration-Windows-cleanstep0</variable>
   <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Windows</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
     <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
     <value type="QString" >APPDATA=C:\Documents and Settings\Meslin FrÃ©dÃ©ric\Application Data</value>
@@ -360,14 +387,15 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.04/mingw/bin/mingw32-make.exe</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/Prototypes/FB01/FB01</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >D:/Programmation/A terminer/FB01/FB01</value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfigurations</variable>
   <valuelist type="QVariantList" >
    <value type="QString" >Debug</value>
-   <value type="QString" >Release</value>
+   <value type="QString" >Linux</value>
+   <value type="QString" >Windows</value>
   </valuelist>
  </data>
  <data>

@@ -127,13 +127,12 @@ void QVoice::Recevoir()
 /*****************************************************************************/
 void QVoice::on_spnBox_algo_valueChanged(int i)
 {
-//Vérification
-    if (MIDI::EnAttente()) return;
-//Change d'image
+//Trouve le nom
     QPixmap Pix;
     QString Nom = ":/imgs/algo";
     QString Num; Num.setNum(i);
     Nom.append(Num); Nom.append(".bmp");
+//Change d'image
     Pix.load(Nom);
     m_ui->lbl_algo->setPixmap(Pix);
 //Envoie le code

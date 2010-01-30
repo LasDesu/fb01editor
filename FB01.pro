@@ -1,5 +1,5 @@
 # FB01 : Sound editor
-# Copyright Meslin Frédéric 2009
+# Copyright Meslin Frdric 2009
 # fredericmeslin@hotmail.com
 # This file is part of FB01 SE
 # FB01 SE is free software: you can redistribute it and/or modify
@@ -12,6 +12,7 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with FB01 SE. If not, see <http://www.gnu.org/licenses/>.
+
 TARGET = FB01
 TEMPLATE = app
 CONFIG += staticlib \
@@ -19,28 +20,46 @@ CONFIG += staticlib \
 SOURCES += main.cpp \
     mainwindow.cpp \
     midi.cpp \
-    qclavier.cpp \
     expandeur.cpp \
+    qclavier.cpp \
     qinstrument.cpp \
     qoperateur.cpp \
     qvoice.cpp \
-    qenveloppe.cpp
+    qenveloppe.cpp \
+    qbanks.cpp
 HEADERS += mainwindow.h \
     midi.h \
-    qclavier.h \
     expandeur.h \
-    types.h \
-    win32.h \
+    qclavier.h \
     qinstrument.h \
     qoperateur.h \
     qvoice.h \
-    qenveloppe.h
+    qenveloppe.h \
+    linux.h \
+    types.h \
+    win32.h \
+    qbanks.h
 FORMS += mainwindow.ui \
     qinstrument.ui \
     qoperateur.ui \
-    qvoice.ui
-LIBS += -luser32 \
-    -lwinmm
+    qvoice.ui \
+    qbanks.ui
 RESOURCES += FB01.qrc
-RC_FILE = FB01.rc
-OTHER_FILES += FB01.rc
+winnt { 
+    DEFINES += WIN32
+    
+    # RC_FILE += FB01.rc
+    LIBS += -luser32 \
+        -lwinmm
+}
+win32 { 
+    DEFINES += WIN32
+    
+    # RC_FILE += FB01.rc
+    LIBS += -luser32 \
+        -lwinmm
+}
+unix { 
+    LIBS += 
+    DEFINES += LINUX
+}

@@ -22,8 +22,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_mainwindow.h"
-#include "expandeur.h"
+//Inclusions générales
+    #include "ui_mainwindow.h"
+    #include <QtGui/QApplication>
+    #include <QtGui/QMessageBox>
+    #include <QtGui/QFileDialog>
+    #include <QList>
+
+//Inclusions spécifiques
+    #include "expandeur.h"
+    #include "midi.h"
 
 //Constantes
     #define VERSION 1
@@ -55,11 +63,6 @@
         void InitialiserEditeur();
         void InitialiserInterface();
         void TerminerEditeur();
-    //Utilitaires
-        void ActiverEditeur(bool Actif);
-        void ChangerPage(int Page);
-        void ChangerInst(int Inst);
-        void ChangerOP(int OP);
     //Archivage
         QFile * ChargerFichier(int Type, short Version);
         QFile * EnregistrerFichier(int Type, short Version);
@@ -67,10 +70,16 @@
         void Envoyer();
     //Actualisation
         void ActualiserEditeur();
-        void ActualiserSet();
-        void ActualiserVoice();
-        void ActualiserConfig();
-        void ActualiserBank();
+        bool ActualiserSet();
+        bool ActualiserVoice();
+        bool ActualiserConfig();
+        bool ActualiserBank();
+    //Utilitaires
+        void ConfigurerOnglets(bool Actifs);
+        void ConfigurerMenus(int Onglet);
+        void ChangerPage(int Page);
+        void ChangerInst(int Inst);
+        void ChangerOP(int OP);
     private slots:
     //Sélection des drivers
         void on_cmbBox_MIDIIn_activated(int Index);
@@ -87,37 +96,39 @@
         void on_actionRandomize_triggered(bool checked = false);
         void on_actionCopy_triggered(bool checked = false);
         void on_actionPaste_triggered(bool checked = false);
-    //Menu FB01
-        void on_actionSend_current_voice_triggered(bool checked = false)
-            {ui->widget_voice->Envoyer();
-             ui->widget_opera_1->Envoyer(); ui->widget_opera_2->Envoyer();
-             ui->widget_opera_3->Envoyer(); ui->widget_opera_4->Envoyer();}
-        void on_actionSend_current_set_triggered(bool checked = false)
-            {ui->widget_instru_1->Envoyer(); ui->widget_instru_2->Envoyer();
-             ui->widget_instru_3->Envoyer(); ui->widget_instru_4->Envoyer();
-             ui->widget_instru_5->Envoyer(); ui->widget_instru_6->Envoyer();
-             ui->widget_instru_7->Envoyer(); ui->widget_instru_8->Envoyer();}
+    //Menu configuration
         void on_actionSend_current_config_triggered(bool checked = false)
-            {Envoyer();}
-        void on_actionGet_current_voice_triggered(bool checked = false)
-            {ActualiserVoice();}
-        void on_actionGet_current_set_triggered(bool checked = false)
-            {ActualiserSet();}
+            {if (!Attente) Envoyer();}
         void on_actionGet_current_config_triggered(bool checked = false)
-            {ActualiserConfig();}
+            {if (!Attente) ActualiserConfig();}
+        void on_actionSend_current_set_triggered(bool checked = false)
+            {if (!Attente) {ui->widget_instru_1->Envoyer(); ui->widget_instru_2->Envoyer();
+                            ui->widget_instru_3->Envoyer(); ui->widget_instru_4->Envoyer();
+                            ui->widget_instru_5->Envoyer(); ui->widget_instru_6->Envoyer();
+                            ui->widget_instru_7->Envoyer(); ui->widget_instru_8->Envoyer();}}
+        void on_actionGet_current_set_triggered(bool checked = false)
+            {if (!Attente) ActualiserSet();}
+        void on_actionSend_current_voice_triggered(bool checked = false)
+            {if (!Attente) {ui->widget_voice->Envoyer();
+                            ui->widget_opera_1->Envoyer(); ui->widget_opera_2->Envoyer();
+                            ui->widget_opera_3->Envoyer(); ui->widget_opera_4->Envoyer();}}
+        void on_actionGet_current_voice_triggered(bool checked = false)
+            {if (!Attente) ActualiserVoice();}
+        void on_actionRam_1_triggered(bool checked = false)
+            {if (!Attente) ui->widget_banks->Envoyer(0);}
+        void on_actionRam_2_triggered(bool checked = false)
+            {if (!Attente) ui->widget_banks->Envoyer(1);}
+        void on_actionGet_all_banks_triggered(bool checked = false)
+            {if (!Attente) ActualiserBank();}
      //Menu aide
         void on_actionAbout_triggered(bool checked = false);
         void on_actionRead_this_triggered(bool checked = false);
         void on_actionOnline_help_triggered(bool checked = false);
-    //Gestion des banks
-        void on_pshBut_refresh_bank_clicked(bool checked)
-            {ActualiserBank();}
-        void on_pshBut_bybank_clicked(bool checked);
-        void on_pshBut_byname_clicked(bool checked);
-        void on_pshBut_bystyle_clicked(bool checked);
-    //Configuration globale
+    //Edition de la configuration globale
         void on_spnBox_syschan_valueChanged(int i)
-            {if (!Attente) EXPANDEUR::SysChan = i - 1;}
+            {if (!Attente) EXPANDEUR::ChoisirSysChan(i - 1);}
+        void on_spnBox_kybchan_valueChanged(int i)
+            {MIDI::ChoisirNoteChan(i - 1);}
         void on_pshBut_combine_clicked(bool checked)
             {if (!Attente) EXPANDEUR::EcrireSysParam(0x08, !checked);}
         void on_cmbBox_reception_activated(int i)
@@ -166,6 +177,9 @@
             {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), checked, ui->pshBut_OPon_4->isChecked());}
         void on_pshBut_OPon_4_clicked(bool checked)
             {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), checked);}
+    //Changement d'onglet
+        void on_tabWidget_currentChanged(int index)
+            {ConfigurerMenus(index + 1);}
     };
 
 #endif // MAINWINDOW_H

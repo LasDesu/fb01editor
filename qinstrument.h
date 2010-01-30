@@ -1,9 +1,12 @@
 #ifndef QINSTRUMENT_H
 #define QINSTRUMENT_H
 
-#include "ui_qinstrument.h"
-#include "expandeur.h"
-#include <QFile>
+//Inclusions générales
+    #include "ui_qinstrument.h"
+    #include <QFile>
+
+//Inclusions spécifiques
+    #include "expandeur.h"
 
 namespace Ui {
     class QInstrument;
@@ -26,17 +29,19 @@ public:
     void Recevoir();
 //Interface et édition
     void Initialiser();
-    void InitialiserLimites(QComboBox * Box);
     void Randomiser();
     void Copier(uchar Table[16]);
     void Coller(const uchar Table[16]);
 protected:
+//Interne
     void changeEvent(QEvent *e);
 private:
-//Configuration
+//Interface
+    Ui::QInstrument *m_ui;
     bool  Attente;
     uchar IDSel;
-    Ui::QInstrument *m_ui;
+//Utilitaires
+    void InitialiserNotes(QComboBox * Box);
 private slots:
 //Gestion des évènements
     void on_spnBox_notes_valueChanged(int i)

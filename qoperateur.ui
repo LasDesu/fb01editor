@@ -38,7 +38,7 @@
      <number>31</number>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spnBox_DR1">
+   <widget class="QSpinBox" name="spnBox_D1R">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -64,7 +64,7 @@
      <number>15</number>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spnBox_DR2">
+   <widget class="QSpinBox" name="spnBox_D2R">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -103,7 +103,7 @@
      <string>AR</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_DR1">
+   <widget class="QLabel" name="lbl_D1R">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -113,7 +113,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>DR</string>
+     <string>D1R</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_SL">
@@ -129,7 +129,7 @@
      <string>SL</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_DR2">
+   <widget class="QLabel" name="lbl_D2R">
     <property name="geometry">
      <rect>
       <x>170</x>
@@ -139,7 +139,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>DR</string>
+     <string>D2R</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_RR">
@@ -155,7 +155,7 @@
      <string>RR</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_velmod">
+   <widget class="QLabel" name="lbl_ARvel">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -165,10 +165,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Vel. mod</string>
+     <string>AR. Vel.</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spnBox_velmod">
+   <widget class="QSpinBox" name="spnBox_velAR">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -181,7 +181,7 @@
      <number>3</number>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spnBox_velocity">
+   <widget class="QSpinBox" name="spnBox_vellvl">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -194,7 +194,7 @@
      <number>31</number>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_velocity">
+   <widget class="QLabel" name="lbl_lvlAR">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -204,7 +204,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Velocity</string>
+     <string> Lvl. Vel.</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_detune">
@@ -314,17 +314,17 @@
      <number>15</number>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_kbcurb">
+   <widget class="QLabel" name="lbl_lvlcurb">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>170</y>
-      <width>41</width>
+      <width>51</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Curb</string>
+     <string>Lvl. Curb.</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_rtdph">
@@ -421,7 +421,7 @@
      <string>Volume</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="cmbBox_kbcurb">
+   <widget class="QComboBox" name="cmbBox_lvlcurb">
     <property name="geometry">
      <rect>
       <x>10</x>

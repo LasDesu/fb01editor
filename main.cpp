@@ -19,9 +19,7 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtGui/QApplication>
 #include "mainwindow.h"
-
 QApplication * mainApp;
 
 /*****************************************************************************/

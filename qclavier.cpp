@@ -20,11 +20,11 @@
 */
 
 #include "qclavier.h"
-#include "midi.h"
 
 /*****************************************************************************/
 QClavier::QClavier(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
+//Aucune note
     NoteJouee = -1;
 }
 
@@ -32,7 +32,7 @@ QClavier::~QClavier()
 {
 //Arrête la note
     if (NoteJouee != -1)
-        MIDI::Note(0, NoteJouee, 0);
+        MIDI::Note(NoteJouee, 0);
 }
 
 /*****************************************************************************/
@@ -43,40 +43,18 @@ void QClavier::mouseMoveEvent(QMouseEvent * event)
         mousePressEvent(event);
 }
 
+/*****************************************************************************/
 void QClavier::mousePressEvent(QMouseEvent * event)
 {
-//Initialise
-    int Octave = event->x() / 56;
-    int Reste  = event->x() % 56;
-    int Note   = Octave * 12;
-//Détermine la touche
-    if (event->y() < 24)
-    {//Noire
-        if      (Reste > 4 && Reste < 12)  Note += 1;
-        else if (Reste > 12 && Reste < 20) Note += 3;
-        else if (Reste > 28 && Reste < 36) Note += 6;
-        else if (Reste > 36 && Reste < 44) Note += 8;
-        else if (Reste > 44 && Reste < 52) Note += 10;
-        else goto Blanche;
-    }else{
-    Blanche :
-        if      (Reste < 8) Note += 0;
-        else if (Reste > 8 && Reste < 16)  Note += 2;
-        else if (Reste > 16 && Reste < 24) Note += 4;
-        else if (Reste > 24 && Reste < 32) Note += 5;
-        else if (Reste > 32 && Reste < 40) Note += 7;
-        else if (Reste > 40 && Reste < 48) Note += 9;
-        else if (Reste > 48 && Reste < 56) Note += 11;
-    }
 //Produit la note
-    if (Note > 127) Note = 127;
+    int Note = TrouverNote(event);
     if (Note != NoteJouee)
     {
     //Arrête la note
         if (NoteJouee != -1)
-            MIDI::Note(0, NoteJouee, 0);
+            MIDI::Note(NoteJouee, 0);
     //Joue la nouvelle
-        MIDI::Note(0, Note, 100);
+        MIDI::Note(Note, 100);
         NoteJouee = Note;
     }
 }
@@ -85,6 +63,34 @@ void QClavier::mouseReleaseEvent(QMouseEvent * event)
 {
 //Arrête la note
     if (NoteJouee != -1)
-        MIDI::Note(0, NoteJouee, 0);
+        MIDI::Note(NoteJouee, 0);
     NoteJouee = -1;
+}
+
+/*****************************************************************************/
+int QClavier::TrouverNote(QMouseEvent * event)
+{
+    int Octave = event->x() / 56;
+    int Reste  = event->x() % 56;
+    int Note   = Octave * 12;
+//Détermine la touche
+    if (event->y() < 24)
+    {
+        if      (Reste > 4  && Reste < 12) Note += 1;
+        else if (Reste > 12 && Reste < 20) Note += 3;
+        else if (Reste > 28 && Reste < 36) Note += 6;
+        else if (Reste > 36 && Reste < 44) Note += 8;
+        else if (Reste > 44 && Reste < 52) Note += 10;
+        else goto Blanche;
+    }else{
+    Blanche :
+        if      (Reste > 8  && Reste < 16) Note += 2;
+        else if (Reste > 16 && Reste < 24) Note += 4;
+        else if (Reste > 24 && Reste < 32) Note += 5;
+        else if (Reste > 32 && Reste < 40) Note += 7;
+        else if (Reste > 40 && Reste < 48) Note += 9;
+        else if (Reste > 48 && Reste < 56) Note += 11;
+    }
+ //Retourne la note
+    return (Note > 127) ? 127 : Note;
 }

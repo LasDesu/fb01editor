@@ -19,11 +19,7 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
 #include "mainwindow.h"
-#include "midi.h"
 
 extern QApplication * mainApp;
 
@@ -31,6 +27,7 @@ extern QApplication * mainApp;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+//Initialisation
     InitialiserInterface();
     InitialiserEditeur();
 }
@@ -49,27 +46,24 @@ void MainWindow::InitialiserEditeur()
 //Initialise les opérateurs
     for (int i = 0; i < 4; i ++)
         Operas[i]->ChangerID(i);
-//Initialise les instrus
+//Initialise les instruments
     for (int i = 0; i < 8; i ++)
         Insts[i]->ChangerID(i);
 //Initialise les sélections
     ChangerPage(0);
     ChangerInst(0);
     ChangerOP(0);
-//Initialisation diverse
+//Initialisations diverses
     srand(QTime::currentTime().msec());
     TypeCopie = -1;
+//Déverrouille
     Attente = false;
 }
 
 void MainWindow::InitialiserInterface()
 {
 //Choisit le premier onglet
-    ActiverEditeur(false);
     ui->tabWidget->setCurrentIndex(0);
-//Organise la table de présets
-    ui->table_bank->setRowCount(336);
-    ui->table_bank->setColumnCount(4);
 //Créé les tables des opérateurs
     Operas[0] = ui->widget_opera_1;
     Operas[1] = ui->widget_opera_2;
@@ -84,6 +78,9 @@ void MainWindow::InitialiserInterface()
     Insts[5]  = ui->widget_instru_6;
     Insts[6]  = ui->widget_instru_7;
     Insts[7]  = ui->widget_instru_8;
+//Désactive l'interface
+    ConfigurerMenus(0);
+    ConfigurerOnglets(false);
 }
 
 void MainWindow::TerminerEditeur()
@@ -91,40 +88,50 @@ void MainWindow::TerminerEditeur()
 //Réinitialise le MIDI
     MIDI::DesactiverIn();
     MIDI::DesactiverOut();
+//Désalloue la liste
+    MIDI::DeLister();
 }
 
 /*****************************************************************************/
-void MainWindow::ActiverEditeur(bool Actif)
+void MainWindow::ConfigurerOnglets(bool Actifs)
 {
-//Active les onglets
-    ui->tab_banks->setEnabled(Actif);
-    ui->tab_set->setEnabled(Actif);
-    ui->tab_voice->setEnabled(Actif);
-    ui->tab_operas->setEnabled(Actif);
-//Active le menu fichier
-    ui->actionLoad_set->setEnabled(Actif);
-    ui->actionLoad_voice->setEnabled(Actif);
-    ui->actionSave_set->setEnabled(Actif);
-    ui->actionSave_voice->setEnabled(Actif);
-//Active le menu FB01
-    ui->actionGet_current_config->setEnabled(Actif);
-    ui->actionGet_current_set->setEnabled(Actif);
-    ui->actionGet_current_voice->setEnabled(Actif);
-    ui->actionSend_current_set->setEnabled(Actif);
-    ui->actionSend_current_voice->setEnabled(Actif);
-//Active le menu édition
-    ui->actionInitialize->setEnabled(Actif);
-    ui->actionRandomize->setEnabled(Actif);
-    ui->actionCopy->setEnabled(Actif);
-    ui->actionPaste->setEnabled(Actif);
+//Active ou désactive les onglets
+    ui->tab_banks->setEnabled(Actifs);
+    ui->tab_set->setEnabled(Actifs);
+    ui->tab_operas->setEnabled(Actifs);
+    ui->tab_voice->setEnabled(Actifs);
+//Active le cadre
+    ui->grpBox_config->setEnabled(Actifs);
 }
 
-void MainWindow::ActualiserEditeur()
+
+const bool MenuActifs[6][16] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                {1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0},
+                                {1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0},
+                                {1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0},
+                                {1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1},
+                                {1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1}};
+void MainWindow::ConfigurerMenus(int Onglet)
 {
-//Récupère toutes les informations
-    ActualiserConfig();
-    ActualiserSet();
-    ActualiserVoice();
+//Menu fichier
+    ui->actionLoad_set->setEnabled(MenuActifs[Onglet][0]);
+    ui->actionSave_set->setEnabled(MenuActifs[Onglet][1]);
+    ui->actionLoad_voice->setEnabled(MenuActifs[Onglet][2]);
+    ui->actionSave_voice->setEnabled(MenuActifs[Onglet][3]);
+//Menu édition
+    ui->actionInitialize->setEnabled(MenuActifs[Onglet][4]);
+    ui->actionRandomize->setEnabled(MenuActifs[Onglet][5]);
+    ui->actionCopy->setEnabled(MenuActifs[Onglet][6]);
+    ui->actionPaste->setEnabled(MenuActifs[Onglet][7]);
+//Menu configuration
+    ui->actionSend_current_config->setEnabled(MenuActifs[Onglet][8]);
+    ui->actionGet_current_config->setEnabled(MenuActifs[Onglet][9]);
+    ui->actionGet_all_banks->setEnabled(MenuActifs[Onglet][10]);
+    ui->menuSend_bank->setEnabled(MenuActifs[Onglet][11]);
+    ui->actionSend_current_set->setEnabled(MenuActifs[Onglet][12]);
+    ui->actionGet_current_set->setEnabled(MenuActifs[Onglet][13]);
+    ui->actionSend_current_voice->setEnabled(MenuActifs[Onglet][14]);
+    ui->actionGet_current_voice->setEnabled(MenuActifs[Onglet][15]);
 }
 
 /*****************************************************************************/
@@ -174,68 +181,67 @@ void MainWindow::ChangerOP(int OP)
 }
 
 /*****************************************************************************/
-void MainWindow::ActualiserConfig()
+void MainWindow::ActualiserEditeur()
+{
+//Vérifie la configuration
+    if (!MIDI::EstConfigure()) return;
+    ConfigurerMenus(ui->tabWidget->currentIndex() + 1);
+    ConfigurerOnglets(true);
+//Récupère les informations
+    if (!ActualiserConfig()) goto Erreur;
+    if (!ActualiserSet()) goto Erreur;
+    if (!ActualiserVoice()) goto Erreur;
+    return;
+//Pas de périphérique
+Erreur:
+    ConfigurerMenus(0);
+    ConfigurerOnglets(false);
+}
+
+bool MainWindow::ActualiserConfig()
 {
 //Reçoit la configuration
-    if (!EXPANDEUR::ChargerSet()) return;
     Attente = true;
+    if (!EXPANDEUR::RecevoirSet())
+    {
+        Attente = false;
+        return false;
+    }
 //Décode les données
     ui->pshBut_combine->setChecked((bool) EXPANDEUR::LireSysParam(0x08));
     ui->cmbBox_reception->setCurrentIndex((int) EXPANDEUR::LireSysParam(0x0D));
-    Attente = false;
-}
-
-const char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass",
-                                "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
-void MainWindow::ActualiserBank()
-{
-//Vide la liste
-    ui->table_bank->clearContents();
-//Charge chaque bank
-    Attente = true;
-    for (int b = 0; b < 8; b++)
-    {
-    //Reçoit la configuration
-        if (!EXPANDEUR::ChargerBank(b)) return;
-    //Construit le nom
-        QString Bank, NumB;
-        if (b < 2) {Bank.append("Ram "); NumB.setNum(b+1);}
-        else       {Bank.append("Rom "); NumB.setNum(b-1);}
-        Bank.append(NumB);
-    //Construit la liste
-        for (int v = 0; v < 48; v ++)
-        {
-        //Charge le nom
-            char Nom[8];
-            EXPANDEUR::LireBankVoiceNom(v, Nom);
-            Nom[7] = 0;
-       //Charge le style
-            uchar Style = EXPANDEUR::LireBankParam(v, 0x07);
-            if (Style > 13) Style = 13;
-        //Créé la ligne
-            QString NumI; NumI.setNum(v + 1);
-            QTableWidgetItem * ItNom   = new QTableWidgetItem((QString) Nom);
-            QTableWidgetItem * ItStyle = new QTableWidgetItem((QString) BankStyles[Style]);
-            QTableWidgetItem * ItBank  = new QTableWidgetItem(Bank);
-            QTableWidgetItem * ItNum  = new QTableWidgetItem(NumI);
-        //Ajoute la ligne
-            int r = v + b * 48;
-            ui->table_bank->setItem(r, 0, ItNom);
-            ui->table_bank->setItem(r, 1, ItStyle);
-            ui->table_bank->setItem(r, 2, ItBank);
-            ui->table_bank->setItem(r, 3, ItNum);
-        }
-    }
 //Déverrouille
     Attente = false;
+    return true;
 }
 
-void MainWindow::ActualiserSet()
+bool MainWindow::ActualiserBank()
+{
+//Recoit les banks
+    Attente = true;
+    for (int i = 0; i < 7; i++)
+        if (!EXPANDEUR::RecevoirBank(i))
+        {
+            Attente = false;
+            return false;
+        }
+//Décode les données
+    ui->widget_banks->Recevoir();
+//Déverrouille
+    Attente = false;
+    return true;
+}
+
+bool MainWindow::ActualiserSet()
 {
     char Nom[9];
 //Reçoit la configuration
-    if (!EXPANDEUR::ChargerSet()) return;
     Attente = true;
+    if (!EXPANDEUR::RecevoirSet())
+    {
+        Attente = false;
+        return false;
+    }
 //Décode les données
     for (int i = 0; i < 8; i++)
         Insts[i]->Recevoir();
@@ -243,16 +249,21 @@ void MainWindow::ActualiserSet()
     EXPANDEUR::LireSetNom(Nom);
     ui->txtEdit_setname->setPlainText((QString) Nom);
     ui->txtEdit_setname->repaint();
-//Dévérouille
+//Déverrouille
     Attente = false;
+    return true;
 }
 
-void MainWindow::ActualiserVoice()
+bool MainWindow::ActualiserVoice()
 {
     bool b1, b2, b3, b4;
 //Reçoit la configuration
-    if (!EXPANDEUR::ChargerVoice(InstSel)) return;
     Attente = true;
+    if (!EXPANDEUR::RecevoirVoice(InstSel))
+    {
+        Attente = false;
+        return false;
+    }
 //Décode les données
     ui->widget_voice->Recevoir();
     for (int i = 0; i < 4; i++)
@@ -267,18 +278,24 @@ void MainWindow::ActualiserVoice()
     ui->pshBut_OPon_2->setChecked(b2);
     ui->pshBut_OPon_3->setChecked(b3);
     ui->pshBut_OPon_4->setChecked(b4);
+//Déverrouille
     Attente = false;
+    return true;
 }
 
 /*****************************************************************************/
 void MainWindow::Envoyer()
 {
+//Vérrouille
+    Attente = true;
 //Envoie la config globale
     EXPANDEUR::EcrireSysParam(0x08, ui->pshBut_combine->isChecked());
     EXPANDEUR::EcrireSysParam(0x0D, (uchar) ui->cmbBox_reception->currentIndex());
     EXPANDEUR::EcrireSysParam(0x21, ui->pshBut_memory->isChecked());
     EXPANDEUR::EcrireSysParam(0x22, (uchar) ui->spnBox_confnum->value());
     EXPANDEUR::EcrireSysParam(0x24, (uchar) ui->hzSlider_mastvol->value());
+//Déverrouille
+    Attente = false;
 }
 
 /*****************************************************************************/
@@ -446,6 +463,7 @@ Error :
 /*****************************************************************************/
 void MainWindow::on_actionInitialize_triggered(bool checked)
 {
+    if (Attente) return;
     if (ui->tabWidget->currentIndex() == 4)
     //Opération sur les opérateurs
         Operas[OPSel]->Initialiser();
@@ -459,6 +477,7 @@ void MainWindow::on_actionInitialize_triggered(bool checked)
 
 void MainWindow::on_actionRandomize_triggered(bool checked)
 {
+    if (Attente) return;
     if (ui->tabWidget->currentIndex() == 4)
     //Opération sur les opérateurs
         Operas[OPSel]->Randomiser();
@@ -473,6 +492,7 @@ void MainWindow::on_actionRandomize_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_actionCopy_triggered(bool checked)
 {
+    if (Attente) return;
     if (ui->tabWidget->currentIndex() == 4)
     {
     //Opération sur les opérateurs
@@ -495,6 +515,7 @@ void MainWindow::on_actionCopy_triggered(bool checked)
 
 void MainWindow::on_actionPaste_triggered(bool checked)
 {
+    if (Attente) return;
     if (ui->tabWidget->currentIndex() == 4)
     {
     //Opération sur les opérateurs
@@ -551,23 +572,39 @@ void MainWindow::on_actionOnline_help_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 {
-//Sélectionne le driver
-    if (Index != -1) MIDI::ActiverIn(Index);
-    if (MIDI::EstConfigure())
+//Vérification réception
+    if (Attente) return;
+//Change le driver
+    if (Index < 1)
     {
+    //Déselectionne le driver
+        MIDI::DesactiverIn();
+        ConfigurerOnglets(false);
+        ConfigurerMenus(0);
+        return;
+    }else{
+    //Sélectionne le driver
+        MIDI::ActiverIn(Index - 1);
         ActualiserEditeur();
-        ActiverEditeur(true);
     }
 }
 
 void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
 {
-//Sélectionne le driver
-    if (Index != -1) MIDI::ActiverOut(Index);
-    if (MIDI::EstConfigure())
+//Vérification réception
+    if (Attente) return;
+//Change le driver
+    if (Index < 1)
     {
+    //Déselectionne le driver
+        MIDI::DesactiverOut();
+        ConfigurerOnglets(false);
+        ConfigurerMenus(0);
+        return;
+    }else{
+    //Sélectionne le driver
+        MIDI::ActiverOut(Index - 1);
         ActualiserEditeur();
-        ActiverEditeur(true);
     }
 }
 
@@ -577,39 +614,22 @@ void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 //Efface les items
     ui->cmbBox_MIDIIn->clear();
     ui->cmbBox_MIDIOut->clear();
-//Ajoute les périphériques
+//Liste les périphériques
     MIDI::Lister();
     int Ins = MIDI::NbDriversIn();
-    for (int i = 0; i < Ins; i++)
-        ui->cmbBox_MIDIIn->addItem(MIDI::DriverIn(i), i);
     int Outs = MIDI::NbDriversOut();
+    ui->cmbBox_MIDIIn->addItem((QString) "No driver selected", 0);
+    ui->cmbBox_MIDIOut->addItem((QString) "No driver selected", 0);
+//Ajoute les périphériques
+    for (int i = 0; i < Ins; i++)
+        ui->cmbBox_MIDIIn->addItem((QString)MIDI::DriverIn(i), i+1);
     for (int i = 0; i < Outs; i++)
-        ui->cmbBox_MIDIOut->addItem(MIDI::DriverOut(i), i);
-//Désactive les onglets
-    ActiverEditeur(false);
+        ui->cmbBox_MIDIOut->addItem((QString)MIDI::DriverOut(i), i+1);
+//Sélectionne le driver nul
+    ui->cmbBox_MIDIIn->setCurrentIndex(0);
+    ui->cmbBox_MIDIOut->setCurrentIndex(0);
+//Désactive l'éditeur
+    ConfigurerOnglets(false);
+    ConfigurerMenus(0);
 }
 
-/*****************************************************************************/
-void MainWindow::on_pshBut_bybank_clicked(bool checked)
-{
-    ui->table_bank->sortByColumn(3, Qt::AscendingOrder);
-    ui->table_bank->setSortingEnabled(checked);
-    ui->pshBut_byname->setChecked(false);
-    ui->pshBut_bystyle->setChecked(false);
-}
-
-void MainWindow::on_pshBut_byname_clicked(bool checked)
-{
-    ui->table_bank->sortByColumn(0, Qt::AscendingOrder);
-    ui->table_bank->setSortingEnabled(checked);
-    ui->pshBut_bybank->setChecked(false);
-    ui->pshBut_bystyle->setChecked(false);
-}
-
-void MainWindow::on_pshBut_bystyle_clicked(bool checked)
-{
-    ui->table_bank->sortByColumn(2, Qt::AscendingOrder);
-    ui->table_bank->setSortingEnabled(checked);
-    ui->pshBut_byname->setChecked(false);
-    ui->pshBut_bybank->setChecked(false);
-}

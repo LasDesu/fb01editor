@@ -21,10 +21,23 @@
 
 #include "expandeur.h"
 
-uchar EXPANDEUR::SysChan = 0;
+//Application
+    extern QApplication * mainApp;
+
+//Configuration
+    uchar EXPANDEUR::SysChan = 0;
+    uchar EXPANDEUR::Banks[BANKS][BULSIZ];
+    bool  EXPANDEUR::Ram1Val = false;
+    bool  EXPANDEUR::Ram2Val = false;
 
 /*****************************************************************************/
-bool EXPANDEUR::ChargerBank(uchar Bank)
+void EXPANDEUR::ChoisirSysChan(uchar Chan)
+{
+    SysChan = Chan;
+}
+
+/*****************************************************************************/
+bool EXPANDEUR::RecevoirBank(uchar Bank)
 {
     MMSG Msg[2];
 //Prépare la demande
@@ -37,11 +50,59 @@ bool EXPANDEUR::ChargerBank(uchar Bank)
     Msg[1].data[2] = Bank & 0xF;
     Msg[1].data[3] = 0xF7;
 //Envoie la demande
-    MIDI::EnvMsgLng(Msg, 8);
-    return MIDI::AttMsg();
+    MIDI::EnvMsgLng(Msg, 8, true);
+    if (!MIDI::AttMsg()) return false;
+//Copie les données
+    MIDI::CopierMsg((MMSG *)Banks[Bank], BULSIZ);
+    if(Bank == 0) Ram1Val = true;
+    if(Bank == 1) Ram2Val = true;
+    //MIDI::BackupTampon("c:\\Back.txt");
+    return true;
 }
 
-bool EXPANDEUR::ChargerSet()
+void EXPANDEUR::EnvoyerBank(uchar Bank)
+{
+//Prévient l'utilisateur
+    if ((Bank == 0 && !Ram1Val) || (Bank == 1 && !Ram2Val))
+    {
+        QMessageBox::warning(mainApp->activeWindow(), "FB01 SE:", "Empty banks !");
+        return;
+    }
+//Envoie le backup
+    MIDI::EnvMsgLng((MMSG *)Banks[Bank], BULSIZ, false);
+}
+
+/*****************************************************************************/
+void EXPANDEUR::CopierVoice(int Src, int Dst)
+{
+//Localise le block
+    int BnkSrc = Src / VOICES;
+    int BnkDst = Dst / VOICES;
+    int PosSrc = BLKOFF + (Src % VOICES) * BLKSIZ;
+    int PosDst = BLKOFF + (Dst % VOICES) * BLKSIZ;
+//Copie la voie
+    for (int i=0; i < BLKSIZ; i++)
+        Banks[BnkDst][PosDst + i] = Banks[BnkSrc][PosSrc + i];
+}
+
+void EXPANDEUR::EchangerVoice(int Src, int Dst)
+{
+//Localise le block
+    int BnkSrc = Src / VOICES;
+    int BnkDst = Dst / VOICES;
+    int PosSrc = BLKOFF + (Src % VOICES) * BLKSIZ;
+    int PosDst = BLKOFF + (Dst % VOICES) * BLKSIZ;
+//Echange la voie
+    for (int i=0; i < BLKSIZ; i++)
+    {
+        uchar Temp = Banks[BnkSrc][PosSrc + i];
+        Banks[BnkSrc][PosSrc + i] = Banks[BnkDst][PosDst + i];
+        Banks[BnkDst][PosDst + i] = Temp;
+    }
+}
+
+/*****************************************************************************/
+bool EXPANDEUR::RecevoirSet()
 {
     MMSG Msg[2];
 //Prépare la demande
@@ -54,11 +115,11 @@ bool EXPANDEUR::ChargerSet()
     Msg[1].data[2] = 0x00;
     Msg[1].data[3] = 0xF7;
 //Envoie la demande
-    MIDI::EnvMsgLng(Msg, 8);
+    MIDI::EnvMsgLng(Msg, 8, true);
     return MIDI::AttMsg();
 }
 
-bool EXPANDEUR::ChargerVoice(uchar Inst)
+bool EXPANDEUR::RecevoirVoice(uchar Inst)
 {
     MMSG Msg[2];
 //Prépare la demande
@@ -71,24 +132,25 @@ bool EXPANDEUR::ChargerVoice(uchar Inst)
     Msg[1].data[2] = 0x00;
     Msg[1].data[3] = 0xF7;
 //Envoie la demande
-    MIDI::EnvMsgLng(Msg, 8);
+    MIDI::EnvMsgLng(Msg, 8, true);
     return MIDI::AttMsg();
 }
 
 /*****************************************************************************/
-void EXPANDEUR::LireBankNom(char * Nom)
+void EXPANDEUR::EcrireBankNom(uchar Bank, uchar Voice, const char * Nom)
 {
+    uchar Octet[7];
 //Recopie la chaine
-    for (uchar i = 0; i < 8; i++)
-        Nom[i] = (char) EXPANDEUR::LireBankParam(0xFF, i);
-    Nom[8] = 0;
+    strncpy((char *) Octet, Nom, 7);
+    for (uchar i = 0; i < 7; i++)
+        EcrireBankParam(Bank, Voice, i, Octet[i]);
 }
 
-void EXPANDEUR::LireBankVoiceNom(uchar Voice, char * Nom)
+void EXPANDEUR::LireBankNom(uchar Bank, uchar Voice, char * Nom)
 {
 //Recopie la chaine
     for (uchar i = 0; i < 7; i++)
-        Nom[i] = (char) EXPANDEUR::LireBankParam(Voice, i);
+        Nom[i] = (char) LireBankParam(Bank, Voice, i);
     Nom[7] = 0;
 }
 
@@ -106,7 +168,7 @@ void EXPANDEUR::LireSetNom(char * Nom)
 {
 //Recopie la chaine
     for (uchar i = 0; i < 8; i++)
-        Nom[i] = (char) EXPANDEUR::LireSysParam(i);
+        Nom[i] = (char) LireSysParam(i);
     Nom[8] = 0;
 }
 
@@ -132,7 +194,7 @@ void EXPANDEUR::LireVoiceNom(char * Nom)
 {
 //Recopie la chaine
     for (uchar i = 0; i < 7; i++)
-        Nom[i] = (char) EXPANDEUR::LireVoiceParam(i);
+        Nom[i] = (char) LireVoiceParam(i);
     Nom[7] = 0;
 }
 
@@ -150,7 +212,7 @@ void EXPANDEUR::LireVoicex09(bool * Load, uchar * AMD)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x09);
+    Octet = LireVoiceParam(0x09);
     *Load = (bool) (Octet >> 7);
     *AMD = Octet & 0x7F;
 }
@@ -168,7 +230,7 @@ void EXPANDEUR::LireVoicex0A(bool * Sync, uchar * PMD)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x0A);
+    Octet = LireVoiceParam(0x0A);
     *Sync = (bool) (Octet >> 7);
     *PMD = Octet & 0x7F;
 }
@@ -186,7 +248,7 @@ void EXPANDEUR::LireVoicex0C(uchar * Feedback, uchar * Algo)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x0C);
+    Octet = LireVoiceParam(0x0C);
     *Feedback = (Octet >> 3) & 0x7;
     *Algo = Octet & 0x7;
 }
@@ -204,7 +266,7 @@ void EXPANDEUR::LireVoicex0D(uchar * PMS, uchar * AMS)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x0D);
+    Octet = LireVoiceParam(0x0D);
     *PMS = (Octet >> 4) & 0x7;
     *AMS = Octet & 0x3;
 }
@@ -221,7 +283,7 @@ void EXPANDEUR::LireVoicex0E(uchar * Wave)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x0E);
+    Octet = LireVoiceParam(0x0E);
     *Wave = (Octet >> 5) & 0x3;
 }
 
@@ -238,7 +300,7 @@ void EXPANDEUR::LireVoicex3A(bool * Poly, uchar * Porta)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x3A);
+    Octet = LireVoiceParam(0x3A);
     *Poly = (bool) (Octet >> 7);
     *Porta = Octet & 0x7F;
 }
@@ -256,7 +318,7 @@ void EXPANDEUR::LireVoicex3B(uchar * Pmdctl, uchar * Pitch)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireVoiceParam(0x3B);
+    Octet = LireVoiceParam(0x3B);
     *Pmdctl = (Octet >> 4) & 0x7;
     *Pitch = Octet & 0xF;
 }
@@ -276,7 +338,7 @@ void EXPANDEUR::EcrireOps(uchar Inst, bool Op1, bool Op2, bool Op3, bool Op4)
 void EXPANDEUR::LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4)
 {
     uchar Octet;
-    Octet = EXPANDEUR::LireVoiceParam(0x0B);
+    Octet = LireVoiceParam(0x0B);
 //Récupère l'état
     *Op1 = (bool) (Octet & 0x8);
     *Op2 = (bool) (Octet & 0x10);
@@ -285,58 +347,58 @@ void EXPANDEUR::LireOps(bool * Op1, bool * Op2, bool * Op3, bool * Op4)
 }
 
 /*****************************************************************************/
-void EXPANDEUR::EcrireOpx01(uchar Inst, uchar Op, uchar KeyCurb, uchar Velocity)
+void EXPANDEUR::EcrireOpx01(uchar Inst, uchar Op, uchar LvlCurb, uchar VelLvl)
 {
     uchar Octet = 0;
 //Compose le paquet
-    Octet += (KeyCurb & 0x1) << 7;
-    Octet += (Velocity & 0x7) << 4;
+    Octet += (LvlCurb & 0x1) << 7;
+    Octet += (VelLvl & 0x7) << 4;
     EcrireOpParam(Inst, Op, 0x01, Octet);
 }
 
-void EXPANDEUR::LireOpx01(uchar Op, uchar * KeyCurb, uchar * Velocity)
+void EXPANDEUR::LireOpx01(uchar Op, uchar * KeyCurb, uchar * VelLvl)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x01);
+    Octet = LireOpParam(Op, 0x01);
     *KeyCurb  = Octet >> 7;
-    *Velocity = (Octet >> 4) & 0x7;
+    *VelLvl = (Octet >> 4) & 0x7;
 }
 
-void EXPANDEUR::EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar Adjust)
+void EXPANDEUR::EcrireOpx02(uchar Inst, uchar Op, uchar LvlDph, uchar AdjTL)
 {
     uchar Octet = 0;
 //Compose le paquet
     Octet += (LvlDph & 0xF) << 4;
-    Octet += Adjust & 0xF;
+    Octet += AdjTL & 0xF;
     EcrireOpParam(Inst, Op, 0x02, Octet);
 }
 
-void EXPANDEUR::LireOpx02(uchar Op, uchar * LvlDph, uchar * Adjust)
+void EXPANDEUR::LireOpx02(uchar Op, uchar * LvlDph, uchar * AdjTL)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x02);
+    Octet = LireOpParam(Op, 0x02);
     *LvlDph = (Octet >> 4) & 0xF;
-    *Adjust = Octet & 0xF;
+    *AdjTL = Octet & 0xF;
 }
 
-void EXPANDEUR::EcrireOpx03(uchar Inst, uchar Op, uchar KeyCurb, uchar Fine, uchar Multiple)
+void EXPANDEUR::EcrireOpx03(uchar Inst, uchar Op, uchar LvlCurb, uchar Fine, uchar Multiple)
 {
     uchar Octet = 0;
 //Compose le paquet
-    Octet += (KeyCurb & 0x2) << 6;
+    Octet += (LvlCurb & 0x2) << 6;
     Octet += (Fine & 0x7) << 4;
     Octet += Multiple & 0xF;
     EcrireOpParam(Inst, Op, 0x03, Octet);
 }
 
-void EXPANDEUR::LireOpx03(uchar Op, uchar * KeyCurb, uchar * Fine, uchar * Multiple)
+void EXPANDEUR::LireOpx03(uchar Op, uchar * LvlCurb, uchar * Fine, uchar * Multiple)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x03);
-    *KeyCurb = (Octet >> 6) & 0x2;
+    Octet = LireOpParam(Op, 0x03);
+    *LvlCurb = (Octet >> 6) & 0x2;
     *Fine = (Octet >> 4) & 0x7;
     *Multiple = Octet & 0xF;
 }
@@ -354,47 +416,47 @@ void EXPANDEUR::LireOpx04(uchar Op, uchar * RateDph, uchar * AR)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x04);
+    Octet = LireOpParam(Op, 0x04);
     *RateDph = (Octet >> 6) & 0x3;
     *AR = Octet & 0x1F;
 }
 
-void EXPANDEUR::EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VeloSens, uchar DR1)
+void EXPANDEUR::EcrireOpx05(uchar Inst, uchar Op, bool Carrier, uchar VelAR, uchar D1R)
 {
     uchar Octet = 0;
 //Compose le paquet
     if (Carrier) Octet += 0x80;
-    Octet += (VeloSens & 0x3) << 5;
-    Octet += DR1 & 0x1F;
+    Octet += (VelAR & 0x3) << 5;
+    Octet += D1R & 0x1F;
     EcrireOpParam(Inst, Op, 0x05, Octet);
 }
 
-void EXPANDEUR::LireOpx05(uchar Op, bool * Carrier, uchar * VeloSens, uchar * DR1)
+void EXPANDEUR::LireOpx05(uchar Op, bool * Carrier, uchar * VelAR, uchar * D1R)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x05);
+    Octet = LireOpParam(Op, 0x05);
     *Carrier = (bool) (Octet & 0x80);
-    *VeloSens = (Octet >> 5) & 0x3;
-    *DR1 = Octet & 0x1F;
+    *VelAR = (Octet >> 5) & 0x3;
+    *D1R = Octet & 0x1F;
 }
 
-void EXPANDEUR::EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar DR2)
+void EXPANDEUR::EcrireOpx06(uchar Inst, uchar Op, uchar Coarse, uchar D2R)
 {
     uchar Octet = 0;
 //Compose le paquet
     Octet += (Coarse & 0x3) << 6;
-    Octet += DR2 & 0x1F;
+    Octet += D2R & 0x1F;
     EcrireOpParam(Inst, Op, 0x06, Octet);
 }
 
-void EXPANDEUR::LireOpx06(uchar Op, uchar * Coarse, uchar * DR2)
+void EXPANDEUR::LireOpx06(uchar Op, uchar * Coarse, uchar * D2R)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x06);
+    Octet = LireOpParam(Op, 0x06);
     *Coarse = (Octet >> 6) & 0x3;
-    *DR2 = Octet & 0x1F;
+    *D2R = Octet & 0x1F;
 }
 
 void EXPANDEUR::EcrireOpx07(uchar Inst, uchar Op, uchar SL, uchar RR)
@@ -410,18 +472,25 @@ void EXPANDEUR::LireOpx07(uchar Op, uchar * SL, uchar * RR)
 {
     uchar Octet;
 //Récupère le paquet
-    Octet = EXPANDEUR::LireOpParam(Op, 0x07);
+    Octet = LireOpParam(Op, 0x07);
     *SL = (Octet >> 4) & 0xF;
     *RR = Octet & 0xF;
 }
 
 /*****************************************************************************/
-uchar EXPANDEUR::LireBankParam(uchar Voice, uchar Param)
+uchar EXPANDEUR::LireBankParam(uchar Bank, uchar Voice, uchar Param)
 {
-    int Pos = 0x4C + 2 * (int) Param + 0x83 * (int) Voice;
+    int Pos = BLKOFF + 2 + 2 * (int) Param + BLKSIZ * (int) Voice;
 //Lit un paramêtre
-    return (MIDI::LireMsg(Pos) & 0xF)
-         + (MIDI::LireMsg(Pos+1) << 4);
+    return (Banks[Bank][Pos] & 0xF) + (Banks[Bank][Pos+1] << 4);
+}
+
+void EXPANDEUR::EcrireBankParam(uchar Bank, uchar Voice, uchar Param, uchar Valeur)
+{
+    int Pos = BLKOFF + 2 + 2 * (int) Param + BLKSIZ * (int) Voice;
+//Ecrit un paramêtre
+    Banks[Bank][Pos] = Valeur & 0xF;
+    Banks[Bank][Pos+1] = Valeur >> 4;
 }
 
 /*****************************************************************************/
@@ -438,7 +507,7 @@ void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
     Msg[1].data[2] = Valeur & 0x7F;
     Msg[1].data[3] = 0xF7;
 //Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 8);
+    MIDI::EnvMsgLng(Msg, 8, false);
 }
 
 uchar EXPANDEUR::LireSysParam(uchar Param)
@@ -462,7 +531,7 @@ void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
     Msg[1].data[2] = Valeur & 0x7F;
     Msg[1].data[3] = 0xF7;
 //Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 8);
+    MIDI::EnvMsgLng(Msg, 8, false);
 }
 
 uchar EXPANDEUR::LireInstParam(uchar Inst, uchar Param)
@@ -487,15 +556,14 @@ void EXPANDEUR::EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur)
     Msg[1].data[3] = Valeur >> 4;
     Msg[2].data[0] = 0xF7;
 //Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 9);
+    MIDI::EnvMsgLng(Msg, 9, false);
 }
 
 uchar EXPANDEUR::LireVoiceParam(uchar Param)
 {
     int Pos = 0x9 + 2 * (int) Param;
 //Lit un paramêtre
-    return (MIDI::LireMsg(Pos) & 0xF)
-         + (MIDI::LireMsg(Pos+1) << 4);
+    return (MIDI::LireMsg(Pos) & 0xF) + (MIDI::LireMsg(Pos+1) << 4);
 }
 
 /*****************************************************************************/

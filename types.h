@@ -19,14 +19,6 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-#ifndef bool
-        #define bool char unsigned
-	#define true  1
-	#define false 0
-#endif
-*/
-
 #ifndef uchar
 	#define uchar  char  unsigned
 	#define ushort short unsigned

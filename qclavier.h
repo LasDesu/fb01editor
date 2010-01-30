@@ -22,8 +22,12 @@
 #ifndef QCLAVIER_H
 #define QCLAVIER_H
 
+//Inclusions générales
     #include <QtGui/QLabel>
     #include <QtGui/QMouseEvent>
+
+//Inclusions spécifiques
+    #include "midi.h"
 
     class QClavier : public QLabel
     {
@@ -34,6 +38,8 @@
     private:
     //Note en cours
         int NoteJouee;
+    //Détermine la note
+        int TrouverNote(QMouseEvent * event);
     //Réimplémentation de la souris
         virtual void mouseMoveEvent(QMouseEvent * event);
         virtual void mousePressEvent(QMouseEvent * event);

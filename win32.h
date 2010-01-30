@@ -29,7 +29,6 @@ extern "C"
     #define CALLBACK_FUNCTION 0x30000
 //Constantes MIDI
     #define MIM_LONGDATA 0x3C4
-
 //Structures MIDI
     typedef struct
     {
@@ -87,6 +86,5 @@ extern "C"
     uint WINAPI midiOutLongMsg(ulong hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
     uint WINAPI midiOutShortMsg(ulong hmo, ulong dwMsg);
     uint WINAPI midiInAddBuffer(ulong hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
-
 }
 #endif // WIN32_H

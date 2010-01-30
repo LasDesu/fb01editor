@@ -71,7 +71,7 @@ bool QOperateur::Enregistrer(QFile * Fichier)
 /*****************************************************************************/
 void QOperateur::Rafraichir()
 {
-    m_ui->label_env->DefinirEnveloppe(m_ui->spnBox_AR->value(), m_ui->spnBox_DR1->value(), m_ui->spnBox_SL->value(),m_ui->spnBox_DR2->value(), m_ui->spnBox_RR->value());
+    m_ui->label_env->DefinirEnveloppe(m_ui->spnBox_AR->value(), m_ui->spnBox_D1R->value(), m_ui->spnBox_SL->value(),m_ui->spnBox_D2R->value(), m_ui->spnBox_RR->value());
     m_ui->label_env->repaint();
 }
 
@@ -80,12 +80,12 @@ void QOperateur::Envoyer()
 {
 //Envoie la configuration complète
     EXPANDEUR::EcrireOpParam(InstSel, IDSel, 0x00, (uchar) (127 - m_ui->hzSlider_volume->value()));
-    EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) m_ui->spnBox_velocity->value());
+    EXPANDEUR::EcrireOpx01(InstSel, IDSel, (uchar) m_ui->cmbBox_lvlcurb->currentIndex(), (uchar) m_ui->spnBox_vellvl->value());
     EXPANDEUR::EcrireOpx02(InstSel, IDSel, (uchar) m_ui->spnBox_lvldph->value(), (uchar) m_ui->spnBox_adjTL->value());
-    EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_kbcurb->currentIndex(), (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) m_ui->spnBox_multiple->value());
+    EXPANDEUR::EcrireOpx03(InstSel, IDSel, (uchar) m_ui->cmbBox_lvlcurb->currentIndex(), (uchar) (m_ui->spnBox_fine->value() + 4), (uchar) m_ui->spnBox_multiple->value());
     EXPANDEUR::EcrireOpx04(InstSel, IDSel, (uchar) m_ui->spnBox_rtdph->value(), (uchar) m_ui->spnBox_AR->value());
-    EXPANDEUR::EcrireOpx05(InstSel, IDSel, (uchar) m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velmod->value(), (uchar) m_ui->spnBox_DR1->value());
-    EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) m_ui->spnBox_coarse->value(), (uchar) m_ui->spnBox_DR2->value());
+    EXPANDEUR::EcrireOpx05(InstSel, IDSel, (uchar) m_ui->pshBut_carrier->isChecked(), (uchar) m_ui->spnBox_velAR->value(), (uchar) m_ui->spnBox_D1R->value());
+    EXPANDEUR::EcrireOpx06(InstSel, IDSel, (uchar) m_ui->spnBox_coarse->value(), (uchar) m_ui->spnBox_D2R->value());
     EXPANDEUR::EcrireOpx07(InstSel, IDSel, (uchar) (15 - m_ui->spnBox_SL->value()), (uchar) m_ui->spnBox_RR->value());
 }
 
@@ -99,11 +99,11 @@ void QOperateur::Recevoir()
 //Interprète les données
     m_ui->hzSlider_volume->setValue((int) (127 - EXPANDEUR::LireOpParam(IDSel, 0x00)));
     EXPANDEUR::LireOpx01(IDSel, &st1, &p2);
-    m_ui->spnBox_velocity->setValue((int) p2);
+    m_ui->spnBox_vellvl->setValue((int) p2);
     EXPANDEUR::LireOpx02(IDSel, &p1, &p2);
     m_ui->spnBox_lvldph->setValue((int) p1); m_ui->spnBox_adjTL->setValue((int) p2);
     EXPANDEUR::LireOpx03(IDSel, &st2, &p1, &p2);
-    m_ui->cmbBox_kbcurb->setCurrentIndex((int)st1 + st2);
+    m_ui->cmbBox_lvlcurb->setCurrentIndex((int)st1 + st2);
     m_ui->spnBox_fine->setValue((int) (p1 - 4));
     m_ui->spnBox_multiple->setValue((int) p2);
     EXPANDEUR::LireOpx04(IDSel, &p1, &p2);
@@ -111,10 +111,10 @@ void QOperateur::Recevoir()
     m_ui->spnBox_AR->setValue((int) p2);
     EXPANDEUR::LireOpx05(IDSel, &b1, &p1, &p2);
     m_ui->pshBut_carrier->setChecked(b1);
-    m_ui->spnBox_velmod->setValue((int) p1);
-    m_ui->spnBox_DR1->setValue((int) p2);
+    m_ui->spnBox_velAR->setValue((int) p1);
+    m_ui->spnBox_D1R->setValue((int) p2);
     EXPANDEUR::LireOpx06(IDSel, &p1, &p2);
-    m_ui->spnBox_coarse->setValue((int) p1); m_ui->spnBox_DR2->setValue((int) p2);
+    m_ui->spnBox_coarse->setValue((int) p1); m_ui->spnBox_D2R->setValue((int) p2);
     EXPANDEUR::LireOpx07(IDSel, &p1, &p2);
     m_ui->spnBox_SL->setValue((int) (15 - p1)); m_ui->spnBox_RR->setValue((int) p2);
  //Déverrouille
@@ -134,8 +134,8 @@ void QOperateur::Randomiser()
     Attente = true;
 //Initialise avec des données aléatoires
     m_ui->hzSlider_volume->setValue(RAND(95, 127));
-    m_ui->cmbBox_kbcurb->setCurrentIndex(RAND(0, 3));
-    m_ui->spnBox_velocity->setValue(RAND(0, 31));
+    m_ui->cmbBox_lvlcurb->setCurrentIndex(RAND(0, 3));
+    m_ui->spnBox_vellvl->setValue(RAND(0, 31));
     m_ui->spnBox_lvldph->setValue(RAND(0, 15));
     m_ui->spnBox_adjTL->setValue(RAND(0, 15));
     m_ui->spnBox_fine->setValue(RAND(-4, 3));
@@ -143,10 +143,10 @@ void QOperateur::Randomiser()
     m_ui->spnBox_rtdph->setValue(0);
     m_ui->spnBox_AR->setValue(31);
     m_ui->pshBut_carrier->setChecked((bool) RAND(0, 1));
-    m_ui->spnBox_velmod->setValue(RAND(0, 3));
-    m_ui->spnBox_DR1->setValue(RAND(0, 31));
+    m_ui->spnBox_velAR->setValue(RAND(0, 3));
+    m_ui->spnBox_D1R->setValue(RAND(0, 31));
     m_ui->spnBox_coarse->setValue(RAND(0, 3));
-    m_ui->spnBox_DR2->setValue(RAND(0, 31));
+    m_ui->spnBox_D2R->setValue(RAND(0, 31));
     m_ui->spnBox_SL->setValue(RAND(0, 15));
     m_ui->spnBox_RR->setValue(RAND(0, 15));
 //Actualise l'interface
@@ -160,8 +160,8 @@ void QOperateur::Copier(uchar Table[16])
 {
 //Copie les données
     Table[0]  = (uchar) m_ui->hzSlider_volume->value();
-    Table[1]  = (uchar) m_ui->cmbBox_kbcurb->currentIndex();
-    Table[2]  = (uchar) m_ui->spnBox_velocity->value();
+    Table[1]  = (uchar) m_ui->cmbBox_lvlcurb->currentIndex();
+    Table[2]  = (uchar) m_ui->spnBox_vellvl->value();
     Table[3]  = (uchar) m_ui->spnBox_lvldph->value();
     Table[4]  = (uchar) m_ui->spnBox_adjTL->value();
     Table[5]  = (uchar) m_ui->spnBox_fine->value();
@@ -169,10 +169,10 @@ void QOperateur::Copier(uchar Table[16])
     Table[7]  = (uchar) m_ui->spnBox_rtdph->value();
     Table[8]  = (uchar) m_ui->spnBox_AR->value();
     Table[9]  = (uchar) m_ui->pshBut_carrier->isChecked();
-    Table[10] = (uchar) m_ui->spnBox_velmod->value();
-    Table[11] = (uchar) m_ui->spnBox_DR1->value();
+    Table[10] = (uchar) m_ui->spnBox_velAR->value();
+    Table[11] = (uchar) m_ui->spnBox_D1R->value();
     Table[12] = (uchar) m_ui->spnBox_coarse->value();
-    Table[13] = (uchar) m_ui->spnBox_DR2->value();
+    Table[13] = (uchar) m_ui->spnBox_D2R->value();
     Table[14] = (uchar) m_ui->spnBox_SL->value();
     Table[15] = (uchar) m_ui->spnBox_RR->value();
  }
@@ -183,8 +183,8 @@ void QOperateur::Coller(const uchar Table[16])
     Attente = true;
  //Colle les données
     m_ui->hzSlider_volume->setValue((int)Table[0]);
-    m_ui->cmbBox_kbcurb->setCurrentIndex((int)Table[1]);
-    m_ui->spnBox_velocity->setValue((int)Table[2]);
+    m_ui->cmbBox_lvlcurb->setCurrentIndex((int)Table[1]);
+    m_ui->spnBox_vellvl->setValue((int)Table[2]);
     m_ui->spnBox_lvldph->setValue((int)Table[3]);
     m_ui->spnBox_adjTL->setValue((int)Table[4]);
     m_ui->spnBox_fine->setValue((int)Table[5]);
@@ -192,10 +192,10 @@ void QOperateur::Coller(const uchar Table[16])
     m_ui->spnBox_rtdph->setValue((int)Table[7]);
     m_ui->spnBox_AR->setValue((int)Table[8]);
     m_ui->pshBut_carrier->setChecked((bool)Table[9]);
-    m_ui->spnBox_velmod->setValue((int)Table[10]);
-    m_ui->spnBox_DR1->setValue((int)Table[11]);
+    m_ui->spnBox_velAR->setValue((int)Table[10]);
+    m_ui->spnBox_D1R->setValue((int)Table[11]);
     m_ui->spnBox_coarse->setValue((int)Table[12]);
-    m_ui->spnBox_DR2->setValue((int)Table[13]);
+    m_ui->spnBox_D2R->setValue((int)Table[13]);
     m_ui->spnBox_SL->setValue((int)Table[14]);
     m_ui->spnBox_RR->setValue((int)Table[15]);
     Attente = false;
