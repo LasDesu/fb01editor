@@ -21,14 +21,14 @@
 
 #include "expandeur.h"
 
-//Application
-    extern QApplication * mainApp;
+//****************************************************************************/
+extern QApplication * MainApp;
 
-//Configuration
-    uchar EXPANDEUR::SysChan = 0;
-    uchar EXPANDEUR::Banks[BANKS][BULSIZ];
-    bool  EXPANDEUR::Ram1Val = false;
-    bool  EXPANDEUR::Ram2Val = false;
+//****************************************************************************/
+uchar EXPANDEUR::SysChan = 0;
+uchar EXPANDEUR::Banks[BANKS][BULSIZ];
+bool  EXPANDEUR::Ram1Val = false;
+bool  EXPANDEUR::Ram2Val = false;
 
 /*****************************************************************************/
 void EXPANDEUR::ChoisirSysChan(uchar Chan)
@@ -39,21 +39,15 @@ void EXPANDEUR::ChoisirSysChan(uchar Chan)
 /*****************************************************************************/
 bool EXPANDEUR::RecevoirBank(uchar Bank)
 {
-    MMSG Msg[2];
+    uchar RecBank[] = {0xF0, 0x43, 0x75, 0x00, 0x20, 0x00, 0x00, 0xF7};
 //Prépare la demande
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x20;
-    Msg[1].data[1] = 0x00;
-    Msg[1].data[2] = Bank & 0xF;
-    Msg[1].data[3] = 0xF7;
+    RecBank[3] = SysChan;
+    RecBank[5] = Bank & 0xF;
 //Envoie la demande
-    MIDI::EnvMsgLng(Msg, 8, true);
+    MIDI::EnvMsg(RecBank, 8, true);
     if (!MIDI::AttMsg()) return false;
 //Copie les données
-    MIDI::CopierMsg((MMSG *)Banks[Bank], BULSIZ);
+    MIDI::ExtraireMsg(Banks[Bank], BULSIZ);
     if(Bank == 0) Ram1Val = true;
     if(Bank == 1) Ram2Val = true;
     //MIDI::BackupTampon("c:\\Back.txt");
@@ -65,74 +59,48 @@ void EXPANDEUR::EnvoyerBank(uchar Bank)
 //Prévient l'utilisateur
     if ((Bank == 0 && !Ram1Val) || (Bank == 1 && !Ram2Val))
     {
-        QMessageBox::warning(mainApp->activeWindow(), "FB01 SE:", "Empty banks !");
+        QMessageBox::warning(MainApp->activeWindow(), "FB01 SE:", "Empty banks !");
         return;
     }
 //Envoie le backup
-    MIDI::EnvMsgLng((MMSG *)Banks[Bank], BULSIZ, false);
+    MIDI::EnvMsg(Banks[Bank], BULSIZ, false);
 }
 
 /*****************************************************************************/
 void EXPANDEUR::CopierVoice(int Src, int Dst)
 {
-//Localise le block
-    int BnkSrc = Src / VOICES;
-    int BnkDst = Dst / VOICES;
-    int PosSrc = BLKOFF + (Src % VOICES) * BLKSIZ;
-    int PosDst = BLKOFF + (Dst % VOICES) * BLKSIZ;
-//Copie la voie
-    for (int i=0; i < BLKSIZ; i++)
-        Banks[BnkDst][PosDst + i] = Banks[BnkSrc][PosSrc + i];
+//Copie le block
+    memcpy(&Banks[TRBANK(Dst)][TROFF(Dst)], &Banks[TRBANK(Src)][TROFF(Src)], BLKSIZ);
 }
 
 void EXPANDEUR::EchangerVoice(int Src, int Dst)
 {
-//Localise le block
-    int BnkSrc = Src / VOICES;
-    int BnkDst = Dst / VOICES;
-    int PosSrc = BLKOFF + (Src % VOICES) * BLKSIZ;
-    int PosDst = BLKOFF + (Dst % VOICES) * BLKSIZ;
-//Echange la voie
-    for (int i=0; i < BLKSIZ; i++)
-    {
-        uchar Temp = Banks[BnkSrc][PosSrc + i];
-        Banks[BnkSrc][PosSrc + i] = Banks[BnkDst][PosDst + i];
-        Banks[BnkDst][PosDst + i] = Temp;
-    }
+    uchar Temp[BLKSIZ];
+//Echange les blocks
+    memcpy(Temp, &Banks[TRBANK(Src)][TROFF(Src)], BLKSIZ);
+    memcpy(&Banks[TRBANK(Src)][TROFF(Src)], &Banks[TRBANK(Dst)][TROFF(Dst)], BLKSIZ);
+    memcpy(&Banks[TRBANK(Dst)][TROFF(Dst)], Temp, BLKSIZ);
 }
 
 /*****************************************************************************/
 bool EXPANDEUR::RecevoirSet()
 {
-    MMSG Msg[2];
+    uchar RecSet[] = {0xF0, 0x43, 0x75, 0x00, 0x20, 0x01, 0x00, 0xF7};
 //Prépare la demande
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x20;
-    Msg[1].data[1] = 0x01;
-    Msg[1].data[2] = 0x00;
-    Msg[1].data[3] = 0xF7;
+    RecSet[3] = SysChan;
 //Envoie la demande
-    MIDI::EnvMsgLng(Msg, 8, true);
+    MIDI::EnvMsg(RecSet, 8, true);
     return MIDI::AttMsg();
 }
 
 bool EXPANDEUR::RecevoirVoice(uchar Inst)
 {
-    MMSG Msg[2];
+    uchar RecVoice[] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Prépare la demande
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x20 + ((Inst + 8) & 0xF);
-    Msg[1].data[1] = 0x00;
-    Msg[1].data[2] = 0x00;
-    Msg[1].data[3] = 0xF7;
+    RecVoice[3] = SysChan;
+    RecVoice[4] = 0x20 + ((Inst + 8) & 0xF);
 //Envoie la demande
-    MIDI::EnvMsgLng(Msg, 8, true);
+    MIDI::EnvMsg(RecVoice, 8, true);
     return MIDI::AttMsg();
 }
 
@@ -140,7 +108,6 @@ bool EXPANDEUR::RecevoirVoice(uchar Inst)
 void EXPANDEUR::EcrireBankNom(uchar Bank, uchar Voice, const char * Nom)
 {
     uchar Octet[7];
-//Recopie la chaine
     strncpy((char *) Octet, Nom, 7);
     for (uchar i = 0; i < 7; i++)
         EcrireBankParam(Bank, Voice, i, Octet[i]);
@@ -148,7 +115,6 @@ void EXPANDEUR::EcrireBankNom(uchar Bank, uchar Voice, const char * Nom)
 
 void EXPANDEUR::LireBankNom(uchar Bank, uchar Voice, char * Nom)
 {
-//Recopie la chaine
     for (uchar i = 0; i < 7; i++)
         Nom[i] = (char) LireBankParam(Bank, Voice, i);
     Nom[7] = 0;
@@ -158,7 +124,6 @@ void EXPANDEUR::LireBankNom(uchar Bank, uchar Voice, char * Nom)
 void EXPANDEUR::EcrireSetNom(const char * Nom)
 {
     uchar Octet[8];
-//Recopie la chaine
     strncpy((char *)Octet, Nom, 8);
     for (uchar i = 0; i < 8; i++)
         EcrireSysParam(i, Octet[i]);
@@ -166,7 +131,6 @@ void EXPANDEUR::EcrireSetNom(const char * Nom)
 
 void EXPANDEUR::LireSetNom(char * Nom)
 {
-//Recopie la chaine
     for (uchar i = 0; i < 8; i++)
         Nom[i] = (char) LireSysParam(i);
     Nom[8] = 0;
@@ -176,7 +140,7 @@ void EXPANDEUR::LireSetNom(char * Nom)
 uchar EXPANDEUR::LireInstx06(uchar Inst)
 {
     uchar Detune = LireInstParam(Inst, 0x06);
-    if (Detune > 63) Detune +=0x80;
+    if (Detune > 63) Detune += 0x80;
     return Detune;
 }
 
@@ -184,7 +148,6 @@ uchar EXPANDEUR::LireInstx06(uchar Inst)
 void EXPANDEUR::EcrireVoiceNom(uchar Inst, const char * Nom)
 {
     uchar Octet[7];
-//Recopie la chaine
     strncpy((char *)Octet, Nom, 7);
     for (uchar i = 0; i < 7; i++)
         EcrireVoiceParam(Inst, i, Octet[i]);
@@ -192,7 +155,6 @@ void EXPANDEUR::EcrireVoiceNom(uchar Inst, const char * Nom)
 
 void EXPANDEUR::LireVoiceNom(char * Nom)
 {
-//Recopie la chaine
     for (uchar i = 0; i < 7; i++)
         Nom[i] = (char) LireVoiceParam(i);
     Nom[7] = 0;
@@ -481,14 +443,12 @@ void EXPANDEUR::LireOpx07(uchar Op, uchar * SL, uchar * RR)
 uchar EXPANDEUR::LireBankParam(uchar Bank, uchar Voice, uchar Param)
 {
     int Pos = BLKOFF + 2 + 2 * (int) Param + BLKSIZ * (int) Voice;
-//Lit un paramêtre
     return (Banks[Bank][Pos] & 0xF) + (Banks[Bank][Pos+1] << 4);
 }
 
 void EXPANDEUR::EcrireBankParam(uchar Bank, uchar Voice, uchar Param, uchar Valeur)
 {
     int Pos = BLKOFF + 2 + 2 * (int) Param + BLKSIZ * (int) Voice;
-//Ecrit un paramêtre
     Banks[Bank][Pos] = Valeur & 0xF;
     Banks[Bank][Pos+1] = Valeur >> 4;
 }
@@ -496,42 +456,33 @@ void EXPANDEUR::EcrireBankParam(uchar Bank, uchar Voice, uchar Param, uchar Vale
 /*****************************************************************************/
 void EXPANDEUR::EcrireSysParam(uchar Param, uchar Valeur)
 {
-    MMSG Msg[2];
+    uchar EcrSys[] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
 //Construit le message
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x10;
-    Msg[1].data[1] = Param & 0x7F;
-    Msg[1].data[2] = Valeur & 0x7F;
-    Msg[1].data[3] = 0xF7;
+    EcrSys[3] = SysChan;
+    EcrSys[5] = Param & 0x7F;
+    EcrSys[6] = Valeur & 0x7F;
 //Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 8, false);
+    MIDI::EnvMsg(EcrSys, 8, false);
 }
 
 uchar EXPANDEUR::LireSysParam(uchar Param)
 {
     int Pos = 0x09 + (int) Param;
 //Lit un paramêtre
-    return MIDI::LireMsg(Pos) & 0x7F;
+    return MIDI::LireMsg(Pos);
 }
 
 /*****************************************************************************/
 void EXPANDEUR::EcrireInstParam(uchar Inst, uchar Param, uchar Valeur)
 {
-    MMSG Msg[2];
+    uchar EcrInst[] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Construit le message
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x18 + (Inst & 0x7);
-    Msg[1].data[1] = Param & 0x1F;
-    Msg[1].data[2] = Valeur & 0x7F;
-    Msg[1].data[3] = 0xF7;
+    EcrInst[3] = SysChan;
+    EcrInst[4] = 0x18 + (Inst & 0x7);
+    EcrInst[5] = Param & 0x1F;
+    EcrInst[6] = Valeur & 0x7F;
 //Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 8, false);
+    MIDI::EnvMsg(EcrInst, 8, false);
 }
 
 uchar EXPANDEUR::LireInstParam(uchar Inst, uchar Param)
@@ -544,26 +495,22 @@ uchar EXPANDEUR::LireInstParam(uchar Inst, uchar Param)
 /*****************************************************************************/
 void EXPANDEUR::EcrireVoiceParam(uchar Inst, uchar Param, uchar Valeur)
 {
-    MMSG Msg[3];
+    uchar EcrVoice[] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Construit le message
-    Msg[0].data[0] = 0xF0;
-    Msg[0].data[1] = 0x43;
-    Msg[0].data[2] = 0x75;
-    Msg[0].data[3] = SysChan;
-    Msg[1].data[0] = 0x18 + (Inst & 0x7);
-    Msg[1].data[1] = (Param + 0x40) & 0x7F;
-    Msg[1].data[2] = Valeur & 0xF;
-    Msg[1].data[3] = Valeur >> 4;
-    Msg[2].data[0] = 0xF7;
+    EcrVoice[3] = SysChan;
+    EcrVoice[4] = 0x18 + (Inst & 0x7);
+    EcrVoice[5] = (Param + 0x40) & 0x7F;
+    EcrVoice[6] = Valeur & 0xF;
+    EcrVoice[7] = Valeur >> 4;
 //Transmet le paramêtre
-    MIDI::EnvMsgLng(Msg, 9, false);
+    MIDI::EnvMsg(EcrVoice, 9, false);
 }
 
 uchar EXPANDEUR::LireVoiceParam(uchar Param)
 {
     int Pos = 0x9 + 2 * (int) Param;
 //Lit un paramêtre
-    return (MIDI::LireMsg(Pos) & 0xF) + (MIDI::LireMsg(Pos+1) << 4);
+    return MIDI::LireMsg(Pos) + (MIDI::LireMsg(Pos+1) << 4);
 }
 
 /*****************************************************************************/

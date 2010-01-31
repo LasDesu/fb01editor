@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
-    <height>264</height>
+    <width>574</width>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QGroupBox" name="grpBox_global">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>170</x>
      <y>0</y>
      <width>191</width>
-     <height>261</height>
+     <height>271</height>
     </rect>
    </property>
    <property name="title">
@@ -29,7 +29,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>60</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -48,7 +48,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>50</y>
+      <y>60</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -149,7 +149,7 @@
       <x>100</x>
       <y>20</y>
       <width>81</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
@@ -172,7 +172,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>80</y>
+      <y>90</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -191,7 +191,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
+      <y>90</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -210,7 +210,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>110</y>
+      <y>120</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -229,7 +229,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>120</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -248,7 +248,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>180</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -267,7 +267,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>240</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -279,14 +279,14 @@
      </font>
     </property>
     <property name="text">
-     <string>PMD Control.</string>
+     <string>PMD Control. :</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_pitch_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
+      <y>210</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -305,7 +305,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>150</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -324,7 +324,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>200</y>
+      <y>210</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -337,7 +337,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>140</y>
+      <y>150</y>
       <width>81</width>
       <height>21</height>
      </rect>
@@ -353,7 +353,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>230</y>
+      <y>240</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -388,7 +388,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>170</y>
+      <y>180</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -449,10 +449,10 @@
   <widget class="QGroupBox" name="grpBox_LFO">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>380</x>
      <y>0</y>
      <width>191</width>
-     <height>261</height>
+     <height>271</height>
     </rect>
    </property>
    <property name="title">
@@ -462,7 +462,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>200</y>
+      <y>210</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -500,7 +500,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>140</y>
+      <y>150</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -549,7 +549,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>150</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -568,7 +568,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
+      <y>210</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -625,7 +625,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>230</y>
+      <y>240</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -644,7 +644,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>170</y>
+      <y>180</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -663,7 +663,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>180</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -682,7 +682,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>240</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -774,7 +774,7 @@
      <x>0</x>
      <y>110</y>
      <width>151</width>
-     <height>151</height>
+     <height>161</height>
     </rect>
    </property>
    <property name="title">
@@ -805,7 +805,7 @@
       <x>10</x>
       <y>40</y>
       <width>131</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
@@ -822,13 +822,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
+      <y>100</y>
       <width>131</width>
       <height>51</height>
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
+     <enum>Qt::ScrollBarAlwaysOn</enum>
     </property>
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -841,7 +841,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>80</y>
       <width>71</width>
       <height>16</height>
      </rect>

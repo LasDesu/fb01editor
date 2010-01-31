@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -70,7 +70,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>50</y>
+        <y>60</y>
         <width>321</width>
         <height>141</height>
        </rect>
@@ -244,7 +244,7 @@
         <x>360</x>
         <y>20</y>
         <width>231</width>
-        <height>211</height>
+        <height>221</height>
        </rect>
       </property>
       <property name="title">
@@ -443,7 +443,7 @@
          <x>10</x>
          <y>170</y>
          <width>211</width>
-         <height>31</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="text">
@@ -452,7 +452,8 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;* These informations cannot be retrieved&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;from the FB01 sound module.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;from the FB01 sound module. You must set&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;them manually.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
@@ -1018,9 +1019,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>500</y>
+        <y>496</y>
         <width>91</width>
-        <height>21</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -1033,7 +1034,7 @@ p, li { white-space: pre-wrap; }
        <enum>QPlainTextEdit::NoWrap</enum>
       </property>
       <property name="maximumBlockCount">
-       <number>7</number>
+       <number>0</number>
       </property>
      </widget>
     </widget>
@@ -1044,10 +1045,10 @@ p, li { white-space: pre-wrap; }
      <widget class="QVoice" name="widget_voice" native="true">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>20</x>
         <y>20</y>
-        <width>564</width>
-        <height>264</height>
+        <width>574</width>
+        <height>274</height>
        </rect>
       </property>
      </widget>

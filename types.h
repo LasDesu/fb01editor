@@ -38,3 +38,8 @@
 #ifndef RAND
     #define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
 #endif
+
+#ifndef min
+    #define min(a, b) (a < b ? a : b)
+    #define max(a, b) (a > b ? a : b)
+#endif

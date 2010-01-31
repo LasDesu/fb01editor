@@ -21,7 +21,7 @@
 
 #include "mainwindow.h"
 
-extern QApplication * mainApp;
+extern QApplication * MainApp;
 
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -192,12 +192,18 @@ void MainWindow::ActualiserEditeur()
     if (!ActualiserSet()) goto Erreur;
     if (!ActualiserVoice()) goto Erreur;
     return;
-//Pas de périphérique
 Erreur:
+//Réset les drivers
+    MIDI::DesactiverIn();
+    MIDI::DesactiverOut();
+//Vérrouille l'éditeur
     ConfigurerMenus(0);
     ConfigurerOnglets(false);
-}
+    ui->cmbBox_MIDIIn->setCurrentIndex(0);
+    ui->cmbBox_MIDIOut->setCurrentIndex(0);
 
+}
+/*****************************************************************************/
 bool MainWindow::ActualiserConfig()
 {
 //Reçoit la configuration
@@ -539,7 +545,7 @@ void MainWindow::on_actionPaste_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_actionQuit_triggered(bool checked)
 {
-    mainApp->quit();
+    MainApp->quit();
 }
 
 /*****************************************************************************/
@@ -572,16 +578,14 @@ void MainWindow::on_actionOnline_help_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 {
-//Vérification réception
+//Change de driver
     if (Attente) return;
-//Change le driver
     if (Index < 1)
     {
     //Déselectionne le driver
         MIDI::DesactiverIn();
         ConfigurerOnglets(false);
         ConfigurerMenus(0);
-        return;
     }else{
     //Sélectionne le driver
         MIDI::ActiverIn(Index - 1);
@@ -591,16 +595,14 @@ void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
 
 void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
 {
-//Vérification réception
-    if (Attente) return;
 //Change le driver
+    if (Attente) return;
     if (Index < 1)
     {
     //Déselectionne le driver
         MIDI::DesactiverOut();
         ConfigurerOnglets(false);
         ConfigurerMenus(0);
-        return;
     }else{
     //Sélectionne le driver
         MIDI::ActiverOut(Index - 1);

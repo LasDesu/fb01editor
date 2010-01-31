@@ -22,7 +22,7 @@
 #include "qbanks.h"
 
 //Application
-    extern QApplication * mainApp;
+    extern QApplication * MainApp;
 
 /*****************************************************************************/
 QBanks::QBanks(QWidget *parent) : QWidget(parent), m_ui(new Ui::QBanks)
@@ -54,7 +54,7 @@ QBanks::~QBanks()
 void QBanks::Envoyer(int Bank)
 {
 //Prévient l'utilisateur
-    if (QMessageBox::question(mainApp->activeWindow(), "FB01 SE:", "Ready to send ?",
+    if (QMessageBox::question(MainApp->activeWindow(), "FB01 SE:", "Ready to send ?",
         QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Cancel) return;
 //Envoie les données
     EXPANDEUR::EnvoyerBank(Bank);
@@ -85,8 +85,8 @@ void QBanks::Recevoir()
        //Créé le nouvel item
             QString Pos; Pos.setNum(Voice + 1);
             QTableWidgetItem * ItNom   = new QTableWidgetItem((QString) Nom);
-            QTableWidgetItem * ItBank  = new QTableWidgetItem((QString) BankNoms[Bank]);
             QTableWidgetItem * ItStyle = new QTableWidgetItem((QString) BankStyles[Style]);
+            QTableWidgetItem * ItBank  = new QTableWidgetItem((QString) BankNoms[Bank]);
             QTableWidgetItem * ItVoice = new QTableWidgetItem(Pos);
         //Ajoute les informations
             ItBank->setData(Qt::StatusTipRole, Bank);
@@ -115,7 +115,7 @@ void QBanks::Initialiser(int Bank)
 /*****************************************************************************/
 void QBanks::on_pshBut_bybank_clicked(bool checked)
 {
-    m_ui->table_bank->sortByColumn(3, Qt::AscendingOrder);
+    m_ui->table_bank->sortByColumn(2, Qt::AscendingOrder);
     m_ui->table_bank->setSortingEnabled(checked);
     m_ui->pshBut_byname->setChecked(false);
     m_ui->pshBut_bystyle->setChecked(false);
@@ -131,7 +131,7 @@ void QBanks::on_pshBut_byname_clicked(bool checked)
 
 void QBanks::on_pshBut_bystyle_clicked(bool checked)
 {
-    m_ui->table_bank->sortByColumn(2, Qt::AscendingOrder);
+    m_ui->table_bank->sortByColumn(1, Qt::AscendingOrder);
     m_ui->table_bank->setSortingEnabled(checked);
     m_ui->pshBut_byname->setChecked(false);
     m_ui->pshBut_bybank->setChecked(false);
@@ -167,12 +167,12 @@ void QBanks::on_pshBut_duplicate_clicked(bool checked)
     QList <QTableWidgetItem *> Liste = m_ui->table_bank->selectedItems();
     if (Liste.count() != 8)
     {
-        QMessageBox::information(mainApp->activeWindow(), "FB01 SE:", "Two voices must be selected !");
+        QMessageBox::information(MainApp->activeWindow(), "FB01 SE:", "Two voices must be selected !");
         return;
     }
     if (Liste.at(7)->data(Qt::StatusTipRole).toInt() > 95)
     {
-        QMessageBox::warning(mainApp->activeWindow(), "FB01 SE:", "Cannot copy to rom !");
+        QMessageBox::warning(MainApp->activeWindow(), "FB01 SE:", "Cannot copy to rom !");
         return;
     }
 //Copie la voice
@@ -192,13 +192,13 @@ void QBanks::on_pshBut_exchange_clicked(bool checked)
     QList <QTableWidgetItem *> Liste = m_ui->table_bank->selectedItems();
     if (Liste.count() != 8)
     {
-        QMessageBox::information(mainApp->activeWindow(), "FB01 SE:", "Two voices must be selected !");
+        QMessageBox::information(MainApp->activeWindow(), "FB01 SE:", "Two voices must be selected !");
         return;
     }
     if (Liste.at(3)->data(Qt::StatusTipRole).toInt() > 95 ||
         Liste.at(7)->data(Qt::StatusTipRole).toInt() > 95)
     {
-        QMessageBox::warning(mainApp->activeWindow(), "FB01 SE:", "Cannot exchange with rom !");
+        QMessageBox::warning(MainApp->activeWindow(), "FB01 SE:", "Cannot exchange with rom !");
         return;
     }
 //Echange les voices

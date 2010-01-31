@@ -20,16 +20,16 @@
 */
 
 #include "mainwindow.h"
-QApplication * mainApp;
+QApplication * MainApp;
 
 /*****************************************************************************/
 int main(int argc, char *argv[])
 {
 //Créé l'application
     QApplication app(argc, argv);
-    mainApp = &app;
-    MainWindow mainWin;
+    MainApp = &app;
+    MainWindow MainWin;
 //Démarre le programme
-    mainWin.show();
+    MainWin.show();
     return app.exec();
 }

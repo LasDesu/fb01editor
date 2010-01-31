@@ -125,15 +125,12 @@ void QVoice::Recevoir()
 }
 
 /*****************************************************************************/
+QString AlgNoms[] = {":/ALGO1", ":/ALGO2", ":/ALGO3", ":/ALGO4", ":/ALGO5", ":/ALGO6", ":/ALGO7", ":/ALGO8"};
 void QVoice::on_spnBox_algo_valueChanged(int i)
 {
-//Trouve le nom
-    QPixmap Pix;
-    QString Nom = ":/imgs/algo";
-    QString Num; Num.setNum(i);
-    Nom.append(Num); Nom.append(".bmp");
 //Change d'image
-    Pix.load(Nom);
+    QPixmap Pix;
+    Pix.load(AlgNoms[i-1]);
     m_ui->lbl_algo->setPixmap(Pix);
 //Envoie le code
     EXPANDEUR::EcrireVoicex0C(InstSel, (uchar) m_ui->spnBox_feedback->value(), (uchar) (i - 1));

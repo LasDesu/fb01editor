@@ -22,16 +22,27 @@
 #ifndef EXPANDEUR_H
 #define EXPANDEUR_H
 
-//Inclusions spécifiques
+//****************************************************************************/
+    #include <QtGui/QApplication>
+    #include <QtGui/QMessageBox>
+    #include <string.h>
+
+//****************************************************************************/
+    #include "types.h"
     #include "midi.h"
 
-//Constantes
+//****************************************************************************/
     #define BANKS  7
     #define VOICES 48
     #define BULSIZ 0x18DC
     #define BLKSIZ 0x83
     #define BLKOFF 0x4A
 
+//****************************************************************************/
+    #define TRBANK(p) (p / VOICES)
+    #define TROFF(p)  (BLKOFF + (p % VOICES) * BLKSIZ)
+
+//****************************************************************************/
     class EXPANDEUR
     {
     private:
@@ -39,8 +50,8 @@
         static uchar SysChan;
     //Voices
         static uchar Banks[BANKS][BULSIZ];
-        static bool Ram1Val;
-        static bool Ram2Val;
+        static bool  Ram1Val;
+        static bool  Ram2Val;
     public:
     //Gestion des banks
         static void CopierVoice(int Src, int Dst);

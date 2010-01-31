@@ -22,15 +22,15 @@
 #ifndef MIDI_H
 #define MIDI_H
 
-//Inclusions générales
+//****************************************************************************/
     #include <QtGui/QApplication>
     #include <QtGui/QMessageBox>
     #include <QTime>
     #include <QFile>
+    #include <string.h>
 
-//Inclusions spécifiques
+//****************************************************************************/
     #include "types.h"
-    #include "memory.h"
     #ifdef WIN32
         #include "win32.h"
     #endif
@@ -38,17 +38,11 @@
         #include "linux.h"
     #endif
 
-//Constantes
-    #define TAMPON  6400
-    #define ATTENTE 6000
+//****************************************************************************/
+    #define TAMPON   6400
+    #define ATTENTE 10000
 
-//Messages MIDI
-    typedef union
-    {
-        ulong word;
-        uchar data[4];
-    }MMSG;
-
+//****************************************************************************/
     class MIDI
     {
     public:
@@ -66,13 +60,10 @@
         static void DesactiverOut();
         static bool EstConfigure();
     //Envoi de messages
-        static void EnvMsgLng(MMSG * Msg, int Taille, bool Requete);
-        static void EnvMsg(MMSG * Msg);
-    //Réception
+        static void  EnvMsg(uchar * Msg, int Taille, bool Requete);
         static bool  AttMsg();
-        static void  CopierMsg(MMSG * Temp, int Taille);
         static uchar LireMsg(int Pos);
-        static bool  Recoit();
+        static void  ExtraireMsg(uchar * Temp, int Taille);
     //Envoi de notes
         static void ChoisirNoteChan(int Chan);
         static void Note(uchar Note, uchar Velo);
@@ -82,26 +73,29 @@
     //Configurations
         static void * Ins, * Outs;
         static int   NbIns, NbOuts;
-        static ulong HndIn, HndOut;
+        static uint  HndIn, HndOut;
         static uchar NoteChan;
     //Tampon de réception
         static uchar Tampon[TAMPON];
         static uchar Donnees[TAMPON];
         static bool  Attente;
-    //Utilitaires
+    //Affichage des erreurs
         static void AffErrIn(uint Resultat);
         static void AffErrOut(uint Resultat);
         static void AffAttente(bool Active);
-    #ifdef WIN32
-    //Statut des tampons
-        static MIDIHDR Header;
-        static bool Prepare;
-    //Gestion des tampon
-        static void PreparerTampon();
-        static void DePreparerTampon();
-        static void WINAPI Callback (ulong hmi, uint msg, ulong instance, ulong param1, ulong param2);
-        static void TraiterSysEx();
-    #endif
+    //Fonctions spécifiques
+        #ifdef WIN32
+        //Statut des tampons
+            static MIDIHDR Header;
+            static bool Prepare;
+        //Gestion des tampon
+            static void PreparerTampon();
+            static void DePreparerTampon();
+            static void WINAPI Callback (uint hmi, uint msg, uint instance, uint param1, uint param2);
+            static void TraiterSysEx();
+        #endif
+        #ifdef LINUX
+        #endif
     };
 
 #endif // MIDI_H

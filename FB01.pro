@@ -13,53 +13,52 @@
 # You should have received a copy of the GNU General Public License
 # along with FB01 SE. If not, see <http://www.gnu.org/licenses/>.
 
-TARGET = FB01
+TARGET   = FB01
 TEMPLATE = app
-CONFIG += staticlib \
-    static
+
 SOURCES += main.cpp \
-    mainwindow.cpp \
-    midi.cpp \
-    expandeur.cpp \
-    qclavier.cpp \
-    qinstrument.cpp \
-    qoperateur.cpp \
-    qvoice.cpp \
-    qenveloppe.cpp \
-    qbanks.cpp
+           mainwindow.cpp \
+           midi.cpp \
+           expandeur.cpp \
+           qclavier.cpp \
+           qinstrument.cpp \
+           qoperateur.cpp \
+           qvoice.cpp \
+           qenveloppe.cpp \
+           qbanks.cpp
+
 HEADERS += mainwindow.h \
-    midi.h \
-    expandeur.h \
-    qclavier.h \
-    qinstrument.h \
-    qoperateur.h \
-    qvoice.h \
-    qenveloppe.h \
-    linux.h \
-    types.h \
-    win32.h \
-    qbanks.h
+           midi.h \
+           expandeur.h \
+           qclavier.h \
+           qinstrument.h \
+           qoperateur.h \
+           qvoice.h \
+           qenveloppe.h \
+           linux.h \
+           types.h \
+           win32.h \
+           qbanks.h
+
 FORMS += mainwindow.ui \
-    qinstrument.ui \
-    qoperateur.ui \
-    qvoice.ui \
-    qbanks.ui
+         qinstrument.ui \
+         qoperateur.ui \
+         qvoice.ui \
+         qbanks.ui
+
 RESOURCES += FB01.qrc
+
 winnt { 
-    DEFINES += WIN32
-    
-    # RC_FILE += FB01.rc
-    LIBS += -luser32 \
-        -lwinmm
+    DEFINES += WIN32    
+    LIBS    += -luser32 \ -lwinmm
+    RC_FILE  = FB01.rc
 }
 win32 { 
     DEFINES += WIN32
-    
-    # RC_FILE += FB01.rc
-    LIBS += -luser32 \
-        -lwinmm
+    LIBS    += -luser32 -lwinmm
+    RC_FILE  = FB01.rc
 }
 unix { 
-    LIBS += 
     DEFINES += LINUX
+    LIBS +=
 }

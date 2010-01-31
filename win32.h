@@ -24,19 +24,21 @@
 
 extern "C"
 {
-//Types de données
+//****************************************************************************/
     #define WINAPI __stdcall
+
+//****************************************************************************/
     #define CALLBACK_FUNCTION 0x30000
-//Constantes MIDI
-    #define MIM_LONGDATA 0x3C4
-//Structures MIDI
+    #define MIM_LONGDATA      0x3C4
+
+//****************************************************************************/
     typedef struct
     {
         ushort wMid;
         ushort wPid;
         uint   vDriverVersion;
         char   szPname[32];
-        ulong  dwSupport;
+        uint   dwSupport;
     } MIDIINCAPS;
 
     typedef struct
@@ -49,42 +51,42 @@ extern "C"
         ushort wVoices;
         ushort wNotes;
         ushort wChannelMask;
-        ulong  dwSupport;
+        uint   dwSupport;
     } MIDIOUTCAPS;
 
     typedef struct{
         char *lpData;
-        ulong dwBufferLength;
-        ulong dwBytesRecorded;
-        ulong dwUser;
-        ulong dwFlags;
+        uint dwBufferLength;
+        uint dwBytesRecorded;
+        uint dwUser;
+        uint dwFlags;
         void  *lpNext;
-        ulong reserved;
-        ulong dwOffset;
-        ulong dwReserved[4];
+        uint reserved;
+        uint dwOffset;
+        uint dwReserved[4];
     } MIDIHDR;
 
-//Routines MIDI winmm
+//****************************************************************************/
     uint WINAPI midiOutGetNumDevs(void);
     uint WINAPI midiInGetNumDevs(void);
-    uint WINAPI midiOutOpen(ulong * lphmo, uint uDeviceID, ulong dwCallback, ulong dwCallbackInstance, ulong dwFlags);
-    uint WINAPI midiInOpen(ulong * lphmo, uint uDeviceID, ulong dwCallback, ulong dwCallbackInstance, ulong dwFlags);
-    uint WINAPI midiOutClose(ulong hmo);
-    uint WINAPI midiInClose(ulong hmi);
+    uint WINAPI midiOutOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
+    uint WINAPI midiInOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
+    uint WINAPI midiOutClose(uint hmo);
+    uint WINAPI midiInClose(uint hmi);
     uint WINAPI midiOutGetDevCapsA(uint uDeviceID, MIDIOUTCAPS * lpMidiOutCaps, uint cbMidiOutCaps);
     uint WINAPI midiInGetDevCapsA(uint uDeviceID, MIDIINCAPS * lpMidiInCaps, uint cbMidiInCaps);
-    uint WINAPI midiOutPrepareHeader(ulong hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
-    uint WINAPI midiInPrepareHeader(ulong hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
-    uint WINAPI midiOutUnprepareHeader(ulong hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
-    uint WINAPI midiInUnprepareHeader(ulong hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
+    uint WINAPI midiOutPrepareHeader(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
+    uint WINAPI midiInPrepareHeader(uint hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
+    uint WINAPI midiOutUnprepareHeader(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
+    uint WINAPI midiInUnprepareHeader(uint hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
     uint WINAPI midiOutGetErrorTextA(uint wError, char * lpText, uint cchText);
     uint WINAPI midiInGetErrorTextA(uint wError, char * lpText, uint cchText);
-    uint WINAPI midiInStart(ulong hmi);
-    uint WINAPI midiInStop(ulong hmi);
-    uint WINAPI midiOutReset(ulong hmo);
-    uint WINAPI midiInReset(ulong hmi);
-    uint WINAPI midiOutLongMsg(ulong hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
-    uint WINAPI midiOutShortMsg(ulong hmo, ulong dwMsg);
-    uint WINAPI midiInAddBuffer(ulong hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
+    uint WINAPI midiInStart(uint hmi);
+    uint WINAPI midiInStop(uint hmi);
+    uint WINAPI midiOutReset(uint hmo);
+    uint WINAPI midiInReset(uint hmi);
+    uint WINAPI midiOutLongMsg(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
+    uint WINAPI midiOutShortMsg(uint hmo, uint dwMsg);
+    uint WINAPI midiInAddBuffer(uint hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
 }
 #endif // WIN32_H
