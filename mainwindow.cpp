@@ -55,6 +55,7 @@ void MainWindow::InitialiserEditeur()
     ChangerOP(0);
 //Initialisations diverses
     srand(QTime::currentTime().msec());
+    Copie = NULL;
     TypeCopie = -1;
 //Déverrouille
     Attente = false;
@@ -90,10 +91,12 @@ void MainWindow::TerminerEditeur()
     MIDI::DesactiverOut();
 //Désalloue la liste
     MIDI::DeLister();
+//Libère l'espace de copie
+    if (TypeCopie != -1) free(Copie);
 }
 
 /*****************************************************************************/
-void MainWindow::ConfigurerOnglets(bool Actifs)
+void MainWindow::ConfigurerOnglets(const bool Actifs)
 {
 //Active ou désactive les onglets
     ui->tab_banks->setEnabled(Actifs);
@@ -104,14 +107,13 @@ void MainWindow::ConfigurerOnglets(bool Actifs)
     ui->grpBox_config->setEnabled(Actifs);
 }
 
-
-const bool MenuActifs[6][16] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                                {1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0},
-                                {1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0},
-                                {1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0},
-                                {1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1},
-                                {1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1}};
-void MainWindow::ConfigurerMenus(int Onglet)
+const bool MenuActifs[6][17] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                {1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0},
+                                {1,1,1,1,1,0,0,0,1,0,0,1,1,0,0,0,0},
+                                {1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0},
+                                {1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1},
+                                {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1}};
+void MainWindow::ConfigurerMenus(const int Onglet)
 {
 //Menu fichier
     ui->actionLoad_set->setEnabled(MenuActifs[Onglet][0]);
@@ -123,19 +125,20 @@ void MainWindow::ConfigurerMenus(int Onglet)
     ui->actionRandomize->setEnabled(MenuActifs[Onglet][5]);
     ui->actionCopy->setEnabled(MenuActifs[Onglet][6]);
     ui->actionPaste->setEnabled(MenuActifs[Onglet][7]);
+    ui->actionExchange->setEnabled(MenuActifs[Onglet][8]);
 //Menu configuration
-    ui->actionSend_current_config->setEnabled(MenuActifs[Onglet][8]);
-    ui->actionGet_current_config->setEnabled(MenuActifs[Onglet][9]);
-    ui->actionGet_all_banks->setEnabled(MenuActifs[Onglet][10]);
-    ui->menuSend_bank->setEnabled(MenuActifs[Onglet][11]);
-    ui->actionSend_current_set->setEnabled(MenuActifs[Onglet][12]);
-    ui->actionGet_current_set->setEnabled(MenuActifs[Onglet][13]);
-    ui->actionSend_current_voice->setEnabled(MenuActifs[Onglet][14]);
-    ui->actionGet_current_voice->setEnabled(MenuActifs[Onglet][15]);
+    ui->actionSend_current_config->setEnabled(MenuActifs[Onglet][9]);
+    ui->actionGet_current_config->setEnabled(MenuActifs[Onglet][10]);
+    ui->actionGet_all_banks->setEnabled(MenuActifs[Onglet][11]);
+    ui->menuSend_bank->setEnabled(MenuActifs[Onglet][12]);
+    ui->actionSend_current_set->setEnabled(MenuActifs[Onglet][13]);
+    ui->actionGet_current_set->setEnabled(MenuActifs[Onglet][14]);
+    ui->actionSend_current_voice->setEnabled(MenuActifs[Onglet][15]);
+    ui->actionGet_current_voice->setEnabled(MenuActifs[Onglet][16]);
 }
 
 /*****************************************************************************/
-void MainWindow::ChangerPage(int Page)
+void MainWindow::ChangerPage(const int Page)
 {
 //Mémorisation de la page
     PageSel = Page;
@@ -151,7 +154,7 @@ void MainWindow::ChangerPage(int Page)
     }
 }
 
-void MainWindow::ChangerInst(int Inst)
+void MainWindow::ChangerInst(const int Inst)
 {
 //Actualise l'interface
     ui->pshBut_inst_cur_1->setChecked(Inst == 0);
@@ -169,7 +172,7 @@ void MainWindow::ChangerInst(int Inst)
     InstSel = Inst;
 }
 
-void MainWindow::ChangerOP(int OP)
+void MainWindow::ChangerOP(const int OP)
 {
 //Actualise l'interface
     ui->pshBut_op_cur_1->setChecked(OP == 0);
@@ -189,8 +192,8 @@ void MainWindow::ActualiserEditeur()
     ConfigurerOnglets(true);
 //Récupère les informations
     if (!ActualiserConfig()) goto Erreur;
-    if (!ActualiserSet()) goto Erreur;
-    if (!ActualiserVoice()) goto Erreur;
+    if (!ActualiserSet())    goto Erreur;
+    if (!ActualiserVoice())  goto Erreur;
     return;
 Erreur:
 //Réset les drivers
@@ -405,7 +408,7 @@ BadFile:
 /*****************************************************************************/
 const char ChargeTitres[3][20] = {"Load a bank :", "Load a set :", "Load a voice :"};
 const char Exts[3][4]= {"fbb", "fbs", "fbv"};
-QFile * MainWindow::ChargerFichier(int Type, short Version)
+QFile * MainWindow::ChargerFichier(const int Type, const short Version)
 {
     short Ver;
     char  Text[3];
@@ -442,7 +445,7 @@ NewFile:
 }
 
 char EnregTitres[3][20] = {"Save a bank :", "Save a set :", "Save a voice :"};
-QFile * MainWindow::EnregistrerFichier(int Type, short Version)
+QFile * MainWindow::EnregistrerFichier(const int Type, const short Version)
 {
     QFile * Fichier;
 //Ouvre le sélecteur
@@ -499,22 +502,23 @@ void MainWindow::on_actionRandomize_triggered(bool checked)
 void MainWindow::on_actionCopy_triggered(bool checked)
 {
     if (Attente) return;
+    if (Copie) free(Copie);
     if (ui->tabWidget->currentIndex() == 4)
     {
-    //Opération sur les opérateurs
-        Operas[OPSel]->Copier(TabCopie);
+        Copie = (uchar *) malloc(LNGOP);
+        Operas[OPSel]->Copier(Copie);
         TypeCopie = 0;
     }
     else if (ui->tabWidget->currentIndex() == 3)
     {
-    //Opération sur la voice
-        ui->widget_voice->Copier(TabCopie);
+        Copie = (uchar *) malloc(LNGVOICE);
+        ui->widget_voice->Copier(Copie);
         TypeCopie = 1;
     }
     else if (ui->tabWidget->currentIndex() == 2)
     {
-    //Opération sur les instruments
-        Insts[InstSel]->Copier(TabCopie);
+        Copie = (uchar *) malloc(LNGINST);
+        Insts[InstSel]->Copier(Copie);
         TypeCopie = 2;
     }
 }
@@ -524,22 +528,21 @@ void MainWindow::on_actionPaste_triggered(bool checked)
     if (Attente) return;
     if (ui->tabWidget->currentIndex() == 4)
     {
-    //Opération sur les opérateurs
-        if (TypeCopie == 0)
-            Operas[OPSel]->Coller(TabCopie);
+        if (TypeCopie == 0) Operas[OPSel]->Coller(Copie);
     }
     else if (ui->tabWidget->currentIndex() == 3)
     {
-    //Opération sur la voice
-        if (TypeCopie == 1)
-            ui->widget_voice->Coller(TabCopie);
+        if (TypeCopie == 1) ui->widget_voice->Coller(Copie);
     }
     else if (ui->tabWidget->currentIndex() == 2)
     {
-    //Opération sur les instruments
-        if (TypeCopie == 2)
-            Insts[InstSel]->Coller(TabCopie);
+        if (TypeCopie == 2) Insts[InstSel]->Coller(Copie);
     }
+}
+
+/*****************************************************************************/
+void MainWindow::on_actionExchange_triggered(bool checked)
+{
 }
 
 /*****************************************************************************/

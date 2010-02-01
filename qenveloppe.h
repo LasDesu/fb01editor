@@ -22,11 +22,12 @@
 #ifndef QENVELOPPE_H
 #define QENVELOPPE_H
 
-//Inclusions générales
+/*****************************************************************************/
     #include <QtGui/QLabel>
     #include <QtGui/QMouseEvent>
     #include <QPainter>
 
+/*****************************************************************************/
     class QEnveloppe : public QLabel
     {
     public:

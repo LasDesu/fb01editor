@@ -32,8 +32,8 @@ void * MIDI::Outs = NULL;
 int    MIDI::NbIns  = 0;
 int    MIDI::NbOuts = 0;
 uchar  MIDI::NoteChan = 0;
-uchar  MIDI::Tampon[TAMPON];
-uchar  MIDI::Donnees[TAMPON];
+uchar  MIDI::Tampon[LNGTAMP];
+uchar  MIDI::Donnees[LNGTAMP];
 
 //****************************************************************************/
 #ifdef WIN32
@@ -88,7 +88,7 @@ int MIDI::NbDriversOut()
 }
 
 /*****************************************************************************/
-char * MIDI::DriverIn(int Index)
+char * MIDI::DriverIn(const int Index)
 {
     #ifdef WIN32
         return ((MIDIINCAPS *)Ins)[Index].szPname;
@@ -98,7 +98,7 @@ char * MIDI::DriverIn(int Index)
     #endif
 }
 
-char * MIDI::DriverOut(int Index)
+char * MIDI::DriverOut(const int Index)
 {
     #ifdef WIN32
         return ((MIDIOUTCAPS *)Outs)[Index].szPname;
@@ -109,7 +109,7 @@ char * MIDI::DriverOut(int Index)
 }
 
 /*****************************************************************************/
-void MIDI::ActiverIn(int Index)
+void MIDI::ActiverIn(const int Index)
 {
 //Désactive le port précédent
     DesactiverIn();
@@ -145,7 +145,7 @@ void MIDI::DesactiverIn()
 }
 
 /*****************************************************************************/
-void MIDI::ActiverOut(int Index)
+void MIDI::ActiverOut(const int Index)
 {
 //Désactive le port précédent
     DesactiverOut();
@@ -223,7 +223,7 @@ void MIDI::AffErrOut(uint Resultat)
 }
 
 /*****************************************************************************/
-void MIDI::EnvMsg(uchar * Msg, int Taille, bool Requete)
+void MIDI::EnvMsg(uchar * Msg, const int Taille, const bool Requete)
 {
 //Vérifie l'ouverture
     if (HndOut == 0) return;
@@ -247,12 +247,12 @@ void MIDI::EnvMsg(uchar * Msg, int Taille, bool Requete)
 }
 
 /*****************************************************************************/
-void MIDI::ChoisirNoteChan(int Chan)
+void MIDI::ChoisirNoteChan(const int Chan)
 {
     NoteChan = Chan;
 }
 
-void MIDI::Note(uchar Note, uchar Velo)
+void MIDI::Note(const uchar Note, const uchar Velo)
 {
     uchar Msg[3];
 //Active une note
@@ -286,7 +286,7 @@ bool MIDI::AttMsg()
             }
         }
     //Récupère les données
-        memcpy(Donnees, Tampon, TAMPON);
+        memcpy(Donnees, Tampon, LNGTAMP);
         PreparerTampon();
     #endif
 //Termine l'attente
@@ -295,15 +295,14 @@ bool MIDI::AttMsg()
 }
 
 /*****************************************************************************/
-void MIDI::ExtraireMsg(uchar * Msg, int Taille)
+void MIDI::ExtraireMsg(uchar * Msg, const int Taille)
 {
-    Taille = min(TAMPON, Taille);
-    if (Msg != NULL) memcpy(Msg, Donnees, Taille);
+    if (Msg != NULL) memcpy(Msg, Donnees, min(LNGTAMP, Taille));
 }
 
-uchar MIDI::LireMsg(int Pos)
+uchar MIDI::LireMsg(const int Pos)
 {
-    if (Pos < TAMPON) return Donnees[Pos];
+    if (Pos < LNGTAMP) return Donnees[Pos];
     return 0;
 }
 
@@ -313,10 +312,10 @@ void MIDI::PreparerTampon()
 {
 //Initialise le tampon
     DePreparerTampon();
-    memset(Tampon, 0, TAMPON);
+    memset(Tampon, 0, LNGTAMP);
     memset(&Header, 0, sizeof(MIDIHDR));
 //Configure l'entête
-    Header.dwBufferLength = TAMPON;
+    Header.dwBufferLength = LNGTAMP;
     Header.lpData = (char *) Tampon;
 //Prépare le tampon
     uint Resultat = midiInPrepareHeader(HndIn, &Header, sizeof(MIDIHDR));
@@ -347,7 +346,7 @@ void MIDI::BackupTampon(char * Chemin)
 //Effectue un backup
     QFile Fichier((QString)Chemin);
     Fichier.open(QIODevice::WriteOnly);
-    Fichier.write((char *) Donnees, TAMPON);
+    Fichier.write((char *) Donnees, LNGTAMP);
     Fichier.close();
 }
 

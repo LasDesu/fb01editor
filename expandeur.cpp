@@ -26,7 +26,7 @@ extern QApplication * MainApp;
 
 //****************************************************************************/
 uchar EXPANDEUR::SysChan = 0;
-uchar EXPANDEUR::Banks[BANKS][BULSIZ];
+uchar EXPANDEUR::Banks[NBBANKS][LNGBULK];
 bool  EXPANDEUR::Ram1Val = false;
 bool  EXPANDEUR::Ram2Val = false;
 
@@ -47,7 +47,7 @@ bool EXPANDEUR::RecevoirBank(uchar Bank)
     MIDI::EnvMsg(RecBank, 8, true);
     if (!MIDI::AttMsg()) return false;
 //Copie les données
-    MIDI::ExtraireMsg(Banks[Bank], BULSIZ);
+    MIDI::ExtraireMsg(Banks[Bank], LNGBULK);
     if(Bank == 0) Ram1Val = true;
     if(Bank == 1) Ram2Val = true;
     //MIDI::BackupTampon("c:\\Back.txt");
@@ -63,23 +63,23 @@ void EXPANDEUR::EnvoyerBank(uchar Bank)
         return;
     }
 //Envoie le backup
-    MIDI::EnvMsg(Banks[Bank], BULSIZ, false);
+    MIDI::EnvMsg(Banks[Bank], LNGBULK, false);
 }
 
 /*****************************************************************************/
 void EXPANDEUR::CopierVoice(int Src, int Dst)
 {
 //Copie le block
-    memcpy(&Banks[TRBANK(Dst)][TROFF(Dst)], &Banks[TRBANK(Src)][TROFF(Src)], BLKSIZ);
+    memcpy(&Banks[TRBANK(Dst)][TROFF(Dst)], &Banks[TRBANK(Src)][TROFF(Src)], LNGBLK);
 }
 
 void EXPANDEUR::EchangerVoice(int Src, int Dst)
 {
-    uchar Temp[BLKSIZ];
+    uchar Temp[LNGBLK];
 //Echange les blocks
-    memcpy(Temp, &Banks[TRBANK(Src)][TROFF(Src)], BLKSIZ);
-    memcpy(&Banks[TRBANK(Src)][TROFF(Src)], &Banks[TRBANK(Dst)][TROFF(Dst)], BLKSIZ);
-    memcpy(&Banks[TRBANK(Dst)][TROFF(Dst)], Temp, BLKSIZ);
+    memcpy(Temp, &Banks[TRBANK(Src)][TROFF(Src)], LNGBLK);
+    memcpy(&Banks[TRBANK(Src)][TROFF(Src)], &Banks[TRBANK(Dst)][TROFF(Dst)], LNGBLK);
+    memcpy(&Banks[TRBANK(Dst)][TROFF(Dst)], Temp, LNGBLK);
 }
 
 /*****************************************************************************/
@@ -107,33 +107,33 @@ bool EXPANDEUR::RecevoirVoice(uchar Inst)
 /*****************************************************************************/
 void EXPANDEUR::EcrireBankNom(uchar Bank, uchar Voice, const char * Nom)
 {
-    uchar Octet[7];
-    strncpy((char *) Octet, Nom, 7);
-    for (uchar i = 0; i < 7; i++)
+    uchar Octet[LNGBANKNM];
+    strncpy((char *) Octet, Nom, LNGBANKNM);
+    for (uchar i = 0; i < LNGBANKNM-1; i++)
         EcrireBankParam(Bank, Voice, i, Octet[i]);
 }
 
 void EXPANDEUR::LireBankNom(uchar Bank, uchar Voice, char * Nom)
 {
-    for (uchar i = 0; i < 7; i++)
+    for (uchar i = 0; i < LNGBANKNM-1; i++)
         Nom[i] = (char) LireBankParam(Bank, Voice, i);
-    Nom[7] = 0;
+    Nom[LNGBANKNM-1] = 0;
 }
 
 /*****************************************************************************/
 void EXPANDEUR::EcrireSetNom(const char * Nom)
 {
-    uchar Octet[8];
-    strncpy((char *)Octet, Nom, 8);
-    for (uchar i = 0; i < 8; i++)
+    uchar Octet[LNGSETNM];
+    strncpy((char *)Octet, Nom, LNGSETNM);
+    for (uchar i = 0; i < LNGSETNM-1; i++)
         EcrireSysParam(i, Octet[i]);
 }
 
 void EXPANDEUR::LireSetNom(char * Nom)
 {
-    for (uchar i = 0; i < 8; i++)
+    for (uchar i = 0; i < LNGSETNM-1; i++)
         Nom[i] = (char) LireSysParam(i);
-    Nom[8] = 0;
+    Nom[LNGSETNM-1] = 0;
 }
 
 /*****************************************************************************/
@@ -147,17 +147,17 @@ uchar EXPANDEUR::LireInstx06(uchar Inst)
 /*****************************************************************************/
 void EXPANDEUR::EcrireVoiceNom(uchar Inst, const char * Nom)
 {
-    uchar Octet[7];
-    strncpy((char *)Octet, Nom, 7);
-    for (uchar i = 0; i < 7; i++)
+    uchar Octet[LNGVOICENM];
+    strncpy((char *)Octet, Nom, LNGVOICENM);
+    for (uchar i = 0; i < LNGVOICENM-1; i++)
         EcrireVoiceParam(Inst, i, Octet[i]);
 }
 
 void EXPANDEUR::LireVoiceNom(char * Nom)
 {
-    for (uchar i = 0; i < 7; i++)
+    for (uchar i = 0; i < LNGVOICENM-1; i++)
         Nom[i] = (char) LireVoiceParam(i);
-    Nom[7] = 0;
+    Nom[LNGVOICENM-1] = 0;
 }
 
 /*****************************************************************************/
@@ -442,14 +442,14 @@ void EXPANDEUR::LireOpx07(uchar Op, uchar * SL, uchar * RR)
 /*****************************************************************************/
 uchar EXPANDEUR::LireBankParam(uchar Bank, uchar Voice, uchar Param)
 {
-    int Pos = BLKOFF + 2 + 2 * (int) Param + BLKSIZ * (int) Voice;
+    int Pos = OFFBLK + 2 + 2 * (int) Param + LNGBLK * (int) Voice;
     return (Banks[Bank][Pos] & 0xF) + (Banks[Bank][Pos+1] << 4);
 }
 
 void EXPANDEUR::EcrireBankParam(uchar Bank, uchar Voice, uchar Param, uchar Valeur)
 {
-    int Pos = BLKOFF + 2 + 2 * (int) Param + BLKSIZ * (int) Voice;
-    Banks[Bank][Pos] = Valeur & 0xF;
+    int Pos = OFFBLK + 2 + 2 * (int) Param + LNGBLK * (int) Voice;
+    Banks[Bank][Pos]   = Valeur & 0xF;
     Banks[Bank][Pos+1] = Valeur >> 4;
 }
 
@@ -510,7 +510,7 @@ uchar EXPANDEUR::LireVoiceParam(uchar Param)
 {
     int Pos = 0x9 + 2 * (int) Param;
 //Lit un paramêtre
-    return MIDI::LireMsg(Pos) + (MIDI::LireMsg(Pos+1) << 4);
+    return (MIDI::LireMsg(Pos) & 0xF) + (MIDI::LireMsg(Pos+1) << 4);
 }
 
 /*****************************************************************************/

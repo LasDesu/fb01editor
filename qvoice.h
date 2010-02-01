@@ -1,38 +1,40 @@
 #ifndef QVOICE_H
 #define QVOICE_H
 
-//Inclusions générales
+/*****************************************************************************/
     #include "ui_qvoice.h"
     #include <QFile>
     #include <QPixmap>
 
-//Inclusions spécifiques
+/*****************************************************************************/
     #include "expandeur.h"
 
-//Constantes
-    #define INFOS 129
+/*****************************************************************************/
+    #define LNGINFOS 129
+    #define LNGVOICE 16
 
-namespace Ui {
-    class QVoice;
-}
+/*****************************************************************************/
+    namespace Ui {
+        class QVoice;
+    }
 
-class QVoice : public QWidget {
-    Q_OBJECT
-public:
+    class QVoice : public QWidget {
+        Q_OBJECT
+    public:
     //Constructeurs
         QVoice(QWidget *parent = 0);
         ~QVoice();
     //Gestion de la configuration
-        void  ChangerInst(uchar Inst);
+        void  ChangerInst(const uchar Inst);
         uchar RecupererInst();
     //Chargement/enregistrement
         bool Enregistrer(QFile * Fichier);
-        bool Charger(QFile * Fichier, int Version);
+        bool Charger(QFile * Fichier, const int Version);
     //Interface et édition
         void Initialiser();
         void Randomiser();
-        void Copier(uchar Table[16]);
-        void Coller(const uchar Table[16]);
+        void Copier(uchar * Table);
+        void Coller(const uchar * Table);
         void Rafraichir();
     //Communication
         void Envoyer();
@@ -69,17 +71,17 @@ public:
             {if (!Attente) EXPANDEUR::EcrireVoicex0E(InstSel, (uchar) i);}
         void on_pshBut_LFOload_clicked(bool checked)
             {if (!Attente) EXPANDEUR::EcrireVoicex09(InstSel, ! checked, (uchar) m_ui->spnBox_AMD->value());}
-    void on_pshBut_LFOsync_clicked(bool checked)
-        {if (!Attente) EXPANDEUR::EcrireVoicex0A(InstSel, ! checked, (uchar) m_ui->spnBox_PMD->value());}
-    void on_spnBox_AMD_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireVoicex09(InstSel, ! m_ui->pshBut_LFOload->isChecked(), (uchar) i);}
-    void on_spnBox_AMS_valueChanged(int i)
-         {if (!Attente) EXPANDEUR::EcrireVoicex0D(InstSel, m_ui->spnBox_PMS->value(), (uchar) i);}
-    void on_spnBox_PMD_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireVoicex0A(InstSel, ! m_ui->pshBut_LFOsync->isChecked(), (uchar) i);}
-    void on_spnBox_PMS_valueChanged(int i)
-        {if (!Attente) EXPANDEUR::EcrireVoicex0D(InstSel, (uchar) i, (uchar) m_ui->spnBox_AMS->value());}
-    void on_spnBox_algo_valueChanged(int i);
-};
+        void on_pshBut_LFOsync_clicked(bool checked)
+            {if (!Attente) EXPANDEUR::EcrireVoicex0A(InstSel, ! checked, (uchar) m_ui->spnBox_PMD->value());}
+        void on_spnBox_AMD_valueChanged(int i)
+            {if (!Attente) EXPANDEUR::EcrireVoicex09(InstSel, ! m_ui->pshBut_LFOload->isChecked(), (uchar) i);}
+        void on_spnBox_AMS_valueChanged(int i)
+             {if (!Attente) EXPANDEUR::EcrireVoicex0D(InstSel, m_ui->spnBox_PMS->value(), (uchar) i);}
+        void on_spnBox_PMD_valueChanged(int i)
+            {if (!Attente) EXPANDEUR::EcrireVoicex0A(InstSel, ! m_ui->pshBut_LFOsync->isChecked(), (uchar) i);}
+        void on_spnBox_PMS_valueChanged(int i)
+            {if (!Attente) EXPANDEUR::EcrireVoicex0D(InstSel, (uchar) i, (uchar) m_ui->spnBox_AMS->value());}
+        void on_spnBox_algo_valueChanged(int i);
+    };
 
 #endif // QVOICE_H

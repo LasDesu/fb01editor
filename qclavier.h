@@ -22,13 +22,14 @@
 #ifndef QCLAVIER_H
 #define QCLAVIER_H
 
-//Inclusions générales
+/*****************************************************************************/
     #include <QtGui/QLabel>
     #include <QtGui/QMouseEvent>
 
-//Inclusions spécifiques
+/*****************************************************************************/
     #include "midi.h"
 
+/*****************************************************************************/
     class QClavier : public QLabel
     {
     public:

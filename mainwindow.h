@@ -22,20 +22,21 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-//Inclusions générales
+/*****************************************************************************/
     #include "ui_mainwindow.h"
     #include <QtGui/QApplication>
     #include <QtGui/QMessageBox>
     #include <QtGui/QFileDialog>
     #include <QList>
 
-//Inclusions spécifiques
+/*****************************************************************************/
     #include "expandeur.h"
     #include "midi.h"
 
-//Constantes
+/*****************************************************************************/
     #define VERSION 1
 
+/*****************************************************************************/
     namespace Ui
     {
         class MainWindow;
@@ -53,9 +54,10 @@
         QOperateur  * Operas[4];
         QInstrument * Insts[8];
         bool Attente;
-    //Paramêtres d'édition
-        uchar TabCopie[16];
+    //Espace de copie
+        uchar * Copie;
         int TypeCopie;
+    //Paramêtres d'édition
         int PageSel;
         int InstSel;
         int OPSel;
@@ -64,8 +66,8 @@
         void InitialiserInterface();
         void TerminerEditeur();
     //Archivage
-        QFile * ChargerFichier(int Type, short Version);
-        QFile * EnregistrerFichier(int Type, short Version);
+        QFile * ChargerFichier(const int Type, const short Version);
+        QFile * EnregistrerFichier(const int Type, const short Version);
     //Communication
         void Envoyer();
     //Actualisation
@@ -75,11 +77,11 @@
         bool ActualiserConfig();
         bool ActualiserBank();
     //Utilitaires
-        void ConfigurerOnglets(bool Actifs);
-        void ConfigurerMenus(int Onglet);
-        void ChangerPage(int Page);
-        void ChangerInst(int Inst);
-        void ChangerOP(int OP);
+        void ConfigurerOnglets(const bool Actifs);
+        void ConfigurerMenus(const int Onglet);
+        void ChangerPage(const int Page);
+        void ChangerInst(const int Inst);
+        void ChangerOP(const int OP);
     private slots:
     //Sélection des drivers
         void on_cmbBox_MIDIIn_activated(int Index);
@@ -96,6 +98,7 @@
         void on_actionRandomize_triggered(bool checked = false);
         void on_actionCopy_triggered(bool checked = false);
         void on_actionPaste_triggered(bool checked = false);
+        void on_actionExchange_triggered(bool checked = false);
     //Menu configuration
         void on_actionSend_current_config_triggered(bool checked = false)
             {if (!Attente) Envoyer();}

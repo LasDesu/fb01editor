@@ -39,7 +39,7 @@
     #endif
 
 //****************************************************************************/
-    #define TAMPON   6400
+    #define LNGTAMP 6400
     #define ATTENTE 10000
 
 //****************************************************************************/
@@ -51,22 +51,22 @@
         static void DeLister();
         static int  NbDriversIn();
         static int  NbDriversOut();
-        static char * DriverIn(int Index);
-        static char * DriverOut(int Index);
+        static char * DriverIn(const int Index);
+        static char * DriverOut(const int Index);
     //Initialisation
-        static void ActiverIn(int Index);
+        static void ActiverIn(const int Index);
         static void DesactiverIn();
-        static void ActiverOut(int Index);
+        static void ActiverOut(const int Index);
         static void DesactiverOut();
         static bool EstConfigure();
     //Envoi de messages
-        static void  EnvMsg(uchar * Msg, int Taille, bool Requete);
+        static void  EnvMsg(uchar * Msg, const int Taille, bool Requete);
         static bool  AttMsg();
-        static uchar LireMsg(int Pos);
-        static void  ExtraireMsg(uchar * Temp, int Taille);
+        static uchar LireMsg(const int Pos);
+        static void  ExtraireMsg(uchar * Temp, const int Taille);
     //Envoi de notes
-        static void ChoisirNoteChan(int Chan);
-        static void Note(uchar Note, uchar Velo);
+        static void ChoisirNoteChan(const int Chan);
+        static void Note(const uchar Note, const uchar Velo);
     //Debug
         static void BackupTampon(char * Chemin);
     private:
@@ -76,12 +76,12 @@
         static uint  HndIn, HndOut;
         static uchar NoteChan;
     //Tampon de réception
-        static uchar Tampon[TAMPON];
-        static uchar Donnees[TAMPON];
+        static uchar Tampon[LNGTAMP];
+        static uchar Donnees[LNGTAMP];
         static bool  Attente;
     //Affichage des erreurs
-        static void AffErrIn(uint Resultat);
-        static void AffErrOut(uint Resultat);
+        static void AffErrIn(const uint Resultat);
+        static void AffErrOut(const uint Resultat);
         static void AffAttente(bool Active);
     //Fonctions spécifiques
         #ifdef WIN32

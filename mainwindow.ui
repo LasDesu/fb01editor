@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -1309,6 +1309,8 @@ p, li { white-space: pre-wrap; }
     <addaction name="separator"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionExchange"/>
    </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuEdit"/>
@@ -1418,6 +1420,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionRam_2">
    <property name="text">
     <string>Ram 2</string>
+   </property>
+  </action>
+  <action name="actionExchange">
+   <property name="text">
+    <string>Exchange</string>
    </property>
   </action>
  </widget>

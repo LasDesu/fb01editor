@@ -17,7 +17,7 @@ QInstrument::~QInstrument()
 }
 
 /*****************************************************************************/
-void QInstrument::ChangerID(uchar ID)
+void QInstrument::ChangerID(const uchar ID)
 {
 //Prépare le nom
     QString nom = "Instrument ";
@@ -51,13 +51,13 @@ void QInstrument::InitialiserNotes(QComboBox * Box)
 }
 
 /*****************************************************************************/
-bool QInstrument::Charger(QFile * Fichier, int Version)
+bool QInstrument::Charger(QFile * Fichier, const int Version)
 {
     uchar Table[16];
 //Vérrouille l'interface
     Attente = true;
 //Charge les données
-    Fichier->read((char *)Table, 15);
+    Fichier->read((char *) Table, 15);
     if (Fichier->error()) return true;
     Coller(Table);
 //Déverrouille
@@ -154,7 +154,7 @@ void QInstrument::Randomiser()
 }
 
 /*****************************************************************************/
-void QInstrument::Copier(uchar Table[16])
+void QInstrument::Copier(uchar * Table)
 {
 //Copie les données
     Table[0]  = (uchar) m_ui->spnBox_notes->value();
@@ -174,7 +174,7 @@ void QInstrument::Copier(uchar Table[16])
     Table[14] = (uchar) m_ui->cmbBox_pmdctl->currentIndex();
 }
 
-void QInstrument::Coller(const uchar Table[16])
+void QInstrument::Coller(const uchar * Table)
 {
 //Vérrouille l'interface
     Attente = true;
@@ -198,6 +198,11 @@ void QInstrument::Coller(const uchar Table[16])
     Attente = false;
     Envoyer();
  }
+
+/*****************************************************************************/
+void QInstrument::Echanger(QInstrument * Inst)
+{
+}
 
 /*****************************************************************************/
 void QInstrument::changeEvent(QEvent *e)

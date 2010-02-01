@@ -32,15 +32,18 @@
     #include "midi.h"
 
 //****************************************************************************/
-    #define BANKS  7
-    #define VOICES 48
-    #define BULSIZ 0x18DC
-    #define BLKSIZ 0x83
-    #define BLKOFF 0x4A
+    #define NBBANKS    7
+    #define NBVOICES   48
+    #define LNGBULK    0x18DC
+    #define LNGBLK     0x83
+    #define OFFBLK     0x4A
+    #define LNGBANKNM  8
+    #define LNGSETNM   8
+    #define LNGVOICENM 7
 
 //****************************************************************************/
-    #define TRBANK(p) (p / VOICES)
-    #define TROFF(p)  (BLKOFF + (p % VOICES) * BLKSIZ)
+    #define TRBANK(p) (p / NBVOICES)
+    #define TROFF(p)  (OFFBLK + (p % NBVOICES) * LNGBLK)
 
 //****************************************************************************/
     class EXPANDEUR
@@ -49,7 +52,7 @@
     //Configuration
         static uchar SysChan;
     //Voices
-        static uchar Banks[BANKS][BULSIZ];
+        static uchar Banks[NBBANKS][LNGBULK];
         static bool  Ram1Val;
         static bool  Ram2Val;
     public:

@@ -32,7 +32,7 @@ uchar QOperateur::RecupererID()
 }
 
 /*****************************************************************************/
-void QOperateur::ChangerInst(uchar Inst)
+void QOperateur::ChangerInst(const uchar Inst)
 {
     InstSel = Inst;
 }
@@ -43,13 +43,13 @@ uchar QOperateur::RecupererInst()
 }
 
 /*****************************************************************************/
-bool QOperateur::Charger(QFile * Fichier, int Version)
+bool QOperateur::Charger(QFile * Fichier, const int Version)
 {
     uchar Table[16];
 //Vérrouille l'interface
     Attente = true;
 //Charge les données
-    Fichier->read((char *) Table, 16);
+    Fichier->read((char *) Table, LNGOP);
     if (Fichier->error()) return true;
     Coller(Table);
 //Déverrouille
@@ -62,7 +62,7 @@ bool QOperateur::Enregistrer(QFile * Fichier)
     uchar Table[16];
 //Enregistre les données
     Copier(Table);
-    Fichier->write((char *) Table, 16);
+    Fichier->write((char *) Table, LNGOP);
 //Vérifie les erreurs
     if (Fichier->error()) return true;
     return false;
@@ -122,7 +122,7 @@ void QOperateur::Recevoir()
 }
 
 /*****************************************************************************/
-const uchar InitTab[16] = {127, 0, 0, 0, 0, 0, 0, 0, 31, 1, 0, 31, 0, 0, 15, 15};
+const uchar InitTab[LNGOP] = {127, 0, 0, 0, 0, 0, 0, 0, 31, 1, 0, 31, 0, 0, 15, 15};
 void QOperateur::Initialiser()
 {
     Coller(InitTab);
@@ -150,13 +150,26 @@ void QOperateur::Randomiser()
     m_ui->spnBox_SL->setValue(RAND(0, 15));
     m_ui->spnBox_RR->setValue(RAND(0, 15));
 //Actualise l'interface
-    Attente = false;
     Rafraichir();
     Envoyer();
+//Déverrouille
+    Attente = false;
 }
 
 /*****************************************************************************/
-void QOperateur::Copier(uchar Table[16])
+void QOperateur::Echanger(QOperateur * Op)
+{
+    uchar Table1[LNGOP];
+    uchar Table2[LNGOP];
+//Echange les opérateurs
+    Op->Copier(Table1);
+    this->Copier(Table2);
+    this->Coller(Table1);
+    Op->Coller(Table2);
+}
+
+/*****************************************************************************/
+void QOperateur::Copier(uchar * Table)
 {
 //Copie les données
     Table[0]  = (uchar) m_ui->hzSlider_volume->value();
@@ -177,7 +190,7 @@ void QOperateur::Copier(uchar Table[16])
     Table[15] = (uchar) m_ui->spnBox_RR->value();
  }
 
-void QOperateur::Coller(const uchar Table[16])
+void QOperateur::Coller(const uchar * Table)
 {
 //Vérrouille l'interface
     Attente = true;
@@ -198,10 +211,11 @@ void QOperateur::Coller(const uchar Table[16])
     m_ui->spnBox_D2R->setValue((int)Table[13]);
     m_ui->spnBox_SL->setValue((int)Table[14]);
     m_ui->spnBox_RR->setValue((int)Table[15]);
-    Attente = false;
  //Actualise l'interface
     Rafraichir();
     Envoyer();
+ //Déverrouille
+    Attente = false;
  }
 
 /*****************************************************************************/

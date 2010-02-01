@@ -91,7 +91,7 @@ void QBanks::Recevoir()
         //Ajoute les informations
             ItBank->setData(Qt::StatusTipRole, Bank);
             ItStyle->setData(Qt::StatusTipRole, Style);
-            ItVoice->setData(Qt::StatusTipRole, Voice + Bank * VOICES);
+            ItVoice->setData(Qt::StatusTipRole, Voice + Bank * NBVOICES);
         //Ajoute l'item
             m_ui->table_bank->setRowCount(Index + 1);
             m_ui->table_bank->setItem(Index, 0, ItNom);
@@ -160,24 +160,21 @@ void QBanks::on_table_bank_cellClicked(int row, int column)
 }
 
 /*****************************************************************************/
-void QBanks::on_pshBut_duplicate_clicked(bool checked)
+void QBanks::Copier(uchar * Table)
 {
 //Vérifie la sélection
     if (Attente) return;
     QList <QTableWidgetItem *> Liste = m_ui->table_bank->selectedItems();
-    if (Liste.count() != 8)
-    {
+    if (Liste.count() != 8) {
         QMessageBox::information(MainApp->activeWindow(), "FB01 SE:", "Two voices must be selected !");
         return;
     }
-    if (Liste.at(7)->data(Qt::StatusTipRole).toInt() > 95)
-    {
+    if (Liste.at(7)->data(Qt::StatusTipRole).toInt() > 95) {
         QMessageBox::warning(MainApp->activeWindow(), "FB01 SE:", "Cannot copy to rom !");
         return;
     }
 //Copie la voice
-    EXPANDEUR::CopierVoice(Liste.at(3)->data(Qt::StatusTipRole).toInt(),
-                           Liste.at(7)->data(Qt::StatusTipRole).toInt());
+    EXPANDEUR::CopierVoice(Liste.at(3)->data(Qt::StatusTipRole).toInt(), Liste.at(7)->data(Qt::StatusTipRole).toInt());
     for (int i = 0; i < 2; i++)
     {
         Liste.at(4+i)->setText(Liste.at(i)->text());
@@ -185,25 +182,26 @@ void QBanks::on_pshBut_duplicate_clicked(bool checked)
     }
 }
 
-void QBanks::on_pshBut_exchange_clicked(bool checked)
+void QBanks::Coller(const uchar * Table)
+{
+}
+
+/*****************************************************************************/
+void QBanks::Echanger()
 {
 //Vérifie la sélection
     if (Attente) return;
     QList <QTableWidgetItem *> Liste = m_ui->table_bank->selectedItems();
-    if (Liste.count() != 8)
-    {
+    if (Liste.count() != 8) {
         QMessageBox::information(MainApp->activeWindow(), "FB01 SE:", "Two voices must be selected !");
         return;
     }
-    if (Liste.at(3)->data(Qt::StatusTipRole).toInt() > 95 ||
-        Liste.at(7)->data(Qt::StatusTipRole).toInt() > 95)
-    {
+    if (Liste.at(3)->data(Qt::StatusTipRole).toInt() > 95 || Liste.at(7)->data(Qt::StatusTipRole).toInt() > 95) {
         QMessageBox::warning(MainApp->activeWindow(), "FB01 SE:", "Cannot exchange with rom !");
         return;
     }
 //Echange les voices
-    EXPANDEUR::EchangerVoice(Liste.at(3)->data(Qt::StatusTipRole).toInt(),
-                             Liste.at(7)->data(Qt::StatusTipRole).toInt());
+    EXPANDEUR::EchangerVoice(Liste.at(3)->data(Qt::StatusTipRole).toInt(), Liste.at(7)->data(Qt::StatusTipRole).toInt());
     for (int i = 0; i < 2; i++)
     {
         QString TStr = Liste.at(4+i)->text();

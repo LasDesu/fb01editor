@@ -14,7 +14,7 @@ QVoice::~QVoice()
 }
 
 /*****************************************************************************/
-void QVoice::ChangerInst(uchar Inst)
+void QVoice::ChangerInst(const uchar Inst)
 {
     InstSel = Inst;
 }
@@ -27,23 +27,24 @@ uchar QVoice::RecupererInst()
 /*****************************************************************************/
 void QVoice::Rafraichir()
 {
+//Redessine les textes
     m_ui->txtEdit_author->repaint();
     m_ui->txtEdit_comment->repaint();
     m_ui->txtEdit_voicename->repaint();
 }
 
 /*****************************************************************************/
-bool QVoice::Charger(QFile * Fichier, int Version)
+bool QVoice::Charger(QFile * Fichier, const int Version)
 {
     uchar Table[16];
-    char Infos[INFOS];
+    char Infos[LNGINFOS];
     char Nom[8];
 //Vérouille l'interface
     Attente = true;
 //Lit les informations
-    Fichier->read(Infos, INFOS); Infos[INFOS-1] = 0;
+    Fichier->read(Infos, LNGINFOS); Infos[LNGINFOS-1] = 0;
     m_ui->txtEdit_author->setPlainText((QString) Infos);
-    Fichier->read(Infos, INFOS); Infos[INFOS-1] = 0;
+    Fichier->read(Infos, LNGINFOS); Infos[LNGINFOS-1] = 0;
     m_ui->txtEdit_comment->setPlainText((QString) Infos);
     Fichier->read(Nom, 7);  Nom[7] = 0;
     m_ui->txtEdit_voicename->setPlainText((QString)Nom);
@@ -59,13 +60,13 @@ bool QVoice::Charger(QFile * Fichier, int Version)
 bool QVoice::Enregistrer(QFile * Fichier)
 {
     uchar Table[16];
-    char Infos[INFOS];
+    char Infos[LNGINFOS];
     char Nom[7];
 //Ecrit les informations
-    strncpy(Infos, m_ui->txtEdit_author->toPlainText().toAscii().constData(), INFOS);
-    Fichier->write(Infos, INFOS);
-    strncpy(Infos, m_ui->txtEdit_comment->toPlainText().toAscii().constData(), INFOS);
-    Fichier->write(Infos, INFOS);
+    strncpy(Infos, m_ui->txtEdit_author->toPlainText().toAscii().constData(), LNGINFOS);
+    Fichier->write(Infos,LNGINFOS);
+    strncpy(Infos, m_ui->txtEdit_comment->toPlainText().toAscii().constData(), LNGINFOS);
+    Fichier->write(Infos, LNGINFOS);
     strncpy(Nom, m_ui->txtEdit_voicename->toPlainText().toAscii().constData(), 7);
     Fichier->write(Nom, 7);
 //Ecrit la configuration globale
@@ -171,13 +172,14 @@ void QVoice::Randomiser()
     m_ui->spnBox_PMD->setValue(RAND(0, 127));
     m_ui->spnBox_PMS->setValue(RAND(0, 7));
 //Actualise l'interface
-    Attente = false;
     Rafraichir();
     Envoyer();
+//Déverrouille
+    Attente = false;
 }
 
 /*****************************************************************************/
-void QVoice::Copier(uchar Table[16])
+void QVoice::Copier(uchar * Table)
 {
 //Copie les données
     Table[0]  = (uchar) m_ui->spnBox_algo->value();
@@ -198,7 +200,7 @@ void QVoice::Copier(uchar Table[16])
     Table[15] = (uchar) m_ui->spnBox_PMS->value();
 }
 
-void QVoice::Coller(const uchar Table[16])
+void QVoice::Coller(const uchar * Table)
 {
 //Vérrouille l'interface
     Attente = true;
@@ -219,11 +221,12 @@ void QVoice::Coller(const uchar Table[16])
     m_ui->spnBox_AMS->setValue((int) Table[13]);
     m_ui->spnBox_PMD->setValue((int) Table[14]);
     m_ui->spnBox_PMS->setValue((int) Table[15]);
-    Attente = false;
- //Actualise l'interface
+//Actualise l'interface
     Rafraichir();
     Envoyer();
- }
+//Deverrouille
+    Attente = false;
+}
 
 /*****************************************************************************/
 void QVoice::changeEvent(QEvent *e)
