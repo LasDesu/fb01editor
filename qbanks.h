@@ -45,9 +45,14 @@
     //Communication
         void Envoyer(const int Bank);
         void Recevoir();
+    //Chargement/enregistrement
+        bool Enregistrer(QFile * Fichier, const int Bank);
+        bool Charger(QFile * Fichier, const int Version, const int Bank);
+    //Affichage
+        void Rafraichir();
+        void RafraichirItem(const int row, const int column);
     //Interface et édition
-        void Initialiser(const int Bank);
-        void Copier(uchar * Table);
+        bool Copier(uchar * Table);
         void Coller(const uchar * Table);
         void Echanger();
     protected:
@@ -57,23 +62,16 @@
     //Interface
         Ui::QBanks * m_ui;
         bool Attente;
-    //Sélection
-        int BankSel;
-        int VoiceSel;
     private slots:
     //Gestion des évènements
         void on_table_bank_cellClicked(int row, int column);
         void on_pshBut_bybank_clicked(bool checked);
         void on_pshBut_byname_clicked(bool checked);
         void on_pshBut_bystyle_clicked(bool checked);
-        void on_txtEdit_voicename_textChanged()
-            {if (!Attente && BankSel != -1){
-                EXPANDEUR::EcrireBankNom(BankSel, VoiceSel, m_ui->txtEdit_voicename->toPlainText().toAscii().constData());
-                m_ui->table_bank->selectedItems().at(0)->setText(m_ui->txtEdit_voicename->toPlainText().left(8));}}
-        void on_cmbBox_voicestyle_activated(int Index)
-            {if (!Attente && BankSel != -1){
-                EXPANDEUR::EcrireBankParam(BankSel, VoiceSel, 0x07, Index);
-                m_ui->table_bank->selectedItems().at(1)->setText(m_ui->cmbBox_voicestyle->currentText());}}
+        void on_pshBut_copy_clicked(bool checked);
+        void on_pshBut_exchange_clicked(bool checked);
+        void on_txtEdit_voicename_textChanged();
+        void on_cmbBox_voicestyle_activated(int Index);
     };
 
 #endif // QBANKS_H

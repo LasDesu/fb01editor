@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>FB01 : Sound Editor</string>
+   <string>FB01 : Sound Editor V1.0</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -361,7 +361,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Memory protect * :</string>
+        <string>Memory protect :</string>
        </property>
       </widget>
       <widget class="QSpinBox" name="spnBox_confnum">
@@ -374,13 +374,13 @@
         </rect>
        </property>
        <property name="minimum">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="maximum">
-        <number>19</number>
+        <number>20</number>
        </property>
        <property name="value">
-        <number>0</number>
+        <number>1</number>
        </property>
       </widget>
       <widget class="QLabel" name="lbl_confnum">
@@ -399,7 +399,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Config. number * :</string>
+        <string>Config. number :</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbl_mastvol">
@@ -418,7 +418,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Master volume * :</string>
+        <string>Master volume :</string>
        </property>
       </widget>
       <widget class="QSlider" name="hzSlider_mastvol">
@@ -451,7 +451,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;* These informations cannot be retrieved&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;These informations cannot be retrieved&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;from the FB01 sound module. You must set&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;them manually.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -1243,7 +1243,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/imgs/clavier.bmp</pixmap>
+     <pixmap>:/CLAVIER</pixmap>
     </property>
    </widget>
   </widget>
@@ -1253,13 +1253,16 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>620</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionLoad_bank"/>
+    <addaction name="actionSave_bank"/>
+    <addaction name="separator"/>
     <addaction name="actionLoad_set"/>
     <addaction name="actionSave_set"/>
     <addaction name="separator"/>
@@ -1425,6 +1428,16 @@ p, li { white-space: pre-wrap; }
   <action name="actionExchange">
    <property name="text">
     <string>Exchange</string>
+   </property>
+  </action>
+  <action name="actionLoad_bank">
+   <property name="text">
+    <string>Load bank ...</string>
+   </property>
+  </action>
+  <action name="actionSave_bank">
+   <property name="text">
+    <string>Save bank ...</string>
    </property>
   </action>
  </widget>

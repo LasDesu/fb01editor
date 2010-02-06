@@ -56,7 +56,7 @@ void MainWindow::InitialiserEditeur()
 //Initialisations diverses
     srand(QTime::currentTime().msec());
     Copie = NULL;
-    TypeCopie = -1;
+    TypeCopie = 0;
 //Déverrouille
     Attente = false;
 }
@@ -107,34 +107,36 @@ void MainWindow::ConfigurerOnglets(const bool Actifs)
     ui->grpBox_config->setEnabled(Actifs);
 }
 
-const bool MenuActifs[6][17] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                                {1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0},
-                                {1,1,1,1,1,0,0,0,1,0,0,1,1,0,0,0,0},
-                                {1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0},
-                                {1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1},
-                                {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1}};
+const bool MenuActifs[6][19] = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                {1,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0},
+                                {1,1,1,1,1,1,0,0,1,1,1,0,0,1,1,0,0,0,0},
+                                {1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0},
+                                {1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1},
+                                {1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1}};
 void MainWindow::ConfigurerMenus(const int Onglet)
 {
 //Menu fichier
-    ui->actionLoad_set->setEnabled(MenuActifs[Onglet][0]);
-    ui->actionSave_set->setEnabled(MenuActifs[Onglet][1]);
-    ui->actionLoad_voice->setEnabled(MenuActifs[Onglet][2]);
-    ui->actionSave_voice->setEnabled(MenuActifs[Onglet][3]);
+    ui->actionLoad_bank->setEnabled(MenuActifs[Onglet][0]);
+    ui->actionSave_bank->setEnabled(MenuActifs[Onglet][1]);
+    ui->actionLoad_set->setEnabled(MenuActifs[Onglet][2]);
+    ui->actionSave_set->setEnabled(MenuActifs[Onglet][3]);
+    ui->actionLoad_voice->setEnabled(MenuActifs[Onglet][4]);
+    ui->actionSave_voice->setEnabled(MenuActifs[Onglet][5]);
 //Menu édition
-    ui->actionInitialize->setEnabled(MenuActifs[Onglet][4]);
-    ui->actionRandomize->setEnabled(MenuActifs[Onglet][5]);
-    ui->actionCopy->setEnabled(MenuActifs[Onglet][6]);
-    ui->actionPaste->setEnabled(MenuActifs[Onglet][7]);
-    ui->actionExchange->setEnabled(MenuActifs[Onglet][8]);
+    ui->actionInitialize->setEnabled(MenuActifs[Onglet][6]);
+    ui->actionRandomize->setEnabled(MenuActifs[Onglet][7]);
+    ui->actionCopy->setEnabled(MenuActifs[Onglet][8]);
+    ui->actionPaste->setEnabled(MenuActifs[Onglet][9]);
+    ui->actionExchange->setEnabled(MenuActifs[Onglet][10]);
 //Menu configuration
-    ui->actionSend_current_config->setEnabled(MenuActifs[Onglet][9]);
-    ui->actionGet_current_config->setEnabled(MenuActifs[Onglet][10]);
-    ui->actionGet_all_banks->setEnabled(MenuActifs[Onglet][11]);
-    ui->menuSend_bank->setEnabled(MenuActifs[Onglet][12]);
-    ui->actionSend_current_set->setEnabled(MenuActifs[Onglet][13]);
-    ui->actionGet_current_set->setEnabled(MenuActifs[Onglet][14]);
-    ui->actionSend_current_voice->setEnabled(MenuActifs[Onglet][15]);
-    ui->actionGet_current_voice->setEnabled(MenuActifs[Onglet][16]);
+    ui->actionSend_current_config->setEnabled(MenuActifs[Onglet][11]);
+    ui->actionGet_current_config->setEnabled(MenuActifs[Onglet][12]);
+    ui->actionGet_all_banks->setEnabled(MenuActifs[Onglet][13]);
+    ui->menuSend_bank->setEnabled(MenuActifs[Onglet][14]);
+    ui->actionSend_current_set->setEnabled(MenuActifs[Onglet][15]);
+    ui->actionGet_current_set->setEnabled(MenuActifs[Onglet][16]);
+    ui->actionSend_current_voice->setEnabled(MenuActifs[Onglet][17]);
+    ui->actionGet_current_voice->setEnabled(MenuActifs[Onglet][18]);
 }
 
 /*****************************************************************************/
@@ -301,21 +303,64 @@ void MainWindow::Envoyer()
     EXPANDEUR::EcrireSysParam(0x08, ui->pshBut_combine->isChecked());
     EXPANDEUR::EcrireSysParam(0x0D, (uchar) ui->cmbBox_reception->currentIndex());
     EXPANDEUR::EcrireSysParam(0x21, ui->pshBut_memory->isChecked());
-    EXPANDEUR::EcrireSysParam(0x22, (uchar) ui->spnBox_confnum->value());
+    EXPANDEUR::EcrireSysParam(0x22, (uchar) ui->spnBox_confnum->value()-1);
     EXPANDEUR::EcrireSysParam(0x24, (uchar) ui->hzSlider_mastvol->value());
 //Déverrouille
     Attente = false;
 }
 
 /*****************************************************************************/
+void MainWindow::on_actionLoad_bank_triggered(bool checked)
+{
+    bool ok;
+//Ouvre le fichier
+    QFile * Fichier = ChargerFichier(0, VERSION);
+    if (Fichier == NULL) return;
+    Attente = true;
+//Charge la bank
+    int Bank = QInputDialog::getInt(this, "FB01 SE :", "Which bank would you like to load ?", 1, 1, 2, 1, &ok);
+    if (!ok) return;
+    if (ui->widget_banks->Charger(Fichier, VERSION, Bank - 1)) goto BadFile;
+//Rafraichit l'affichage
+    ui->widget_banks->Rafraichir();
+//Ferme le fichier
+    Attente = false;
+    Fichier->close();
+    return;
+//Erreur apparue
+BadFile :
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    Fichier->close();
+}
+
+void MainWindow::on_actionSave_bank_triggered(bool checked)
+{
+    bool ok;
+//Ouvre le fichier
+    QFile * Fichier = EnregistrerFichier(0, VERSION);
+    if (Fichier == NULL) return;
+//Sauve la bank
+    int Bank = QInputDialog::getInt(this, "FB01 SE :", "Which bank would you like to save ?", 1, 1, 2, 1, &ok);
+    if (!ok) return;
+    if (ui->widget_banks->Enregistrer(Fichier, Bank - 1)) goto BadFile;
+//Ferme le fichier
+    Fichier->close();
+    return;
+//Erreur apparue
+BadFile :
+    QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
+    Fichier->close();
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionLoad_set_triggered(bool checked)
 {
-    char Nom[9];
 //Ouvre le fichier
     QFile * Fichier = ChargerFichier(1, VERSION);
     if (Fichier == NULL) return;
     Attente = true;
 //Charge le nom du set
+    char Nom[9];
     Fichier->read(Nom, 8);
     Nom[8] = 0;
 //Ecrit le nom
@@ -337,11 +382,11 @@ BadFile :
 
 void MainWindow::on_actionSave_set_triggered(bool checked)
 {
-    char Nom[8];
 //Ouvre le fichier
     QFile * Fichier = EnregistrerFichier(1, VERSION);
     if (Fichier == NULL) return;
 //Enregistre le nom du set
+    char Nom[8];
     strncpy(Nom, ui->txtEdit_setname->toPlainText().toAscii().constData(), 8);
     Fichier->write(Nom, 8);
 //Enregistre le set d'instruments
@@ -503,46 +548,75 @@ void MainWindow::on_actionCopy_triggered(bool checked)
 {
     if (Attente) return;
     if (Copie) free(Copie);
-    if (ui->tabWidget->currentIndex() == 4)
+//Copie le contenu
+    switch (ui->tabWidget->currentIndex())
     {
-        Copie = (uchar *) malloc(LNGOP);
-        Operas[OPSel]->Copier(Copie);
-        TypeCopie = 0;
-    }
-    else if (ui->tabWidget->currentIndex() == 3)
-    {
-        Copie = (uchar *) malloc(LNGVOICE);
-        ui->widget_voice->Copier(Copie);
+    case 1 :
+        Copie = (uchar *) malloc(LNGBLK);
+        if(ui->widget_banks->Copier(Copie))
+        {
+        //Libère l'espace
+            TypeCopie = 0;
+            free(Copie);
+            return;
+        }
         TypeCopie = 1;
-    }
-    else if (ui->tabWidget->currentIndex() == 2)
-    {
+    break;
+    case 2 :
         Copie = (uchar *) malloc(LNGINST);
         Insts[InstSel]->Copier(Copie);
         TypeCopie = 2;
+    break;
+    case 3 :
+        Copie = (uchar *) malloc(LNGVOICE);
+        ui->widget_voice->Copier(Copie);
+        TypeCopie = 3;
+    break;
+    case 4 :
+        Copie = (uchar *) malloc(LNGOP);
+        Operas[OPSel]->Copier(Copie);
+        TypeCopie = 4;
+    break;
+    default : break;
     }
 }
 
 void MainWindow::on_actionPaste_triggered(bool checked)
 {
     if (Attente) return;
-    if (ui->tabWidget->currentIndex() == 4)
+    if (TypeCopie != ui->tabWidget->currentIndex()) return;
+//Colle le contenu
+    switch (ui->tabWidget->currentIndex())
     {
-        if (TypeCopie == 0) Operas[OPSel]->Coller(Copie);
-    }
-    else if (ui->tabWidget->currentIndex() == 3)
-    {
-        if (TypeCopie == 1) ui->widget_voice->Coller(Copie);
-    }
-    else if (ui->tabWidget->currentIndex() == 2)
-    {
-        if (TypeCopie == 2) Insts[InstSel]->Coller(Copie);
+    case 1 : ui->widget_banks->Coller(Copie); break;
+    case 2 : Insts[InstSel]->Coller(Copie); break;
+    case 3 : ui->widget_voice->Coller(Copie); break;
+    case 4 : Operas[OPSel]->Coller(Copie); break;
+    default : break;
     }
 }
 
 /*****************************************************************************/
 void MainWindow::on_actionExchange_triggered(bool checked)
 {
+    bool ok;
+    int Inst, OP;
+    if (Attente) return;
+    switch (ui->tabWidget->currentIndex())
+    {
+    case 1 : ui->widget_banks->Echanger(); break;
+    case 2 :
+        Inst = QInputDialog::getInt(this, "FB01 SE :", "With which instrument would you like to exchange ?", InstSel+1, 1, 8, 1, &ok);
+        if (!ok || Inst == InstSel+1) return;
+        Insts[InstSel]->Echanger(Insts[Inst-1]);
+        break;
+    case 4 :
+        OP = QInputDialog::getInt(this, "FB01 SE :", "With which operator would you like to exchange ?", OPSel+1, 1, 4, 1, &ok);
+        if (!ok || OP == OPSel+1) return;
+        Operas[OPSel]->Echanger(Operas[OP-1]);
+        break;
+    default : break;
+    }
 }
 
 /*****************************************************************************/
@@ -556,7 +630,7 @@ void MainWindow::on_actionAbout_triggered(bool checked)
 {
     QString Text;
 //Informations sur le logiciel
-    Text.append("FB01 Sound Editor :\nCopyright Meslin Frederic 2009\nfredericmeslin@hotmail.com\n\n");
+    Text.append("FB01 Sound Editor : V1.0 (06/02/10)\nCopyright Meslin Frederic 2010\nfredericmeslin@hotmail.com\n\n");
     Text.append("A free computer editor for the Yamaha FB01 sound module\n");
     Text.append("This program is under a GPL license, please read the COPYING file.\n\n");
     Text.append("Main website : http://sourceforge.net/projects/fb01editor/\n");
@@ -567,15 +641,23 @@ void MainWindow::on_actionRead_this_triggered(bool checked)
 {
     QString Text;
 //Informations supplémentaires
-    Text.append("Thank you for using this program.\n\n");
-    Text.append("If you want to help the author of the project,\n");
-    Text.append("you can either donate or make new patchs,\n");
-    Text.append("or post bug reports and talk about it in forums.\n");
+    Text.append("Thank you for using this program.\n");
+    Text.append("Please visit the FB01 website for updates, bug reports and tricks.\n\n");
+    Text.append("If you want to help the project author, you can either donate\n");
+    Text.append("or get involved into the developpment of the editor, by posting\n");
+    Text.append("bug reports or directly contacting me on sourceforge.\n");
     QMessageBox::information(this, "FB01 SE :", Text);
 }
 
 void MainWindow::on_actionOnline_help_triggered(bool checked)
 {
+    QString Text;
+//Informations supplémentaires
+    Text.append("Please look for the :\n\n");
+    Text.append("help.pdf file (ENGLISH)\n");
+    Text.append("aide.pdf file (FRANCAIS)\n\n");
+    Text.append("in the directory of the editor.\n");
+    QMessageBox::information(this, "FB01 SE :", Text);
 }
 
 /*****************************************************************************/

@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frdric 2009
+    Copyright Meslin Frédéric 2009
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE

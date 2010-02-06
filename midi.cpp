@@ -184,8 +184,7 @@ void MIDI::AffAttente(bool Active)
 {
     static QMessageBox * MsgBox = NULL;
     if (Active) {
-        MsgBox = new QMessageBox(QMessageBox::Information, "FB01 SE:", "Waiting for device ...",
-                                 0, MainApp->activeWindow());
+        MsgBox = new QMessageBox(QMessageBox::Information, "FB01 SE:", "Waiting for device ...", 0, MainApp->activeWindow());
         MsgBox->show();
         MsgBox->repaint();
     }else if (MsgBox) {
@@ -365,6 +364,5 @@ void MIDI::TraiterSysEx()
 {
 //Traite un sysex inattendu
     PreparerTampon();
-    QMessageBox::information(MainApp->activeWindow(), "FB01 SE:", "Please use the menus to make backups !");
 }
 #endif

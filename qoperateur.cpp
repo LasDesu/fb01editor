@@ -1,3 +1,24 @@
+/*
+    FB01 : Sound editor
+    Copyright Meslin Frédéric 2009
+    fredericmeslin@hotmail.com
+
+    This file is part of FB01 SE
+
+    FB01 SE is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FB01 SE is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "qoperateur.h"
 
 /*****************************************************************************/
@@ -157,18 +178,6 @@ void QOperateur::Randomiser()
 }
 
 /*****************************************************************************/
-void QOperateur::Echanger(QOperateur * Op)
-{
-    uchar Table1[LNGOP];
-    uchar Table2[LNGOP];
-//Echange les opérateurs
-    Op->Copier(Table1);
-    this->Copier(Table2);
-    this->Coller(Table1);
-    Op->Coller(Table2);
-}
-
-/*****************************************************************************/
 void QOperateur::Copier(uchar * Table)
 {
 //Copie les données
@@ -217,6 +226,22 @@ void QOperateur::Coller(const uchar * Table)
  //Déverrouille
     Attente = false;
  }
+
+/*****************************************************************************/
+void QOperateur::Echanger(QOperateur * Op)
+{
+    uchar Table1[LNGOP];
+    uchar Table2[LNGOP];
+//Vérrouille l'interface
+    Attente = true;
+//Echange les opérateurs
+    Op->Copier(Table1);
+    this->Copier(Table2);
+    this->Coller(Table1);
+    Op->Coller(Table2);
+//Déverrouille
+    Attente = false;
+}
 
 /*****************************************************************************/
 void QOperateur::changeEvent(QEvent *e)

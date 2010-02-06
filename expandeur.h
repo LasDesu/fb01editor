@@ -25,6 +25,7 @@
 //****************************************************************************/
     #include <QtGui/QApplication>
     #include <QtGui/QMessageBox>
+    #include <QtGui/QInputDialog>
     #include <string.h>
 
 //****************************************************************************/
@@ -34,16 +35,19 @@
 //****************************************************************************/
     #define NBBANKS    7
     #define NBVOICES   48
-    #define LNGBULK    0x18DC
-    #define LNGBLK     0x83
+    #define LNGBULK    0x18DB
     #define OFFBLK     0x4A
+    #define LNGBLK     0x83
+    #define OFFINST    0x20
+    #define LNGINST    0x10
+
     #define LNGBANKNM  8
     #define LNGSETNM   8
     #define LNGVOICENM 7
 
 //****************************************************************************/
-    #define TRBANK(p) (p / NBVOICES)
-    #define TROFF(p)  (OFFBLK + (p % NBVOICES) * LNGBLK)
+    #define OFFVOICE(v)      (OFFBLK + LNGBLK * (int) v)
+    #define OFFINSTRUMENT(i) (OFFINST + LNGINST * (int) i)
 
 //****************************************************************************/
     class EXPANDEUR
@@ -53,17 +57,19 @@
         static uchar SysChan;
     //Voices
         static uchar Banks[NBBANKS][LNGBULK];
-        static bool  Ram1Val;
-        static bool  Ram2Val;
+        static bool  BanksVal;
     public:
     //Gestion des banks
-        static void CopierVoice(int Src, int Dst);
-        static void EchangerVoice(int Src, int Dst);
+        static void CopierVoice(const uchar Bank, const uchar Voice, uchar * Table);
+        static void CollerVoice(const uchar Bank, const uchar Voice, const uchar * Table);
+        static void CopierBank(const uchar Bank, uchar * Table);
+        static void CollerBank(const uchar Bank, const uchar * Table);
     //Chargement/déchargement
         static bool RecevoirBank(uchar Bank);
         static void EnvoyerBank(uchar Bank);
         static bool RecevoirSet();
         static bool RecevoirVoice(uchar Inst);
+        static bool BanksValide();
     //Communication
         static void  ChoisirSysChan(uchar Chan);
         static uchar LireBankParam(uchar Bank, uchar Voice, uchar Param);

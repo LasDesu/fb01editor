@@ -1,3 +1,24 @@
+/*
+    FB01 : Sound editor
+    Copyright Meslin Frédéric 2009
+    fredericmeslin@hotmail.com
+
+    This file is part of FB01 SE
+
+    FB01 SE is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FB01 SE is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "qinstrument.h"
 
 /*****************************************************************************/
@@ -53,11 +74,11 @@ void QInstrument::InitialiserNotes(QComboBox * Box)
 /*****************************************************************************/
 bool QInstrument::Charger(QFile * Fichier, const int Version)
 {
-    uchar Table[16];
+    uchar Table[LNGINST];
 //Vérrouille l'interface
     Attente = true;
 //Charge les données
-    Fichier->read((char *) Table, 15);
+    Fichier->read((char *) Table, LNGINST-1);
     if (Fichier->error()) return true;
     Coller(Table);
 //Déverrouille
@@ -67,10 +88,10 @@ bool QInstrument::Charger(QFile * Fichier, const int Version)
 
 bool QInstrument::Enregistrer(QFile * Fichier)
 {
-    uchar Table[16];
+    uchar Table[LNGINST];
 //Enregistre les données
     Copier(Table);
-    Fichier->write((char *) Table, 15);
+    Fichier->write((char *) Table, LNGINST-1);
 //Vérifie les erreurs
     if (Fichier->error()) return true;
     return false;
@@ -172,13 +193,14 @@ void QInstrument::Copier(uchar * Table)
     Table[12] = (uchar) m_ui->spnBox_pitch->value();
     Table[13] = (uchar) m_ui->pshBut_poly->isChecked();
     Table[14] = (uchar) m_ui->cmbBox_pmdctl->currentIndex();
+    Table[15] = 0;
 }
 
 void QInstrument::Coller(const uchar * Table)
 {
 //Vérrouille l'interface
     Attente = true;
- //Colle les données
+//Colle les données
     m_ui->spnBox_notes->setValue((int)Table[0]);
     m_ui->spnBox_chan->setValue((int)Table[1]);
     m_ui->cmbBox_upper->setCurrentIndex((int)Table[2]);
@@ -194,7 +216,7 @@ void QInstrument::Coller(const uchar * Table)
     m_ui->spnBox_pitch->setValue((int)Table[12]);
     m_ui->pshBut_poly->setChecked((bool)Table[13]);
     m_ui->cmbBox_pmdctl->setCurrentIndex((int)Table[14]);
- //Actualise l'interface
+//Actualise l'interface
     Attente = false;
     Envoyer();
  }
@@ -202,6 +224,17 @@ void QInstrument::Coller(const uchar * Table)
 /*****************************************************************************/
 void QInstrument::Echanger(QInstrument * Inst)
 {
+    uchar Table1[LNGINST];
+    uchar Table2[LNGINST];
+//Vérrouille l'interface
+    Attente = true;
+//Echange les opérateurs
+    Inst->Copier(Table1);
+    this->Copier(Table2);
+    this->Coller(Table1);
+    Inst->Coller(Table2);
+//Déverrouille
+    Attente = false;
 }
 
 /*****************************************************************************/

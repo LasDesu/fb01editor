@@ -26,6 +26,7 @@
     #include "ui_mainwindow.h"
     #include <QtGui/QApplication>
     #include <QtGui/QMessageBox>
+    #include <QtGui/QInputDialog>
     #include <QtGui/QFileDialog>
     #include <QList>
 
@@ -93,6 +94,8 @@
         void on_actionSave_voice_triggered(bool checked = false);
         void on_actionLoad_set_triggered(bool checked = false);
         void on_actionSave_set_triggered(bool checked = false);
+        void on_actionLoad_bank_triggered(bool checked = false);
+        void on_actionSave_bank_triggered(bool checked = false);
     //Menu edit
         void on_actionInitialize_triggered(bool checked = false);
         void on_actionRandomize_triggered(bool checked = false);
@@ -133,13 +136,13 @@
         void on_spnBox_kybchan_valueChanged(int i)
             {MIDI::ChoisirNoteChan(i - 1);}
         void on_pshBut_combine_clicked(bool checked)
-            {if (!Attente) EXPANDEUR::EcrireSysParam(0x08, !checked);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x08, checked);}
         void on_cmbBox_reception_activated(int i)
             {if (!Attente) EXPANDEUR::EcrireSysParam(0x0D, (uchar) i);}
         void on_pshBut_memory_clicked(bool checked)
-            {if (!Attente) EXPANDEUR::EcrireSysParam(0x21, !checked);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x21, checked);}
         void on_spnBox_confnum_valueChanged(int i)
-            {if (!Attente) EXPANDEUR::EcrireSysParam(0x22, (uchar) i);}
+            {if (!Attente) EXPANDEUR::EcrireSysParam(0x22, (uchar) i - 1);}
         void on_hzSlider_mastvol_valueChanged(int i)
             {if (!Attente) EXPANDEUR::EcrireSysParam(0x24, (uchar) i);}
     //Edition des instruments
@@ -181,8 +184,9 @@
         void on_pshBut_OPon_4_clicked(bool checked)
             {if (!Attente) EXPANDEUR::EcrireOps(InstSel, ui->pshBut_OPon_1->isChecked(), ui->pshBut_OPon_2->isChecked(), ui->pshBut_OPon_3->isChecked(), checked);}
     //Changement d'onglet
-        void on_tabWidget_currentChanged(int index)
-            {ConfigurerMenus(index + 1);}
+        void on_tabWidget_currentChanged(int index) {
+            if (MIDI::EstConfigure()) ConfigurerMenus(index + 1);
+        }
     };
 
 #endif // MAINWINDOW_H
