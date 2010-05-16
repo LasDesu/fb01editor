@@ -25,11 +25,11 @@
 extern "C"
 {
 //****************************************************************************/
-    #define WINAPI __stdcall
+#define WINAPI __stdcall
 
 //****************************************************************************/
-    #define CALLBACK_FUNCTION 0x30000
-    #define MIM_LONGDATA      0x3C4
+#define CALLBACK_FUNCTION 0x30000
+#define MIM_LONGDATA      0x3C4
 
 //****************************************************************************/
     typedef struct

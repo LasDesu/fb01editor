@@ -20,26 +20,26 @@
 */
 
 #ifndef uchar
-	#define uchar  char  unsigned
-	#define ushort short unsigned
-	#define uint   int   unsigned
-	#define ulong  long  unsigned
+#define uchar  char  unsigned
+#define ushort short unsigned
+#define uint   int   unsigned
+#define ulong  long  unsigned
 #endif
 
 #ifndef int8
-	#define int8   char
-	#define uint8  char  unsigned
-	#define int16  short
-	#define uint16 short unsigned
-	#define int32  long
-	#define uint32 long  unsigned
+#define int8   char
+#define uint8  char  unsigned
+#define int16  short
+#define uint16 short unsigned
+#define int32  long
+#define uint32 long  unsigned
 #endif
 
 #ifndef RAND
-    #define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
+#define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
 #endif
 
 #ifndef min
-    #define min(a, b) (a < b ? a : b)
-    #define max(a, b) (a > b ? a : b)
+#define min(a, b) (a < b ? a : b)
+#define max(a, b) (a > b ? a : b)
 #endif
