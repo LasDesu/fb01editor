@@ -19,44 +19,31 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPERATOR_H
-#define OPERATOR_H
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
 
 #include "../types.h"
-#include "object.h"
-#include "midi.h"
 
-class Operator : public Object {
+class Object {
 public :
-//Paramêtres éditables
-    #define OPERATOR_NB_PARAM 16
-    typedef enum {
-        OPERATOR_LEVEL = 0,
-        OPERATOR_LEVEL_CURB,
-        OPERATOR_LEVEL_VELOCITY,
-        OPERATOR_LEVEL_DEPTH,
-        OPERATOR_ADJUST,
-        OPERATOR_FINE,
-        OPERATOR_MULTIPLE,
-        OPERATOR_RATE_DEPTH,
-        OPERATOR_ATTACK,
-        OPERATOR_MODULATOR,
-        OPERATOR_ATTACK_VELOCITY,
-        OPERATOR_DECAY1,
-        OPERATOR_COARSE,
-        OPERATOR_DECAY2,
-        OPERATOR_SUSTAIN,
-        OPERATOR_RELEASE
-    }OPERATOR_PARAM;
 //Constructeurs
-    Operator(const uchar instru, const uchar id, uchar * sysEx, bool * modif);
-    ~Operator();
+    Object();
+    ~Object();
+//Chargement / déchargement de l'objet
+    bool Enregistrer(FILE * fichier);
+    bool Charger(FILE * fichier, const int version);
+//Importation exportation de l'objet
+    bool Exporte(FILE * fichier);
+    bool Importe(FILE * fichier);
 //Edition de l'objet
     void Initialiser();
+    void Randomiser();
+    void Copier(uchar * table, const ulong len);
+    void Coller(const uchar * table, const ulong len);
 //Modification des propriétés
     virtual uchar LireParam(const uchar param);
     virtual void  EcrireParam(const uchar param, const uchar valeur);
@@ -64,15 +51,21 @@ public :
     virtual uint Envoyer();
     virtual uint EnvoyerTout();
     virtual uint RecevoirTout();
-private :
+protected :
 //Messages SysEx
-    #define OPERATOR_LEN_SYSEX 16
-    #define OPERATOR_NB_SYSEX  8
+    uint lenSysEx;
+    uint nbSysEx;
+    uchar * sysEx;
+    bool  * modif;
 //Paramêtres globaux
-    uchar instru;
+    uchar id;
+    uchar nbParam;
 //Gestion des SysEx
+    void InitSysEx();
+    void CheckSumSysEx();
     virtual uchar LireSysEx(const uchar param);
     virtual void  EcrireSysEx(const uchar param, const uchar valeur);
+
 };
 
 #endif

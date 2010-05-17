@@ -26,9 +26,11 @@
 #include <stdio.h>
 
 #include "../types.h"
+#include "object.h"
 #include "operator.h"
+#include "midi.h"
 
-class Voice {
+class Voice : public Object {
 public :
 //Paramêtres éditables
     #define VOICE_NB_PARAM 20
@@ -55,31 +57,22 @@ public :
         VOICE_ENABLE_OP4,
     }VOICE_PARAM;
 //Constructeurs
-    Voice();
+    Voice(const uchar instru);
     ~Voice();
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const int version);
-    bool EnregistrerSysEx(FILE * fichier);
-    bool ChargerSysEx(FILE * fichier);
-//Edition de l'opérateur
+//Edition de l'objet
     void Initialiser();
-    void Randomiser();
-    void Copier(uchar * table, ulong len);
-    void Coller(const uchar * table, ulong len);
-//Lien avec interface
-    uchar LireParam(uchar param);
-    void  EcrireParam(uchar param, uchar valeur);
-//Communication MIDI
-    void EnvoyerTout();
-    void RecevoirTout();
-    void Envoyer();
+//Modification des propriétés
+    virtual uchar LireParam(const uchar param);
+    virtual void  EcrireParam(const uchar param, const uchar valeur);
+//Envoi / Reception de l'objet
+    virtual uint Envoyer();
+    virtual uint EnvoyerTout();
+    virtual uint RecevoirTout();
 private :
-//Messages SysEx
-    #define VOICE_LEN_SYSEX 40
-    uchar sysEx[VOICE_LEN_SYSEX];
-    bool  modif[VOICE_LEN_SYSEX];
-//Opérateurs
+//Opérateurs intégrés
     #define VOICE_NB_OPS 4
     Operator * operators[VOICE_NB_OPS];
 //Paramêtres spéciaux
@@ -90,10 +83,11 @@ private :
     char comment[VOICE_LEN_COMMENT];
     char nom[VOICE_LEN_NOM];
 //Gestion des sysExs
-    void  InitialiserSysEx();
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur);
-    void  CheckSumSysEx();
+    #define VOICE_LEN_SYSEX 139
+    #define VOICE_NB_SYSEX  64
+    void  InitSysEx();
+    virtual uchar LireSysEx(const uchar param);
+    virtual void  EcrireSysEx(const uchar param, const uchar valeur);
 };
 
 #endif

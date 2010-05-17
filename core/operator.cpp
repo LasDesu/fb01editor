@@ -22,39 +22,22 @@
 #include "operator.h"
 
 /*****************************************************************************/
-Operator::Operator(const uchar id, uchar ** sysEx, uchar ** modif)
+Operator::Operator(const uchar instru, const uchar id, uchar * sysEx, bool * modif)
 {
-    this->id = id;
+//Initialise les propriétés
+    this->instru  = instru;
+    this->id       = id;
+    this->nbParam  = OPERATOR_NB_PARAM;
+    this->lenSysEx = OPERATOR_LEN_SYSEX;
+    this->nbSysEx  = OPERATOR_NB_SYSEX;
+//Initialise le sysEx
     this->sysEx = sysEx;
     this->modif = modif;
+    InitSysEx();
 }
 
 Operator::~Operator()
 {
-}
-
-/*****************************************************************************/
-bool Operator::Enregistrer(FILE * fichier)
-{
-    uchar sauv[OPERATOR_NB_PARAM];
-//Créé la table de paramêtres
-    for (int i=0; i < OPERATOR_NB_PARAM; i++)
-        sauv[i] = LireParam(i);
-//Sauvegarde la table
-    fwrite(sauv, OPERATOR_NB_PARAM, 1, fichier);
-    return true;
-}
-
-bool Operator::Charger(FILE * fichier, const int version)
-{
-//Charge la table
-    uchar sauv[OPERATOR_NB_PARAM];
-    if (fread(sauv, OPERATOR_NB_PARAM, 1, fichier))
-        return false;
-//Récupère les paramêtres
-    for (int i=0; i < OPERATOR_NB_PARAM; i++)
-        EcrireParam(i, sauv[i]);
-    return true;
 }
 
 /*****************************************************************************/
@@ -63,24 +46,6 @@ void Operator::Initialiser()
 {
     for (int i=0; i < OPERATOR_NB_PARAM; i++)
         EcrireParam(i, initTab[i]);
-}
-
-void Operator::Randomiser()
-{
-    for (int i=0; i < OPERATOR_NB_PARAM; i++)
-        EcrireParam(i, RAND(0, 255));
-}
-
-void Operator::Copier(uchar * table, const ulong len)
-{
-    if (len < OPERATOR_LEN_SYSEX) return;
-    memcpy(table, sysEx, OPERATOR_LEN_SYSEX);
-}
-
-void Operator::Coller(const uchar * table, const ulong len)
-{
-    if (len < OPERATOR_LEN_SYSEX) return;
-    memcpy(sysEx, table, OPERATOR_LEN_SYSEX);
 }
 
 /*****************************************************************************/
@@ -215,22 +180,48 @@ void Operator::EcrireParam(const uchar param, const uchar valeur)
 }
 
 /*****************************************************************************/
+uint Operator::EnvoyerTout()
+{
+    return MIDI::MIDI_ERREUR_RIEN;
+}
+
+uint Operator::RecevoirTout()
+{
+    return MIDI::MIDI_ERREUR_RIEN;
+}
+
+/*****************************************************************************/
+uint Operator::Envoyer()
+{
+    uchar envOperateur[9] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF7};
+//Construit le message
+    envOperateur[3] = MIDI::SysChannel();
+    envOperateur[4] = 0x18 + (instru & 0x7);
+//Envoi les changements
+    for (int i=0; i < OPERATOR_NB_SYSEX; i++)
+        if (modif[i]) {
+        //Ajoute le contenu
+            envOperateur[5] = (i + id * 0x8 + 0x50) & 0x7F;
+            envOperateur[6] = sysEx[i*2];
+            envOperateur[7] = sysEx[i*2+1];
+        //Envoi le message
+            uint res = MIDI::EnvSysEx(envOperateur, 9);
+            if (res != MIDI::MIDI_ERREUR_RIEN) return res;
+            modif[i] = false;
+        }
+    return MIDI::MIDI_ERREUR_RIEN;
+}
+
+/*****************************************************************************/
 uchar Operator::LireSysEx(const uchar param)
 {
-    return (*sysEx[param] & 0xF) + (*sysEx[param * 2] << 4);
+    return (sysEx[param] & 0xF) + (sysEx[param * 2] << 4);
 }
 
 void Operator::EcrireSysEx(const uchar param, const uchar valeur)
 {
-    *sysEx[param * 2] = valeur & 0xF;
-    *sysEx[param * 2 + 1] = valeur >> 4;
-    *modif[param] = true;
+    sysEx[param * 2] = valeur & 0xF;
+    sysEx[param * 2 + 1] = valeur >> 4;
+    modif[param] = true;
 }
 
-/*****************************************************************************/
-void Operator::Envoyer()
-{
-    for (int i = 0; i < OPERATOR_NB_SYSEX; i++)
-        if (*modif[i]) {
-        }
-}

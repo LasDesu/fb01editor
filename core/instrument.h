@@ -26,33 +26,49 @@
 #include <stdio.h>
 
 #include "../types.h"
-/*
+#include "object.h"
+#include "midi.h"
 
-class Instrument {
+class Instrument : public Object {
 public :
-//Constantes
-//Chargement / déchargement
-    bool Enregistrer(FILE * fichier);
-    bool Charger(FILE * fichier, const int version);
-    bool EnregistrerSysEx(FILE * fichier);
-    bool ChargerSysEx(FILE * fichier);
-//Edition de l'opérateur
+//Paramêtres éditables
+    #define INSTRU_NB_PARAM 15
+    typedef enum {
+        INSTRU_NB_NOTES = 0,
+        INSTRU_CHANNEL,
+        INSTRU_UPPER,
+        INSTRU_LOWER,
+        INSTRU_BANK,
+        INSTRU_VOICE,
+        INSTRU_DETUNE,
+        INSTRU_TRANS,
+        INSTRU_VOLUME,
+        INSTRU_PAN,
+        INSTRU_LFO,
+        INSTRU_PORTAMENTO,
+        INSTRU_PITCHBEND,
+        INSTRU_POLY,
+        INSTRU_CONROLLER
+    }INSTRU_PARAM;
+//Constructeurs
+    Instrument(const uchar id, uchar * sysEx, bool * modif);
+    ~Instrument();
+//Edition de l'objet
     void Initialiser();
-    void Randomiser();
-    void Copier(uchar * table, ulong len);
-    void Coller(const uchar * table, ulong len);
-//Lien avec interface
-    uchar LireParam(uchar param);
-    void  EcrireParam(uchar param, uchar valeur);
-//Communication MIDI
-    void EnvoyerTout(uchar index);
-    void RecevoirTout(uchar index);
-    void Envoyer(uchar index);
+//Modification des propriétés
+    virtual uchar LireParam(const uchar param);
+    virtual void  EcrireParam(const uchar param, const uchar valeur);
+//Envoi / Reception de l'objet
+    virtual uint Envoyer();
+    virtual uint EnvoyerTout();
+    virtual uint RecevoirTout();
 private :
 //Messages SysEx
-    uchar sysEx[];
-    bool  modifs[];
+    #define INSTRU_LEN_SYSEX 32
+    #define INSTRU_NB_SYSEX  16
+    void  InitSysEx();
+    virtual uchar LireSysEx(const uchar param);
+    virtual void  EcrireSysEx(const uchar param, const uchar valeur);
 };
 
-*/
 #endif

@@ -6,10 +6,12 @@ HEADERS += types.h \
     core/voice.h \
     core/instrument.h \
     core/operator.h \
-    core/midi.h
+    core/midi.h \
+    core/object.h
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/voice.cpp \
     core/instrument.cpp \
     core/operator.cpp \
-    core/midi.cpp
+    core/midi.cpp \
+    core/object.cpp
