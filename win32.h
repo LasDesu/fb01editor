@@ -21,15 +21,26 @@
 
 #ifndef WIN32_H
 #define WIN32_H
+#ifdef WIN32
 
 extern "C"
 {
-//****************************************************************************/
 #define WINAPI __stdcall
 
-//****************************************************************************/
+#define CALLBACK_NULL     0
 #define CALLBACK_FUNCTION 0x30000
-#define MIM_LONGDATA      0x3C4
+
+#define MM_MIM_OPEN      0x3C1
+#define MM_MIM_CLOSE     0x3C2
+#define MM_MIM_DATA      0x3C3
+#define MM_MIM_LONGDATA  0x3C4
+#define MM_MIM_ERROR     0x3C5
+#define MM_MIM_LONGERROR 0x3C6
+#define MM_MIM_MOREDATA  0x3CC
+
+#define MM_MOM_OPEN      0x3C7
+#define MM_MOM_CLOSE     0x3C8
+#define MM_MOM_DONE      0x3C9
 
 //****************************************************************************/
     typedef struct
@@ -73,6 +84,8 @@ extern "C"
     uint WINAPI midiInOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
     uint WINAPI midiOutClose(uint hmo);
     uint WINAPI midiInClose(uint hmi);
+    uint WINAPI midiConnect(uint hmidi, uint hmo, void * pReserved);
+    uint WINAPI midiDisconnect(uint hmidi, uint hmo, void * pReserved);
     uint WINAPI midiOutGetDevCapsA(uint uDeviceID, MIDIOUTCAPS * lpMidiOutCaps, uint cbMidiOutCaps);
     uint WINAPI midiInGetDevCapsA(uint uDeviceID, MIDIINCAPS * lpMidiInCaps, uint cbMidiInCaps);
     uint WINAPI midiOutPrepareHeader(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
@@ -88,5 +101,10 @@ extern "C"
     uint WINAPI midiOutLongMsg(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
     uint WINAPI midiOutShortMsg(uint hmo, uint dwMsg);
     uint WINAPI midiInAddBuffer(uint hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
+
+    void WINAPI Sleep(ulong dwMilliseconds);
+    #define sleep(t) (Sleep(t))
 }
+
+#endif
 #endif // WIN32_H

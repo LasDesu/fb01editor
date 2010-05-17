@@ -78,15 +78,22 @@ private :
 //Messages SysEx
     #define VOICE_LEN_SYSEX 40
     uchar sysEx[VOICE_LEN_SYSEX];
-    bool modifs[VOICE_LEN_SYSEX];
+    bool  modif[VOICE_LEN_SYSEX];
 //Opérateurs
     #define VOICE_NB_OPS 4
     Operator * operators[VOICE_NB_OPS];
+//Paramêtres spéciaux
+    #define VOICE_LEN_AUTEUR  129
+    #define VOICE_LEN_COMMENT 129
+    #define VOICE_LEN_NOM     8
+    char auteur[VOICE_LEN_AUTEUR];
+    char comment[VOICE_LEN_COMMENT];
+    char nom[VOICE_LEN_NOM];
 //Gestion des sysExs
     void  InitialiserSysEx();
     uchar LireSysEx(const uchar param);
     void  EcrireSysEx(const uchar param, const uchar valeur);
-    void  CalculerCheckSum();
+    void  CheckSumSysEx();
 };
 
 #endif

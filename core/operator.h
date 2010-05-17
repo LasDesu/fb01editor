@@ -51,7 +51,7 @@ public :
         OPERATOR_RELEASE
     }OPERATOR_PARAM;
 //Constructeurs
-    Operator(const uchar id);
+    Operator(const uchar id, uchar ** sysEx, uchar ** modif);
     ~Operator();
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
@@ -63,15 +63,15 @@ public :
     void Coller(const uchar * table, const ulong len);
 //Lien avec interface
     uchar LireParam(const uchar param);
-    void EcrireParam(const uchar param, const uchar valeur);
+    void  EcrireParam(const uchar param, const uchar valeur);
 //Communication MIDI
     void Envoyer();
 private :
 //Messages SysEx
     #define OPERATOR_LEN_SYSEX 17
     #define OPERATOR_NB_SYSEX  8
-    uchar sysEx[OPERATOR_LEN_SYSEX];
-    bool  modif[OPERATOR_NB_SYSEX];
+    uchar ** sysEx;
+    bool  ** modif;
 //Association opérateur
     uchar id;
 //Gestion des SysEx

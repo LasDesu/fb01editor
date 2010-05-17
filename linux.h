@@ -21,5 +21,11 @@
 
 #ifndef LINUX_H
 #define LINUX_H
-
+#ifdef LINUX
+extern "C"
+{
+//****************************************************************************/
+        #define sleep(t) (usleep(t * 1000))
+}
+#endif
 #endif // LINUX_H

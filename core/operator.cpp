@@ -22,10 +22,11 @@
 #include "operator.h"
 
 /*****************************************************************************/
-Operator::Operator(const uchar id)
+Operator::Operator(const uchar id, uchar ** sysEx, uchar ** modif)
 {
     this->id = id;
-    InitialiserSysEx();
+    this->sysEx = sysEx;
+    this->modif = modif;
 }
 
 Operator::~Operator()
@@ -214,35 +215,22 @@ void Operator::EcrireParam(const uchar param, const uchar valeur)
 }
 
 /*****************************************************************************/
-void Operator::InitialiserSysEx()
-{
-    memset(sysEx, OPERATOR_LEN_SYSEX, 0);
-}
-
 uchar Operator::LireSysEx(const uchar param)
 {
-    return (sysEx[param] & 0xF) + (sysEx[param * 2] << 4);
+    return (*sysEx[param] & 0xF) + (*sysEx[param * 2] << 4);
 }
 
 void Operator::EcrireSysEx(const uchar param, const uchar valeur)
 {
-    sysEx[param * 2] = valeur & 0xF;
-    sysEx[param * 2 + 1] = valeur >> 4;
-    modif[param] = true;
-}
-
-void Operator::CheckSumSysEx()
-{
-    uchar sum;
-    for(int i = 0; i < OPERATOR_LEN_SYSEX - 1; i ++)
-        sum += sysEx[i];
-    sysEx[OPERATOR_LEN_SYSEX - 1] = (~sum) + 1;
+    *sysEx[param * 2] = valeur & 0xF;
+    *sysEx[param * 2 + 1] = valeur >> 4;
+    *modif[param] = true;
 }
 
 /*****************************************************************************/
 void Operator::Envoyer()
 {
     for (int i = 0; i < OPERATOR_NB_SYSEX; i++)
-        if (modif[i]) {
+        if (*modif[i]) {
         }
 }

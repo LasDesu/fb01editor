@@ -25,7 +25,7 @@
 Voice::Voice()
 {
     for (int i=0; i < 4; i++)
-        operators[i] = new Operator(i);
+        operators[i] = new Operator(i, &sysEx[VOICE_OFF_OPERATEUR], &modif[0]);
     InitialiserSysEx();
 }
 
@@ -71,15 +71,16 @@ bool Voice::Charger(FILE * fichier, const int version)
 bool Voice::EnregistrerSysEx(FILE * fichier)
 {
 //Exporte le sysex
-
+    return true;
 }
 
 bool Voice::ChargerSysEx(FILE * fichier)
 {
+    return true;
 }
 
 /*****************************************************************************/
-const uchar InitTab[16] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
+const uchar initTab[16] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
 void Voice::Initialiser()
 {
     for (int i=0; i < VOICE_NB_PARAM; i++)
@@ -148,7 +149,7 @@ uchar Voice::LireParam(const uchar param)
         return (LireSysEx(0xB) >> 5) & 0x1;
     case VOICE_ENABLE_OP1 :
         return (LireSysEx(0xB) >> 6) & 0x1;
-    default : return;
+    default : return 0;
     }
 }
 
@@ -251,15 +252,15 @@ void Voice::EcrireParam(uchar param, uchar valeur)
 }
 
 /*****************************************************************************/
-void Voice::EnvoyerTout(uchar index)
+void Voice::EnvoyerTout()
 {
 }
 
-void Voice::RecevoirTout(uchar index)
+void Voice::RecevoirTout()
 {
 }
 
-void Voice::Envoyer(uchar index)
+void Voice::Envoyer()
 {
 }
 
@@ -278,19 +279,19 @@ void Voice::InitialiserSysEx()
     sysEx[VOICE_LEN_SYSEX - 1] = 0xF7;
 }
 
-uchar Operator::LireSysEx(const uchar param)
+uchar Voice::LireSysEx(const uchar param)
 {
     return (sysEx[param + 9] & 0xF) + (sysEx[param * 2 + 9] << 4);
 }
 
-void Operator::EcrireSysEx(const uchar param, const uchar valeur)
+void Voice::EcrireSysEx(const uchar param, const uchar valeur)
 {
     sysEx[param * 2 + 9]  = valeur & 0xF;
     sysEx[param * 2 + 10] = valeur >> 4;
     modif[param] = true;
 }
 
-void Operator::CheckSumSysEx()
+void Voice::CheckSumSysEx()
 {
     uchar sum;
     for(int i = 7; i < VOICE_LEN_SYSEX - 2; i ++)
