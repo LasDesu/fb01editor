@@ -56,7 +56,7 @@ bool Voice::Enregistrer(FILE * fichier)
     fwrite(comment, VOICE_LEN_COMMENT, 1, fichier);
     fwrite(nom, VOICE_LEN_NOM, 1, fichier);
 //Sauvegarde la table
-    return Object::Enregistrer(fichier);
+    return Block::Enregistrer(fichier);
 }
 
 bool Voice::Charger(FILE * fichier, const int version)
@@ -66,11 +66,11 @@ bool Voice::Charger(FILE * fichier, const int version)
     fread(comment, VOICE_LEN_COMMENT, 1, fichier);
     fread(nom, VOICE_LEN_NOM, 1, fichier);
  //Recupère la table
-    return Object::Charger(fichier, version);
+    return Block::Charger(fichier, version);
 }
 
 /*****************************************************************************/
-const uchar initTab[VOICE_NB_PARAM] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
+const uchar initTab[16] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
 void Voice::Initialiser()
 {
     for (int i=0; i < VOICE_NB_PARAM; i++)
@@ -226,7 +226,10 @@ void Voice::EcrireParam(uchar param, uchar valeur)
 /*****************************************************************************/
 uint Voice::EnvoyerTout()
 {
-    return MIDI::EnvSysEx(sysEx, VOICE_LEN_SYSEX);
+    uint res = MIDI::EnvSysEx(sysEx, VOICE_LEN_SYSEX);
+    if (res != MIDI::MIDI_ERREUR_RIEN) return res;
+    memset(modif, 0, VOICE_NB_SYSEX);
+    return MIDI::MIDI_ERREUR_RIEN;
 }
 
 uint Voice::RecevoirTout()
@@ -268,7 +271,7 @@ uint Voice::Envoyer()
 void Voice::InitSysEx()
 {
 //Entête de message
-    Object::InitSysEx();
+    Block::InitSysEx();
     sysEx[0] = 0xF0; sysEx[1] = 0x43;
     sysEx[2] = 0x75; sysEx[3] = 0x00;
     sysEx[4] = 0x08; sysEx[5] = 0x00;

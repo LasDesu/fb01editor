@@ -31,8 +31,10 @@ int    MIDI::nbIns  = 0;
 int    MIDI::nbOuts = 0;
 uchar  MIDI::midiChannel = 0;
 uchar  MIDI::sysChannel = 0;
+uchar  MIDI::tampon[2][MIDI_LEN_TAMPON] = {{0,},};
 
 #ifdef WIN32
+    MIDIHDR MIDI::header = {0,};
     bool MIDI::prepare = false;
     bool MIDI::attente = false;
 #endif

@@ -19,27 +19,31 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef uchar
-#define uchar  char  unsigned
-#define ushort short unsigned
-#define uint   int   unsigned
-#define ulong  long  unsigned
-#endif
+#ifndef QCLAVIER_H
+#define QCLAVIER_H
 
-#ifndef int8
-#define int8   char
-#define uint8  char  unsigned
-#define int16  short
-#define uint16 short unsigned
-#define int32  long
-#define uint32 long  unsigned
-#endif
+/*****************************************************************************/
+#include <QtGui/QLabel>
+#include <QtGui/QMouseEvent>
 
-#ifndef RAND
-#define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
-#endif
+#include "../types.h"
+#include "../core/midi.h"
 
-#ifndef min
-#define min(a, b) (a < b ? a : b)
-#define max(a, b) (a > b ? a : b)
-#endif
+/*****************************************************************************/
+class QClavier : public QLabel
+{
+public:
+    QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    ~QClavier();
+private:
+//Note en cours
+    int noteJouee;
+//Détermine la note
+    int TrouverNote(QMouseEvent * event);
+//Réimplémentation de la souris
+    virtual void mouseMoveEvent(QMouseEvent * event);
+    virtual void mousePressEvent(QMouseEvent * event);
+    virtual void mouseReleaseEvent(QMouseEvent * event);
+};
+
+#endif // QCLAVIER_H

@@ -27,10 +27,10 @@
 #include <strings.h>
 
 #include "../types.h"
-#include "object.h"
+#include "block.h"
 #include "midi.h"
 
-class Operator : public Object {
+class Operator : public Block {
 public :
 //Paramêtres éditables
     #define OPERATOR_NB_PARAM 16
@@ -58,12 +58,12 @@ public :
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
-    virtual uchar LireParam(const uchar param);
-    virtual void  EcrireParam(const uchar param, const uchar valeur);
+    uchar LireParam(const uchar param);
+    void  EcrireParam(const uchar param, const uchar valeur);
 //Envoi / Reception de l'objet
-    virtual uint Envoyer();
-    virtual uint EnvoyerTout();
-    virtual uint RecevoirTout();
+    uint Envoyer();
+    uint EnvoyerTout();
+    uint RecevoirTout();
 private :
 //Messages SysEx
     #define OPERATOR_LEN_SYSEX 16
@@ -71,8 +71,8 @@ private :
 //Paramêtres globaux
     uchar instru;
 //Gestion des SysEx
-    virtual uchar LireSysEx(const uchar param);
-    virtual void  EcrireSysEx(const uchar param, const uchar valeur);
+    uchar LireSysEx(const uchar param);
+    void  EcrireSysEx(const uchar param, const uchar valeur);
 };
 
 #endif

@@ -19,10 +19,10 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "object.h"
+#include "block.h"
 
 /*****************************************************************************/
-Object::Object()
+Block::Block()
 {
     this->id = 0;
     this->nbParam = 0;
@@ -32,12 +32,12 @@ Object::Object()
     this->modif = NULL;
 }
 
-Object::~Object()
+Block::~Block()
 {
 }
 
 /*****************************************************************************/
-bool Object::Enregistrer(FILE * fichier)
+bool Block::Enregistrer(FILE * fichier)
 {
     uchar sauv[nbParam];
     for (int i=0; i < nbParam; i++)
@@ -46,7 +46,7 @@ bool Object::Enregistrer(FILE * fichier)
     return true;
 }
 
-bool Object::Charger(FILE * fichier, const int version)
+bool Block::Charger(FILE * fichier, const int version)
 {
     uchar sauv[nbParam];
     if (fread(sauv, nbParam, 1, fichier))
@@ -57,7 +57,7 @@ bool Object::Charger(FILE * fichier, const int version)
 }
 
 /*****************************************************************************/
-bool Object::Exporte(FILE * fichier)
+bool Block::Exporte(FILE * fichier)
 {
     if (sysEx == NULL) return false;
     uint res = fwrite(sysEx, lenSysEx, 1, fichier);
@@ -65,7 +65,7 @@ bool Object::Exporte(FILE * fichier)
     return true;
 }
 
-bool Object::Importe(FILE * fichier)
+bool Block::Importe(FILE * fichier)
 {
     if (sysEx == NULL) return false;
     uint res = fread(sysEx, lenSysEx, 1, fichier);
@@ -74,38 +74,38 @@ bool Object::Importe(FILE * fichier)
 }
 
 /*****************************************************************************/
-void Object::Initialiser()
+void Block::Initialiser()
 {
     for (int i=0; i < nbParam; i++)
         EcrireParam(i, 0);
 }
 
-void Object::Randomiser()
+void Block::Randomiser()
 {
     for (int i=0; i < nbParam; i++)
         EcrireParam(i, RAND(0, 255));
 }
 
-void Object::Copier(uchar * table, const ulong len)
+void Block::Copier(uchar * table, const ulong len)
 {
     if (len < lenSysEx) return;
     memcpy(table, sysEx, lenSysEx);
 }
 
-void Object::Coller(const uchar * table, const ulong len)
+void Block::Coller(const uchar * table, const ulong len)
 {
     if (len < lenSysEx) return;
     memcpy(sysEx, table, lenSysEx);
 }
 
 /*****************************************************************************/
-void Object::InitSysEx()
+void Block::InitSysEx()
 {
     memset(sysEx, nbSysEx, 0);
     memset(modif, lenSysEx, 0);
 }
 
-void Object::CheckSumSysEx()
+void Block::CheckSumSysEx()
 {
     uchar sum;
     for(uint i = 7; i < lenSysEx - 2; i ++)

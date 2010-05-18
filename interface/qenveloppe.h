@@ -19,27 +19,24 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef uchar
-#define uchar  char  unsigned
-#define ushort short unsigned
-#define uint   int   unsigned
-#define ulong  long  unsigned
-#endif
+#ifndef QENVELOPPE_H
+#define QENVELOPPE_H
 
-#ifndef int8
-#define int8   char
-#define uint8  char  unsigned
-#define int16  short
-#define uint16 short unsigned
-#define int32  long
-#define uint32 long  unsigned
-#endif
+#include <QtGui/QLabel>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
 
-#ifndef RAND
-#define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
-#endif
+/*****************************************************************************/
+class QEnveloppe : public QLabel
+{
+public:
+    QEnveloppe(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    ~QEnveloppe();
+//Fonctions publiques
+    void DefinirEnveloppe(int AR, int DR1, int SL, int DR2, int RR);
+private:
+    QPoint Points[5];
+    virtual void paintEvent (QPaintEvent * event);
+};
 
-#ifndef min
-#define min(a, b) (a < b ? a : b)
-#define max(a, b) (a > b ? a : b)
-#endif
+#endif // QENVELOPPE_H

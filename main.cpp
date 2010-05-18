@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009 - 2010
+    Copyright Meslin Frédéric 2009
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -19,27 +19,17 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef uchar
-#define uchar  char  unsigned
-#define ushort short unsigned
-#define uint   int   unsigned
-#define ulong  long  unsigned
-#endif
+#include "mainwindow.h"
+QApplication * MainApp;
 
-#ifndef int8
-#define int8   char
-#define uint8  char  unsigned
-#define int16  short
-#define uint16 short unsigned
-#define int32  long
-#define uint32 long  unsigned
-#endif
-
-#ifndef RAND
-#define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
-#endif
-
-#ifndef min
-#define min(a, b) (a < b ? a : b)
-#define max(a, b) (a > b ? a : b)
-#endif
+/*****************************************************************************/
+int main(int argc, char *argv[])
+{
+//Créé l'application
+    QApplication app(argc, argv);
+    MainApp = &app;
+    MainWindow MainWin;
+//Démarre le programme
+    MainWin.show();
+    return app.exec();
+}

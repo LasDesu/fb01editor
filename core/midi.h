@@ -75,7 +75,7 @@ public:
     static void  Note(const uchar note, const uchar velo);
 //Debug
     static void BackupTampon(char * Chemin);
-private:
+protected:
 //Configuration de la communication
     static void * ins, * outs;
     static int   nbIns, nbOuts;
@@ -83,7 +83,7 @@ private:
     static uchar midiChannel;
     static uchar sysChannel;
 //Tampon de réception
-    #define MIDI_LEN_TAMPON 0x1900
+    #define MIDI_LEN_TAMPON      0x1900
     #define MIDI_ATTENTE         100
     #define MIDI_ATTENTE_MESSAGE 100
     static uchar tampon[2][MIDI_LEN_TAMPON];

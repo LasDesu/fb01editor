@@ -26,10 +26,10 @@
 #include <stdio.h>
 
 #include "../types.h"
-#include "object.h"
+#include "block.h"
 #include "midi.h"
 
-class Instrument : public Object {
+class Instrument : public Block {
 public :
 //Paramêtres éditables
     #define INSTRU_NB_PARAM 15
@@ -56,19 +56,18 @@ public :
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
-    virtual uchar LireParam(const uchar param);
-    virtual void  EcrireParam(const uchar param, const uchar valeur);
+    uchar LireParam(const uchar param);
+    void  EcrireParam(const uchar param, const uchar valeur);
 //Envoi / Reception de l'objet
-    virtual uint Envoyer();
-    virtual uint EnvoyerTout();
-    virtual uint RecevoirTout();
+    uint Envoyer();
+    uint EnvoyerTout();
+    uint RecevoirTout();
 private :
 //Messages SysEx
     #define INSTRU_LEN_SYSEX 32
     #define INSTRU_NB_SYSEX  16
-    void  InitSysEx();
-    virtual uchar LireSysEx(const uchar param);
-    virtual void  EcrireSysEx(const uchar param, const uchar valeur);
+    uchar LireSysEx(const uchar param);
+    void  EcrireSysEx(const uchar param, const uchar valeur);
 };
 
 #endif

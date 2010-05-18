@@ -19,8 +19,8 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef BLOCK_H
+#define BLOCK_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,29 +28,29 @@
 
 #include "../types.h"
 
-class Object {
+class Block {
 public :
 //Constructeurs
-    Object();
-    ~Object();
+    Block();
+    ~Block();
 //Chargement / déchargement de l'objet
-    bool Enregistrer(FILE * fichier);
-    bool Charger(FILE * fichier, const int version);
+    virtual bool Enregistrer(FILE * fichier);
+    virtual bool Charger(FILE * fichier, const int version);
 //Importation exportation de l'objet
-    bool Exporte(FILE * fichier);
-    bool Importe(FILE * fichier);
+    virtual bool Exporte(FILE * fichier);
+    virtual bool Importe(FILE * fichier);
 //Edition de l'objet
-    void Initialiser();
-    void Randomiser();
-    void Copier(uchar * table, const ulong len);
-    void Coller(const uchar * table, const ulong len);
+    virtual void Initialiser();
+    virtual void Randomiser();
+    virtual void Copier(uchar * table, const ulong len);
+    virtual void Coller(const uchar * table, const ulong len);
 //Modification des propriétés
-    virtual uchar LireParam(const uchar param);
-    virtual void  EcrireParam(const uchar param, const uchar valeur);
+    virtual uchar LireParam(const uchar param) = 0;
+    virtual void  EcrireParam(const uchar param, const uchar valeur) = 0;
 //Envoi / Reception de l'objet
-    virtual uint Envoyer();
-    virtual uint EnvoyerTout();
-    virtual uint RecevoirTout();
+    virtual uint Envoyer() = 0;
+    virtual uint EnvoyerTout() = 0;
+    virtual uint RecevoirTout() = 0;
 protected :
 //Messages SysEx
     uint lenSysEx;
@@ -61,11 +61,10 @@ protected :
     uchar id;
     uchar nbParam;
 //Gestion des SysEx
-    void InitSysEx();
-    void CheckSumSysEx();
-    virtual uchar LireSysEx(const uchar param);
-    virtual void  EcrireSysEx(const uchar param, const uchar valeur);
-
+    virtual void InitSysEx();
+    virtual void CheckSumSysEx();
+    virtual uchar LireSysEx(const uchar param) = 0;
+    virtual void  EcrireSysEx(const uchar param, const uchar valeur) = 0;
 };
 
 #endif
