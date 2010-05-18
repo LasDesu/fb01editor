@@ -46,11 +46,11 @@ class MainWindow : public QMainWindow{
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-private:
     Ui::MainWindow *ui;
-private slots:
-    void on_cmbBox_MIDIIn_activated(int Index);
-    void on_cmbBox_MIDIOut_activated(int Index);
+public slots:
+    void on_cmbBox_MIDICtrl_activated(int index);
+    void on_cmbBox_MIDIIn_activated(int index);
+    void on_cmbBox_MIDIOut_activated(int index);
     void on_pshBut_refresh_midi_clicked(bool checked);
 
     void on_actionQuit_triggered(bool checked = false);

@@ -99,7 +99,7 @@ extern "C"
     uint WINAPI midiOutReset(uint hmo);
     uint WINAPI midiInReset(uint hmi);
     uint WINAPI midiOutLongMsg(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
-    uint WINAPI midiOutShortMsg(uint hmo, uint dwMsg);
+    uint WINAPI midiOutShortMsg(uint hmo, ulong dwMsg);
     uint WINAPI midiInAddBuffer(uint hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
 
     void WINAPI Sleep(ulong dwMilliseconds);

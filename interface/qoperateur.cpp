@@ -43,6 +43,7 @@ void QOperateur::Rafraichir()
 /*****************************************************************************/
 void QOperateur::on_hzSlider_volume_valueChanged(int i)
 {
+    //operateur->
 }
 
 void QOperateur::on_spnBox_vellvl_valueChanged(int i)

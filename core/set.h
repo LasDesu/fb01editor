@@ -28,12 +28,41 @@
 
 #include "../types.h"
 #include "midi.h"
+#include "block.h"
+#include "instrument.h"
 
-class Set {
+class Set : public Block {
 public :
+//Paramêtres éditables
+    #define SET_NB_PARAM 0;
+    #define SET_LEN_NOM 8
+//Constructeurs
     Set();
     ~Set();
+//Chargement / déchargement
+    bool Enregistrer(FILE * fichier);
+    bool Charger(FILE * fichier, const int version);
+//Edition de l'objet
+    void Initialiser();
+//Modification des propriétés
+    uchar  LireParam(const uchar param);
+    void   EcrireParam(const uchar param, const uchar valeur);
+    char * LireNom();
+    void   EcrireNom(char * nom);
+//Envoi / Reception de l'objet
+    uint Envoyer();
+    uint EnvoyerTout();
+    uint RecevoirTout();
 private :
+//Instruments du set
+    #define SET_NB_INSTRU 8
+    Instrument * instruments[SET_NB_INSTRU];
+//Gestion des sysExs
+    #define SET_LEN_SYSEX 171
+    #define SET_NB_SYSEX  160
+    void  InitSysEx();
+    uchar LireSysEx(const uchar param);
+    void  EcrireSysEx(const uchar param, const uchar valeur);
 };
 
 #endif

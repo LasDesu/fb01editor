@@ -46,21 +46,6 @@ class Editeur {
 public :
     Editeur();
     ~Editeur();
-private :
-//Objets de l'éditeur
-    Bank  * bank;
-    Voice * voice;
-    Set   * set;
-    MainWindow  * mainWindow;
-//Sélection d'édition
-    int PageSel;
-    int InstSel;
-    int OPSel;
-//Initialisation de l'éditeur
-    void InitialiserEditeur();
-    void InitialiserInterface();
-    void TerminerEditeur();
-    void TerminerInterface();
 //Chargement et déchargement
     FILE * ChargerFichier(const int Type, const short Version);
     FILE * EnregistrerFichier(const int Type, const short Version);
@@ -71,11 +56,26 @@ private :
     bool ActualiserConfig();
     bool ActualiserBank();
 //Configuration de l'interface
-    void ConfigurerOnglets(const bool Actifs);
-    void ConfigurerMenus(const int Onglet);
-    void ChangerPage(const int Page);
-    void ChangerInst(const int Inst);
+    void ConfigurerOnglets(const bool actifs);
+    void ConfigurerMenus(const bool actifs);
+    void ChangerPage(const int page);
+    void ChangerInstru(const int instru);
     void ChangerOP(const int OP);
+private :
+//Objets de l'éditeur
+    #define EDITEUR_NB_BANK 4
+    Bank  * bank[EDITEUR_NB_BANK];
+    Voice * voice;
+    Set   * set;
+//Fenêtre principale
+    MainWindow  * mainWindow;
+//Sélection d'édition
+    int pageSel, instruSel, OPSel;
+//Initialisation de l'éditeur
+    void InitialiserEditeur();
+    void InitialiserInterface();
+    void TerminerEditeur();
+    void TerminerInterface();
 };
 
 #endif

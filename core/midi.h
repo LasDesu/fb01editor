@@ -65,6 +65,7 @@ public:
     static bool OutOk();
     static bool CtrlOk();
 //Envoi de messages
+    static uint EnvMsg(uchar * msg);
     static uint EnvSysEx(uchar * sysEx, const int taille);
     static uint RecSysEx(uchar * sysEx, const int taille);
 //Paramêtres de transmission

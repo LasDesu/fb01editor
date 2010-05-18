@@ -34,6 +34,7 @@ class Voice : public Block {
 public :
 //Paramêtres éditables
     #define VOICE_NB_PARAM 20
+    #define VOICE_LEN_NOM  8
     typedef enum {
         VOICE_ALGORITHME = 0,
         VOICE_USERCODE,
@@ -65,8 +66,10 @@ public :
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
-    uchar LireParam(const uchar param);
-    void  EcrireParam(const uchar param, const uchar valeur);
+    uchar  LireParam(const uchar param);
+    void   EcrireParam(const uchar param, const uchar valeur);
+    char * LireNom();
+    void   EcrireNom(char * nom);
 //Envoi / Reception de l'objet
     uint Envoyer();
     uint EnvoyerTout();
@@ -87,7 +90,7 @@ private :
     #define VOICE_NB_SYSEX  64
     void  InitSysEx();
     uchar LireSysEx(const uchar param);
-   void  EcrireSysEx(const uchar param, const uchar valeur);
+    void  EcrireSysEx(const uchar param, const uchar valeur);
 };
 
 #endif

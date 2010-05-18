@@ -20,8 +20,10 @@
 */
 
 #include "mainwindow.h"
+#include "editeur.h"
 
 extern QApplication * MainApp;
+extern Editeur * editeur;
 
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -343,69 +345,82 @@ void MainWindow::on_actionOnline_help_triggered(bool checked)
 }
 
 /*****************************************************************************/
-void MainWindow::on_cmbBox_MIDIIn_activated(int Index)
+void MainWindow::on_cmbBox_MIDICtrl_activated(int index)
 {
-    /*
-//Change de driver
-    if (Attente) return;
-    if (Index < 1)
-    {
+    if (index < 1) {
     //Déselectionne le driver
-        MIDI::DesactiverIn();
-        ConfigurerOnglets(false);
-        ConfigurerMenus(0);
+        MIDI::DesactiverCtrl();
     }else{
     //Sélectionne le driver
-        MIDI::ActiverIn(Index - 1);
-        ActualiserEditeur();
+        if (MIDI::ActiverCtrl(index - 1)) {
+            ui->cmbBox_MIDICtrl->setCurrentIndex(0);
+            return;
+        }
+        editeur->ActualiserEditeur();
     }
-    */
 }
 
-void MainWindow::on_cmbBox_MIDIOut_activated(int Index)
+void MainWindow::on_cmbBox_MIDIIn_activated(int index)
 {
-    /*
-//Change le driver
-    if (Attente) return;
-    if (Index < 1)
+    if (index < 1) {
+    //Déselectionne le driver
+        MIDI::DesactiverIn();
+        editeur->ConfigurerOnglets(false);
+        editeur->ConfigurerMenus(false);
+    }else{
+    //Sélectionne le driver
+        if (MIDI::ActiverIn(index - 1)) {
+            ui->cmbBox_MIDIIn->setCurrentIndex(0);
+            return;
+        }
+        editeur->ActualiserEditeur();
+    }
+}
+
+void MainWindow::on_cmbBox_MIDIOut_activated(int index)
+{
+    if (index < 1)
     {
     //Déselectionne le driver
         MIDI::DesactiverOut();
-        ConfigurerOnglets(false);
-        ConfigurerMenus(0);
+        ui->cmbBox_MIDICtrl->setCurrentIndex(0);
+        editeur->ConfigurerOnglets(false);
+        editeur->ConfigurerMenus(false);
     }else{
     //Sélectionne le driver
-        MIDI::ActiverOut(Index - 1);
-        ActualiserEditeur();
+        if (MIDI::ActiverOut(index - 1)) {
+            ui->cmbBox_MIDIOut->setCurrentIndex(0);
+            return;
+        }
+        editeur->ActualiserEditeur();
     }
-    */
 }
 
 /*****************************************************************************/
 void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 {
-    /*
 //Efface les items
+    ui->cmbBox_MIDICtrl->clear();
     ui->cmbBox_MIDIIn->clear();
     ui->cmbBox_MIDIOut->clear();
 //Liste les périphériques
-    MIDI::Lister();
-    int Ins = MIDI::NbDriversIn();
-    int Outs = MIDI::NbDriversOut();
+    MIDI::EnumererDrivers();
+    int nbIns = MIDI::NbDriversIn();
+    int nbOuts = MIDI::NbDriversOut();
+    ui->cmbBox_MIDICtrl->addItem((QString) "No driver selected", 0);
     ui->cmbBox_MIDIIn->addItem((QString) "No driver selected", 0);
     ui->cmbBox_MIDIOut->addItem((QString) "No driver selected", 0);
 //Ajoute les périphériques
-    for (int i = 0; i < Ins; i++)
+    for (int i = 0; i < nbIns; i++) {
+        ui->cmbBox_MIDICtrl->addItem((QString)MIDI::DriverIn(i), i+1);
         ui->cmbBox_MIDIIn->addItem((QString)MIDI::DriverIn(i), i+1);
-    for (int i = 0; i < Outs; i++)
+    }
+    for (int i = 0; i < nbOuts; i++)
         ui->cmbBox_MIDIOut->addItem((QString)MIDI::DriverOut(i), i+1);
 //Sélectionne le driver nul
+    ui->cmbBox_MIDICtrl->setCurrentIndex(0);
     ui->cmbBox_MIDIIn->setCurrentIndex(0);
     ui->cmbBox_MIDIOut->setCurrentIndex(0);
-//Désactive l'éditeur
-    ConfigurerOnglets(false);
-    ConfigurerMenus(0);
-    */
 }
 
 /*****************************************************************************/

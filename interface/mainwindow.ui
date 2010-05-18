@@ -1278,7 +1278,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/CLAVIER</pixmap>
+     <pixmap resource="../FB01.qrc">:/CLAVIER</pixmap>
     </property>
    </widget>
   </widget>
@@ -1564,6 +1564,8 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>

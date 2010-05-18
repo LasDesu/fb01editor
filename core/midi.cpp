@@ -245,6 +245,20 @@ bool MIDI::CtrlOk()
 }
 
 /*****************************************************************************/
+uint MIDI::EnvMsg(uchar * msg)
+{
+//Vérifie l'ouverture
+    if (hndOut == 0) return MIDI_ERREUR_NOOUT;
+#ifdef WIN32
+//Envoie le message
+    if (midiOutShortMsg(hndOut, *(ulong *) msg))
+        return MIDI_ERREUR_SEND;
+#endif
+#ifdef LINUX
+#endif
+    return MIDI_ERREUR_RIEN;
+}
+
 uint MIDI::EnvSysEx(uchar * sysEx, const int taille)
 {
 //Vérifie l'ouverture
@@ -325,14 +339,14 @@ uchar MIDI::SysChannel()
 /*****************************************************************************/
 void MIDI::Note(const uchar note, const uchar velo)
 {
-    uchar msg[3];
+    uchar msg[4];
 //Active une note
-    if (!hndOut) return;
     msg[0] = 0x90 + (midiChannel & 0xF);
     msg[1] = note & 0x7F;
     msg[2] = velo & 0x7F;
+    msg[3] = 0;
 //Envoie la note
-    EnvSysEx(msg, 3);
+    EnvMsg(msg);
 }
 
 /*****************************************************************************/

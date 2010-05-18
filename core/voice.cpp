@@ -29,13 +29,13 @@ Voice::Voice(const uchar instru)
     this->nbParam  = VOICE_NB_PARAM;
     this->lenSysEx = VOICE_LEN_SYSEX;
     this->nbSysEx  = VOICE_NB_SYSEX;
-//Initialise les opérateurs
-    for (int i=0; i < 4; i++)
-        operateurs[i] = new Operateur(instru, i, &sysEx[0x29 + 0x10 * i], &modif[0x10 + 0x8 * i]);
 //Initialise le sysEx
     this->sysEx = (uchar *) malloc(VOICE_LEN_SYSEX);
     this->modif = (bool *)  malloc(VOICE_NB_SYSEX);
     InitSysEx();
+//Initialise les opérateurs
+    for (int i=0; i < VOICE_NB_OPS; i++)
+        operateurs[i] = new Operateur(instru, i, &sysEx[0x29 + 0x10 * i], &modif[0x10 + 0x8 * i]);
 }
 
 Voice::~Voice()
@@ -56,7 +56,12 @@ bool Voice::Enregistrer(FILE * fichier)
     fwrite(comment, VOICE_LEN_COMMENT, 1, fichier);
     fwrite(nom, VOICE_LEN_NOM, 1, fichier);
 //Sauvegarde la table
-    return Block::Enregistrer(fichier);
+    if (!Block::Enregistrer(fichier)) return false;
+//Sauvegarde les opérateurs
+    for (int i=0; i < VOICE_NB_OPS; i ++)
+        if (!operateurs[i]->Enregistrer(fichier))
+            return false;
+    return true;
 }
 
 bool Voice::Charger(FILE * fichier, const int version)
@@ -65,14 +70,20 @@ bool Voice::Charger(FILE * fichier, const int version)
     fread(auteur, VOICE_LEN_AUTEUR, 1, fichier);
     fread(comment, VOICE_LEN_COMMENT, 1, fichier);
     fread(nom, VOICE_LEN_NOM, 1, fichier);
- //Recupère la table
-    return Block::Charger(fichier, version);
+//Récupère la table
+    if (!Block::Charger(fichier, version)) return false;
+//Récupère les opérateurs
+    for (int i=0; i < VOICE_NB_OPS; i ++)
+        if (!operateurs[i]->Charger(fichier, version))
+            return false;
+    return true;
 }
 
 /*****************************************************************************/
 const uchar initTab[16] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
 void Voice::Initialiser()
 {
+    EcrireNom((char *) "none");
     for (int i=0; i < VOICE_NB_PARAM; i++)
         EcrireParam(i, initTab[i]);
 }
@@ -224,6 +235,24 @@ void Voice::EcrireParam(uchar param, uchar valeur)
 }
 
 /*****************************************************************************/
+char * Voice::LireNom()
+{
+    static char nom[VOICE_LEN_NOM + 1];
+    for (uchar i = 0; i < VOICE_LEN_NOM; i++)
+        nom[i] = (char) LireSysEx(i);
+    nom[VOICE_LEN_NOM] = 0;
+    return nom;
+}
+
+void Voice::EcrireNom(char * nom)
+{
+    uchar i = 0;
+    int len = min(strlen(nom), VOICE_LEN_NOM);
+    for (; i < len; i++) EcrireSysEx(i, nom[i]);
+    for (; i < VOICE_LEN_NOM; i++) EcrireSysEx(i, ' ');
+}
+
+/*****************************************************************************/
 uint Voice::EnvoyerTout()
 {
     uint res = MIDI::EnvSysEx(sysEx, VOICE_LEN_SYSEX);
@@ -290,8 +319,8 @@ uchar Voice::LireSysEx(const uchar param)
 
 void Voice::EcrireSysEx(const uchar param, const uchar valeur)
 {
-    sysEx[param * 2 + 9]  = valeur & 0xF;
-    sysEx[param * 2 + 10] = valeur >> 4;
+    sysEx[param * 2 + 0x9] = valeur & 0xF;
+    sysEx[param * 2 + 0xA] = valeur >> 4;
     modif[param] = true;
 }
 

@@ -39,7 +39,6 @@ SOURCES += core/set.cpp \
     core/midi.cpp \
     core/block.cpp \
     core/voice.cpp \
-    core/set.cpp \
     core/operateur.cpp \
     core/instrument.cpp \
     core/bank.cpp \
