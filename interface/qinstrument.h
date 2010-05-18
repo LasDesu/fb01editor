@@ -24,7 +24,7 @@
 
 #include <QtGui/QWidget>
 
-#include "ui_qinstrument.h"
+#include "../ui_qinstrument.h"
 #include "../core/instrument.h"
 #include "../core/midi.h"
 

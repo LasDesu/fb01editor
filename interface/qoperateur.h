@@ -24,8 +24,8 @@
 
 #include <QtGui/QWidget>
 
-#include "ui_qoperateur.h"
-#include "../core/operator.h"
+#include "../ui_qoperateur.h"
+#include "../core/operateur.h"
 #include "../core/midi.h"
 
 namespace Ui {
@@ -42,7 +42,7 @@ protected:
     void changeEvent(QEvent *e);
 private:
     Ui::QOperateur *m_ui;
-    Operator * operateur;
+    Operateur * operateur;
 private slots:
     void on_hzSlider_volume_valueChanged(int i);
     void on_spnBox_vellvl_valueChanged(int i);

@@ -19,7 +19,7 @@ HEADERS += types.h \
     core/midi.h \
     core/block.h \
     core/set.h \
-    core/operator.h \
+    core/operateur.h \
     core/instrument.h \
     core/voice.h \
     interface/qoperateur.h \
@@ -30,14 +30,17 @@ HEADERS += types.h \
     interface/qenveloppe.h \
     core/bank.h \
     interface/mainwindow.h \
-    interface/qbanks.h
+    interface/qbanks.h \
+    interface/mainwindow.h \
+    editeur.h
+
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
     core/block.cpp \
     core/voice.cpp \
     core/set.cpp \
-    core/operator.cpp \
+    core/operateur.cpp \
     core/instrument.cpp \
     core/bank.cpp \
     interface/qoperateur.cpp \
@@ -46,9 +49,10 @@ SOURCES += core/set.cpp \
     interface/qvoice.cpp \
     interface/qinstrument.cpp \
     interface/qenveloppe.cpp \
-    interface/mainwindow.cpp \
     interface/qbanks.cpp \
-    main.cpp
+    interface/mainwindow.cpp \
+    editeur.cpp
+
 winnt { 
     DEFINES += WIN32
     LIBS += -luser32 \

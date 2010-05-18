@@ -19,8 +19,8 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QCLAVIER_H
-#define QCLAVIER_H
+#ifndef QBUTTON_H
+#define QBUTTON_H
 
 /*****************************************************************************/
 #include <QtGui/QPushButton>

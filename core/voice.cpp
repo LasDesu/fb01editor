@@ -31,7 +31,7 @@ Voice::Voice(const uchar instru)
     this->nbSysEx  = VOICE_NB_SYSEX;
 //Initialise les opérateurs
     for (int i=0; i < 4; i++)
-        operators[i] = new Operator(instru, i, &sysEx[0x29 + 0x10 * i], &modif[0x10 + 0x8 * i]);
+        operateurs[i] = new Operateur(instru, i, &sysEx[0x29 + 0x10 * i], &modif[0x10 + 0x8 * i]);
 //Initialise le sysEx
     this->sysEx = (uchar *) malloc(VOICE_LEN_SYSEX);
     this->modif = (bool *)  malloc(VOICE_NB_SYSEX);
@@ -42,7 +42,7 @@ Voice::~Voice()
 {
 //Libère les opérateurs
     for (int i=0; i < 4; i++)
-        delete operators[i];
+        delete operateurs[i];
 //Libère le sysex
     free(this->sysEx);
     free(this->modif);

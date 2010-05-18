@@ -25,7 +25,7 @@
 #include <QtGui/QWidget>
 #include <QPixmap>
 
-#include "ui_qvoice.h"
+#include "../ui_qvoice.h"
 #include "../core/voice.h"
 #include "../core/midi.h"
 

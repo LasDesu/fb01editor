@@ -27,7 +27,7 @@
 
 #include "../types.h"
 #include "block.h"
-#include "operator.h"
+#include "operateur.h"
 #include "midi.h"
 
 class Voice : public Block {
@@ -74,7 +74,7 @@ public :
 private :
 //Opérateurs intégrés
     #define VOICE_NB_OPS 4
-    Operator * operators[VOICE_NB_OPS];
+    Operateur * operateurs[VOICE_NB_OPS];
 //Paramêtres spéciaux
     #define VOICE_LEN_AUTEUR  129
     #define VOICE_LEN_COMMENT 129

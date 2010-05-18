@@ -20,7 +20,7 @@
 */
 
 #ifndef INSTRUMENT_H
-#define INTRUMENT_H
+#define INSTRUMENT_H
 
 #include <stdlib.h>
 #include <stdio.h>

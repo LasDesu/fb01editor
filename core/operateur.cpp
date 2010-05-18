@@ -19,10 +19,10 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "operator.h"
+#include "operateur.h"
 
 /*****************************************************************************/
-Operator::Operator(const uchar instru, const uchar id, uchar * sysEx, bool * modif)
+Operateur::Operateur(const uchar instru, const uchar id, uchar * sysEx, bool * modif)
 {
 //Initialise les propriétés
     this->instru  = instru;
@@ -36,20 +36,20 @@ Operator::Operator(const uchar instru, const uchar id, uchar * sysEx, bool * mod
     InitSysEx();
 }
 
-Operator::~Operator()
+Operateur::~Operateur()
 {
 }
 
 /*****************************************************************************/
 const uchar initTab[OPERATOR_NB_PARAM] = {127, 0, 0, 0, 0, 0, 0, 0, 31, 1, 0, 31, 0, 0, 15, 15};
-void Operator::Initialiser()
+void Operateur::Initialiser()
 {
     for (int i=0; i < OPERATOR_NB_PARAM; i++)
         EcrireParam(i, initTab[i]);
 }
 
 /*****************************************************************************/
-uchar Operator::LireParam(const uchar param)
+uchar Operateur::LireParam(const uchar param)
 {
     switch(param) {
     case OPERATOR_LEVEL :
@@ -89,7 +89,7 @@ uchar Operator::LireParam(const uchar param)
     }
 }
 
-void Operator::EcrireParam(const uchar param, const uchar valeur)
+void Operateur::EcrireParam(const uchar param, const uchar valeur)
 {
     uchar byte;
     switch(param) {
@@ -180,18 +180,18 @@ void Operator::EcrireParam(const uchar param, const uchar valeur)
 }
 
 /*****************************************************************************/
-uint Operator::EnvoyerTout()
+uint Operateur::EnvoyerTout()
 {
     return MIDI::MIDI_ERREUR_RIEN;
 }
 
-uint Operator::RecevoirTout()
+uint Operateur::RecevoirTout()
 {
     return MIDI::MIDI_ERREUR_RIEN;
 }
 
 /*****************************************************************************/
-uint Operator::Envoyer()
+uint Operateur::Envoyer()
 {
     uchar envOperateur[9] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Construit le message
@@ -213,12 +213,12 @@ uint Operator::Envoyer()
 }
 
 /*****************************************************************************/
-uchar Operator::LireSysEx(const uchar param)
+uchar Operateur::LireSysEx(const uchar param)
 {
     return (sysEx[param] & 0xF) + (sysEx[param * 2] << 4);
 }
 
-void Operator::EcrireSysEx(const uchar param, const uchar valeur)
+void Operateur::EcrireSysEx(const uchar param, const uchar valeur)
 {
     sysEx[param * 2] = valeur & 0xF;
     sysEx[param * 2 + 1] = valeur >> 4;

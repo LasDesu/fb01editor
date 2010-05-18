@@ -22,48 +22,28 @@
 #ifndef QBANKS_H
 #define QBANKS_H
 
-/*****************************************************************************/
-#include "ui_qbanks.h"
+#include <QtGui/QWidget>
+#include "../ui_qbanks.h"
 
-/*****************************************************************************/
-#include "expandeur.h"
+#include "../core/midi.h"
+#include "../core/bank.h"
 
-/*****************************************************************************/
-#define LNGBANK x
-
-/*****************************************************************************/
 namespace Ui {
     class QBanks;
 }
 
+/*****************************************************************************/
 class QBanks : public QWidget {
     Q_OBJECT
 public:
-    //Constructeurs
     QBanks(QWidget *parent = 0);
     ~QBanks();
-    //Communication
-    void Envoyer(const int Bank);
-    void Recevoir();
-    //Chargement/enregistrement
-    bool Enregistrer(QFile * Fichier, const int Bank);
-    bool Charger(QFile * Fichier, const int Version, const int Bank);
-    //Affichage
-    void Rafraichir();
-    void RafraichirItem(const int row, const int column);
-    //Interface et édition
-    bool Copier(uchar * Table);
-    void Coller(const uchar * Table);
-    void Echanger();
 protected:
-    //Interne
     void changeEvent(QEvent *e);
 private:
-    //Interface
     Ui::QBanks * m_ui;
-    bool Attente;
+    Bank * bank;
 private slots:
-    //Gestion des évènements
     void on_table_bank_cellClicked(int row, int column);
     void on_pshBut_bybank_clicked(bool checked);
     void on_pshBut_byname_clicked(bool checked);

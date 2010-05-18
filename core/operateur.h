@@ -30,7 +30,7 @@
 #include "block.h"
 #include "midi.h"
 
-class Operator : public Block {
+class Operateur : public Block {
 public :
 //Paramêtres éditables
     #define OPERATOR_NB_PARAM 16
@@ -53,8 +53,8 @@ public :
         OPERATOR_RELEASE
     }OPERATOR_PARAM;
 //Constructeurs
-    Operator(const uchar instru, const uchar id, uchar * sysEx, bool * modif);
-    ~Operator();
+    Operateur(const uchar instru, const uchar id, uchar * sysEx, bool * modif);
+    ~Operateur();
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
