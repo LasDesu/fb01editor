@@ -43,6 +43,11 @@ QBanks::~QBanks()
 {
     delete m_ui;
 }
+/*****************************************************************************/
+void QBanks::DefinirBank(Bank * bank)
+{
+    this->bank = bank;
+}
 
 /*****************************************************************************/
 void QBanks::on_pshBut_bybank_clicked(bool checked)

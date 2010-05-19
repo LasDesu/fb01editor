@@ -43,6 +43,7 @@
 
 //****************************************************************************/
 class Editeur {
+    friend class MainWindow;
 public :
     Editeur();
     ~Editeur();
@@ -55,20 +56,22 @@ public :
     bool ActualiserVoice();
     bool ActualiserConfig();
     bool ActualiserBank();
+//Attribution des objets
+    void AttribuerInstruments();
+    void AttribuerOperateurs();
 //Configuration de l'interface
     void ConfigurerOnglets(const bool actifs);
     void ConfigurerMenus(const bool actifs);
-    void ChangerPage(const int page);
-    void ChangerInstru(const int instru);
-    void ChangerOP(const int OP);
+//Choix des objets sélectionné
+    void ChoisirPageSet(const int page);
+    void ChoisirInstru(const int instru);
+    void ChoisirOP(const int OP);
 private :
 //Objets de l'éditeur
     #define EDITEUR_NB_BANK 4
-    Bank  * bank[EDITEUR_NB_BANK];
+    Bank  * banks[EDITEUR_NB_BANK];
     Voice * voice;
     Set   * set;
-//Fenêtre principale
-    MainWindow  * mainWindow;
 //Sélection d'édition
     int pageSel, instruSel, OPSel;
 //Initialisation de l'éditeur

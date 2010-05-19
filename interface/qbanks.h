@@ -38,6 +38,7 @@ class QBanks : public QWidget {
 public:
     QBanks(QWidget *parent = 0);
     ~QBanks();
+    void DefinirBank(Bank * bank);
 protected:
     void changeEvent(QEvent *e);
 private:

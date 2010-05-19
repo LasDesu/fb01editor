@@ -24,9 +24,9 @@
 /*****************************************************************************/
 QButton::QButton(QWidget * parent) : QPushButton(parent)
 {
+//Initialise le controle
     this->valeur = 0;
-    this->valMin = 0;
-    this->valMax = 127;
+    this->ancValeur = 0;
     this->click = false;
 }
 
@@ -35,32 +35,62 @@ QButton::~QButton()
 }
 
 /*****************************************************************************/
+void QButton::EcrireValeur(int valeur)
+{
+    static QString text;
+    if (valeur >= valMin && valeur <= valMax) {
+    //Change la valeur interne
+        this->valeur = valeur;
+        this->ancValeur = valeur;
+        emit valueChanged(valeur);
+    //Affiche la nouvelle valeur
+        text.setNum(valeur, 10);
+        setText(text);
+    }
+}
+
+int QButton::LireValeur()
+{
+    return valeur;
+}
+
+/*****************************************************************************/
 void QButton::mouseMoveEvent(QMouseEvent * event)
 {
+    static QString text;
     if (!click) return;
 //Augmente ou diminue la valeur
-    int ancValeur = valeur;
-    valeur += event->y() - sourisY;
-    valeur += (event->x() - sourisX) / 4;
+    valeur = clickValeur;
+    valeur += (sourisY - event->y()) >> 2;
+    valeur += (event->x() - sourisX) >> 4;
 //Limite la plage
     if(valeur > valMax) valeur = valMax;
     if(valeur < valMin) valeur = valMin;
-//Reprend la position
-    if(valeur != ancValeur) {
-        sourisX = event->x();
-        sourisY = event->y();
+//Change la valeur du controle
+    if (valeur != ancValeur) {
+        emit valueChanged(valeur);
+        ancValeur = valeur;
+        text.setNum(valeur, 10);
+        setText(text);
     }
 }
 
 /*****************************************************************************/
 void QButton::mousePressEvent(QMouseEvent * event)
 {
-    click = true;
+//Récupère les bornes
+    QSize size = this->baseSize();
+    this->valMin = (char) size.width();
+    this->valMax = (char) size.height();
+    clickValeur = valeur;
+//Sauvegarde la position
     sourisX = event->x();
     sourisY = event->y();
+    click = true;
 }
 
 void QButton::mouseReleaseEvent(QMouseEvent * event)
 {
     click = false;
 }
+

@@ -25,112 +25,6 @@
    <property name="title">
     <string>Instrument</string>
    </property>
-   <widget class="QSpinBox" name="spnBox_notes">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>20</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>8</number>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_chan">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>16</number>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_bank">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>140</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>6</number>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_voice">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>170</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>47</number>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="cmbBox_trans">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>200</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>-2 Octaves</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>-1 Octave</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>0 Octave</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>1 Octaves</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>2 Octaves</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_detune">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>230</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>-64</number>
-    </property>
-    <property name="maximum">
-     <number>63</number>
-    </property>
-   </widget>
    <widget class="QSlider" name="hzSlider_volume">
     <property name="geometry">
      <rect>
@@ -195,32 +89,6 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spnBox_porta">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>380</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>127</number>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_pitch">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>410</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>12</number>
-    </property>
-   </widget>
    <widget class="QComboBox" name="cmbBox_pmdctl">
     <property name="geometry">
      <rect>
@@ -276,8 +144,167 @@
      </rect>
     </property>
    </widget>
+   <widget class="QButton" name="but_notes">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>8</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_channel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>1</width>
+      <height>16</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>1</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_bank">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>5</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_voice">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>170</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>47</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_trans">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>254</width>
+      <height>2</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_fine">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>192</width>
+      <height>63</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_porta">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>380</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>127</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_pitch">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>410</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>12</height>
+     </size>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QButton</class>
+   <extends>QPushButton</extends>
+   <header>interface/qbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

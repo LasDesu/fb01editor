@@ -51,15 +51,14 @@ public :
         INSTRU_CONROLLER
     }INSTRU_PARAM;
 //Constructeurs
-    Instrument(const uchar id, uchar * sysEx, bool * modif);
+    Instrument(const uchar id, uchar * sysEx);
     ~Instrument();
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
     uchar LireParam(const uchar param);
-    void  EcrireParam(const uchar param, const uchar valeur);
+    void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
-    uint Envoyer();
     uint EnvoyerTout();
     uint RecevoirTout();
 private :
@@ -67,7 +66,7 @@ private :
     #define INSTRU_LEN_SYSEX 32
     #define INSTRU_NB_SYSEX  16
     uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur);
+    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

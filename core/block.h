@@ -46,25 +46,23 @@ public :
     virtual void Coller(const uchar * table, const ulong len);
 //Modification des propriétés
     virtual uchar LireParam(const uchar param) = 0;
-    virtual void  EcrireParam(const uchar param, const uchar valeur) = 0;
+    virtual void  EcrireParam(const uchar param, const uchar valeur, const bool envoi) = 0;
 //Envoi / Reception de l'objet
-    virtual uint Envoyer() = 0;
     virtual uint EnvoyerTout() = 0;
     virtual uint RecevoirTout() = 0;
 protected :
 //Messages SysEx
     uint lenSysEx;
-    uint nbSysEx;
     uchar * sysEx;
-    bool  * modif;
 //Paramêtres globaux
     uchar id;
     uchar nbParam;
-//Gestion des SysEx
+//Utilitaires SysEx
     virtual void InitSysEx();
     virtual void CheckSumSysEx();
+//Ecriture et lecture
     virtual uchar LireSysEx(const uchar param) = 0;
-    virtual void  EcrireSysEx(const uchar param, const uchar valeur) = 0;
+    virtual void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi) = 0;
 };
 
 #endif

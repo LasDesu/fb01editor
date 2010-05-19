@@ -25,6 +25,7 @@
 QVoice::QVoice(QWidget *parent) : QWidget(parent), m_ui(new Ui::QVoice)
 {
     m_ui->setupUi(this);
+    m_ui->but_algo->EcrireValeur(1);
 }
 
 QVoice::~QVoice()
@@ -33,85 +34,102 @@ QVoice::~QVoice()
 }
 
 /*****************************************************************************/
-/*
-void QVoice::Rafraichir()
+void QVoice::DefinirVoice(Voice * voice)
 {
-    m_ui->txtEdit_author->repaint();
-    m_ui->txtEdit_comment->repaint();
-    m_ui->txtEdit_voicename->repaint();
+    this->voice = voice;
 }
-*/
+
+/*****************************************************************************/
+QString AlgNoms[] = {":/ALGO1", ":/ALGO2", ":/ALGO3", ":/ALGO4", ":/ALGO5", ":/ALGO6", ":/ALGO7", ":/ALGO8"};
+void QVoice::on_but_algo_valueChanged(int i)
+{
+    QPixmap Pix;
+//Change l'image
+    Pix.load(AlgNoms[i-1]);
+    m_ui->lbl_algo->setPixmap(Pix);
+//Envoie la donnée
+    voice->EcrireParam(Voice::VOICE_ALGORITHME, i - 1, true);
+}
+
 /*****************************************************************************/
 void QVoice::on_txtEdit_voicename_textChanged()
 {
+    voice->EcrireNom(m_ui->txtEdit_voicename->toPlainText().toAscii().data(), true);
 }
 
 void QVoice::on_cmbBox_style_activated(int i)
 {
+    voice->EcrireParam(Voice::VOICE_USERCODE, i, true);
 }
 
-void QVoice::on_spnBox_feedback_valueChanged(int i)
+void QVoice::on_but_feedback_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_FEEDBACK, i, true);
 }
 
-void QVoice::on_spnBox_trans_valueChanged(int i)
+void QVoice::on_but_trans_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_TRANSPOSE, i + 2, true);
 }
 
 void QVoice::on_pshBut_poly_clicked(bool checked)
 {
+    voice->EcrireParam(Voice::VOICE_POLY, checked, true);
 }
 
-void QVoice::on_spnBox_porta_valueChanged(int i)
+void QVoice::on_but_porta_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_PORTAMENTO, i, true);
 }
 
-void QVoice::on_spnBox_pitch_valueChanged(int i)
+void QVoice::on_but_pitch_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_PITCHBEND, i, true);
 }
 
 void QVoice::on_cmbBox_pmdctl_activated(int i)
 {
+    voice->EcrireParam(Voice::VOICE_CONTROLLER, i, true);
 }
 
-void QVoice::on_spnBox_LFOspeed_valueChanged(int i)
+void QVoice::on_but_LFOspeed_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_SPEED, i, true);
 }
 
 void QVoice::on_cmbBox_LFOwave_activated(int i)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_WAVE, i, true);
 }
 
 void QVoice::on_pshBut_LFOload_clicked(bool checked)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_LOAD, checked, true);
 }
 
 void QVoice::on_pshBut_LFOsync_clicked(bool checked)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_SYNC, checked, true);
 }
 
-void QVoice::on_spnBox_AMD_valueChanged(int i)
+void QVoice::on_but_AMD_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_AMD, i, true);
 }
 
-void QVoice::on_spnBox_AMS_valueChanged(int i)
+void QVoice::on_but_AMS_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_AMS, i, true);
 }
 
-void QVoice::on_spnBox_PMD_valueChanged(int i)
+void QVoice::on_but_PMD_valueChanged(int i)
 {
+    voice->EcrireParam(Voice::VOICE_LFO_PMD, i, true);
 }
 
-void QVoice::on_spnBox_PMS_valueChanged(int i)
+void QVoice::on_but_PMS_valueChanged(int i)
 {
-}
-
-QString AlgNoms[] = {":/ALGO1", ":/ALGO2", ":/ALGO3", ":/ALGO4", ":/ALGO5", ":/ALGO6", ":/ALGO7", ":/ALGO8"};
-void QVoice::on_spnBox_algo_valueChanged(int i)
-{
-    QPixmap Pix;
-    Pix.load(AlgNoms[i-1]);
-    m_ui->lbl_algo->setPixmap(Pix);
+    voice->EcrireParam(Voice::VOICE_LFO_PMS, i, true);
 }
 
 /*****************************************************************************/

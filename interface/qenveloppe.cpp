@@ -38,27 +38,42 @@ void QEnveloppe::DefinirEnveloppe(int AR, int DR1, int SL, int DR2, int RR)
 //Calcule la position
     Points[0].setX(0);
     Points[0].setY(31);
-//Configure l'enveloppe
-    if (AR == 0)
-    {//Pas de note
+//Affichage de l'attaque
+    if (AR == 0) {
+    //Pas d'attaque
         Points[1].setX(31);  Points[1].setY(31);
         Points[2].setX(62);  Points[2].setY(31);
         Points[3].setX(93);  Points[3].setY(31);
         Points[4].setX(108); Points[4].setY(31);
     }else{
+    //Attaque non nulle
         Points[1].setX(31 - AR); Points[1].setY(0);
-        if (DR1 == 0)
-        {//Note continue
+    //Affichage du decay 1
+        if (DR1 == 0) {
+        //Pas de decay 1
             Points[2].setX(Points[1].x() + 31); Points[2].setY(0);
             Points[3].setX(Points[2].x() + 31); Points[3].setY(0);
-            Points[4].setX(Points[3].x() + 15 - RR); Points[4].setY(31);
-        }else{
-            Points[2].setX(Points[1].x() + 31 - DR1); Points[2].setY(31 - (SL * 31) / 15);
-            if (DR2 == 0)
-            {//Pas d'amortissement
-                Points[3].setX(Points[2].x() + 31); Points[3].setY(Points[2].y());
-                Points[4].setX(Points[3].x() + 15 - RR); Points[4].setY(31);
+        //Affichage du release
+            if (RR == 0) {
+                Points[4].setX(Points[3].x() + 15); Points[4].setY(0);
             }else{
+                Points[4].setX(Points[3].x() + 15 - RR); Points[4].setY(31);
+            }
+        }else{
+        //Affichage du sustain
+            Points[2].setX(Points[1].x() + 31 - DR1); Points[2].setY(31 - (SL * 31) / 15);
+        //Affichage du decay 2
+            if (DR2 == 0) {
+            //Pas de decay 2
+                Points[3].setX(Points[2].x() + 31); Points[3].setY(Points[2].y());
+            //Affichage du release
+                if (RR == 0) {
+                    Points[4].setX(Points[3].x() + 15); Points[4].setY(Points[3].y());
+                }else{
+                    Points[4].setX(Points[3].x() + 15 - RR); Points[4].setY(31);
+                }
+            }else{
+            //Decay 2 non nul
                 Points[3].setX(Points[2].x() + 31 - DR2); Points[3].setY(31);
                 if (RR == 0)
                 {//Pas de relachement

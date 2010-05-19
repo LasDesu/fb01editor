@@ -29,23 +29,27 @@
 /*****************************************************************************/
 class QButton : public QPushButton
 {
+    Q_OBJECT
 public:
     QButton(QWidget * parent = 0);
     ~QButton();
 //Accesseurs
     void EcrireValeur(int valeur);
-    int  LireValeur();
+    int LireValeur();
 private:
 //Valeurs du controle
-    int valeur;
+    int valeur, ancValeur;
     int valMin, valMax;
 //Gestion du click
     bool click;
-    int sourisX, sourisY;
+    int  clickValeur;
+    int  sourisX, sourisY;
 //Réimplémentation de la souris
     virtual void mouseMoveEvent(QMouseEvent * event);
     virtual void mousePressEvent(QMouseEvent * event);
     virtual void mouseReleaseEvent(QMouseEvent * event);
+signals :
+    void valueChanged(int value);
 };
 
 #endif // QBUTTON_H

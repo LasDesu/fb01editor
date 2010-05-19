@@ -53,15 +53,16 @@ public :
         OPERATOR_RELEASE
     }OPERATOR_PARAM;
 //Constructeurs
-    Operateur(const uchar instru, const uchar id, uchar * sysEx, bool * modif);
+    Operateur(const uchar id, uchar * sysEx);
     ~Operateur();
+//Association de l'instrument
+    void AssocierInstrument(int index);
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
     uchar LireParam(const uchar param);
-    void  EcrireParam(const uchar param, const uchar valeur);
+    void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
-    uint Envoyer();
     uint EnvoyerTout();
     uint RecevoirTout();
 private :
@@ -70,9 +71,9 @@ private :
     #define OPERATOR_NB_SYSEX  8
 //Paramêtres globaux
     uchar instru;
-//Gestion des SysEx
+//Envoi et réception sysEx
     uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur);
+    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

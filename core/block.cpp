@@ -26,10 +26,8 @@ Block::Block()
 {
     this->id = 0;
     this->nbParam = 0;
-    this->nbSysEx = 0;
     this->lenSysEx = 0;
     this->sysEx = NULL;
-    this->modif = NULL;
 }
 
 Block::~Block()
@@ -52,7 +50,7 @@ bool Block::Charger(FILE * fichier, const int version)
     if (fread(sauv, nbParam, 1, fichier))
         return false;
     for (int i=0; i < nbParam; i++)
-        EcrireParam(i, sauv[i]);
+        EcrireParam(i, sauv[i], true);
     return true;
 }
 
@@ -77,13 +75,13 @@ bool Block::Importe(FILE * fichier)
 void Block::Initialiser()
 {
     for (int i=0; i < nbParam; i++)
-        EcrireParam(i, 0);
+        EcrireParam(i, 0, true);
 }
 
 void Block::Randomiser()
 {
     for (int i=0; i < nbParam; i++)
-        EcrireParam(i, RAND(0, 255));
+        EcrireParam(i, RAND(0, 255), true);
 }
 
 void Block::Copier(uchar * table, const ulong len)
@@ -96,13 +94,13 @@ void Block::Coller(const uchar * table, const ulong len)
 {
     if (len < lenSysEx) return;
     memcpy(sysEx, table, lenSysEx);
+    EnvoyerTout();
 }
 
 /*****************************************************************************/
 void Block::InitSysEx()
 {
-    memset(sysEx, nbSysEx, 0);
-    memset(modif, lenSysEx, 0);
+    memset(sysEx, lenSysEx, 0);
 }
 
 void Block::CheckSumSysEx()

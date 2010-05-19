@@ -29,6 +29,7 @@
 #include <QtGui/QFileDialog>
 #include <QList>
 
+#include "../editeur.h"
 #include "../core/midi.h"
 #include "qbanks.h"
 #include "qinstrument.h"
@@ -43,9 +44,11 @@ namespace Ui
 /*****************************************************************************/
 class MainWindow : public QMainWindow{
     Q_OBJECT
+    friend class Editeur;
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+private:
     Ui::MainWindow *ui;
 public slots:
     void on_cmbBox_MIDICtrl_activated(int index);

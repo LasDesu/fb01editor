@@ -24,7 +24,6 @@
 
 extern QApplication * MainApp;
 extern Editeur * editeur;
-
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -493,34 +492,42 @@ void MainWindow::on_hzSlider_mastvol_valueChanged(int i)
 /*****************************************************************************/
 void MainWindow::on_pshBut_inst_cur_1_clicked(bool checked)
 {
+    editeur->ChoisirInstru(0);
 }
 
 void MainWindow::on_pshBut_inst_cur_2_clicked(bool checked)
 {
+    editeur->ChoisirInstru(1);
 }
 
 void MainWindow::on_pshBut_inst_cur_3_clicked(bool checked)
 {
+    editeur->ChoisirInstru(2);
 }
 
 void MainWindow::on_pshBut_inst_cur_4_clicked(bool checked)
 {
+    editeur->ChoisirInstru(3);
 }
 
 void MainWindow::on_pshBut_inst_cur_5_clicked(bool checked)
 {
+    editeur->ChoisirInstru(4);
 }
 
 void MainWindow::on_pshBut_inst_cur_6_clicked(bool checked)
 {
+    editeur->ChoisirInstru(5);
 }
 
 void MainWindow::on_pshBut_inst_cur_7_clicked(bool checked)
 {
+    editeur->ChoisirInstru(6);
 }
 
 void MainWindow::on_pshBut_inst_cur_8_clicked(bool checked)
 {
+    editeur->ChoisirInstru(7);
 }
 
 void MainWindow::on_txtEdit_setname_textChanged()
@@ -530,39 +537,49 @@ void MainWindow::on_txtEdit_setname_textChanged()
 /*****************************************************************************/
 void MainWindow::on_pshBut_op_cur_1_clicked(bool checked)
 {
+    editeur->ChoisirOP(0);
 }
 
 void MainWindow::on_pshBut_op_cur_2_clicked(bool checked)
 {
+    editeur->ChoisirOP(1);
 }
 
 void MainWindow::on_pshBut_op_cur_3_clicked(bool checked)
 {
+    editeur->ChoisirOP(2);
 }
 
 void MainWindow::on_pshBut_op_cur_4_clicked(bool checked)
 {
+    editeur->ChoisirOP(3);
 }
 
+/*****************************************************************************/
 void MainWindow::on_pshBut_OPon_1_clicked(bool checked)
 {
+    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP1, checked, true);
 }
 
 void MainWindow::on_pshBut_OPon_2_clicked(bool checked)
 {
+    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP2, checked, true);
 }
 
 void MainWindow::on_pshBut_OPon_3_clicked(bool checked)
 {
+    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP3, checked, true);
 }
 
 void MainWindow::on_pshBut_OPon_4_clicked(bool checked)
 {
+    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP4, checked, true);
 }
 
 /*****************************************************************************/
 void MainWindow::on_pshBut_next_pressed()
 {
+    editeur->ChoisirPageSet(1 - editeur->pageSel);
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)

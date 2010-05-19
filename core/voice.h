@@ -58,8 +58,12 @@ public :
         VOICE_ENABLE_OP4,
     }VOICE_PARAM;
 //Constructeurs
-    Voice(const uchar instru);
+    Voice();
     ~Voice();
+//Récupération des objets
+    Operateur * RecupererOP(int index);
+//Association de l'instrument
+    void AssocierInstrument(int index);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const int version);
@@ -67,11 +71,10 @@ public :
     void Initialiser();
 //Modification des propriétés
     uchar  LireParam(const uchar param);
-    void   EcrireParam(const uchar param, const uchar valeur);
+    void   EcrireParam(const uchar param, const uchar valeur, const bool envoi);
     char * LireNom();
-    void   EcrireNom(char * nom);
+    void   EcrireNom(char * nom, const bool envoi);
 //Envoi / Reception de l'objet
-    uint Envoyer();
     uint EnvoyerTout();
     uint RecevoirTout();
 private :
@@ -90,7 +93,7 @@ private :
     #define VOICE_NB_SYSEX  64
     void  InitSysEx();
     uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur);
+    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

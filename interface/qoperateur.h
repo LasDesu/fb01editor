@@ -38,6 +38,8 @@ class QOperateur : public QWidget {
 public:
     QOperateur(QWidget *parent = 0);
     ~QOperateur();
+    void DefinirOP(Operateur * operateur);
+    void ActualiserEnveloppe();
 protected:
     void changeEvent(QEvent *e);
 private:
@@ -45,21 +47,21 @@ private:
     Operateur * operateur;
 private slots:
     void on_hzSlider_volume_valueChanged(int i);
-    void on_spnBox_vellvl_valueChanged(int i);
-    void on_spnBox_velAR_valueChanged(int i);
-    void on_spnBox_AR_valueChanged(int i);
-    void on_spnBox_D1R_valueChanged(int i);
-    void on_spnBox_SL_valueChanged(int i);
-    void on_spnBox_D2R_valueChanged(int i);
-    void on_spnBox_RR_valueChanged(int i);
     void on_pshBut_carrier_clicked(bool checked);
-    void on_spnBox_coarse_valueChanged(int i);
-    void on_spnBox_fine_valueChanged(int i);
-    void on_spnBox_multiple_valueChanged(int i);
     void on_cmbBox_lvlcurb_activated(int i);
-    void on_spnBox_lvldph_valueChanged(int i);
-    void on_spnBox_rtdph_valueChanged(int i);
-    void on_spnBox_adjTL_valueChanged(int i);
+    void on_but_vellvl_valueChanged(int i);
+    void on_but_velAR_valueChanged(int i);
+    void on_but_AR_valueChanged(int i);
+    void on_but_D1R_valueChanged(int i);
+    void on_but_SL_valueChanged(int i);
+    void on_but_D2R_valueChanged(int i);
+    void on_but_RR_valueChanged(int i);
+    void on_but_coarse_valueChanged(int i);
+    void on_but_fine_valueChanged(int i);
+    void on_but_mult_valueChanged(int i);
+    void on_but_lvldph_valueChanged(int i);
+    void on_but_rtdph_valueChanged(int i);
+    void on_but_adjTL_valueChanged(int i);
 };
 
 #endif // QOPERATEUR_H

@@ -38,6 +38,7 @@ class QInstrument : public QWidget {
 public:
     QInstrument(QWidget *parent = 0);
     ~QInstrument();
+    void DefinirInstrument(Instrument * instrument);
 protected:
     void changeEvent(QEvent *e);
 private:

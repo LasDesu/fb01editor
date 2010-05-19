@@ -22,18 +22,21 @@
 #include "editeur.h"
 
 QApplication * application;
-Editeur      * editeur;
-
+MainWindow   * mainWindow = NULL;
+Editeur      * editeur = NULL;
 /*****************************************************************************/
 int main(int argc, char *argv[])
 {
 //Créé l'éditeur
     application = new QApplication(argc, argv);
+    mainWindow  = new MainWindow();
+    mainWindow->show();
     editeur = new Editeur();
 //Démarre le programme
     int res = application->exec();
 //Libère les ressources
     delete editeur;
+    delete mainWindow;
     delete application;
     return res;
 }
@@ -41,9 +44,6 @@ int main(int argc, char *argv[])
 /*****************************************************************************/
 Editeur::Editeur()
 {
-//Créé la fenêtre
-    mainWindow = new MainWindow();
-    mainWindow->show();
 //Initialise l'éditeur
     InitialiserInterface();
     InitialiserEditeur();
@@ -54,8 +54,6 @@ Editeur::~Editeur()
 //Termine l'éditeur
     TerminerEditeur();
     TerminerInterface();
-//Libère la fenêtre
-    delete mainWindow;
 }
 
 /*****************************************************************************/
@@ -63,13 +61,16 @@ void Editeur::InitialiserEditeur()
 {
 //Créé les objets de l'éditeur
     set = new Set();
-    voice = new Voice(0);
+    voice = new Voice();
     for (int i=0; i < EDITEUR_NB_BANK; i++)
-        bank[i] = new Bank();
+        banks[i] = new Bank();
+//Attribue les classes à l'interface
+    AttribuerInstruments();
+    AttribuerOperateurs();
 //Initialise les sélections
-    ChangerPage(0);
-    ChangerInstru(0);
-    ChangerOP(0);
+    ChoisirPageSet(0);
+    ChoisirInstru(0);
+    ChoisirOP(0);
 //Initialisations diverses
     //srand(QTime::currentTime().msec());
 }
@@ -78,8 +79,6 @@ void Editeur::InitialiserInterface()
 {
 //Liste les drivers
     mainWindow->on_pshBut_refresh_midi_clicked(false);
-//Choisit le premier onglet
-    mainWindow->ui->tabWidget->setCurrentIndex(0);
 //Désactive l'interface
     ConfigurerMenus(false);
     ConfigurerOnglets(false);
@@ -96,6 +95,7 @@ void Editeur::TerminerEditeur()
 
 void Editeur::TerminerInterface()
 {
+
 }
 
 /*****************************************************************************/
@@ -106,8 +106,11 @@ void Editeur::ConfigurerOnglets(const bool actifs)
     mainWindow->ui->tab_set->setEnabled(actifs);
     mainWindow->ui->tab_operas->setEnabled(actifs);
     mainWindow->ui->tab_voice->setEnabled(actifs);
-//Active le cadre
+//Active ou désactive le cadre de config
     mainWindow->ui->grpBox_config->setEnabled(actifs);
+//Sélectionne l'onglet de configuration
+    if (!actifs)
+        mainWindow->ui->tabWidget->setCurrentIndex(0);
 }
 
 void Editeur::ConfigurerMenus(const bool actifs)
@@ -143,21 +146,22 @@ void Editeur::ConfigurerMenus(const bool actifs)
 }
 
 /*****************************************************************************/
-void Editeur::ChangerPage(const int page)
+void Editeur::ChoisirPageSet(const int page)
 {
 //Sélectionne la page
     pageSel = page;
-    if (pageSel == 0)
-    {
+    if (pageSel == 0) {
         mainWindow->ui->frame_page_1->show();
         mainWindow->ui->frame_page_2->hide();
     }else{
         mainWindow->ui->frame_page_2->show();
         mainWindow->ui->frame_page_1->hide();
     }
+//Charge le set d'instruments
+    set->RecevoirTout();
 }
 
-void Editeur::ChangerInstru(const int instru)
+void Editeur::ChoisirInstru(const int instru)
 {
 //Sélectionne l'instrument
     instruSel = instru;
@@ -169,11 +173,12 @@ void Editeur::ChangerInstru(const int instru)
     mainWindow->ui->pshBut_inst_cur_6->setChecked(instruSel == 5);
     mainWindow->ui->pshBut_inst_cur_7->setChecked(instruSel == 6);
     mainWindow->ui->pshBut_inst_cur_8->setChecked(instruSel == 7);
-//Charge le nouvelle instrument
-
+//Charge l'instrument sélectionné
+    voice->AssocierInstrument(instru);
+    voice->RecevoirTout();
 }
 
-void Editeur::ChangerOP(const int OP)
+void Editeur::ChoisirOP(const int OP)
 {
 //Sélectionne l'opérateur
     OPSel = OP;
@@ -181,6 +186,27 @@ void Editeur::ChangerOP(const int OP)
     mainWindow->ui->pshBut_op_cur_2->setChecked(OP == 1);
     mainWindow->ui->pshBut_op_cur_3->setChecked(OP == 2);
     mainWindow->ui->pshBut_op_cur_4->setChecked(OP == 3);
+}
+
+/*****************************************************************************/
+void Editeur::AttribuerInstruments()
+{
+    mainWindow->ui->widget_instru_1->DefinirInstrument(set->RecupererInstrument(0));
+    mainWindow->ui->widget_instru_2->DefinirInstrument(set->RecupererInstrument(1));
+    mainWindow->ui->widget_instru_3->DefinirInstrument(set->RecupererInstrument(2));
+    mainWindow->ui->widget_instru_4->DefinirInstrument(set->RecupererInstrument(3));
+    mainWindow->ui->widget_instru_5->DefinirInstrument(set->RecupererInstrument(4));
+    mainWindow->ui->widget_instru_6->DefinirInstrument(set->RecupererInstrument(5));
+    mainWindow->ui->widget_instru_7->DefinirInstrument(set->RecupererInstrument(6));
+    mainWindow->ui->widget_instru_8->DefinirInstrument(set->RecupererInstrument(7));
+}
+
+void Editeur::AttribuerOperateurs()
+{
+    mainWindow->ui->widget_opera_1->DefinirOP(voice->RecupererOP(0));
+    mainWindow->ui->widget_opera_2->DefinirOP(voice->RecupererOP(1));
+    mainWindow->ui->widget_opera_3->DefinirOP(voice->RecupererOP(2));
+    mainWindow->ui->widget_opera_4->DefinirOP(voice->RecupererOP(3));
 }
 
 /*****************************************************************************/

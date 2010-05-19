@@ -29,10 +29,10 @@
 /*****************************************************************************/
 class QEnveloppe : public QLabel
 {
+    Q_OBJECT
 public:
     QEnveloppe(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~QEnveloppe();
-//Fonctions publiques
     void DefinirEnveloppe(int AR, int DR1, int SL, int DR2, int RR);
 private:
     QPoint Points[5];

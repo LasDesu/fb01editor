@@ -27,14 +27,12 @@ Set::Set()
 //Initialise les propriétés
     this->nbParam  = SET_NB_PARAM;
     this->lenSysEx = SET_LEN_SYSEX;
-    this->nbSysEx  = SET_NB_SYSEX;
 //Initialise le sysEx
     this->sysEx = (uchar *) malloc(SET_LEN_SYSEX);
-    this->modif = (bool *)  malloc(SET_NB_SYSEX);
     InitSysEx();
 //Initialise les instruments
     for (int i=0; i < SET_NB_INSTRU; i++)
-        instruments[i] = new Instrument(i, &sysEx[0x29 + 0x10 * i], &modif[0x20 + 0x10 * i]);
+        instruments[i] = new Instrument(i, &sysEx[0x29 + 0x10 * i]);
 }
 
 Set::~Set()
@@ -44,7 +42,12 @@ Set::~Set()
         delete instruments[i];
 //Libère le sysex
     free(this->sysEx);
-    free(this->modif);
+}
+
+/*****************************************************************************/
+Instrument * Set::RecupererInstrument(int index)
+{
+    return instruments[index];
 }
 
 /*****************************************************************************/
@@ -66,7 +69,7 @@ bool Set::Charger(FILE * fichier, const int version)
 /*****************************************************************************/
 void Set::Initialiser()
 {
-    EcrireNom((char *)"none");
+    EcrireNom((char *)"none", true);
 }
 
 /*****************************************************************************/
@@ -75,7 +78,7 @@ uchar Set::LireParam(const uchar param)
     return 0;
 }
 
-void Set::EcrireParam(uchar param, uchar valeur)
+void Set::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 {
 }
 
@@ -89,12 +92,12 @@ char * Set::LireNom()
     return nom;
 }
 
-void Set::EcrireNom(char * nom)
+void Set::EcrireNom(char * nom, const bool envoi)
 {
     uchar i = 0;
     int len = min(strlen(nom), SET_LEN_NOM);
-    for (; i < len; i++) EcrireSysEx(i, nom[i]);
-    for (; i < SET_LEN_NOM; i++) EcrireSysEx(i, ' ');
+    for (; i < len; i++) EcrireSysEx(i, nom[i], envoi);
+    for (; i < SET_LEN_NOM; i++) EcrireSysEx(i, ' ', envoi);
 }
 
 /*****************************************************************************/
@@ -102,7 +105,6 @@ uint Set::EnvoyerTout()
 {
     uint res = MIDI::EnvSysEx(sysEx, SET_LEN_SYSEX);
     if (res != MIDI::MIDI_ERREUR_RIEN) return res;
-    memset(modif, 0, SET_NB_SYSEX);
     return MIDI::MIDI_ERREUR_RIEN;
 }
 
@@ -116,26 +118,6 @@ uint Set::RecevoirTout()
     if (res != MIDI::MIDI_ERREUR_RIEN) return res;
 //Attend la reception
     return MIDI::RecSysEx(sysEx, SET_LEN_SYSEX);
-}
-
-/*****************************************************************************/
-uint Set::Envoyer()
-{
-    uchar envSet[8] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
-//Construit le message
-    envSet[3] = MIDI::SysChannel();
-//Envoi les changements
-    for (int i=0; i < SET_NB_SYSEX; i++)
-        if (modif[i]) {
-        //Ajoute le contenu
-            envSet[5] = i & 0x7F;
-            envSet[6] = sysEx[i] & 0x7F;
-        //Envoi le message
-            uint res = MIDI::EnvSysEx(envSet, 8);
-            if (res != MIDI::MIDI_ERREUR_RIEN) return res;
-            modif[i] = false;
-        }
-    return MIDI::MIDI_ERREUR_RIEN;
 }
 
 /*****************************************************************************/
@@ -159,8 +141,17 @@ uchar Set::LireSysEx(const uchar param)
     return sysEx[param + 0x9];
 }
 
-void Set::EcrireSysEx(const uchar param, const uchar valeur)
+void Set::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
 {
+    uchar envSet[8] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
+//Modifie le sysEx
     sysEx[param + 0x9] = valeur & 0x7F;
-    modif[param] = true;
+//Construit le message
+    if (!envoi) return;
+    envSet[3] = MIDI::SysChannel();
+//Envoi les changements
+    envSet[5] = param & 0x7F;
+    envSet[6] = valeur & 0x7F;
+//Envoi le message
+    MIDI::EnvSysEx(envSet, 8);
 }

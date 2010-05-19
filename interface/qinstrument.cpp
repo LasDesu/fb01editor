@@ -25,6 +25,7 @@
 QInstrument::QInstrument(QWidget *parent) : QWidget(parent), m_ui(new Ui::QInstrument)
 {
     m_ui->setupUi(this);
+    m_ui->but_channel->EcrireValeur(1);
     InitialiserNotes(m_ui->cmbBox_upper);
     InitialiserNotes(m_ui->cmbBox_lower);
 }
@@ -32,6 +33,12 @@ QInstrument::QInstrument(QWidget *parent) : QWidget(parent), m_ui(new Ui::QInstr
 QInstrument::~QInstrument()
 {
     delete m_ui;
+}
+
+/*****************************************************************************/
+void QInstrument::DefinirInstrument(Instrument * instrument)
+{
+    this->instrument = instrument;
 }
 
 /*****************************************************************************/

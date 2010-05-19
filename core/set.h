@@ -39,6 +39,8 @@ public :
 //Constructeurs
     Set();
     ~Set();
+//Récupération des objets
+    Instrument * RecupererInstrument(int index);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const int version);
@@ -46,11 +48,10 @@ public :
     void Initialiser();
 //Modification des propriétés
     uchar  LireParam(const uchar param);
-    void   EcrireParam(const uchar param, const uchar valeur);
+    void   EcrireParam(const uchar param, const uchar valeur, const bool envoi);
     char * LireNom();
-    void   EcrireNom(char * nom);
+    void   EcrireNom(char * nom, const bool envoi);
 //Envoi / Reception de l'objet
-    uint Envoyer();
     uint EnvoyerTout();
     uint RecevoirTout();
 private :
@@ -62,7 +63,7 @@ private :
     #define SET_NB_SYSEX  160
     void  InitSysEx();
     uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur);
+    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

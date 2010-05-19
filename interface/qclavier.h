@@ -32,6 +32,7 @@
 /*****************************************************************************/
 class QClavier : public QLabel
 {
+    Q_OBJECT
 public:
     QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~QClavier();
