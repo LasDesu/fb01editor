@@ -30,6 +30,8 @@ Voice::Voice()
 //Initialise le sysEx
     this->sysEx = (uchar *) malloc(VOICE_LEN_SYSEX);
     InitSysEx();
+//Initialise le nom
+    EcrireNom("none", false);
 //Initialise les opérateurs
     for (int i=0; i < VOICE_NB_OPS; i++)
         operateurs[i] = new Operateur(i, &sysEx[0x29 + 0x10 * i]);
@@ -257,7 +259,7 @@ void Voice::EcrireNom(char * nom, const bool envoi)
 {
     uchar i = 0;
     int len = min(strlen(nom), VOICE_LEN_NOM);
-    for (; i < len; i++) EcrireSysEx(i, nom[i], envoi);
+    for (; i < len; i++) EcrireSysEx(i,0, envoi);
     for (; i < VOICE_LEN_NOM; i++) EcrireSysEx(i, ' ', envoi);
 }
 
@@ -320,4 +322,3 @@ void Voice::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
 //Envoi le message
     MIDI::EnvSysEx(envVoice, 9);
 }
-

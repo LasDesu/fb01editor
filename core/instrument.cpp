@@ -93,7 +93,7 @@ void Instrument::EcrireParam(const uchar param, const uchar valeur, const bool e
         EcrireSysEx(1, valeur & 0xF, envoi);
     break;
     case INSTRU_UPPER :
-        EcrireSysEx(2, valeur, envoi);
+        EcrireSysEx(2, valeur & 0xF, envoi);
     break;
     case INSTRU_LOWER :
         EcrireSysEx(3, valeur & 0xF, envoi);

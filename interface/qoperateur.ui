@@ -539,7 +539,7 @@
      <string>0</string>
     </property>
    </widget>
-   <widget class="QButton" name="but_SL_2">
+   <widget class="QButton" name="but_adjTL">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -562,14 +562,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QEnveloppe</class>
-   <extends>QLabel</extends>
-   <header>interface/qenveloppe.h</header>
-  </customwidget>
-  <customwidget>
    <class>QButton</class>
    <extends>QPushButton</extends>
    <header>interface/qbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QEnveloppe</class>
+   <extends>QLabel</extends>
+   <header>interface/qenveloppe.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

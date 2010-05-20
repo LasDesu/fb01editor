@@ -34,8 +34,8 @@ public:
     QButton(QWidget * parent = 0);
     ~QButton();
 //Accesseurs
-    void EcrireValeur(int valeur);
-    int LireValeur();
+    void setValue(int value);
+    int  value();
 private:
 //Valeurs du controle
     int valeur, ancValeur;

@@ -40,6 +40,9 @@ public:
     QVoice(QWidget *parent = 0);
     ~QVoice();
     void DefinirVoice(Voice * voice);
+    void DefinirAuteur(QString auteur);
+    void DefinirComment(QString comment);
+    void Actualiser();
 protected:
     void changeEvent(QEvent *e);
 private:
@@ -55,7 +58,7 @@ private slots:
     void on_but_porta_valueChanged(int i);
     void on_but_pitch_valueChanged(int i);
     void on_cmbBox_pmdctl_activated(int i);
-    void on_but_LFOspeed_valueChanged(int i);
+    void on_spnBox_LFOspeed_valueChanged(int i);
     void on_cmbBox_LFOwave_activated(int i);
     void on_pshBut_LFOload_clicked(bool checked);
     void on_pshBut_LFOsync_clicked(bool checked);

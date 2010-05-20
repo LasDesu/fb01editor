@@ -352,7 +352,7 @@
      <string>0</string>
     </property>
    </widget>
-   <widget class="QButton" name="but_transpose">
+   <widget class="QButton" name="but_trans">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -435,7 +435,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/imgs/algo1.bmp</pixmap>
+     <pixmap>:/ALGO1</pixmap>
     </property>
    </widget>
    <widget class="QButton" name="but_algo">

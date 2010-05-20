@@ -40,6 +40,7 @@ public:
     ~QOperateur();
     void DefinirOP(Operateur * operateur);
     void ActualiserEnveloppe();
+    void Actualiser();
 protected:
     void changeEvent(QEvent *e);
 private:

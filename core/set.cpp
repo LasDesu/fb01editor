@@ -30,6 +30,8 @@ Set::Set()
 //Initialise le sysEx
     this->sysEx = (uchar *) malloc(SET_LEN_SYSEX);
     InitSysEx();
+//Initialise le nom
+    EcrireNom("none", false);
 //Initialise les instruments
     for (int i=0; i < SET_NB_INSTRU; i++)
         instruments[i] = new Instrument(i, &sysEx[0x29 + 0x10 * i]);

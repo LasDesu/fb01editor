@@ -51,13 +51,14 @@ public :
     FILE * ChargerFichier(const int Type, const short Version);
     FILE * EnregistrerFichier(const int Type, const short Version);
 //Actualisation de l'éditeur
-    void ActualiserEditeur();
-    bool ActualiserSet();
-    bool ActualiserVoice();
-    bool ActualiserConfig();
-    bool ActualiserBank();
+    void Actualiser();
+    void Reinitialiser();
+//Gestion des erreurs
+    void ErreurMIDI();
+    void ErreurConnection();
 //Attribution des objets
     void AttribuerInstruments();
+    void AttribuerVoice();
     void AttribuerOperateurs();
 //Configuration de l'interface
     void ConfigurerOnglets(const bool actifs);
@@ -66,6 +67,10 @@ public :
     void ChoisirPageSet(const int page);
     void ChoisirInstru(const int instru);
     void ChoisirOP(const int OP);
+    bool ActualiserConfig();
+    bool ActualiserBanks();
+    bool ActualiserSet();
+    bool ActualiserInstru();
 private :
 //Objets de l'éditeur
     #define EDITEUR_NB_BANK 4

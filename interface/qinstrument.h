@@ -39,6 +39,7 @@ public:
     QInstrument(QWidget *parent = 0);
     ~QInstrument();
     void DefinirInstrument(Instrument * instrument);
+    void Actualiser();
 protected:
     void changeEvent(QEvent *e);
 private:
@@ -47,20 +48,20 @@ private:
 //Fonctions internes
     void InitialiserNotes(QComboBox * box);
 private slots:
-    void on_spnBox_notes_valueChanged(int i);
-    void on_spnBox_chan_valueChanged(int i);
+    void on_but_notes_valueChanged(int i);
+    void on_but_channel_valueChanged(int i);
     void on_cmbBox_upper_activated(int i);
     void on_cmbBox_lower_activated(int i);
-    void on_spnBox_bank_valueChanged(int i);
-    void on_spnBox_voice_valueChanged(int i);
-    void on_spnBox_detune_valueChanged(int i);
-    void on_cmbBox_trans_activated(int i);
+    void on_but_bank_valueChanged(int i);
+    void on_but_voice_valueChanged(int i);
+    void on_but_detune_valueChanged(int i);
+    void on_but_trans_valueChanged(int i);
     void on_hzSlider_volume_valueChanged(int i);
     void on_hzSlider_pan_valueChanged(int i);
     void on_pshBut_LFO_clicked(bool checked);
     void on_pshBut_poly_clicked(bool checked);
-    void on_spnBox_porta_valueChanged(int i);
-    void on_spnBox_pitch_valueChanged(int i);
+    void on_but_porta_valueChanged(int i);
+    void on_but_pitch_valueChanged(int i);
     void on_cmbBox_pmdctl_activated(int i);
 };
 

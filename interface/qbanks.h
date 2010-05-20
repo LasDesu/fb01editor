@@ -39,6 +39,7 @@ public:
     QBanks(QWidget *parent = 0);
     ~QBanks();
     void DefinirBank(Bank * bank);
+    void Actualiser();
 protected:
     void changeEvent(QEvent *e);
 private:

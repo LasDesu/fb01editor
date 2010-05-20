@@ -35,21 +35,21 @@ QButton::~QButton()
 }
 
 /*****************************************************************************/
-void QButton::EcrireValeur(int valeur)
+void QButton::setValue(int value)
 {
     static QString text;
-    if (valeur >= valMin && valeur <= valMax) {
+    if (value >= valMin && value <= valMax) {
     //Change la valeur interne
-        this->valeur = valeur;
-        this->ancValeur = valeur;
-        emit valueChanged(valeur);
+        this->valeur = value;
+        this->ancValeur = value;
+        emit valueChanged(value);
     //Affiche la nouvelle valeur
-        text.setNum(valeur, 10);
+        text.setNum(value, 10);
         setText(text);
     }
 }
 
-int QButton::LireValeur()
+int QButton::value()
 {
     return valeur;
 }

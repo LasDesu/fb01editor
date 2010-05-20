@@ -76,9 +76,6 @@ public slots:
     void on_actionGet_current_set_triggered(bool checked = false);
     void on_actionSend_current_voice_triggered(bool checked = false);
     void on_actionGet_current_voice_triggered(bool checked = false);
-    void on_actionRam_1_triggered(bool checked = false);
-    void on_actionRam_2_triggered(bool checked = false);
-    void on_actionGet_all_banks_triggered(bool checked = false);
 
     void on_actionAbout_triggered(bool checked = false);
     void on_actionRead_this_triggered(bool checked = false);
@@ -111,9 +108,6 @@ public slots:
     void on_pshBut_OPon_2_clicked(bool checked);
     void on_pshBut_OPon_3_clicked(bool checked);
     void on_pshBut_OPon_4_clicked(bool checked);
-
-    void on_tabWidget_currentChanged(int index);
-
 };
 
 #endif // MAINWINDOW_H

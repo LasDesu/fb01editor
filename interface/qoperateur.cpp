@@ -41,10 +41,31 @@ void QOperateur::DefinirOP(Operateur * operateur)
 /*****************************************************************************/
 void QOperateur::ActualiserEnveloppe()
 {
-    m_ui->label_env->DefinirEnveloppe(m_ui->but_AR->LireValeur(), m_ui->but_D1R->LireValeur(),
-                                      m_ui->but_SL->LireValeur(), m_ui->but_D2R->LireValeur(),
-                                      m_ui->but_RR->LireValeur());
+    m_ui->label_env->DefinirEnveloppe(m_ui->but_AR->value(), m_ui->but_D1R->value(),
+                                      m_ui->but_SL->value(), m_ui->but_D2R->value(),
+                                      m_ui->but_RR->value());
     m_ui->label_env->repaint();
+}
+
+void QOperateur::Actualiser()
+{
+    m_ui->hzSlider_volume->setValue(127 - operateur->LireParam(Operateur::OPERATOR_LEVEL));
+    m_ui->but_vellvl->setValue(operateur->LireParam(Operateur::OPERATOR_LEVEL_VELOCITY));
+    m_ui->but_velAR->setValue(operateur->LireParam(Operateur::OPERATOR_ATTACK_VELOCITY));
+    m_ui->but_adjTL->setValue(operateur->LireParam(Operateur::OPERATOR_ADJUST));
+    m_ui->cmbBox_lvlcurb->setCurrentIndex(operateur->LireParam(Operateur::OPERATOR_LEVEL_CURB));
+    m_ui->but_lvldph->setValue(operateur->LireParam(Operateur::OPERATOR_LEVEL_DEPTH));
+    m_ui->but_rtdph->setValue(operateur->LireParam(Operateur::OPERATOR_RATE_DEPTH));
+    m_ui->but_fine->setValue(operateur->LireParam(Operateur::OPERATOR_FINE) - 4);
+    m_ui->but_coarse->setValue(operateur->LireParam(Operateur::OPERATOR_COARSE));
+    m_ui->but_mult->setValue(operateur->LireParam(Operateur::OPERATOR_MULTIPLE));
+    m_ui->pshBut_carrier->setChecked(!operateur->LireParam(Operateur::OPERATOR_MODULATOR));
+    m_ui->but_AR->setValue(operateur->LireParam(Operateur::OPERATOR_ATTACK));
+    m_ui->but_D1R->setValue(operateur->LireParam(Operateur::OPERATOR_DECAY1));
+    m_ui->but_D2R->setValue(operateur->LireParam(Operateur::OPERATOR_DECAY2));
+    m_ui->but_SL->setValue(15 - operateur->LireParam(Operateur::OPERATOR_SUSTAIN));
+    m_ui->but_RR->setValue(operateur->LireParam(Operateur::OPERATOR_RELEASE));
+    ActualiserEnveloppe();
 }
 
 /*****************************************************************************/

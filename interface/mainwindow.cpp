@@ -353,9 +353,10 @@ void MainWindow::on_cmbBox_MIDICtrl_activated(int index)
     //Sélectionne le driver
         if (MIDI::ActiverCtrl(index - 1)) {
             ui->cmbBox_MIDICtrl->setCurrentIndex(0);
+            editeur->ErreurConnection();
             return;
         }
-        editeur->ActualiserEditeur();
+        editeur->Actualiser();
     }
 }
 
@@ -370,9 +371,10 @@ void MainWindow::on_cmbBox_MIDIIn_activated(int index)
     //Sélectionne le driver
         if (MIDI::ActiverIn(index - 1)) {
             ui->cmbBox_MIDIIn->setCurrentIndex(0);
+            editeur->ErreurConnection();
             return;
         }
-        editeur->ActualiserEditeur();
+        editeur->Actualiser();
     }
 }
 
@@ -389,9 +391,10 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
     //Sélectionne le driver
         if (MIDI::ActiverOut(index - 1)) {
             ui->cmbBox_MIDIOut->setCurrentIndex(0);
+            editeur->ErreurConnection();
             return;
         }
-        editeur->ActualiserEditeur();
+        editeur->Actualiser();
     }
 }
 
@@ -448,19 +451,6 @@ void MainWindow::on_actionGet_current_voice_triggered(bool checked)
 }
 
 /*****************************************************************************/
-void MainWindow::on_actionRam_1_triggered(bool checked)
-{
-}
-
-void MainWindow::on_actionRam_2_triggered(bool checked)
-{
-}
-
-void MainWindow::on_actionGet_all_banks_triggered(bool checked)
-{
-}
-
-/*****************************************************************************/
 void MainWindow::on_spnBox_syschan_valueChanged(int i)
 {
 }
@@ -493,45 +483,62 @@ void MainWindow::on_hzSlider_mastvol_valueChanged(int i)
 void MainWindow::on_pshBut_inst_cur_1_clicked(bool checked)
 {
     editeur->ChoisirInstru(0);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_2_clicked(bool checked)
 {
     editeur->ChoisirInstru(1);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_3_clicked(bool checked)
 {
     editeur->ChoisirInstru(2);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_4_clicked(bool checked)
 {
     editeur->ChoisirInstru(3);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_5_clicked(bool checked)
 {
     editeur->ChoisirInstru(4);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_6_clicked(bool checked)
 {
     editeur->ChoisirInstru(5);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_7_clicked(bool checked)
 {
     editeur->ChoisirInstru(6);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_pshBut_inst_cur_8_clicked(bool checked)
 {
     editeur->ChoisirInstru(7);
+    if(!editeur->ActualiserInstru())
+        editeur->ErreurMIDI();
 }
 
 void MainWindow::on_txtEdit_setname_textChanged()
 {
+    editeur->set->EcrireNom(ui->txtEdit_setname->toPlainText().toAscii().data(), true);
 }
 
 /*****************************************************************************/
@@ -582,6 +589,3 @@ void MainWindow::on_pshBut_next_pressed()
     editeur->ChoisirPageSet(1 - editeur->pageSel);
 }
 
-void MainWindow::on_tabWidget_currentChanged(int index)
-{
-}

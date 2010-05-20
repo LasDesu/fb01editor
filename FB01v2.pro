@@ -32,8 +32,8 @@ HEADERS += types.h \
     interface/mainwindow.h \
     interface/qbanks.h \
     interface/mainwindow.h \
-    editeur.h
-
+    editeur.h \
+    core/config.h
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
@@ -50,8 +50,8 @@ SOURCES += core/set.cpp \
     interface/qenveloppe.cpp \
     interface/qbanks.cpp \
     interface/mainwindow.cpp \
-    editeur.cpp
-
+    editeur.cpp \
+    core/config.cpp
 winnt { 
     DEFINES += WIN32
     LIBS += -luser32 \

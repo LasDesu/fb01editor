@@ -21,9 +21,11 @@
 
 #include "editeur.h"
 
+//Objets principaux
 QApplication * application;
 MainWindow   * mainWindow = NULL;
 Editeur      * editeur = NULL;
+
 /*****************************************************************************/
 int main(int argc, char *argv[])
 {
@@ -66,6 +68,7 @@ void Editeur::InitialiserEditeur()
         banks[i] = new Bank();
 //Attribue les classes à l'interface
     AttribuerInstruments();
+    AttribuerVoice();
     AttribuerOperateurs();
 //Initialise les sélections
     ChoisirPageSet(0);
@@ -157,10 +160,31 @@ void Editeur::ChoisirPageSet(const int page)
         mainWindow->ui->frame_page_2->show();
         mainWindow->ui->frame_page_1->hide();
     }
-//Charge le set d'instruments
-    set->RecevoirTout();
 }
 
+bool Editeur::ActualiserSet()
+{
+//Charge le set d'instruments
+    if (!set->RecevoirTout()) return false;
+//Change le nom du set
+    mainWindow->ui->txtEdit_setname->setPlainText((QString) set->LireNom());
+    mainWindow->ui->txtEdit_setname->repaint();
+//Actualise les instruments
+    if (pageSel == 0) {
+        mainWindow->ui->widget_instru_1->Actualiser();
+        mainWindow->ui->widget_instru_2->Actualiser();
+        mainWindow->ui->widget_instru_3->Actualiser();
+        mainWindow->ui->widget_instru_4->Actualiser();
+    }else{
+        mainWindow->ui->widget_instru_5->Actualiser();
+        mainWindow->ui->widget_instru_6->Actualiser();
+        mainWindow->ui->widget_instru_7->Actualiser();
+        mainWindow->ui->widget_instru_8->Actualiser();
+    }
+    return true;
+}
+
+/*****************************************************************************/
 void Editeur::ChoisirInstru(const int instru)
 {
 //Sélectionne l'instrument
@@ -173,24 +197,47 @@ void Editeur::ChoisirInstru(const int instru)
     mainWindow->ui->pshBut_inst_cur_6->setChecked(instruSel == 5);
     mainWindow->ui->pshBut_inst_cur_7->setChecked(instruSel == 6);
     mainWindow->ui->pshBut_inst_cur_8->setChecked(instruSel == 7);
+}
+
+bool Editeur::ActualiserInstru()
+{
 //Charge l'instrument sélectionné
-    voice->AssocierInstrument(instru);
-    voice->RecevoirTout();
+    voice->AssocierInstrument(instruSel);
+    if (!voice->RecevoirTout()) return false;
+//Actualise la voice et les opérateurs
+    mainWindow->ui->widget_voice->Actualiser();
+    mainWindow->ui->widget_opera_1->Actualiser();
+    mainWindow->ui->widget_opera_2->Actualiser();
+    mainWindow->ui->widget_opera_3->Actualiser();
+    mainWindow->ui->widget_opera_4->Actualiser();
+    return true;
 }
 
 void Editeur::ChoisirOP(const int OP)
 {
 //Sélectionne l'opérateur
     OPSel = OP;
-    mainWindow->ui->pshBut_op_cur_1->setChecked(OP == 0);
-    mainWindow->ui->pshBut_op_cur_2->setChecked(OP == 1);
-    mainWindow->ui->pshBut_op_cur_3->setChecked(OP == 2);
-    mainWindow->ui->pshBut_op_cur_4->setChecked(OP == 3);
+    mainWindow->ui->pshBut_op_cur_1->setChecked(OPSel == 0);
+    mainWindow->ui->pshBut_op_cur_2->setChecked(OPSel == 1);
+    mainWindow->ui->pshBut_op_cur_3->setChecked(OPSel == 2);
+    mainWindow->ui->pshBut_op_cur_4->setChecked(OPSel == 3);
 }
+
+/*****************************************************************************/
+bool Editeur::ActualiserConfig()
+{
+    return true;
+}
+bool Editeur::ActualiserBanks()
+{
+    return true;
+}
+
 
 /*****************************************************************************/
 void Editeur::AttribuerInstruments()
 {
+//Attribue les instruments aux contrôles
     mainWindow->ui->widget_instru_1->DefinirInstrument(set->RecupererInstrument(0));
     mainWindow->ui->widget_instru_2->DefinirInstrument(set->RecupererInstrument(1));
     mainWindow->ui->widget_instru_3->DefinirInstrument(set->RecupererInstrument(2));
@@ -201,128 +248,67 @@ void Editeur::AttribuerInstruments()
     mainWindow->ui->widget_instru_8->DefinirInstrument(set->RecupererInstrument(7));
 }
 
+void Editeur::AttribuerVoice()
+{
+//Attribue la voice au controle
+    mainWindow->ui->widget_voice->DefinirVoice(voice);
+}
+
 void Editeur::AttribuerOperateurs()
 {
+//Attribue les opérateurs aux contrôles
     mainWindow->ui->widget_opera_1->DefinirOP(voice->RecupererOP(0));
     mainWindow->ui->widget_opera_2->DefinirOP(voice->RecupererOP(1));
     mainWindow->ui->widget_opera_3->DefinirOP(voice->RecupererOP(2));
     mainWindow->ui->widget_opera_4->DefinirOP(voice->RecupererOP(3));
 }
 
+
 /*****************************************************************************/
-void Editeur::ActualiserEditeur()
+void Editeur::ErreurMIDI()
+{
+    QMessageBox::information(mainWindow,"FB01 Editor :", "Error in MIDI communication,\nplease check your cables and devices !");
+    Reinitialiser();
+}
+
+void Editeur::ErreurConnection()
+{
+    QMessageBox::information(mainWindow,"FB01 Editor :", "Error when connecting to the MIDI driver,\nplease check your interfaces and refresh the drivers list !");
+}
+
+/*****************************************************************************/
+void Editeur::Actualiser()
 {
 //Vérifie la configuration
     if (!MIDI::InOk() || !MIDI::OutOk()) return;
     ConfigurerMenus(true);
     ConfigurerOnglets(true);
 //Récupère les informations
-    if (!ActualiserConfig()) goto Erreur;
-    if (!ActualiserSet())    goto Erreur;
-    if (!ActualiserVoice())  goto Erreur;
-    return;
-Erreur:
-//Réset les drivers
-    MIDI::DesactiverIn();
-    MIDI::DesactiverOut();
-//Vérrouille l'éditeur
-    ConfigurerMenus(0);
-    ConfigurerOnglets(0);
+    if (!ActualiserConfig()) {
+        Reinitialiser();
+        return;
+    }
+    if (!ActualiserSet()) {
+        ErreurMIDI();
+        return;
+    }
+    if (!ActualiserInstru()) {
+        ErreurMIDI();
+        return;
+    }
+}
+
+void Editeur::Reinitialiser()
+{
+//Déselectionne les drivers
     mainWindow->ui->cmbBox_MIDIIn->setCurrentIndex(0);
     mainWindow->ui->cmbBox_MIDIOut->setCurrentIndex(0);
     mainWindow->ui->cmbBox_MIDICtrl->setCurrentIndex(0);
-}
-
-/*****************************************************************************/
-bool Editeur::ActualiserConfig()
-{
-    /*
-//Reçoit la configuration
-    if (!EXPANDEUR::RecevoirSet())
-    {
-        Attente = false;
-        return false;
-    }
-//Décode les données
-    ui->pshBut_combine->setChecked((bool) EXPANDEUR::LireSysParam(0x08));
-    ui->cmbBox_reception->setCurrentIndex((int) EXPANDEUR::LireSysParam(0x0D));
-//Déverrouille
-    Attente = false;
-    */
-    return true;
-}
-
-bool Editeur::ActualiserBank()
-{
-    /*
-//Recoit les banks
-    Attente = true;
-    for (int i = 0; i < 7; i++)
-        if (!EXPANDEUR::RecevoirBank(i))
-        {
-            Attente = false;
-            return false;
-        }
-//Décode les données
-    ui->widget_banks->Recevoir();
-//Déverrouille
-    */
-    return true;
-}
-
-bool Editeur::ActualiserSet()
-{
-    /*
-    char Nom[9];
-//Reçoit la configuration
-    Attente = true;
-    if (!EXPANDEUR::RecevoirSet())
-    {
-        Attente = false;
-        return false;
-    }
-//Décode les données
-    for (int i = 0; i < 8; i++)
-        Insts[i]->Recevoir();
-//Récupère le nom
-    EXPANDEUR::LireSetNom(Nom);
-    ui->txtEdit_setname->setPlainText((QString) Nom);
-    ui->txtEdit_setname->repaint();
-//Déverrouille
-    Attente = false;
-    */
-    return true;
-}
-
-bool Editeur::ActualiserVoice()
-{
-    /*
-    bool b1, b2, b3, b4;
-//Reçoit la configuration
-    Attente = true;
-    if (!EXPANDEUR::RecevoirVoice(InstSel))
-    {
-        Attente = false;
-        return false;
-    }
-//Décode les données
-    ui->widget_voice->Recevoir();
-    for (int i = 0; i < 4; i++)
-        Operas[i]->Recevoir();
-//Rafraichit l'interface
-    ui->widget_voice->Rafraichir();
-    for (int i = 0; i < 4; i++)
-        Operas[i]->Rafraichir();
-//Détermine le statut
-    EXPANDEUR::LireOps(&b1, &b2, &b3, &b4);
-    ui->pshBut_OPon_1->setChecked(b1);
-    ui->pshBut_OPon_2->setChecked(b2);
-    ui->pshBut_OPon_3->setChecked(b3);
-    ui->pshBut_OPon_4->setChecked(b4);
-//Déverrouille
-    Attente = false;
-    */
-    return true;
+    MIDI::DesactiverIn();
+    MIDI::DesactiverOut();
+//Vérrouille l'interface
+    ConfigurerMenus(0);
+    ConfigurerOnglets(0);
 }
 
 /*****************************************************************************/

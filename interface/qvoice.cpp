@@ -25,7 +25,7 @@
 QVoice::QVoice(QWidget *parent) : QWidget(parent), m_ui(new Ui::QVoice)
 {
     m_ui->setupUi(this);
-    m_ui->but_algo->EcrireValeur(1);
+    m_ui->but_algo->setValue(1);
 }
 
 QVoice::~QVoice()
@@ -37,6 +37,39 @@ QVoice::~QVoice()
 void QVoice::DefinirVoice(Voice * voice)
 {
     this->voice = voice;
+}
+
+void QVoice::DefinirAuteur(QString auteur)
+{
+    m_ui->txtEdit_author->setPlainText(auteur);
+}
+
+void QVoice::DefinirComment(QString comment)
+{
+    m_ui->txtEdit_comment->setPlainText(comment);
+}
+
+/*****************************************************************************/
+void QVoice::Actualiser()
+{
+    m_ui->txtEdit_voicename->setPlainText((QString) voice->LireNom());
+    m_ui->txtEdit_voicename->repaint();
+    m_ui->but_algo->setValue(voice->LireParam(Voice::VOICE_ALGORITHME));
+    m_ui->cmbBox_style->setCurrentIndex(voice->LireParam(Voice::VOICE_USERCODE));
+    m_ui->cmbBox_LFOwave->setCurrentIndex(voice->LireParam(Voice::VOICE_LFO_WAVE));
+    m_ui->spnBox_LFOspeed->setValue(voice->LireParam(Voice::VOICE_LFO_SPEED));
+    m_ui->pshBut_LFOload->setChecked(!voice->LireParam(Voice::VOICE_LFO_LOAD));
+    m_ui->pshBut_LFOsync->setChecked(!voice->LireParam(Voice::VOICE_LFO_SYNC));
+    m_ui->but_feedback->setValue(voice->LireParam(Voice::VOICE_FEEDBACK));
+    m_ui->but_AMD->setValue(voice->LireParam(Voice::VOICE_LFO_AMD));
+    m_ui->but_PMD->setValue(voice->LireParam(Voice::VOICE_LFO_PMD));
+    m_ui->but_PMS->setValue(voice->LireParam(Voice::VOICE_LFO_PMS));
+    m_ui->but_AMS->setValue(voice->LireParam(Voice::VOICE_LFO_AMS));
+    m_ui->but_trans->setValue(voice->LireParam(Voice::VOICE_TRANSPOSE) - 2);
+    m_ui->pshBut_poly->setChecked(!voice->LireParam(Voice::VOICE_POLY));
+    m_ui->but_porta->setValue(voice->LireParam(Voice::VOICE_PORTAMENTO));
+    m_ui->cmbBox_pmdctl->setCurrentIndex(voice->LireParam(Voice::VOICE_CONTROLLER));
+    m_ui->but_pitch->setValue(voice->LireParam(Voice::VOICE_PITCHBEND));
 }
 
 /*****************************************************************************/
@@ -74,7 +107,7 @@ void QVoice::on_but_trans_valueChanged(int i)
 
 void QVoice::on_pshBut_poly_clicked(bool checked)
 {
-    voice->EcrireParam(Voice::VOICE_POLY, checked, true);
+    voice->EcrireParam(Voice::VOICE_POLY, !checked, true);
 }
 
 void QVoice::on_but_porta_valueChanged(int i)
@@ -92,7 +125,7 @@ void QVoice::on_cmbBox_pmdctl_activated(int i)
     voice->EcrireParam(Voice::VOICE_CONTROLLER, i, true);
 }
 
-void QVoice::on_but_LFOspeed_valueChanged(int i)
+void QVoice::on_spnBox_LFOspeed_valueChanged(int i)
 {
     voice->EcrireParam(Voice::VOICE_LFO_SPEED, i, true);
 }
@@ -104,12 +137,12 @@ void QVoice::on_cmbBox_LFOwave_activated(int i)
 
 void QVoice::on_pshBut_LFOload_clicked(bool checked)
 {
-    voice->EcrireParam(Voice::VOICE_LFO_LOAD, checked, true);
+    voice->EcrireParam(Voice::VOICE_LFO_LOAD, !checked, true);
 }
 
 void QVoice::on_pshBut_LFOsync_clicked(bool checked)
 {
-    voice->EcrireParam(Voice::VOICE_LFO_SYNC, checked, true);
+    voice->EcrireParam(Voice::VOICE_LFO_SYNC, !checked, true);
 }
 
 void QVoice::on_but_AMD_valueChanged(int i)
