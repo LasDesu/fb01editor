@@ -23,13 +23,9 @@
 
 /*****************************************************************************/
 Instrument::Instrument(const uchar id, uchar * sysEx)
+          : Edit(id, INSTRU_NB_PARAM, INSTRU_LEN_SYSEX, (uchar *) malloc(INSTRU_LEN_SYSEX))
 {
-//Initialise les propriétés
-    this->id = id;
-    this->nbParam  = INSTRU_NB_PARAM;
-    this->lenSysEx = INSTRU_LEN_SYSEX;
-//Initialise le sysEx
-    this->sysEx = sysEx;
+//Initialise la classe
     InitSysEx();
 }
 

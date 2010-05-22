@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Global</string>
+    <string>Global :</string>
    </property>
    <widget class="QLabel" name="lbl_style">
     <property name="geometry">
@@ -410,7 +410,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="grpBox_algos">
+  <widget class="QGroupBox" name="grpBox_algo">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -420,7 +420,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Algorythm</string>
+    <string>Algorithm :</string>
    </property>
    <widget class="QLabel" name="lbl_algo">
     <property name="geometry">
@@ -435,7 +435,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/ALGO1</pixmap>
+     <pixmap resource="../FB01.qrc">:/ALGO1</pixmap>
     </property>
    </widget>
    <widget class="QButton" name="but_algo">
@@ -468,7 +468,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>LFO</string>
+    <string>LFO :</string>
    </property>
    <widget class="QLabel" name="lbl_LFOwave">
     <property name="geometry">
@@ -780,7 +780,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QGroupBox" name="grpBox_informations">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -877,6 +877,8 @@
    <header>interface/qbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>

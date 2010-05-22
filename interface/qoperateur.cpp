@@ -35,7 +35,10 @@ QOperateur::~QOperateur()
 /*****************************************************************************/
 void QOperateur::DefinirOP(Operateur * operateur)
 {
+    QString num;
     this->operateur = operateur;
+    num.setNum(operateur->LireId() + 1, 10);
+    this->m_ui->grpBox_opera->setTitle((QString) "Operateur " + num + " :");
 }
 
 /*****************************************************************************/

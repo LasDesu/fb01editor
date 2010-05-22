@@ -22,79 +22,15 @@
 #include "block.h"
 
 /*****************************************************************************/
-Block::Block()
+Block::Block(const uchar nbParam, const uchar lenSysEx, uchar * sysEx)
 {
-    this->id = 0;
-    this->nbParam = 0;
-    this->lenSysEx = 0;
-    this->sysEx = NULL;
+    this->nbParam = nbParam;
+    this->lenSysEx = lenSysEx;
+    this->sysEx = sysEx;
 }
 
 Block::~Block()
 {
-}
-
-/*****************************************************************************/
-bool Block::Enregistrer(FILE * fichier)
-{
-    uchar sauv[nbParam];
-    for (int i=0; i < nbParam; i++)
-        sauv[i] = LireParam(i);
-    fwrite(sauv, nbParam, 1, fichier);
-    return true;
-}
-
-bool Block::Charger(FILE * fichier, const int version)
-{
-    uchar sauv[nbParam];
-    if (fread(sauv, nbParam, 1, fichier))
-        return false;
-    for (int i=0; i < nbParam; i++)
-        EcrireParam(i, sauv[i], true);
-    return true;
-}
-
-/*****************************************************************************/
-bool Block::Exporte(FILE * fichier)
-{
-    if (sysEx == NULL) return false;
-    uint res = fwrite(sysEx, lenSysEx, 1, fichier);
-    if (res != lenSysEx) return false;
-    return true;
-}
-
-bool Block::Importe(FILE * fichier)
-{
-    if (sysEx == NULL) return false;
-    uint res = fread(sysEx, lenSysEx, 1, fichier);
-    if (res != lenSysEx) return false;
-    return true;
-}
-
-/*****************************************************************************/
-void Block::Initialiser()
-{
-    for (int i=0; i < nbParam; i++)
-        EcrireParam(i, 0, true);
-}
-
-void Block::Randomiser()
-{
-    for (int i=0; i < nbParam; i++)
-        EcrireParam(i, RAND(0, 255), true);
-}
-
-void Block::Copier(uchar * table, const ulong len)
-{
-    if (len < lenSysEx) return;
-    memcpy(table, sysEx, lenSysEx);
-}
-
-void Block::Coller(const uchar * table, const ulong len)
-{
-    if (len < lenSysEx) return;
-    memcpy(sysEx, table, lenSysEx);
-    EnvoyerTout();
 }
 
 /*****************************************************************************/

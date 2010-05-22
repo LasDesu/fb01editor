@@ -23,7 +23,6 @@
 #define BLOCK_H
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <strings.h>
 
 #include "../types.h"
@@ -31,19 +30,8 @@
 class Block {
 public :
 //Constructeurs
-    Block();
+    Block(const uchar nbParam, const uchar lenSysEx, uchar * sysEx);
     ~Block();
-//Chargement / déchargement de l'objet
-    virtual bool Enregistrer(FILE * fichier);
-    virtual bool Charger(FILE * fichier, const int version);
-//Importation exportation de l'objet
-    virtual bool Exporte(FILE * fichier);
-    virtual bool Importe(FILE * fichier);
-//Edition de l'objet
-    virtual void Initialiser();
-    virtual void Randomiser();
-    virtual void Copier(uchar * table, const ulong len);
-    virtual void Coller(const uchar * table, const ulong len);
 //Modification des propriétés
     virtual uchar LireParam(const uchar param) = 0;
     virtual void  EcrireParam(const uchar param, const uchar valeur, const bool envoi) = 0;
@@ -51,11 +39,9 @@ public :
     virtual uint EnvoyerTout() = 0;
     virtual uint RecevoirTout() = 0;
 protected :
-//Messages SysEx
-    uint lenSysEx;
+//Paramêtres sysEx
     uchar * sysEx;
-//Paramêtres globaux
-    uchar id;
+    uint lenSysEx;
     uchar nbParam;
 //Utilitaires SysEx
     virtual void InitSysEx();

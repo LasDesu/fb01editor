@@ -19,37 +19,38 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BANK_H
-#define BANK_H
+#ifndef EDIT_H
+#define EDIT_H
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
 
 #include "../types.h"
-#include "edit.h"
-#include "midi.h"
+#include "block.h"
 
-class Bank : public Edit {
+class Edit : public Block {
 public :
-//Paramêtres éditables
-    #define BANK_NB_PARAM 0
-    #define BANK_LEN_NOM  0
 //Constructeurs
-    Bank();
-    ~Bank();    
-//Modification des propriétés
-    uchar LireParam(const uchar param);
-    void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
-//Envoi / Reception de l'objet
-    uint EnvoyerTout();
-    uint RecevoirTout();
-private :
-//Ecriture et lecture
-    #define BANK_LEN_SYSEX 0
-    void  InitSysEx();
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
+    Edit(const uchar id, const uchar nbParam, const uchar lenSysEx, uchar * sysEx);
+    ~Edit();
+//Gestion de l'id objet
+    uchar LireId();
+    void  EcrireId(const uchar id);
+//Chargement / déchargement de l'objet
+    virtual bool Enregistrer(FILE * fichier);
+    virtual bool Charger(FILE * fichier, const int version);
+//Importation exportation de l'objet
+    virtual bool Exporte(FILE * fichier);
+    virtual bool Importe(FILE * fichier);
+//Edition de l'objet
+    virtual void Initialiser();
+    virtual void Randomiser();
+    virtual void Copier(uchar * table, const ulong len);
+    virtual void Coller(const uchar * table, const ulong len);
+protected :
+//Paramètres de l'objet
+    uchar id;
 };
 
 #endif

@@ -30,10 +30,11 @@ HEADERS += types.h \
     interface/qenveloppe.h \
     core/bank.h \
     interface/mainwindow.h \
-    interface/qbanks.h \
+    interface/qbank.h \
     interface/mainwindow.h \
     editeur.h \
-    core/config.h
+    core/config.h \
+    core/edit.h
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
@@ -48,10 +49,11 @@ SOURCES += core/set.cpp \
     interface/qvoice.cpp \
     interface/qinstrument.cpp \
     interface/qenveloppe.cpp \
-    interface/qbanks.cpp \
+    interface/qbank.cpp \
     interface/mainwindow.cpp \
     editeur.cpp \
-    core/config.cpp
+    core/config.cpp \
+    core/edit.cpp
 winnt { 
     DEFINES += WIN32
     LIBS += -luser32 \
@@ -71,4 +73,4 @@ FORMS += interface/qoperateur.ui \
     interface/qinstrument.ui \
     interface/qvoice.ui \
     interface/mainwindow.ui \
-    interface/qbanks.ui
+    interface/qbank.ui

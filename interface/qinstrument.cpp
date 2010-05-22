@@ -62,7 +62,10 @@ void QInstrument::Actualiser()
 /*****************************************************************************/
 void QInstrument::DefinirInstrument(Instrument * instrument)
 {
+    QString num;
     this->instrument = instrument;
+    num.setNum(instrument->LireId() + 1, 10);
+    this->m_ui->grpBox_instru->setTitle((QString) "Instrument " + num + " :");
 }
 
 /*****************************************************************************/

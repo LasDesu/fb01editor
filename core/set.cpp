@@ -23,15 +23,11 @@
 
 /*****************************************************************************/
 Set::Set()
+   : Edit(0, 0, SET_LEN_SYSEX, (uchar *) malloc(SET_LEN_SYSEX))
 {
-//Initialise les propriétés
-    this->nbParam  = SET_NB_PARAM;
-    this->lenSysEx = SET_LEN_SYSEX;
-//Initialise le sysEx
-    this->sysEx = (uchar *) malloc(SET_LEN_SYSEX);
+//Initialise la classe
     InitSysEx();
-//Initialise le nom
-    EcrireNom("none", false);
+    EcrireNom((char *) "none", false);
 //Initialise les instruments
     for (int i=0; i < SET_NB_INSTRU; i++)
         instruments[i] = new Instrument(i, &sysEx[0x29 + 0x10 * i]);
@@ -56,16 +52,19 @@ Instrument * Set::RecupererInstrument(int index)
 bool Set::Enregistrer(FILE * fichier)
 {
 //Sauvegarde la table
-    return Block::Enregistrer(fichier);
+    if(!Edit::Enregistrer(fichier))
+        return false;
 //Sauvegarde les instruments
+    return true;
 }
 
 bool Set::Charger(FILE * fichier, const int version)
 {
 //Recupère la table
-    return Block::Charger(fichier, version);
+    if(!Edit::Charger(fichier, version))
+        return false;
 //Récupère les instruments
-
+    return true;
 }
 
 /*****************************************************************************/

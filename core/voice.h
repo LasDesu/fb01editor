@@ -26,11 +26,11 @@
 #include <stdio.h>
 
 #include "../types.h"
-#include "block.h"
+#include "edit.h"
 #include "operateur.h"
 #include "midi.h"
 
-class Voice : public Block {
+class Voice : public Edit {
 public :
 //Paramêtres éditables
     #define VOICE_NB_PARAM 20
@@ -88,9 +88,8 @@ private :
     char auteur[VOICE_LEN_AUTEUR];
     char comment[VOICE_LEN_COMMENT];
     char nom[VOICE_LEN_NOM];
-//Gestion des sysExs
+//Gestion des messages sysExs
     #define VOICE_LEN_SYSEX 139
-    #define VOICE_NB_SYSEX  64
     void  InitSysEx();
     uchar LireSysEx(const uchar param);
     void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);

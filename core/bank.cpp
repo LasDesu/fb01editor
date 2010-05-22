@@ -23,9 +23,49 @@
 
 /*****************************************************************************/
 Bank::Bank()
+    : Edit(0,0,0, NULL)
 {
 }
 
 Bank::~Bank()
 {
+}
+
+/*****************************************************************************/
+uchar Bank::LireParam(const uchar param)
+{
+    return 0;
+}
+
+void Bank::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+{
+    return;
+}
+
+/*****************************************************************************/
+uint Bank::EnvoyerTout()
+{
+    return MIDI::MIDI_ERREUR_RIEN;
+}
+
+uint Bank::RecevoirTout()
+{
+    return MIDI::MIDI_ERREUR_RIEN;
+}
+
+/*****************************************************************************/
+void Bank::InitSysEx()
+{
+
+}
+
+/*****************************************************************************/
+uchar Bank::LireSysEx(const uchar param)
+{
+    return 0;
+}
+
+void Bank::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
+{
+    return;
 }

@@ -27,11 +27,11 @@
 #include <strings.h>
 
 #include "../types.h"
-#include "midi.h"
-#include "block.h"
+#include "edit.h"
 #include "instrument.h"
+#include "midi.h"
 
-class Set : public Block {
+class Set : public Edit {
 public :
 //Paramêtres éditables
     #define SET_NB_PARAM 0;
@@ -58,9 +58,8 @@ private :
 //Instruments du set
     #define SET_NB_INSTRU 8
     Instrument * instruments[SET_NB_INSTRU];
-//Gestion des sysExs
+//Gestion des messages sysExs
     #define SET_LEN_SYSEX 171
-    #define SET_NB_SYSEX  160
     void  InitSysEx();
     uchar LireSysEx(const uchar param);
     void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);

@@ -19,41 +19,35 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QBANKS_H
-#define QBANKS_H
+#ifndef QBANK_H
+#define QBANK_H
 
 #include <QtGui/QWidget>
-#include "../ui_qbanks.h"
+#include "../ui_qbank.h"
 
 #include "../core/midi.h"
 #include "../core/bank.h"
 
 namespace Ui {
-    class QBanks;
+    class QBank;
 }
 
 /*****************************************************************************/
-class QBanks : public QWidget {
+class QBank : public QWidget {
     Q_OBJECT
 public:
-    QBanks(QWidget *parent = 0);
-    ~QBanks();
+    QBank(QWidget *parent = 0);
+    ~QBank();
     void DefinirBank(Bank * bank);
     void Actualiser();
 protected:
     void changeEvent(QEvent *e);
 private:
-    Ui::QBanks * m_ui;
+    Ui::QBank * m_ui;
     Bank * bank;
+    void CreerTable();
 private slots:
-    void on_table_bank_cellClicked(int row, int column);
-    void on_pshBut_bybank_clicked(bool checked);
-    void on_pshBut_byname_clicked(bool checked);
-    void on_pshBut_bystyle_clicked(bool checked);
-    void on_pshBut_copy_clicked(bool checked);
-    void on_pshBut_exchange_clicked(bool checked);
-    void on_txtEdit_voicename_textChanged();
-    void on_cmbBox_voicestyle_activated(int Index);
+ //   void on_table_bank_cellClicked(int row, int column);
 };
 
-#endif // QBANKS_H
+#endif // QBANK_H

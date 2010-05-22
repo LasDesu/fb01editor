@@ -19,65 +19,43 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "qbanks.h"
+#include "qbank.h"
 
 extern QApplication * MainApp;
 
 /*****************************************************************************/
-QBanks::QBanks(QWidget *parent) : QWidget(parent), m_ui(new Ui::QBanks)
+QBank::QBank(QWidget *parent) : QWidget(parent), m_ui(new Ui::QBank)
 {
     m_ui->setupUi(this);
-//Ajoute des noms de colonne
-    m_ui->table_bank->setColumnCount(4);
-    QTableWidgetItem * ItNom   = new QTableWidgetItem("Name");
-    QTableWidgetItem * ItStyle = new QTableWidgetItem("Style");
-    QTableWidgetItem * ItBank  = new QTableWidgetItem("Bank");
-    QTableWidgetItem * ItVoice = new QTableWidgetItem("Voice");
-    m_ui->table_bank->setHorizontalHeaderItem(0, ItNom);
-    m_ui->table_bank->setHorizontalHeaderItem(1, ItStyle);
-    m_ui->table_bank->setHorizontalHeaderItem(2, ItBank);
-    m_ui->table_bank->setHorizontalHeaderItem(3, ItVoice);
 }
 
-QBanks::~QBanks()
+QBank::~QBank()
 {
     delete m_ui;
 }
+
 /*****************************************************************************/
-void QBanks::DefinirBank(Bank * bank)
+void QBank::DefinirBank(Bank * bank)
 {
     this->bank = bank;
 }
 
 /*****************************************************************************/
-void QBanks::on_pshBut_bybank_clicked(bool checked)
+void QBank::CreerTable()
 {
-    m_ui->table_bank->sortByColumn(2, Qt::AscendingOrder);
-    m_ui->table_bank->setSortingEnabled(checked);
-    m_ui->pshBut_byname->setChecked(false);
-    m_ui->pshBut_bystyle->setChecked(false);
-}
-
-void QBanks::on_pshBut_byname_clicked(bool checked)
-{
-    m_ui->table_bank->sortByColumn(0, Qt::AscendingOrder);
-    m_ui->table_bank->setSortingEnabled(checked);
-    m_ui->pshBut_bybank->setChecked(false);
-    m_ui->pshBut_bystyle->setChecked(false);
-}
-
-void QBanks::on_pshBut_bystyle_clicked(bool checked)
-{
-    m_ui->table_bank->sortByColumn(1, Qt::AscendingOrder);
-    m_ui->table_bank->setSortingEnabled(checked);
-    m_ui->pshBut_byname->setChecked(false);
-    m_ui->pshBut_bybank->setChecked(false);
+    m_ui->voices->setColumnCount(3);
+    QTableWidgetItem * voice = new QTableWidgetItem("Voice");
+    QTableWidgetItem * nom   = new QTableWidgetItem("Name");
+    QTableWidgetItem * style = new QTableWidgetItem("Style");
+    m_ui->voices->setHorizontalHeaderItem(0, voice);
+    m_ui->voices->setHorizontalHeaderItem(1, nom);
+    m_ui->voices->setHorizontalHeaderItem(2, style);
 }
 
 /*****************************************************************************/
-void QBanks::on_pshBut_copy_clicked(bool checked)
-{
     /*
+void QBank::on_pshBut_copy_clicked(bool checked)
+{
     bool ok;
     uchar Tampon[LNGBULK];
 //Sélectionne les banks
@@ -95,12 +73,10 @@ void QBanks::on_pshBut_copy_clicked(bool checked)
  //Déverrouille et rafraichit
     Attente = false;
     Rafraichir();
-    */
 }
 
-void QBanks::on_pshBut_exchange_clicked(bool checked)
+void QBank::on_pshBut_exchange_clicked(bool checked)
 {
-    /*
     uchar Tampon1[LNGBULK];
     uchar Tampon2[LNGBULK];
 //Echange les banks
@@ -114,13 +90,12 @@ void QBanks::on_pshBut_exchange_clicked(bool checked)
 //Déverrouille et rafraichit
     Attente = false;
     Rafraichir();
-    */
 }
-
+*/
 /*****************************************************************************/
-void QBanks::on_table_bank_cellClicked(int row, int column)
+/*
+void QBank::on_table_bank_cellClicked(int row, int column)
 {
-    /*
 //Limite la sélection
     QList <QTableWidgetItem *> Liste = m_ui->table_bank->selectedItems();
     if (Liste.count() > 8)
@@ -135,12 +110,10 @@ void QBanks::on_table_bank_cellClicked(int row, int column)
     m_ui->txtEdit_voicename->setPlainText(m_ui->table_bank->item(row, 0)->text());
     m_ui->cmbBox_voicestyle->setCurrentIndex(m_ui->table_bank->item(row, 1)->data(Qt::StatusTipRole).toInt());
     Attente = false;
-    */
 }
 
-void QBanks::on_txtEdit_voicename_textChanged()
+void QBank::on_txtEdit_voicename_textChanged()
 {
-    /*
     if (Attente) return;
     if (m_ui->table_bank->item(0,0) == NULL) return;
 //Change le nom de la voice
@@ -148,12 +121,10 @@ void QBanks::on_txtEdit_voicename_textChanged()
     uchar Voice = m_ui->table_bank->selectedItems().at(0)->row() % NBVOICES;
     EXPANDEUR::EcrireBankNom(Bank, Voice, m_ui->txtEdit_voicename->toPlainText().toAscii().constData());
     m_ui->table_bank->selectedItems().at(0)->setText(m_ui->txtEdit_voicename->toPlainText().left(8));
-    */
 }
 
-void QBanks::on_cmbBox_voicestyle_activated(int Index)
+void QBank::on_cmbBox_voicestyle_activated(int Index)
 {
-    /*
     if (Attente) return;
     if (m_ui->table_bank->item(0,0) == NULL) return;
 //Change le style de la voice
@@ -162,11 +133,10 @@ void QBanks::on_cmbBox_voicestyle_activated(int Index)
     EXPANDEUR::EcrireBankParam(Bank, Voice, 0x07, Index);
     m_ui->table_bank->selectedItems().at(1)->setText(m_ui->cmbBox_voicestyle->currentText());
     m_ui->table_bank->selectedItems().at(1)->setData(Qt::StatusTipRole, Index);
-    */
 }
-
+*/
 /*****************************************************************************/
-void QBanks::changeEvent(QEvent *e)
+void QBank::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {

@@ -31,7 +31,7 @@
 
 #include "../editeur.h"
 #include "../core/midi.h"
-#include "qbanks.h"
+#include "qbank.h"
 #include "qinstrument.h"
 #include "qvoice.h"
 #include "qoperateur.h"

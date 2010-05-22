@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Instrument</string>
+    <string>Instrument :</string>
    </property>
    <widget class="QSlider" name="hzSlider_volume">
     <property name="geometry">

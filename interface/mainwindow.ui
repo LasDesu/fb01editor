@@ -57,7 +57,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_general">
      <property name="enabled">
@@ -497,15 +497,190 @@ p, li { white-space: pre-wrap; }
      <attribute name="title">
       <string>Banks</string>
      </attribute>
-     <widget class="QBanks" name="widget_banks" native="true">
+     <widget class="QBank" name="widget_bank_1" native="true">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>620</width>
-        <height>532</height>
+        <x>10</x>
+        <y>10</y>
+        <width>291</width>
+        <height>121</height>
        </rect>
       </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_1">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QBank" name="widget_bank_2" native="true">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>10</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_2">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QBank" name="widget_bank_3" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>140</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_3">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QBank" name="widget_bank_4" native="true">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>140</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_4">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QBank" name="widget_bank_5" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>270</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_5">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QBank" name="widget_bank_6" native="true">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>270</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_6">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QBank" name="widget_bank_7" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>400</y>
+        <width>291</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <widget class="QPushButton" name="pshBut_bank_cur_7">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>93</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Current</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_set">
@@ -1558,9 +1733,9 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QBanks</class>
+   <class>QBank</class>
    <extends>QWidget</extends>
-   <header>interface/qbanks.h</header>
+   <header>interface/qbank.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

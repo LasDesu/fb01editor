@@ -27,10 +27,10 @@
 #include <strings.h>
 
 #include "../types.h"
-#include "block.h"
+#include "edit.h"
 #include "midi.h"
 
-class Operateur : public Block {
+class Operateur : public Edit {
 public :
 //Paramêtres éditables
     #define OPERATOR_NB_PARAM 16
@@ -66,12 +66,10 @@ public :
     uint EnvoyerTout();
     uint RecevoirTout();
 private :
-//Messages SysEx
-    #define OPERATOR_LEN_SYSEX 16
-    #define OPERATOR_NB_SYSEX  8
 //Paramêtres globaux
     uchar instru;
 //Envoi et réception sysEx
+    #define OPERATOR_LEN_SYSEX 16
     uchar LireSysEx(const uchar param);
     void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };

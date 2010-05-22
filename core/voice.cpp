@@ -23,15 +23,11 @@
 
 /*****************************************************************************/
 Voice::Voice()
+     : Edit(0, VOICE_NB_PARAM, VOICE_LEN_SYSEX, (uchar *) malloc(VOICE_LEN_SYSEX))
 {
-//Initialise les propriétés
-    this->nbParam  = VOICE_NB_PARAM;
-    this->lenSysEx = VOICE_LEN_SYSEX;
-//Initialise le sysEx
-    this->sysEx = (uchar *) malloc(VOICE_LEN_SYSEX);
+//Initialise la classe
     InitSysEx();
-//Initialise le nom
-    EcrireNom("none", false);
+    EcrireNom((char *) "none", false);
 //Initialise les opérateurs
     for (int i=0; i < VOICE_NB_OPS; i++)
         operateurs[i] = new Operateur(i, &sysEx[0x29 + 0x10 * i]);
@@ -67,7 +63,7 @@ bool Voice::Enregistrer(FILE * fichier)
     fwrite(comment, VOICE_LEN_COMMENT, 1, fichier);
     fwrite(nom, VOICE_LEN_NOM, 1, fichier);
 //Sauvegarde la table
-    if (!Block::Enregistrer(fichier)) return false;
+    if (!Edit::Enregistrer(fichier)) return false;
 //Sauvegarde les opérateurs
     for (int i=0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Enregistrer(fichier))
@@ -82,7 +78,7 @@ bool Voice::Charger(FILE * fichier, const int version)
     fread(comment, VOICE_LEN_COMMENT, 1, fichier);
     fread(nom, VOICE_LEN_NOM, 1, fichier);
 //Récupère la table
-    if (!Block::Charger(fichier, version)) return false;
+    if (!Edit::Charger(fichier, version)) return false;
 //Récupère les opérateurs
     for (int i=0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Charger(fichier, version))

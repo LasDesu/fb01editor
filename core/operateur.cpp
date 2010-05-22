@@ -23,14 +23,10 @@
 
 /*****************************************************************************/
 Operateur::Operateur(const uchar id, uchar * sysEx)
+         : Edit(id, OPERATOR_NB_PARAM, OPERATOR_LEN_SYSEX, sysEx)
 {
-//Initialise les propriétés
-    this->id = id;
-    this->instru   = 0;
-    this->nbParam  = OPERATOR_NB_PARAM;
-    this->lenSysEx = OPERATOR_LEN_SYSEX;
-//Initialise le sysEx
-    this->sysEx = sysEx;
+//Initialise la classe
+    this->instru = 0;
     InitSysEx();
 }
 

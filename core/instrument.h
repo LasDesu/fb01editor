@@ -26,10 +26,10 @@
 #include <stdio.h>
 
 #include "../types.h"
-#include "block.h"
+#include "edit.h"
 #include "midi.h"
 
-class Instrument : public Block {
+class Instrument : public Edit {
 public :
 //Paramêtres éditables
     #define INSTRU_NB_PARAM 15
@@ -62,9 +62,8 @@ public :
     uint EnvoyerTout();
     uint RecevoirTout();
 private :
-//Messages SysEx
+//Gestion des messages SysEx
     #define INSTRU_LEN_SYSEX 32
-    #define INSTRU_NB_SYSEX  16
     uchar LireSysEx(const uchar param);
     void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
