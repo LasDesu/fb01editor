@@ -48,8 +48,14 @@ public :
     Editeur();
     ~Editeur();
 //Chargement et déchargement
-    FILE * ChargerFichier(const int Type, const short Version);
-    FILE * EnregistrerFichier(const int Type, const short Version);
+    typedef enum {
+        FICHIER_VOICE = 0,
+        FICHIER_SET,
+        FICHIER_BANK,
+        FICHIER_SYSEX
+    }FICHIER_TYPE;
+    FILE * ChargerFichier(FICHIER_TYPE type, short * version);
+    FILE * EnregistrerFichier(FICHIER_TYPE type);
 //Actualisation de l'éditeur
     void Actualiser();
     void Reinitialiser();
@@ -57,33 +63,44 @@ public :
     void ErreurMIDI();
     void ErreurConnection();
 //Attribution des objets
+    void AttribuerConfig();
+    void AttribuerBanks();
     void AttribuerInstruments();
     void AttribuerVoice();
     void AttribuerOperateurs();
 //Configuration de l'interface
     void ConfigurerOnglets(const bool actifs);
     void ConfigurerMenus(const bool actifs);
-//Choix des objets sélectionné
+//Sélection des objets sélectionné
     void ChoisirPageSet(const int page);
+    void ChoisirBank(const int bank);
     void ChoisirInstru(const int instru);
     void ChoisirOP(const int OP);
-    bool ActualiserConfig();
+//Actualisation des contenus
     bool ActualiserBanks();
     bool ActualiserSet();
     bool ActualiserInstru();
+//Rafraichissement de l'affichage
+    void RafraichirBanks();
+    void RafraichirSet();
+    void RafraichirInstru();
 private :
 //Objets de l'éditeur
     #define EDITEUR_NB_BANK 4
-    Bank  * banks[EDITEUR_NB_BANK];
-    Voice * voice;
-    Set   * set;
+    Bank   banks[EDITEUR_NB_BANK];
+    Set    set;
+    Voice  voice;
+    Config config;
 //Sélection d'édition
-    int pageSel, instruSel, OPSel;
+    int pageSel;
+    int instruSel;
+    int OPSel;
+    int bankSel;
 //Initialisation de l'éditeur
     void InitialiserEditeur();
     void InitialiserInterface();
     void TerminerEditeur();
-    void TerminerInterface();
+    void TerminerInterface();    
 };
 
 #endif

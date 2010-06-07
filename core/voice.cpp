@@ -30,7 +30,7 @@ Voice::Voice()
     EcrireNom((char *) "none", false);
 //Initialise les opérateurs
     for (int i=0; i < VOICE_NB_OPS; i++)
-        operateurs[i] = new Operateur(i, &sysEx[0x29 + 0x10 * i]);
+        operateurs[i] = new Operateur(i, &sysEx[0x29 + 0x10 * (VOICE_NB_OPS - i - 1)]);
 }
 
 Voice::~Voice()
@@ -71,14 +71,18 @@ bool Voice::Enregistrer(FILE * fichier)
     return true;
 }
 
-bool Voice::Charger(FILE * fichier, const int version)
+bool Voice::Charger(FILE * fichier, const short version)
 {
 //Récupère des informations
     fread(auteur, VOICE_LEN_AUTEUR, 1, fichier);
     fread(comment, VOICE_LEN_COMMENT, 1, fichier);
     fread(nom, VOICE_LEN_NOM, 1, fichier);
 //Récupère la table
-    if (!Edit::Charger(fichier, version)) return false;
+    if (version == VERSION) {
+        if (!Edit::Charger(fichier, version)) return false;
+    }else {
+    //Compatibilité éditeur 1.0
+    }
 //Récupère les opérateurs
     for (int i=0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Charger(fichier, version))
@@ -104,7 +108,7 @@ uchar Voice::LireParam(const uchar param)
     case VOICE_USERCODE :
         return LireSysEx(0x7);
     case VOICE_FEEDBACK :
-        return LireSysEx(0xC) & 0x38;
+        return (LireSysEx(0xC) >> 3) & 0x7;
     case VOICE_TRANSPOSE :
         return LireSysEx(0xF);
     case VOICE_POLY :
@@ -131,14 +135,14 @@ uchar Voice::LireParam(const uchar param)
         return LireSysEx(0xA) & 0x7F;
     case VOICE_LFO_PMS :
         return (LireSysEx(0xD) >> 4) & 0x7;
-    case VOICE_ENABLE_OP4 :
-        return (LireSysEx(0xB) >> 3) & 0x1;
-    case VOICE_ENABLE_OP3 :
-        return (LireSysEx(0xB) >> 4) & 0x1;
-    case VOICE_ENABLE_OP2 :
-        return (LireSysEx(0xB) >> 5) & 0x1;
     case VOICE_ENABLE_OP1 :
         return (LireSysEx(0xB) >> 6) & 0x1;
+    case VOICE_ENABLE_OP2 :
+        return (LireSysEx(0xB) >> 5) & 0x1;
+    case VOICE_ENABLE_OP3 :
+        return (LireSysEx(0xB) >> 4) & 0x1;
+    case VOICE_ENABLE_OP4 :
+        return (LireSysEx(0xB) >> 3) & 0x1;
     default : return 0;
     }
 }
@@ -157,7 +161,7 @@ void Voice::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
     break;
     case VOICE_FEEDBACK :
         byte  = LireSysEx(0xC) & 0xC7;
-        byte += valeur & 0x7;
+        byte += (valeur & 0x7) << 3;
         EcrireSysEx(0xC, byte, envoi);
     break;
     case VOICE_TRANSPOSE :
@@ -221,22 +225,26 @@ void Voice::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
         byte += (valeur & 0x7) << 4;
         EcrireSysEx(0xD, byte, envoi);
     break;
-    case VOICE_ENABLE_OP4 :
-        byte  = LireSysEx(0xB) & 0xF7;
-        byte += (valeur & 0x1) << 3;
-        EcrireSysEx(0xB, byte, envoi);
-    case VOICE_ENABLE_OP3 :
-        byte  = LireSysEx(0xB) & 0xEF;
-        byte += (valeur & 0x1) << 4;
-        EcrireSysEx(0xB, byte, envoi);
-    case VOICE_ENABLE_OP2 :
-        byte  = LireSysEx(0xB) & 0xDF;
-        byte += (valeur & 0x1) << 5;
-        EcrireSysEx(0xB, byte, envoi);
     case VOICE_ENABLE_OP1 :
         byte  = LireSysEx(0xB) & 0xBF;
         byte += (valeur & 0x1) << 6;
         EcrireSysEx(0xB, byte, envoi);
+    break;
+    case VOICE_ENABLE_OP2 :
+        byte  = LireSysEx(0xB) & 0xDF;
+        byte += (valeur & 0x1) << 5;
+        EcrireSysEx(0xB, byte, envoi);
+    break;
+    case VOICE_ENABLE_OP3 :
+        byte  = LireSysEx(0xB) & 0xEF;
+        byte += (valeur & 0x1) << 4;
+        EcrireSysEx(0xB, byte, envoi);
+    break;
+    case VOICE_ENABLE_OP4 :
+        byte  = LireSysEx(0xB) & 0xF7;
+        byte += (valeur & 0x1) << 3;
+        EcrireSysEx(0xB, byte, envoi);
+    break;
     default : return;
     }
 }
@@ -298,7 +306,7 @@ void Voice::InitSysEx()
 /*****************************************************************************/
 uchar Voice::LireSysEx(const uchar param)
 {
-    return (sysEx[param + 0x9] & 0xF) + (sysEx[param * 2 + 0x9] << 4);
+    return (sysEx[param * 2 + 0x9] & 0xF) + (sysEx[param * 2 + 0xA] << 4);
 }
 
 void Voice::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)

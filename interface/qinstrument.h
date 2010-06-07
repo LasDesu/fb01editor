@@ -46,6 +46,7 @@ private:
     Ui::QInstrument *m_ui;
     Instrument * instrument;
 //Fonctions internes
+    bool attente;
     void InitialiserNotes(QComboBox * box);
 private slots:
     void on_but_notes_valueChanged(int i);

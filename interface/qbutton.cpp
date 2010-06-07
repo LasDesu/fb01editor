@@ -28,6 +28,8 @@ QButton::QButton(QWidget * parent) : QPushButton(parent)
     this->valeur = 0;
     this->ancValeur = 0;
     this->click = false;
+    this->valMax = 0;
+    this->valMin = 0;
 }
 
 QButton::~QButton()
@@ -38,15 +40,14 @@ QButton::~QButton()
 void QButton::setValue(int value)
 {
     static QString text;
-    if (value >= valMin && value <= valMax) {
-    //Change la valeur interne
-        this->valeur = value;
-        this->ancValeur = value;
-        emit valueChanged(value);
-    //Affiche la nouvelle valeur
-        text.setNum(value, 10);
-        setText(text);
-    }
+//Change la valeur interne
+    this->valeur = (char) value;
+    this->ancValeur = valeur;
+    emit valueChanged(valeur);
+//Affiche la nouvelle valeur
+    text.setNum(valeur, 10);
+    setText(text);
+    repaint();
 }
 
 int QButton::value()
@@ -76,14 +77,18 @@ void QButton::mouseMoveEvent(QMouseEvent * event)
 }
 
 /*****************************************************************************/
-void QButton::mousePressEvent(QMouseEvent * event)
+void QButton::setBaseSize(const QSize size)
 {
-//Récupère les bornes
-    QSize size = this->baseSize();
+    QPushButton::setBaseSize(size);
     this->valMin = (char) size.width();
     this->valMax = (char) size.height();
-    clickValeur = valeur;
+}
+
+/*****************************************************************************/
+void QButton::mousePressEvent(QMouseEvent * event)
+{
 //Sauvegarde la position
+    clickValeur = valeur;
     sourisX = event->x();
     sourisY = event->y();
     click = true;

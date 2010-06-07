@@ -71,20 +71,27 @@ public:
 //Paramêtres de transmission
     static void  ChoisirMidiChannel(const uchar channel);
     static uchar MidiChannel();
+    static void  ChoisirVelocity(const uchar velocity);
+    static uchar Velocity();
     static void  ChoisirSysChannel(const uchar channel);
     static uchar SysChannel();
-    static void  Note(const uchar note, const uchar velo);
+//Envoi de notes
+    static void NoteOn(const uchar note);
+    static void NoteOff(const uchar note);
+    static void AllNotesOff();
 //Debug
     static void BackupTampon(char * Chemin);
 protected:
-//Configuration de la communication
+//Objets de la communication
     static void * ins, * outs;
     static int   nbIns, nbOuts;
     static uint  hndIn, hndOut, hndCtrl;
+//Paramêtres de communication
     static uchar midiChannel;
+    static uchar velocity;
     static uchar sysChannel;
 //Tampon de réception
-    #define MIDI_LEN_TAMPON      0x1900
+    #define MIDI_LEN_TAMPON      0x2000
     #define MIDI_ATTENTE         100
     #define MIDI_ATTENTE_MESSAGE 100
     static uchar tampon[2][MIDI_LEN_TAMPON];

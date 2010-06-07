@@ -24,10 +24,13 @@
 
 extern QApplication * MainApp;
 extern Editeur * editeur;
+
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->but_kybchan->setValue(1);
+    ui->but_kybvelo->setValue(100);
 }
 
 MainWindow::~MainWindow()
@@ -38,243 +41,288 @@ MainWindow::~MainWindow()
 /*****************************************************************************/
 void MainWindow::on_actionLoad_bank_triggered(bool checked)
 {
-/*
-    bool ok;
+    short version;
 //Ouvre le fichier
-    QFile * Fichier = ChargerFichier(0, VERSION);
-    if (Fichier == NULL) return;
-    Attente = true;
+    FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_BANK, &version);
+    if (fichier == NULL) return;
 //Charge la bank
-    int Bank = QInputDialog::getInt(this, "FB01 SE :", "Which bank would you like to load ?", 1, 1, 2, 1, &ok);
-    if (!ok) return;
-    if (ui->widget_banks->Charger(Fichier, VERSION, Bank - 1)) goto BadFile;
-//Rafraichit l'affichage
-    ui->widget_banks->Rafraichir();
+    if (!editeur->banks[editeur->bankSel].Charger(fichier, version)) goto ErrorReading;
+    editeur->RafraichirBanks();
 //Ferme le fichier
-    Attente = false;
-    Fichier->close();
+    fclose(fichier);
     return;
 //Erreur apparue
-BadFile :
+ErrorReading :
     QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
-    Fichier->close();
-    */
+    fclose(fichier);
 }
 
 void MainWindow::on_actionSave_bank_triggered(bool checked)
 {
-   /*
-    bool ok;
 //Ouvre le fichier
-    QFile * Fichier = EnregistrerFichier(0, VERSION);
-    if (Fichier == NULL) return;
-//Sauve la bank
-    int Bank = QInputDialog::getInt(this, "FB01 SE :", "Which bank would you like to save ?", 1, 1, 2, 1, &ok);
-    if (!ok) return;
-    if (ui->widget_banks->Enregistrer(Fichier, Bank - 1)) goto BadFile;
+    FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_BANK);
+    if (fichier == NULL) return;
+//Sauvegarde la bank
+    if (!editeur->banks[editeur->bankSel].Enregistrer(fichier)) goto ErrorWriting;
 //Ferme le fichier
-    Fichier->close();
+    fclose(fichier);
     return;
 //Erreur apparue
-BadFile :
+ErrorWriting :
     QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
-    Fichier->close();
-    */
+    fclose(fichier);
 }
 
 /*****************************************************************************/
 void MainWindow::on_actionLoad_set_triggered(bool checked)
 {
-    /*
+    short version;
 //Ouvre le fichier
-    QFile * Fichier = ChargerFichier(1, VERSION);
-    if (Fichier == NULL) return;
-    Attente = true;
-//Charge le nom du set
-    char Nom[9];
-    Fichier->read(Nom, 8);
-    Nom[8] = 0;
-//Ecrit le nom
-    ui->txtEdit_setname->setPlainText((QString) Nom);
-//Charge le set d'instruments
-    for (int i = 0; i < 8; i++)
-        if (Insts[i]->Charger(Fichier, VERSION)) goto BadFile;
-//Rafraichit l'affichage
-    ui->txtEdit_setname->repaint();
+    FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_SET, &version);
+    if (fichier == NULL) return;
+//Charge les propriétés du set
+    if (!editeur->set.Charger(fichier, version)) goto ErrorReading;
+    editeur->RafraichirSet();
 //Ferme le fichier
-    Attente = false;
-    Fichier->close();
+    fclose(fichier);
     return;
-//Erreur apparue
-BadFile :
+//Traitement des érreurs
+ErrorReading :
     QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
-    Fichier->close();
-    */
+    fclose(fichier);
 }
 
 void MainWindow::on_actionSave_set_triggered(bool checked)
 {
-    /*
 //Ouvre le fichier
-    QFile * Fichier = EnregistrerFichier(1, VERSION);
-    if (Fichier == NULL) return;
-//Enregistre le nom du set
-    char Nom[8];
-    strncpy(Nom, ui->txtEdit_setname->toPlainText().toAscii().constData(), 8);
-    Fichier->write(Nom, 8);
-//Enregistre le set d'instruments
-    for (int i = 0; i < 8; i++)
-        if (Insts[i]->Enregistrer(Fichier)) goto BadFile;
-//Rafraichit l'affichage
-    ui->txtEdit_setname->repaint();
+    FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_SET);
+    if (fichier == NULL) return;
+//Enregistre les propriétés du set
+    if (!editeur->set.Enregistrer(fichier)) goto ErrorWriting;
 //Ferme le fichier
-    Fichier->close();
+    fclose(fichier);
     return;
 //Erreur apparue
-BadFile:
+ErrorWriting :
     QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
-    Fichier->close();
-    */
+    fclose(fichier);
 }
 
 /*****************************************************************************/
 void MainWindow::on_actionLoad_voice_triggered(bool checked)
 {
-    /*
+    short version;
 //Ouvre le fichier
-    QFile * Fichier = ChargerFichier(2, VERSION);
-    if (Fichier == NULL) return;
-    Attente = true;
-//Charge le voice
-    if (ui->widget_voice->Charger(Fichier, VERSION)) goto BadFile;
-    for (int i = 0; i < 4; i++)
-        if (Operas[i]->Charger(Fichier, VERSION)) goto BadFile;
-//Rafraichit l'affichage
-    ui->widget_voice->Rafraichir();
-    for (int i = 0; i < 4; i++)
-        Operas[i]->Rafraichir();
+    FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_VOICE, &version);
+    if (fichier == NULL) return;
+//Charge la voice
+    if (!editeur->voice.Charger(fichier, version)) goto ErrorReading;
+    editeur->RafraichirInstru();
 //Ferme le fichier
-    Fichier->close();
-    Attente = false;
+    fclose(fichier);
     return;
 //Erreur apparue
-BadFile:
+ErrorReading :
     QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
-    Fichier->close();
-    */
+    fclose(fichier);
 }
 
 void MainWindow::on_actionSave_voice_triggered(bool checked)
 {
-    /*
 //Ouvre le fichier
-    QFile * Fichier = EnregistrerFichier(2, VERSION);
-    if (Fichier == NULL) return;
-//Charge le voice
-    if (ui->widget_voice->Enregistrer(Fichier)) goto BadFile;
-    for (int i = 0; i < 4; i++)
-        if (Operas[i]->Enregistrer(Fichier)) goto BadFile;
-//Rafraichit l'affichage
-    ui->widget_voice->Rafraichir();
-    for (int i = 0; i < 4; i++)
-        Operas[i]->Rafraichir();
+    FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_VOICE);
+    if (fichier == NULL) return;
+//Charge la voice
+    if (!editeur->voice.Enregistrer(fichier)) goto ErrorWriting;
 //Ferme le fichier
-    Fichier->close();
+    fclose(fichier);
     return;
 //Erreur apparue
-BadFile:
+ErrorWriting :
     QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
-    Fichier->close();
-    */
+    fclose(fichier);
 }
 
+/*****************************************************************************/
+void MainWindow::on_actionImport_bank_triggered(bool checked)
+{
+/*
+//Ouvre le fichier
+    FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_SYSEX, NULL);
+    if (fichier == NULL) return;
+//Importe la bank
+    if (editeur->banks[editeur->BankSel].Importe(fichier)) goto ErrorReading;
+    editeur->RafraichirInstru();
+//Ferme le fichier
+    fclose(fichier);
+    return;
+//Erreur apparue
+ErrorReading :
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    fclose(fichier);
+*/
+}
+
+void MainWindow::on_actionExport_bank_triggered(bool checked)
+{
+/*
+//Ouvre le fichier
+    FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_SYSEX);
+    if (fichier == NULL) return;
+//Exporte la bank
+    if (!editeur->banks[editeur->BankSel].Exporte(fichier)) goto ErrorWriting;
+//Ferme le fichier
+    fclose(fichier);
+    return;
+//Erreur apparue
+ErrorWriting :
+    QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
+    fclose(fichier);
+*/
+}
+
+void MainWindow::on_actionImport_set_triggered(bool checked)
+{
+//Ouvre le fichier
+    FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_SYSEX, NULL);
+    if (fichier == NULL) return;
+//Importe le set
+    if (editeur->set.Importe(fichier)) goto ErrorReading;
+    editeur->RafraichirSet();
+//Ferme le fichier
+    fclose(fichier);
+    return;
+//Erreur apparue
+ErrorReading :
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    fclose(fichier);
+}
+
+void MainWindow::on_actionExport_set_triggered(bool checked)
+{
+//Ouvre le fichier
+    FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_SYSEX);
+    if (fichier == NULL) return;
+//Exporte le set
+    if (!editeur->set.Exporte(fichier)) goto ErrorWriting;
+//Ferme le fichier
+    fclose(fichier);
+    return;
+//Erreur apparue
+ErrorWriting :
+    QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
+    fclose(fichier);
+}
+
+void MainWindow::on_actionImport_voice_triggered(bool checked)
+{
+//Ouvre le fichier
+    FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_SYSEX, NULL);
+    if (fichier == NULL) return;
+//Importe la voice
+    if (editeur->voice.Importe(fichier)) goto ErrorReading;
+    editeur->RafraichirInstru();
+//Ferme le fichier
+    fclose(fichier);
+    return;
+//Erreur apparue
+ErrorReading :
+    QMessageBox::warning(this, "FB01 SE :", "Error reading file !");
+    fclose(fichier);
+}
+
+void MainWindow::on_actionExport_voice_triggered(bool checked)
+{
+//Ouvre le fichier
+    FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_SYSEX);
+    if (fichier == NULL) return;
+//Exporte la voice
+    if (!editeur->voice.Exporte(fichier)) goto ErrorWriting;
+//Ferme le fichier
+    fclose(fichier);
+    return;
+//Erreur apparue
+ErrorWriting :
+    QMessageBox::warning(this, "FB01 SE :", "Error writing file !");
+    fclose(fichier);
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionInitialize_triggered(bool checked)
 {
-    /*
-    if (Attente) return;
-    if (ui->tabWidget->currentIndex() == 4)
-    //Opération sur les opérateurs
-        Operas[OPSel]->Initialiser();
-    else if (ui->tabWidget->currentIndex() == 3)
-    //Opération sur la voice
-        ui->widget_voice->Initialiser();
-    else if (ui->tabWidget->currentIndex() == 2)
-    //Opération sur les instruments
-        Insts[InstSel]->Initialiser();
-        */
+    switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_SET :
+        editeur->set.RecupererInstrument(editeur->instruSel)->Initialiser();
+        editeur->RafraichirSet();
+        break;
+    case ONGLET_VOICE :
+        editeur->voice.Initialiser();
+        editeur->RafraichirInstru();
+        break;
+    case ONGLET_OPERATEURS :
+        editeur->voice.RecupererOP(editeur->OPSel)->Initialiser();
+        editeur->RafraichirInstru();
+        break;
+    }
 }
 
 void MainWindow::on_actionRandomize_triggered(bool checked)
 {
-    /*
-    if (Attente) return;
-    if (ui->tabWidget->currentIndex() == 4)
-    //Opération sur les opérateurs
-        Operas[OPSel]->Randomiser();
-    else if (ui->tabWidget->currentIndex() == 3)
-    //Opération sur la voice
-        ui->widget_voice->Randomiser();
-    else if (ui->tabWidget->currentIndex() == 2)
-    //Opération sur les instruments
-        Insts[InstSel]->Randomiser();
-        */
+    switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_SET :
+        editeur->set.RecupererInstrument(editeur->instruSel)->Randomiser();
+        editeur->RafraichirSet();
+        break;
+    case ONGLET_VOICE :
+        editeur->voice.Randomiser();
+        editeur->RafraichirInstru();
+        break;
+    case ONGLET_OPERATEURS :
+        editeur->voice.RecupererOP(editeur->OPSel)->Randomiser();
+        editeur->RafraichirInstru();
+        break;
+    }
 }
 
 /*****************************************************************************/
 void MainWindow::on_actionCopy_triggered(bool checked)
 {
-    /*
-    if (Attente) return;
-    if (Copie) free(Copie);
-//Copie le contenu
-    switch (ui->tabWidget->currentIndex())
-    {
-    case 1 :
-        Copie = (uchar *) malloc(LNGBLK);
-        if(ui->widget_banks->Copier(Copie))
-        {
-        //Libère l'espace
-            TypeCopie = 0;
-            free(Copie);
-            return;
-        }
-        TypeCopie = 1;
-    break;
-    case 2 :
-        Copie = (uchar *) malloc(LNGINST);
-        Insts[InstSel]->Copier(Copie);
-        TypeCopie = 2;
-    break;
-    case 3 :
-        Copie = (uchar *) malloc(LNGVOICE);
-        ui->widget_voice->Copier(Copie);
-        TypeCopie = 3;
-    break;
-    case 4 :
-        Copie = (uchar *) malloc(LNGOP);
-        Operas[OPSel]->Copier(Copie);
-        TypeCopie = 4;
-    break;
-    default : break;
+    switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_BANK :
+        //editeur->banks[editeur->BankSel].Copier();
+        break;
+    case ONGLET_SET :
+        //editeur->set.RecupererInstrument(editeur->instruSel)->Copier();
+        break;
+    case ONGLET_VOICE :
+        //editeur->voice.Copier();
+        break;
+    case ONGLET_OPERATEURS :
+        //editeur->voice.RecupererOP(editeur->OPSel)->Copier();
+        break;
     }
-    */
 }
 
 void MainWindow::on_actionPaste_triggered(bool checked)
 {
-    /*
-    if (Attente) return;
-    if (TypeCopie != ui->tabWidget->currentIndex()) return;
-//Colle le contenu
-    switch (ui->tabWidget->currentIndex())
-    {
-    case 1 : ui->widget_banks->Coller(Copie); break;
-    case 2 : Insts[InstSel]->Coller(Copie); break;
-    case 3 : ui->widget_voice->Coller(Copie); break;
-    case 4 : Operas[OPSel]->Coller(Copie); break;
-    default : break;
+    switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_BANK :
+        //editeur->banks[editeur->BankSel].Coller();
+        editeur->RafraichirBanks();
+        break;
+    case ONGLET_SET :
+        //editeur->set.RecupererInstrument(editeur->instruSel)->Coller();
+        editeur->RafraichirSet();
+        break;
+    case ONGLET_VOICE :
+        //editeur->voice.Coller();
+        editeur->RafraichirInstru();
+        break;
+    case ONGLET_OPERATEURS :
+        //editeur->voice.RecupererOP(editeur->OPSel)->Coller();
+        editeur->RafraichirInstru();
+        break;
     }
-    */
 }
 
 /*****************************************************************************/
@@ -324,11 +372,11 @@ void MainWindow::on_actionRead_this_triggered(bool checked)
 {
     QString Text;
 //Informations supplémentaires
-    Text.append("Thank you for using this program.\n");
+    Text.append("--- Thank you for using this program. ---\n");
     Text.append("Please visit the FB01 website for updates, bug reports and tricks.\n\n");
     Text.append("If you want to help the project author, you can either donate\n");
     Text.append("or get involved into the developpment of the editor, by posting\n");
-    Text.append("bug reports or directly contacting me on sourceforge.\n");
+    Text.append("bug reports or directly contacting me by email or on sourceforge.\n");
     QMessageBox::information(this, "FB01 SE :", Text);
 }
 
@@ -426,57 +474,80 @@ void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 }
 
 /*****************************************************************************/
+void MainWindow::on_but_kybchan_valueChanged(int i)
+{
+    MIDI::ChoisirMidiChannel(i-1);
+}
+
+void MainWindow::on_but_kybvelo_valueChanged(int i)
+{
+    MIDI::ChoisirVelocity(i);
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionSend_current_config_triggered(bool checked)
 {
+    editeur->config.EnvoyerTout();
 }
 
-void MainWindow::on_actionGet_current_config_triggered(bool checked)
-{
-}
-
+/*****************************************************************************/
 void MainWindow::on_actionSend_current_set_triggered(bool checked)
 {
+    editeur->set.EnvoyerTout();
 }
 
 void MainWindow::on_actionGet_current_set_triggered(bool checked)
 {
+    editeur->ActualiserSet();
+    editeur->RafraichirSet();
 }
 
+/*****************************************************************************/
 void MainWindow::on_actionSend_current_voice_triggered(bool checked)
 {
+    editeur->voice.EnvoyerTout();
 }
 
 void MainWindow::on_actionGet_current_voice_triggered(bool checked)
 {
+    editeur->ActualiserInstru();
+    editeur->RafraichirInstru();
 }
 
 /*****************************************************************************/
-void MainWindow::on_spnBox_syschan_valueChanged(int i)
+void MainWindow::on_pshBut_bank_cur_1_clicked(bool checked)
 {
+    editeur->ChoisirBank(0);
 }
 
-void MainWindow::on_spnBox_kybchan_valueChanged(int i)
+void MainWindow::on_pshBut_bank_cur_2_clicked(bool checked)
 {
+    editeur->ChoisirBank(1);
 }
 
-void MainWindow::on_pshBut_combine_clicked(bool checked)
+void MainWindow::on_pshBut_bank_cur_3_clicked(bool checked)
 {
+    editeur->ChoisirBank(2);
 }
 
-void MainWindow::on_cmbBox_reception_activated(int i)
+void MainWindow::on_pshBut_bank_cur_4_clicked(bool checked)
 {
+    editeur->ChoisirBank(3);
 }
 
-void MainWindow::on_pshBut_memory_clicked(bool checked)
+void MainWindow::on_pshBut_bank_cur_5_clicked(bool checked)
 {
+    editeur->ChoisirBank(4);
 }
 
-void MainWindow::on_spnBox_confnum_valueChanged(int i)
+void MainWindow::on_pshBut_bank_cur_6_clicked(bool checked)
 {
+    editeur->ChoisirBank(5);
 }
 
-void MainWindow::on_hzSlider_mastvol_valueChanged(int i)
+void MainWindow::on_pshBut_bank_cur_7_clicked(bool checked)
 {
+    editeur->ChoisirBank(6);
 }
 
 /*****************************************************************************/
@@ -536,11 +607,6 @@ void MainWindow::on_pshBut_inst_cur_8_clicked(bool checked)
         editeur->ErreurMIDI();
 }
 
-void MainWindow::on_txtEdit_setname_textChanged()
-{
-    editeur->set->EcrireNom(ui->txtEdit_setname->toPlainText().toAscii().data(), true);
-}
-
 /*****************************************************************************/
 void MainWindow::on_pshBut_op_cur_1_clicked(bool checked)
 {
@@ -565,22 +631,22 @@ void MainWindow::on_pshBut_op_cur_4_clicked(bool checked)
 /*****************************************************************************/
 void MainWindow::on_pshBut_OPon_1_clicked(bool checked)
 {
-    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP1, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP1, checked, true);
 }
 
 void MainWindow::on_pshBut_OPon_2_clicked(bool checked)
 {
-    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP2, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP2, checked, true);
 }
 
 void MainWindow::on_pshBut_OPon_3_clicked(bool checked)
 {
-    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP3, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP3, checked, true);
 }
 
 void MainWindow::on_pshBut_OPon_4_clicked(bool checked)
 {
-    editeur->voice->EcrireParam(Voice::VOICE_ENABLE_OP4, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP4, checked, true);
 }
 
 /*****************************************************************************/

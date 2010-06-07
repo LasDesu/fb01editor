@@ -53,7 +53,7 @@ bool Edit::Enregistrer(FILE * fichier)
     return true;
 }
 
-bool Edit::Charger(FILE * fichier, const int version)
+bool Edit::Charger(FILE * fichier, const short version)
 {
     uchar sauv[nbParam];
     if (fread(sauv, nbParam, 1, fichier))

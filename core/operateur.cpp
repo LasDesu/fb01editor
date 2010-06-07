@@ -53,7 +53,7 @@ uchar Operateur::LireParam(const uchar param)
 {
     switch(param) {
     case OPERATOR_LEVEL :
-        return LireSysEx(0x1) & 0x7F;
+        return LireSysEx(0x0);
     case OPERATOR_LEVEL_CURB :
         return ((LireSysEx(0x1) >> 7) & 0x1)
               +((LireSysEx(0x3) >> 6) & 0x2);
@@ -193,7 +193,7 @@ uint Operateur::RecevoirTout()
 /*****************************************************************************/
 uchar Operateur::LireSysEx(const uchar param)
 {
-    return (sysEx[param] & 0xF) + (sysEx[param * 2] << 4);
+    return (sysEx[param * 2] & 0xF) + (sysEx[param * 2 + 1] << 4);
 }
 
 void Operateur::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
@@ -206,7 +206,7 @@ void Operateur::EcrireSysEx(const uchar param, const uchar valeur, const bool en
     envOperateur[3] = MIDI::SysChannel();
     envOperateur[4] = 0x18 + (instru & 0x7);
 //Envoi les changements
-    envOperateur[5] = (param + id * 0x8 + 0x50) & 0x7F;
+    envOperateur[5] = (param + (3 - id) * 0x8 + 0x50) & 0x7F;
     envOperateur[6] = valeur & 0xF;
     envOperateur[7] = valeur >> 4;
 //Envoi le message

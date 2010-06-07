@@ -19,55 +19,49 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QVOICE_H
-#define QVOICE_H
+#ifndef QCONFIG_H
+#define QCONFIG_H
 
-#include <QtGui/QWidget>
-#include <QPixmap>
+#include <QWidget>
+#include "../ui_qconfig.h"
 
-#include "../ui_qvoice.h"
-#include "../core/voice.h"
 #include "../core/midi.h"
+#include "../core/config.h"
+#include "../core/set.h"
 
-/*****************************************************************************/
 namespace Ui {
-    class QVoice;
+    class QConfig;
 }
 
-class QVoice : public QWidget {
+/*****************************************************************************/
+class QConfig : public QWidget {
     Q_OBJECT
 public:
-    QVoice(QWidget *parent = 0);
-    ~QVoice();
-    void DefinirVoice(Voice * voice);
-    void DefinirAuteur(QString auteur);
-    void DefinirComment(QString comment);
+    QConfig(QWidget *parent = 0);
+    ~QConfig();
+    void DefinirConfig(Config * config);
+    void DefinirSet(Set * set);
     void Actualiser();
 protected:
     void changeEvent(QEvent *e);
 private:
-    Ui::QVoice *m_ui;
-    Voice * voice;
+    Ui::QConfig *m_ui;
+    Config * config;
+    Set    * set;
     bool attente;
 private slots:
-    void on_but_algo_valueChanged(int i);
-    void on_txtEdit_voicename_textChanged();
-    void on_cmbBox_style_activated(int i);
-    void on_but_feedback_valueChanged(int i);
-    void on_but_trans_valueChanged(int i);
-    void on_pshBut_poly_clicked(bool checked);
-    void on_but_porta_valueChanged(int i);
-    void on_but_pitch_valueChanged(int i);
-    void on_cmbBox_pmdctl_activated(int i);
+    void on_but_syschan_valueChanged(int i);
+    void on_pshBut_memory_clicked(bool checked = false);
+    void on_but_confnum_valueChanged(int i);
+    void on_but_mastdetune_valueChanged(int i);
+    void on_hzSlider_mastvol_valueChanged(int i);
+    void on_txtEdit_name_textChanged();
+    void on_pshBut_combine_clicked(bool checked = false);
+    void on_cmbBox_reception_activated(int i);
     void on_spnBox_LFOspeed_valueChanged(int i);
     void on_cmbBox_LFOwave_activated(int i);
-    void on_pshBut_LFOload_clicked(bool checked);
-    void on_pshBut_LFOsync_clicked(bool checked);
     void on_but_AMD_valueChanged(int i);
-    void on_but_AMS_valueChanged(int i);
     void on_but_PMD_valueChanged(int i);
-    void on_but_PMS_valueChanged(int i);
-
 };
 
-#endif // QVOICE_H
+#endif // QCONFIG_H

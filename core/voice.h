@@ -66,7 +66,7 @@ public :
     void AssocierInstrument(int index);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
-    bool Charger(FILE * fichier, const int version);
+    bool Charger(FILE * fichier, const short version);
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés

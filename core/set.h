@@ -34,8 +34,16 @@
 class Set : public Edit {
 public :
 //Paramêtres éditables
-    #define SET_NB_PARAM 0;
+    #define SET_NB_PARAM 0
     #define SET_LEN_NOM 8
+    typedef enum {
+        SET_LFO_SPEED = 0,
+        SET_LFO_WAVE,
+        SET_LFO_AMD,
+        SET_LFO_PMD,
+        SET_COMBINE_MODE,
+        SET_RECEPTION_MODE
+    }SET_PARAM;
 //Constructeurs
     Set();
     ~Set();
@@ -43,7 +51,7 @@ public :
     Instrument * RecupererInstrument(int index);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
-    bool Charger(FILE * fichier, const int version);
+    bool Charger(FILE * fichier, const short version);
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés

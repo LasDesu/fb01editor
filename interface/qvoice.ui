@@ -522,7 +522,7 @@
    <widget class="QLabel" name="lbl_AMD">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>140</y>
       <width>41</width>
       <height>20</height>
@@ -541,7 +541,7 @@
    <widget class="QLabel" name="lbl_PMD">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>200</y>
       <width>41</width>
       <height>16</height>
@@ -598,7 +598,7 @@
    <widget class="QLabel" name="lbl_AMS">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>170</y>
       <width>41</width>
       <height>16</height>
@@ -617,7 +617,7 @@
    <widget class="QLabel" name="lbl_PMS">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>10</x>
       <y>230</y>
       <width>41</width>
       <height>16</height>
@@ -706,7 +706,7 @@
    <widget class="QButton" name="but_AMD">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>140</y>
       <width>81</width>
       <height>23</height>
@@ -725,7 +725,7 @@
    <widget class="QButton" name="but_AMS">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>170</y>
       <width>81</width>
       <height>23</height>
@@ -744,7 +744,7 @@
    <widget class="QButton" name="but_PMD">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>200</y>
       <width>81</width>
       <height>23</height>
@@ -763,7 +763,7 @@
    <widget class="QButton" name="but_PMS">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>230</y>
       <width>81</width>
       <height>23</height>

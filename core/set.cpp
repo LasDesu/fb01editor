@@ -51,19 +51,33 @@ Instrument * Set::RecupererInstrument(int index)
 /*****************************************************************************/
 bool Set::Enregistrer(FILE * fichier)
 {
+//Ecrit le nom
+    fread(LireNom(), 1, SET_LEN_NOM, fichier);
 //Sauvegarde la table
     if(!Edit::Enregistrer(fichier))
         return false;
 //Sauvegarde les instruments
+    for (int i = 0; i < SET_NB_INSTRU; i++)
+        if (!instruments[i]->Enregistrer(fichier))
+            return false;
     return true;
 }
 
-bool Set::Charger(FILE * fichier, const int version)
+bool Set::Charger(FILE * fichier, const short version)
 {
+    char nom[SET_LEN_NOM];
+//Récupère le nom
+    fread(nom, 1, SET_LEN_NOM, fichier);
+    EcrireNom(nom, false);
 //Recupère la table
-    if(!Edit::Charger(fichier, version))
-        return false;
-//Récupère les instruments
+    if (version == VERSION) {
+        if(!Edit::Charger(fichier, version))
+            return false;
+    }
+//Charge le set d'instruments
+    for (int i = 0; i < SET_NB_INSTRU; i++)
+        if (!instruments[i]->Charger(fichier, version))
+            return false;
     return true;
 }
 
@@ -76,11 +90,46 @@ void Set::Initialiser()
 /*****************************************************************************/
 uchar Set::LireParam(const uchar param)
 {
-    return 0;
+    switch(param) {
+    case SET_LFO_SPEED:
+        return LireSysEx(0x9);
+    case SET_LFO_WAVE:
+        return LireSysEx(0xC) & 0x3;
+    case SET_LFO_AMD:
+        return LireSysEx(0xA);
+    case SET_LFO_PMD:
+        return LireSysEx(0xB);
+    case SET_COMBINE_MODE:
+        return LireSysEx(0x8) & 0x1;
+    case SET_RECEPTION_MODE:
+        return LireSysEx(0xD) & 0x3;
+    default: return 0;
+    }
 }
 
 void Set::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 {
+    switch(param) {
+    case SET_LFO_SPEED:
+        EcrireSysEx(0x9, valeur & 0x7F, true);
+    break;
+    case SET_LFO_WAVE:
+        EcrireSysEx(0xC, valeur & 0x3, true);
+    break;
+    case SET_LFO_AMD:
+        EcrireSysEx(0xA, valeur & 0x7F, true);
+    break;
+    case SET_LFO_PMD:
+        EcrireSysEx(0xB, valeur & 0x7F, true);
+    break;
+    case SET_COMBINE_MODE:
+        EcrireSysEx(0x8, valeur & 0x1, true);
+    break;
+    case SET_RECEPTION_MODE:
+        EcrireSysEx(0xD, valeur & 0x3, true);
+    break;
+    default: return;
+    }
 }
 
 /*****************************************************************************/

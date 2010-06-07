@@ -29,10 +29,11 @@ Editeur      * editeur = NULL;
 /*****************************************************************************/
 int main(int argc, char *argv[])
 {
-//Créé l'éditeur
+//Créé l'interface de l'application
     application = new QApplication(argc, argv);
     mainWindow  = new MainWindow();
     mainWindow->show();
+//Créé l'éditeur
     editeur = new Editeur();
 //Démarre le programme
     int res = application->exec();
@@ -61,17 +62,15 @@ Editeur::~Editeur()
 /*****************************************************************************/
 void Editeur::InitialiserEditeur()
 {
-//Créé les objets de l'éditeur
-    set = new Set();
-    voice = new Voice();
-    for (int i=0; i < EDITEUR_NB_BANK; i++)
-        banks[i] = new Bank();
 //Attribue les classes à l'interface
+    AttribuerConfig();
+    AttribuerBanks();
     AttribuerInstruments();
     AttribuerVoice();
     AttribuerOperateurs();
 //Initialise les sélections
     ChoisirPageSet(0);
+    ChoisirBank(0);
     ChoisirInstru(0);
     ChoisirOP(0);
 //Initialisations diverses
@@ -110,7 +109,7 @@ void Editeur::ConfigurerOnglets(const bool actifs)
     mainWindow->ui->tab_operas->setEnabled(actifs);
     mainWindow->ui->tab_voice->setEnabled(actifs);
 //Active ou désactive le cadre de config
-    mainWindow->ui->grpBox_config->setEnabled(actifs);
+    mainWindow->ui->widget_config->setEnabled(actifs);
 //Sélectionne l'onglet de configuration
     if (!actifs)
         mainWindow->ui->tabWidget->setCurrentIndex(0);
@@ -162,13 +161,50 @@ void Editeur::ChoisirPageSet(const int page)
     }
 }
 
+void Editeur::ChoisirBank(const int bank)
+{
+//Sélectionne la bank
+    bankSel = bank;
+    mainWindow->ui->pshBut_bank_cur_1->setChecked(bankSel == 0);
+    mainWindow->ui->pshBut_bank_cur_2->setChecked(bankSel == 1);
+    mainWindow->ui->pshBut_bank_cur_3->setChecked(bankSel == 2);
+    mainWindow->ui->pshBut_bank_cur_4->setChecked(bankSel == 3);
+    mainWindow->ui->pshBut_bank_cur_5->setChecked(bankSel == 4);
+    mainWindow->ui->pshBut_bank_cur_6->setChecked(bankSel == 5);
+    mainWindow->ui->pshBut_bank_cur_7->setChecked(bankSel == 6);
+}
+
+void Editeur::ChoisirInstru(const int instru)
+{
+//Sélectionne l'instrument
+    instruSel = instru;
+    mainWindow->ui->pshBut_inst_cur_1->setChecked(instruSel == 0);
+    mainWindow->ui->pshBut_inst_cur_2->setChecked(instruSel == 1);
+    mainWindow->ui->pshBut_inst_cur_3->setChecked(instruSel == 2);
+    mainWindow->ui->pshBut_inst_cur_4->setChecked(instruSel == 3);
+    mainWindow->ui->pshBut_inst_cur_5->setChecked(instruSel == 4);
+    mainWindow->ui->pshBut_inst_cur_6->setChecked(instruSel == 5);
+    mainWindow->ui->pshBut_inst_cur_7->setChecked(instruSel == 6);
+    mainWindow->ui->pshBut_inst_cur_8->setChecked(instruSel == 7);
+}
+
+void Editeur::ChoisirOP(const int OP)
+{
+//Sélectionne l'opérateur
+    OPSel = OP;
+    mainWindow->ui->pshBut_op_cur_1->setChecked(OPSel == 0);
+    mainWindow->ui->pshBut_op_cur_2->setChecked(OPSel == 1);
+    mainWindow->ui->pshBut_op_cur_3->setChecked(OPSel == 2);
+    mainWindow->ui->pshBut_op_cur_4->setChecked(OPSel == 3);
+}
+
+/*****************************************************************************/
 bool Editeur::ActualiserSet()
 {
 //Charge le set d'instruments
-    if (!set->RecevoirTout()) return false;
-//Change le nom du set
-    mainWindow->ui->txtEdit_setname->setPlainText((QString) set->LireNom());
-    mainWindow->ui->txtEdit_setname->repaint();
+    if (set.RecevoirTout() != MIDI::MIDI_ERREUR_RIEN) return false;
+//Actualise le set
+    mainWindow->ui->widget_config->Actualiser();
 //Actualise les instruments
     if (pageSel == 0) {
         mainWindow->ui->widget_instru_1->Actualiser();
@@ -184,85 +220,111 @@ bool Editeur::ActualiserSet()
     return true;
 }
 
-/*****************************************************************************/
-void Editeur::ChoisirInstru(const int instru)
-{
-//Sélectionne l'instrument
-    instruSel = instru;
-    mainWindow->ui->pshBut_inst_cur_1->setChecked(instruSel == 0);
-    mainWindow->ui->pshBut_inst_cur_2->setChecked(instruSel == 1);
-    mainWindow->ui->pshBut_inst_cur_3->setChecked(instruSel == 2);
-    mainWindow->ui->pshBut_inst_cur_4->setChecked(instruSel == 3);
-    mainWindow->ui->pshBut_inst_cur_5->setChecked(instruSel == 4);
-    mainWindow->ui->pshBut_inst_cur_6->setChecked(instruSel == 5);
-    mainWindow->ui->pshBut_inst_cur_7->setChecked(instruSel == 6);
-    mainWindow->ui->pshBut_inst_cur_8->setChecked(instruSel == 7);
-}
-
 bool Editeur::ActualiserInstru()
 {
 //Charge l'instrument sélectionné
-    voice->AssocierInstrument(instruSel);
-    if (!voice->RecevoirTout()) return false;
+    voice.AssocierInstrument(instruSel);
+    if (voice.RecevoirTout() != MIDI::MIDI_ERREUR_RIEN) return false;
 //Actualise la voice et les opérateurs
     mainWindow->ui->widget_voice->Actualiser();
     mainWindow->ui->widget_opera_1->Actualiser();
     mainWindow->ui->widget_opera_2->Actualiser();
     mainWindow->ui->widget_opera_3->Actualiser();
     mainWindow->ui->widget_opera_4->Actualiser();
+//Actualise l'état des opérateurs
+    mainWindow->ui->pshBut_OPon_1->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP1));
+    mainWindow->ui->pshBut_OPon_2->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP2));
+    mainWindow->ui->pshBut_OPon_3->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP3));
+    mainWindow->ui->pshBut_OPon_4->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP4));
     return true;
 }
 
-void Editeur::ChoisirOP(const int OP)
-{
-//Sélectionne l'opérateur
-    OPSel = OP;
-    mainWindow->ui->pshBut_op_cur_1->setChecked(OPSel == 0);
-    mainWindow->ui->pshBut_op_cur_2->setChecked(OPSel == 1);
-    mainWindow->ui->pshBut_op_cur_3->setChecked(OPSel == 2);
-    mainWindow->ui->pshBut_op_cur_4->setChecked(OPSel == 3);
-}
-
-/*****************************************************************************/
-bool Editeur::ActualiserConfig()
-{
-    return true;
-}
 bool Editeur::ActualiserBanks()
 {
     return true;
 }
 
+/*****************************************************************************/
+void Editeur::RafraichirBanks()
+{
+    mainWindow->ui->widget_bank_1->repaint();
+    mainWindow->ui->widget_bank_2->repaint();
+    mainWindow->ui->widget_bank_3->repaint();
+    mainWindow->ui->widget_bank_4->repaint();
+    mainWindow->ui->widget_bank_5->repaint();
+    mainWindow->ui->widget_bank_6->repaint();
+    mainWindow->ui->widget_bank_7->repaint();
+}
 
 /*****************************************************************************/
+void Editeur::RafraichirSet()
+{
+    mainWindow->ui->widget_config->repaint();
+    if (pageSel == 0) {
+        mainWindow->ui->widget_instru_1->repaint();
+        mainWindow->ui->widget_instru_2->repaint();
+        mainWindow->ui->widget_instru_3->repaint();
+        mainWindow->ui->widget_instru_4->repaint();
+    }else{
+        mainWindow->ui->widget_instru_5->repaint();
+        mainWindow->ui->widget_instru_6->repaint();
+        mainWindow->ui->widget_instru_7->repaint();
+        mainWindow->ui->widget_instru_8->repaint();
+    }
+}
+
+void Editeur::RafraichirInstru()
+{
+    mainWindow->ui->widget_voice->repaint();
+}
+
+/*****************************************************************************/
+void Editeur::AttribuerConfig()
+{
+//Attribue la configuration
+    mainWindow->ui->widget_config->DefinirConfig(&config);
+    mainWindow->ui->widget_config->DefinirSet(&set);
+}
+
+void Editeur::AttribuerBanks()
+{
+//Attribue les banks aux contrôles
+    mainWindow->ui->widget_bank_1->DefinirBank(&banks[0]);
+    mainWindow->ui->widget_bank_2->DefinirBank(&banks[1]);
+    mainWindow->ui->widget_bank_3->DefinirBank(&banks[2]);
+    mainWindow->ui->widget_bank_4->DefinirBank(&banks[3]);
+    mainWindow->ui->widget_bank_5->DefinirBank(&banks[4]);
+    mainWindow->ui->widget_bank_6->DefinirBank(&banks[5]);
+    mainWindow->ui->widget_bank_7->DefinirBank(&banks[6]);
+}
+
 void Editeur::AttribuerInstruments()
 {
 //Attribue les instruments aux contrôles
-    mainWindow->ui->widget_instru_1->DefinirInstrument(set->RecupererInstrument(0));
-    mainWindow->ui->widget_instru_2->DefinirInstrument(set->RecupererInstrument(1));
-    mainWindow->ui->widget_instru_3->DefinirInstrument(set->RecupererInstrument(2));
-    mainWindow->ui->widget_instru_4->DefinirInstrument(set->RecupererInstrument(3));
-    mainWindow->ui->widget_instru_5->DefinirInstrument(set->RecupererInstrument(4));
-    mainWindow->ui->widget_instru_6->DefinirInstrument(set->RecupererInstrument(5));
-    mainWindow->ui->widget_instru_7->DefinirInstrument(set->RecupererInstrument(6));
-    mainWindow->ui->widget_instru_8->DefinirInstrument(set->RecupererInstrument(7));
+    mainWindow->ui->widget_instru_1->DefinirInstrument(set.RecupererInstrument(0));
+    mainWindow->ui->widget_instru_2->DefinirInstrument(set.RecupererInstrument(1));
+    mainWindow->ui->widget_instru_3->DefinirInstrument(set.RecupererInstrument(2));
+    mainWindow->ui->widget_instru_4->DefinirInstrument(set.RecupererInstrument(3));
+    mainWindow->ui->widget_instru_5->DefinirInstrument(set.RecupererInstrument(4));
+    mainWindow->ui->widget_instru_6->DefinirInstrument(set.RecupererInstrument(5));
+    mainWindow->ui->widget_instru_7->DefinirInstrument(set.RecupererInstrument(6));
+    mainWindow->ui->widget_instru_8->DefinirInstrument(set.RecupererInstrument(7));
 }
 
 void Editeur::AttribuerVoice()
 {
 //Attribue la voice au controle
-    mainWindow->ui->widget_voice->DefinirVoice(voice);
+    mainWindow->ui->widget_voice->DefinirVoice(&voice);
 }
 
 void Editeur::AttribuerOperateurs()
 {
 //Attribue les opérateurs aux contrôles
-    mainWindow->ui->widget_opera_1->DefinirOP(voice->RecupererOP(0));
-    mainWindow->ui->widget_opera_2->DefinirOP(voice->RecupererOP(1));
-    mainWindow->ui->widget_opera_3->DefinirOP(voice->RecupererOP(2));
-    mainWindow->ui->widget_opera_4->DefinirOP(voice->RecupererOP(3));
+    mainWindow->ui->widget_opera_1->DefinirOP(voice.RecupererOP(0));
+    mainWindow->ui->widget_opera_2->DefinirOP(voice.RecupererOP(1));
+    mainWindow->ui->widget_opera_3->DefinirOP(voice.RecupererOP(2));
+    mainWindow->ui->widget_opera_4->DefinirOP(voice.RecupererOP(3));
 }
-
 
 /*****************************************************************************/
 void Editeur::ErreurMIDI()
@@ -284,8 +346,8 @@ void Editeur::Actualiser()
     ConfigurerMenus(true);
     ConfigurerOnglets(true);
 //Récupère les informations
-    if (!ActualiserConfig()) {
-        Reinitialiser();
+    if (!ActualiserBanks()) {
+        ErreurMIDI();
         return;
     }
     if (!ActualiserSet()) {
@@ -312,88 +374,77 @@ void Editeur::Reinitialiser()
 }
 
 /*****************************************************************************/
-/*
-
-void Editeur::Envoyer()
+const char ChargerTitres[4][20] = {"Load a bank :", "Load a set :", "Load a voice :", "Load a sysex file :"};
+const char ChargerExts[4][4]= {"fbb", "fbs", "fbv", "syx"};
+FILE * Editeur::ChargerFichier(FICHIER_TYPE type, short * version)
 {
-//Vérrouille
-    Attente = true;
-//Envoie la config globale
-    EXPANDEUR::EcrireSysParam(0x08, ui->pshBut_combine->isChecked());
-    EXPANDEUR::EcrireSysParam(0x0D, (uchar) ui->cmbBox_reception->currentIndex());
-    EXPANDEUR::EcrireSysParam(0x21, ui->pshBut_memory->isChecked());
-    EXPANDEUR::EcrireSysParam(0x22, (uchar) ui->spnBox_confnum->value()-1);
-    EXPANDEUR::EcrireSysParam(0x24, (uchar) ui->hzSlider_mastvol->value());
-//Déverrouille
-    Attente = false;
-}
-    */
-
-/*****************************************************************************/
-const char ChargeTitres[3][20] = {"Load a bank :", "Load a set :", "Load a voice :"};
-const char Exts[3][4]= {"fbb", "fbs", "fbv"};
-FILE * Editeur::ChargerFichier(const int Type, const short Version)
-{
-    /*
-    short Ver;
-    char  Text[3];
-    QFile * Fichier;
-//Ouvre le sélecteur
-    QString Ext = "*.";
-    Ext.append(Exts[Type]);
-    QString Nom = QFileDialog::getOpenFileName(this, ChargeTitres[Type], Ext);
-    if (Nom.isEmpty()) return NULL;
+    FILE * fichier;
+    char ext[3];
+//Ouvre le sélecteur de fichier
+    QString filtre = "*.";
+    filtre.append(ChargerExts[type]);
+    QString nom = QFileDialog::getOpenFileName(mainWindow, ChargerTitres[type], filtre);
+    if (nom.isEmpty()) return NULL;
 //Ouvre le fichier
-    Fichier = new QFile(Nom);
-    if (!Fichier->open(QIODevice::ReadOnly)) goto Error;
-//Vérifie l'entète
-    Fichier->read(Text, 3);
-    if (strncmp(Exts[Type], Text, 3)) goto BadFile;
-    Fichier->read((char *) &Ver, (sizeof(short)));
-    if (Ver > Version) goto NewFile;
+    fichier = fopen(nom.toAscii().data(), "rb");
+    if (fichier == NULL) goto Error;
+//Vérifie l'entète et la version
+    if (type != FICHIER_SYSEX) {
+        if (fread(ext, 1, 3, fichier) < 3) goto ErrorReading;
+        if (fread(version, 2, 1, fichier) < 1) goto ErrorReading;
+        if (strncmp(ChargerExts[type], ext, 3)) goto BadFile;
+        if (*version > VERSION) goto TooNewFile;
+    }
 //Retourne le pointeur
-    return Fichier;
+    return fichier;
 //Traitement des érreurs
 Error :
-    QMessageBox::warning(this, "FB01 SE :", "Cannot open file !");
+    QMessageBox::warning(mainWindow, "FB01 SE :", "Unable to open the file !");
+    return NULL;
+ErrorReading :
+    QMessageBox::warning(mainWindow, "FB01 SE :", "Unable to read the file !");
+    fclose(fichier);
     return NULL;
 BadFile:
-    QMessageBox::warning(this, "FB01 SE :", "Bad file type !");
-    Fichier->close();
-    delete(Fichier);
+    QMessageBox::warning(mainWindow, "FB01 SE :", "Bad file format or corrupted file !");
+    fclose(fichier);
     return NULL;
-NewFile:
-    QMessageBox::warning(this, "FB01 SE :", "New file !");
-    Fichier->close();
-    delete(Fichier);
+TooNewFile:
+    QMessageBox::warning(mainWindow, "FB01 SE :", "New file format, please download the latest version !");
+    fclose(fichier);
     return NULL;
-    */
 }
 
-char EnregTitres[3][20] = {"Save a bank :", "Save a set :", "Save a voice :"};
-FILE * Editeur::EnregistrerFichier(const int Type, const short Version)
+char EnregTitres[4][20] = {"Save a bank :", "Save a set :", "Save a voice :", "Save a sysex file :"};
+FILE * Editeur::EnregistrerFichier(FICHIER_TYPE type)
 {
-    /*
-    QFile * Fichier;
+    FILE * fichier;
+    short version = VERSION;
 //Ouvre le sélecteur
-    QString Ext = "*.";
-    Ext.append(Exts[Type]);
-    QString Nom = QFileDialog::getSaveFileName(this, EnregTitres[Type], Ext);
-    if (Nom.isEmpty()) return NULL;
+    QString filtre = "*.";
+    filtre.append(ChargerExts[type]);
+    QString nom = QFileDialog::getSaveFileName(mainWindow, EnregTitres[type], filtre);
+    if (nom.isEmpty()) return NULL;
+    if (!nom.endsWith(ChargerExts[type], Qt::CaseInsensitive))
+        nom.append(filtre.right(filtre.length() - 1));
 //Ouvre le fichier
-    Fichier = new QFile(Nom);
-    if (!Fichier->open(QIODevice::WriteOnly)) goto Error;
+    fichier = fopen(nom.toAscii().data(), "wb+");
+    if (fichier == NULL) goto Error;
 //Ecrit l'entète
-    Fichier->write(Exts[Type], 3);
-    Fichier->write((char *) &Version, (sizeof(short)));
+    if (type != FICHIER_SYSEX) {
+        if (fwrite(ChargerExts[type], 1, 3, fichier) < 3) goto ErrorWriting;
+        if (fwrite(&version, 2, 1, fichier) < 1) goto ErrorWriting;
+    }
 //Retourne le pointeur
-    return Fichier;
+    return fichier;
 //Traitement des érreurs
 Error :
-    QMessageBox::warning(this, "FB01 SE :", "Cannot open file !");
-    Fichier->close();
-    delete(Fichier);
+    QMessageBox::warning(mainWindow, "FB01 SE :", "Unable to open the file !");
+    fclose(fichier);
     return NULL;
-    */
+ErrorWriting :
+    QMessageBox::warning(mainWindow, "FB01 SE :", "Unable to write the file !");
+    fclose(fichier);
+    return NULL;
 }
 

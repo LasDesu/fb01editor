@@ -24,12 +24,13 @@
 /*****************************************************************************/
 QClavier::QClavier(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
-    noteJouee = -1;
+    noteSouris = -1;
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 QClavier::~QClavier()
 {
-    if (noteJouee != -1) MIDI::Note(noteJouee, 0);
+    MIDI::AllNotesOff();
 }
 
 /*****************************************************************************/
@@ -41,28 +42,43 @@ void QClavier::mouseMoveEvent(QMouseEvent * event)
 /*****************************************************************************/
 void QClavier::mousePressEvent(QMouseEvent * event)
 {
-    int note = TrouverNote(event);
-    if (note != noteJouee)
-    {
-        if (noteJouee != -1) MIDI::Note(noteJouee, 0);
-        MIDI::Note(note, 100);
-        noteJouee = note;
+    int note = TrouverNoteSouris(event);
+    if (note != noteSouris) {
+        MIDI::NoteOff(noteSouris);
+        MIDI::NoteOn(note);
+        noteSouris = note;
     }
 }
 
-void QClavier::mouseReleaseEvent(QMouseEvent * event)
+void QClavier::keyPressEvent(QKeyEvent * event)
 {
-    if (noteJouee != -1) MIDI::Note(noteJouee, 0);
-    noteJouee = -1;
+    if (event->isAutoRepeat()) return;
+    int note = TrouverNoteClavier(event);
+    if (note >= 0) MIDI::NoteOn(note);
 }
 
 /*****************************************************************************/
-int QClavier::TrouverNote(QMouseEvent * event)
+void QClavier::mouseReleaseEvent(QMouseEvent * event)
 {
+    if (noteSouris != -1)
+        MIDI::NoteOff(noteSouris);
+    noteSouris = -1;
+}
+
+void QClavier::keyReleaseEvent(QKeyEvent * event)
+{
+    int note = TrouverNoteClavier(event);
+    if (note >= 0) MIDI::NoteOff(note);
+}
+
+/*****************************************************************************/
+int QClavier::TrouverNoteSouris(QMouseEvent * event)
+{
+//Détermine l'octave
     int octave = event->x() / 56;
     int reste  = event->x() % 56;
     int note   = octave * 12;
-//Détermine la touche
+//Détermine la touche du piano
     if (event->y() < 24)
     {
         if      (reste > 4  && reste < 12) note += 1;
@@ -83,3 +99,21 @@ int QClavier::TrouverNote(QMouseEvent * event)
  //Retourne la note
     return (note > 127) ? 127 : note;
 }
+
+const int clavierNotes[] = {Qt::Key_Q, Qt::Key_2, Qt::Key_W, Qt::Key_3, Qt::Key_E, Qt::Key_R, Qt::Key_5, Qt::Key_T, Qt::Key_6, Qt::Key_Y, Qt::Key_7, Qt::Key_U,
+                            Qt::Key_Z, Qt::Key_S, Qt::Key_X, Qt::Key_D, Qt::Key_C, Qt::Key_V, Qt::Key_G, Qt::Key_B, Qt::Key_H, Qt::Key_N, Qt::Key_J, Qt::Key_M};
+const int nbClavierNotes = sizeof(clavierNotes) / sizeof(int);
+int QClavier::TrouverNoteClavier(QKeyEvent * event)
+{
+    for(int i = 0; i < nbClavierNotes; i++)
+        if(event->key() == clavierNotes[i]) {
+            switch (event->modifiers()) {
+                case Qt::ShiftModifier: return i+24+G_REF;
+                case Qt::ControlModifier: return i+12+G_REF;
+                case Qt::AltModifier: return i-12+G_REF;
+                default: return i+G_REF;
+            }
+        }
+    return -1;
+}
+

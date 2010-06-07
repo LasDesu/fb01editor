@@ -23,7 +23,7 @@
 
 /*****************************************************************************/
 Config::Config()
-    : Edit(0,0,0, NULL)
+       : Edit(0,CONFIG_NB_PARAM, 0, NULL)
 {
 }
 
@@ -39,7 +39,25 @@ uchar Config::LireParam(const uchar param)
 
 void Config::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 {
-    return;
+    switch(param) {
+    case CONFIG_SYSCHANNEL:
+        EcrireSysEx(0x20, valeur & 0xF, true);
+        MIDI::ChoisirSysChannel(valeur);
+    break;
+    case CONFIG_MEMORY_PROTECT:
+        EcrireSysEx(0x21, valeur & 0x1, true);
+    break;
+    case CONFIG_CONFIG_NUMBER:
+        EcrireSysEx(0x22, valeur & 0x1F, true);
+    break;
+    case CONFIG_DETUNE:
+        EcrireSysEx(0x23, valeur & 0x7F, true);
+    break;
+    case CONFIG_MASTER_VOLUME:
+        EcrireSysEx(0x24, valeur & 0x7F, true);
+    break;
+    default: return;
+    }
 }
 
 /*****************************************************************************/
@@ -54,12 +72,6 @@ uint Config::RecevoirTout()
 }
 
 /*****************************************************************************/
-void Config::InitSysEx()
-{
-
-}
-
-/*****************************************************************************/
 uchar Config::LireSysEx(const uchar param)
 {
     return 0;
@@ -67,5 +79,12 @@ uchar Config::LireSysEx(const uchar param)
 
 void Config::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
 {
+    uchar envConfig[] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
+//Construit le message
+    envConfig[3] = MIDI::SysChannel();
+    envConfig[5] = param & 0x7F;
+    envConfig[6] = valeur & 0x7F;
+//Transmet le paramêtre
+    MIDI::EnvSysEx(envConfig, 8);
     return;
 }

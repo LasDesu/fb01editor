@@ -30,10 +30,18 @@
 #include "edit.h"
 #include "midi.h"
 
+/*****************************************************************************/
 class Config : public Edit {
 public :
 //Paramêtres éditables
-    #define CONFIG_NB_PARAM 0
+    #define CONFIG_NB_PARAM 4
+    typedef enum {
+        CONFIG_SYSCHANNEL = 0,
+        CONFIG_MEMORY_PROTECT,
+        CONFIG_CONFIG_NUMBER,
+        CONFIG_DETUNE,
+        CONFIG_MASTER_VOLUME
+    }CONFIG_PARAM;
 //Constructeurs
     Config();
     ~Config();
@@ -46,7 +54,6 @@ public :
 private :
 //Ecriture et lecture
     #define CONFIG_LEN_SYSEX 0
-    void  InitSysEx();
     uchar LireSysEx(const uchar param);
     void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };

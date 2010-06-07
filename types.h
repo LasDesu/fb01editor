@@ -19,27 +19,32 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef uchar
-#define uchar  char  unsigned
-#define ushort short unsigned
-#define uint   int   unsigned
-#define ulong  long  unsigned
-#endif
+//Constantes globales
+    #define VERSION 2
 
-#ifndef int8
-#define int8   char
-#define uint8  char  unsigned
-#define int16  short
-#define uint16 short unsigned
-#define int32  long
-#define uint32 long  unsigned
-#endif
+//Types spéciaux globaux
+    #ifndef uchar
+    #define uchar  char  unsigned
+    #define ushort short unsigned
+    #define uint   int   unsigned
+    #define ulong  long  unsigned
+    #endif
 
-#ifndef RAND
-#define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
-#endif
+    #ifndef int8
+    #define int8   char
+    #define uint8  char  unsigned
+    #define int16  short
+    #define uint16 short unsigned
+    #define int32  long
+    #define uint32 long  unsigned
+    #endif
 
-#ifndef min
-#define min(a, b) (a < b ? a : b)
-#define max(a, b) (a > b ? a : b)
-#endif
+//Macros globales
+    #ifndef RAND
+    #define RAND(a, b) (a + (rand() * (b - a + 1)) / RAND_MAX)
+    #endif
+
+    #ifndef min
+    #define min(a, b) (a < b ? a : b)
+    #define max(a, b) (a > b ? a : b)
+    #endif

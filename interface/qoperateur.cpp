@@ -25,6 +25,7 @@
 QOperateur::QOperateur(QWidget *parent) : QWidget(parent), m_ui(new Ui::QOperateur)
 {
     m_ui->setupUi(this);
+    attente = false;
 }
 
 QOperateur::~QOperateur()
@@ -52,6 +53,7 @@ void QOperateur::ActualiserEnveloppe()
 
 void QOperateur::Actualiser()
 {
+    attente = true;
     m_ui->hzSlider_volume->setValue(127 - operateur->LireParam(Operateur::OPERATOR_LEVEL));
     m_ui->but_vellvl->setValue(operateur->LireParam(Operateur::OPERATOR_LEVEL_VELOCITY));
     m_ui->but_velAR->setValue(operateur->LireParam(Operateur::OPERATOR_ATTACK_VELOCITY));
@@ -62,98 +64,120 @@ void QOperateur::Actualiser()
     m_ui->but_fine->setValue(operateur->LireParam(Operateur::OPERATOR_FINE) - 4);
     m_ui->but_coarse->setValue(operateur->LireParam(Operateur::OPERATOR_COARSE));
     m_ui->but_mult->setValue(operateur->LireParam(Operateur::OPERATOR_MULTIPLE));
-    m_ui->pshBut_carrier->setChecked(!operateur->LireParam(Operateur::OPERATOR_MODULATOR));
+    m_ui->pshBut_carrier->setChecked(operateur->LireParam(Operateur::OPERATOR_MODULATOR));
     m_ui->but_AR->setValue(operateur->LireParam(Operateur::OPERATOR_ATTACK));
     m_ui->but_D1R->setValue(operateur->LireParam(Operateur::OPERATOR_DECAY1));
     m_ui->but_D2R->setValue(operateur->LireParam(Operateur::OPERATOR_DECAY2));
     m_ui->but_SL->setValue(15 - operateur->LireParam(Operateur::OPERATOR_SUSTAIN));
     m_ui->but_RR->setValue(operateur->LireParam(Operateur::OPERATOR_RELEASE));
     ActualiserEnveloppe();
+    attente = false;
 }
 
 /*****************************************************************************/
 void QOperateur::on_hzSlider_volume_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_LEVEL, 127 - i, true);
 }
 
 void QOperateur::on_pshBut_carrier_clicked(bool checked)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_MODULATOR, checked, true);
 }
 
 void QOperateur::on_cmbBox_lvlcurb_activated(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_LEVEL_CURB, i, true);
 }
 
 void QOperateur::on_but_vellvl_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_LEVEL_VELOCITY, i, true);
 }
 
 void QOperateur::on_but_velAR_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_ATTACK_VELOCITY, i, true);
 }
 
 void QOperateur::on_but_AR_valueChanged(int i)
 {
-    operateur->EcrireParam(Operateur::OPERATOR_ATTACK, i, true);
-    ActualiserEnveloppe();
+    if (!attente) {
+        operateur->EcrireParam(Operateur::OPERATOR_ATTACK, i, true);
+        ActualiserEnveloppe();
+    }
 }
 
 void QOperateur::on_but_D1R_valueChanged(int i)
 {
-    operateur->EcrireParam(Operateur::OPERATOR_DECAY1, i, true);
-    ActualiserEnveloppe();
+    if (!attente) {
+        operateur->EcrireParam(Operateur::OPERATOR_DECAY1, i, true);
+        ActualiserEnveloppe();
+    }
 }
 
 void QOperateur::on_but_SL_valueChanged(int i)
 {
-    operateur->EcrireParam(Operateur::OPERATOR_SUSTAIN, 15 - i, true);
-    ActualiserEnveloppe();
+    if (!attente) {
+        operateur->EcrireParam(Operateur::OPERATOR_SUSTAIN, 15 - i, true);
+        ActualiserEnveloppe();
+    }
 }
 
 void QOperateur::on_but_D2R_valueChanged(int i)
 {
-    operateur->EcrireParam(Operateur::OPERATOR_DECAY2, i, true);
-    ActualiserEnveloppe();
+    if (!attente) {
+        operateur->EcrireParam(Operateur::OPERATOR_DECAY2, i, true);
+        ActualiserEnveloppe();
+    }
 }
 
 void QOperateur::on_but_RR_valueChanged(int i)
 {
-    operateur->EcrireParam(Operateur::OPERATOR_RELEASE, i, true);
-    ActualiserEnveloppe();
+    if (!attente) {
+        operateur->EcrireParam(Operateur::OPERATOR_RELEASE, i, true);
+        ActualiserEnveloppe();
+    }
 }
 
 void QOperateur::on_but_coarse_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_COARSE, i, true);
 }
 
 void QOperateur::on_but_fine_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_FINE, i + 4, true);
 }
 
 void QOperateur::on_but_mult_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_MULTIPLE, i, true);
 }
 
 void QOperateur::on_but_lvldph_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_LEVEL_DEPTH, i, true);
 }
 
 void QOperateur::on_but_rtdph_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_RATE_DEPTH, i, true);
 }
 
 void QOperateur::on_but_adjTL_valueChanged(int i)
 {
+    if (!attente)
     operateur->EcrireParam(Operateur::OPERATOR_ADJUST, i, true);
 }
 

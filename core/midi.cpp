@@ -30,6 +30,7 @@ void * MIDI::outs = NULL;
 int    MIDI::nbIns  = 0;
 int    MIDI::nbOuts = 0;
 uchar  MIDI::midiChannel = 0;
+uchar  MIDI::velocity = 127;
 uchar  MIDI::sysChannel = 0;
 uchar  MIDI::tampon[2][MIDI_LEN_TAMPON] = {{0,},};
 
@@ -61,6 +62,7 @@ void MIDI::EnumererDrivers()
         midiOutGetDevCapsA(i, &((MIDIOUTCAPS *)outs)[i], sizeof(MIDIOUTCAPS));
 #endif
 #ifdef LINUX
+
 #endif
 }
 
@@ -299,14 +301,14 @@ uint MIDI::RecSysEx(uchar * sysEx, const int taille)
     ulong cmpt = 0;
 //Attend un message
     if (taille > MIDI_LEN_TAMPON) return MIDI_ERREUR_PREPARE;
-    while (cmpt > MIDI_ATTENTE_MESSAGE) {
+    while (cmpt < MIDI_ATTENTE_MESSAGE) {
     //Recoit un nouveau message
         if (!attente) {
         //Recopie le message
             midiInStop(hndIn);
             DePreparerTampon();
-            memcpy(tampon[1], sysEx, taille);
-            return MIDI_ERREUR_RIEN;
+            memcpy(sysEx, tampon[1], taille);
+           return MIDI_ERREUR_RIEN;
         }
     //Attend le message
         sleep(MIDI_ATTENTE);
@@ -326,6 +328,16 @@ uchar MIDI::MidiChannel()
     return midiChannel;
 }
 
+void MIDI::ChoisirVelocity(const uchar velo)
+{
+    velocity = velo;
+}
+
+uchar MIDI::Velocity()
+{
+    return velocity;
+}
+
 void MIDI::ChoisirSysChannel(const uchar channel)
 {
     sysChannel = channel;
@@ -337,15 +349,39 @@ uchar MIDI::SysChannel()
 }
 
 /*****************************************************************************/
-void MIDI::Note(const uchar note, const uchar velo)
+void MIDI::NoteOn(const uchar note)
 {
     uchar msg[4];
 //Active une note
     msg[0] = 0x90 + (midiChannel & 0xF);
     msg[1] = note & 0x7F;
-    msg[2] = velo & 0x7F;
+    msg[2] = velocity & 0x7F;
     msg[3] = 0;
 //Envoie la note
+    EnvMsg(msg);
+}
+
+void MIDI::NoteOff(const uchar note)
+{
+    uchar msg[4];
+//Active une note
+    msg[0] = 0x90 + (midiChannel & 0xF);
+    msg[1] = note & 0x7F;
+    msg[2] = 0;
+    msg[3] = 0;
+//Envoie la note
+    EnvMsg(msg);
+}
+
+void MIDI::AllNotesOff()
+{
+    uchar msg[4];
+//Désactive toutes les notes
+    msg[0] = 0xB0 + (midiChannel & 0xF);
+    msg[1] = 0x7B;
+    msg[2] = 0;
+    msg[3] = 0;
+//Envoie la commande
     EnvMsg(msg);
 }
 
@@ -404,7 +440,7 @@ void WINAPI MIDI::Callback (uint hmi, uint msg, uint instance, uint param1, uint
 {
     if (msg == MM_MIM_LONGDATA && attente) {
     //Recopie du message
-        memcpy(tampon[0], tampon[1], MIDI_LEN_TAMPON);
+        memcpy(tampon[1], tampon[0], MIDI_LEN_TAMPON);
         attente = false;
     }
 }

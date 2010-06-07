@@ -37,7 +37,10 @@ public :
     #define BANK_LEN_NOM  0
 //Constructeurs
     Bank();
-    ~Bank();    
+    ~Bank();
+//Chargement / déchargement
+    bool Enregistrer(FILE * fichier);
+    bool Charger(FILE * fichier, const short version);
 //Modification des propriétés
     uchar LireParam(const uchar param);
     void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);

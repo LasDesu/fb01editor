@@ -25,7 +25,9 @@
 QVoice::QVoice(QWidget *parent) : QWidget(parent), m_ui(new Ui::QVoice)
 {
     m_ui->setupUi(this);
+    attente = true;
     m_ui->but_algo->setValue(1);
+    attente = false;
 }
 
 QVoice::~QVoice()
@@ -52,9 +54,10 @@ void QVoice::DefinirComment(QString comment)
 /*****************************************************************************/
 void QVoice::Actualiser()
 {
+    attente = true;
     m_ui->txtEdit_voicename->setPlainText((QString) voice->LireNom());
     m_ui->txtEdit_voicename->repaint();
-    m_ui->but_algo->setValue(voice->LireParam(Voice::VOICE_ALGORITHME));
+    m_ui->but_algo->setValue(voice->LireParam(Voice::VOICE_ALGORITHME) + 1);
     m_ui->cmbBox_style->setCurrentIndex(voice->LireParam(Voice::VOICE_USERCODE));
     m_ui->cmbBox_LFOwave->setCurrentIndex(voice->LireParam(Voice::VOICE_LFO_WAVE));
     m_ui->spnBox_LFOspeed->setValue(voice->LireParam(Voice::VOICE_LFO_SPEED));
@@ -70,6 +73,7 @@ void QVoice::Actualiser()
     m_ui->but_porta->setValue(voice->LireParam(Voice::VOICE_PORTAMENTO));
     m_ui->cmbBox_pmdctl->setCurrentIndex(voice->LireParam(Voice::VOICE_CONTROLLER));
     m_ui->but_pitch->setValue(voice->LireParam(Voice::VOICE_PITCHBEND));
+    attente = false;
 }
 
 /*****************************************************************************/
@@ -81,87 +85,104 @@ void QVoice::on_but_algo_valueChanged(int i)
     Pix.load(AlgNoms[i-1]);
     m_ui->lbl_algo->setPixmap(Pix);
 //Envoie la donnée
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_ALGORITHME, i - 1, true);
 }
 
 /*****************************************************************************/
 void QVoice::on_txtEdit_voicename_textChanged()
 {
+    if (!attente)
     voice->EcrireNom(m_ui->txtEdit_voicename->toPlainText().toAscii().data(), true);
 }
 
 void QVoice::on_cmbBox_style_activated(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_USERCODE, i, true);
 }
 
 void QVoice::on_but_feedback_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_FEEDBACK, i, true);
 }
 
 void QVoice::on_but_trans_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_TRANSPOSE, i + 2, true);
 }
 
 void QVoice::on_pshBut_poly_clicked(bool checked)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_POLY, !checked, true);
 }
 
 void QVoice::on_but_porta_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_PORTAMENTO, i, true);
 }
 
 void QVoice::on_but_pitch_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_PITCHBEND, i, true);
 }
 
 void QVoice::on_cmbBox_pmdctl_activated(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_CONTROLLER, i, true);
 }
 
 void QVoice::on_spnBox_LFOspeed_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_SPEED, i, true);
 }
 
 void QVoice::on_cmbBox_LFOwave_activated(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_WAVE, i, true);
 }
 
 void QVoice::on_pshBut_LFOload_clicked(bool checked)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_LOAD, !checked, true);
 }
 
 void QVoice::on_pshBut_LFOsync_clicked(bool checked)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_SYNC, !checked, true);
 }
 
 void QVoice::on_but_AMD_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_AMD, i, true);
 }
 
 void QVoice::on_but_AMS_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_AMS, i, true);
 }
 
 void QVoice::on_but_PMD_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_PMD, i, true);
 }
 
 void QVoice::on_but_PMS_valueChanged(int i)
 {
+    if (!attente)
     voice->EcrireParam(Voice::VOICE_LFO_PMS, i, true);
 }
 

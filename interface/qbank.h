@@ -45,7 +45,9 @@ protected:
 private:
     Ui::QBank * m_ui;
     Bank * bank;
+//Fonctions internes
     void CreerTable();
+    bool attente;
 private slots:
  //   void on_table_bank_cellClicked(int row, int column);
 };

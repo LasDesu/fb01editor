@@ -23,7 +23,7 @@
 
 /*****************************************************************************/
 Instrument::Instrument(const uchar id, uchar * sysEx)
-          : Edit(id, INSTRU_NB_PARAM, INSTRU_LEN_SYSEX, (uchar *) malloc(INSTRU_LEN_SYSEX))
+          : Edit(id, INSTRU_NB_PARAM, INSTRU_LEN_SYSEX, sysEx)
 {
 //Initialise la classe
     InitSysEx();
@@ -44,6 +44,7 @@ void Instrument::Initialiser()
 /*****************************************************************************/
 uchar Instrument::LireParam(const uchar param)
 {
+    uchar temp;
     switch(param) {
     case INSTRU_NB_NOTES :
         return LireSysEx(0) & 0xF;
@@ -58,7 +59,9 @@ uchar Instrument::LireParam(const uchar param)
     case INSTRU_VOICE :
         return LireSysEx(5);
     case INSTRU_DETUNE :
-        return LireSysEx(6);
+        temp = LireSysEx(6);
+        if (temp > 63) temp += 0x80;
+        return temp;
     case INSTRU_TRANS :
         return LireSysEx(7) & 0x7;
     case INSTRU_VOLUME :
@@ -68,7 +71,8 @@ uchar Instrument::LireParam(const uchar param)
     case INSTRU_LFO :
         return LireSysEx(10) & 0x1;
     case INSTRU_PORTAMENTO :
-        return LireSysEx(11);
+        temp = LireSysEx(11);
+        return temp;
     case INSTRU_PITCHBEND :
         return LireSysEx(12) & 0xF;
     case INSTRU_POLY :

@@ -32,6 +32,28 @@ Bank::~Bank()
 }
 
 /*****************************************************************************/
+bool Bank::Enregistrer(FILE * fichier)
+{
+//Sauvegarde la table
+    if(!Edit::Enregistrer(fichier))
+        return false;
+//Sauvegarde les instruments
+    return true;
+}
+
+bool Bank::Charger(FILE * fichier, const short version)
+{
+//Recupère la table
+    if (version == VERSION) {
+        if(!Edit::Charger(fichier, version)) return false;
+    }else{
+    //Compatibilité editeur 1.0
+    }
+//Récupère les instruments
+    return true;
+}
+
+/*****************************************************************************/
 uchar Bank::LireParam(const uchar param)
 {
     return 0;

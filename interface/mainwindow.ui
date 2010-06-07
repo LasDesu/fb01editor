@@ -59,31 +59,31 @@
     <property name="currentIndex">
      <number>1</number>
     </property>
-    <widget class="QWidget" name="tab_general">
+    <widget class="QWidget" name="tab_config">
      <property name="enabled">
       <bool>true</bool>
      </property>
      <attribute name="title">
-      <string>General</string>
+      <string>Configuration</string>
      </attribute>
      <widget class="QGroupBox" name="grpBox_MIDI">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>40</y>
-        <width>321</width>
-        <height>201</height>
+        <y>20</y>
+        <width>571</width>
+        <height>141</height>
        </rect>
       </property>
       <property name="title">
-       <string>MIDI Ports</string>
+       <string>MIDI Ports :</string>
       </property>
       <widget class="QComboBox" name="cmbBox_MIDIIn">
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>30</y>
-         <width>251</width>
+         <y>20</y>
+         <width>501</width>
          <height>21</height>
         </rect>
        </property>
@@ -98,8 +98,8 @@
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>60</y>
-         <width>251</width>
+         <y>50</y>
+         <width>501</width>
          <height>21</height>
         </rect>
        </property>
@@ -114,8 +114,8 @@
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>130</y>
-         <width>61</width>
+         <y>110</y>
+         <width>91</width>
          <height>23</height>
         </rect>
        </property>
@@ -123,49 +123,11 @@
         <string>Refresh</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="spnBox_syschan">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>130</y>
-         <width>51</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>16</number>
-       </property>
-       <property name="value">
-        <number>1</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_syschan">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>130</y>
-         <width>111</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>System channel :</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="lbl_MIDIIn">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>32</y>
+         <y>22</y>
          <width>41</width>
          <height>16</height>
         </rect>
@@ -184,7 +146,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>62</y>
+         <y>52</y>
          <width>41</width>
          <height>16</height>
         </rect>
@@ -199,31 +161,12 @@
         <string>OUT :</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="spnBox_kybchan">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>160</y>
-         <width>51</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>16</number>
-       </property>
-       <property name="value">
-        <number>1</number>
-       </property>
-      </widget>
       <widget class="QLabel" name="lbl_kybchan">
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>160</y>
-         <width>111</width>
+         <x>220</x>
+         <y>110</y>
+         <width>91</width>
          <height>20</height>
         </rect>
        </property>
@@ -234,14 +177,14 @@
         </font>
        </property>
        <property name="text">
-        <string>Keyboard channel :</string>
+        <string>VKey channel :</string>
        </property>
       </widget>
       <widget class="QLabel" name="lbl_MIDICtrl">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>92</y>
+         <y>82</y>
          <width>41</width>
          <height>16</height>
         </rect>
@@ -260,8 +203,8 @@
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>90</y>
-         <width>251</width>
+         <y>80</y>
+         <width>501</width>
          <height>21</height>
         </rect>
        </property>
@@ -272,225 +215,73 @@
         <bool>true</bool>
        </property>
       </widget>
+      <widget class="QLabel" name="lbl_kybvel">
+       <property name="geometry">
+        <rect>
+         <x>400</x>
+         <y>110</y>
+         <width>91</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>VKey velocity :</string>
+       </property>
+      </widget>
+      <widget class="QButton" name="but_kybchan">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>110</y>
+         <width>61</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>1</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </widget>
+      <widget class="QButton" name="but_kybvelo">
+       <property name="geometry">
+        <rect>
+         <x>500</x>
+         <y>110</y>
+         <width>61</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>127</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>100</string>
+       </property>
+      </widget>
      </widget>
-     <widget class="QGroupBox" name="grpBox_config">
+     <widget class="QConfig" name="widget_config" native="true">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>20</y>
-        <width>231</width>
+        <x>20</x>
+        <y>180</y>
+        <width>571</width>
         <height>241</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Configuration</string>
-      </property>
-      <widget class="QLabel" name="lbl_combine">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Combine mode :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_reception">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>60</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Reception mode :</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="cmbBox_reception">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>60</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>All</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Even</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Odd</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QPushButton" name="pshBut_combine">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>30</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pshBut_memory">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>90</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Enable</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_memory">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>111</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Memory protect :</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spnBox_confnum">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>122</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>20</number>
-       </property>
-       <property name="value">
-        <number>1</number>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_confnum">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>120</y>
-         <width>101</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Config. number :</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lbl_mastvol">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>150</y>
-         <width>101</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Master volume :</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="hzSlider_mastvol">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>150</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>180</y>
-         <width>211</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;These informations cannot be retrieved&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;from the FB01 sound module. You must set&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;them manually.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_banks">
@@ -839,49 +630,11 @@ p, li { white-space: pre-wrap; }
        <string>Transpose :</string>
       </property>
      </widget>
-     <widget class="QLabel" name="lbl_volume">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>280</y>
-        <width>81</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Volume :</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_pan">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>310</y>
-        <width>81</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Pan :</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="lbl_LFO">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>340</y>
+        <y>280</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -900,7 +653,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>400</y>
+        <y>340</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -919,7 +672,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>430</y>
+        <y>370</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -938,7 +691,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>370</y>
+        <y>310</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -957,7 +710,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>460</y>
+        <y>400</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -1225,26 +978,42 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
-     <widget class="QPlainTextEdit" name="txtEdit_setname">
+     <widget class="QLabel" name="lbl_pan">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>496</y>
-        <width>91</width>
-        <height>31</height>
+        <y>460</y>
+        <width>81</width>
+        <height>16</height>
        </rect>
       </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+      <property name="text">
+       <string>Pan :</string>
       </property>
-      <property name="lineWrapMode">
-       <enum>QPlainTextEdit::NoWrap</enum>
+     </widget>
+     <widget class="QLabel" name="lbl_volume">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>430</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
       </property>
-      <property name="maximumBlockCount">
-       <number>0</number>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Volume :</string>
       </property>
      </widget>
     </widget>
@@ -1270,7 +1039,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QOperateur" name="widget_opera_1" native="true">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>20</x>
         <y>10</y>
         <width>264</width>
         <height>224</height>
@@ -1322,7 +1091,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QOperateur" name="widget_opera_3" native="true">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>20</x>
         <y>270</y>
         <width>264</width>
         <height>224</height>
@@ -1374,7 +1143,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="pshBut_op_cur_1">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>110</x>
         <y>240</y>
         <width>91</width>
         <height>23</height>
@@ -1406,7 +1175,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="pshBut_op_cur_3">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>110</x>
         <y>500</y>
         <width>91</width>
         <height>23</height>
@@ -1453,7 +1222,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../FB01.qrc">:/CLAVIER</pixmap>
+     <pixmap>:/CLAVIER</pixmap>
     </property>
    </widget>
   </widget>
@@ -1523,16 +1292,25 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>FB01</string>
     </property>
-    <addaction name="actionGet_bank"/>
-    <addaction name="actionGet_current_config"/>
-    <addaction name="actionGet_current_set"/>
-    <addaction name="actionGet_current_voice"/>
-    <addaction name="separator"/>
-    <addaction name="actionSend_bank"/>
-    <addaction name="actionSend_current_config"/>
-    <addaction name="actionSend_current_set"/>
-    <addaction name="actionSend_current_voice"/>
-    <addaction name="separator"/>
+    <widget class="QMenu" name="menuGet">
+     <property name="title">
+      <string>Get ..</string>
+     </property>
+     <addaction name="actionGet_bank"/>
+     <addaction name="actionGet_current_set"/>
+     <addaction name="actionGet_current_voice"/>
+    </widget>
+    <widget class="QMenu" name="menuSend">
+     <property name="title">
+      <string>Send ...</string>
+     </property>
+     <addaction name="actionSend_bank"/>
+     <addaction name="actionSend_current_config"/>
+     <addaction name="actionSend_current_set"/>
+     <addaction name="actionSend_current_voice"/>
+    </widget>
+    <addaction name="menuGet"/>
+    <addaction name="menuSend"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -1643,7 +1421,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionGet_bank">
    <property name="text">
-    <string>Get bank ...</string>
+    <string>Get current bank</string>
    </property>
   </action>
   <action name="actionRam_1">
@@ -1703,12 +1481,27 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionSend_bank">
    <property name="text">
-    <string>Send bank ...</string>
+    <string>Send current bank</string>
+   </property>
+  </action>
+  <action name="actionHsgg">
+   <property name="text">
+    <string>hsgg</string>
+   </property>
+  </action>
+  <action name="actionSdsd">
+   <property name="text">
+    <string>sdsd</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>QButton</class>
+   <extends>QPushButton</extends>
+   <header>interface/qbutton.h</header>
+  </customwidget>
   <customwidget>
    <class>QClavier</class>
    <extends>QLabel</extends>
@@ -1738,9 +1531,13 @@ p, li { white-space: pre-wrap; }
    <header>interface/qbank.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QConfig</class>
+   <extends>QWidget</extends>
+   <header>interface/qconfig.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

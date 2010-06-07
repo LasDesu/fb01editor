@@ -46,6 +46,7 @@ protected:
 private:
     Ui::QOperateur *m_ui;
     Operateur * operateur;
+    bool attente;
 private slots:
     void on_hzSlider_volume_valueChanged(int i);
     void on_pshBut_carrier_clicked(bool checked);

@@ -36,6 +36,8 @@ public:
 //Accesseurs
     void setValue(int value);
     int  value();
+//Réimplémentation du basesize
+    void setBaseSize(const QSize size);
 private:
 //Valeurs du controle
     int valeur, ancValeur;

@@ -39,7 +39,7 @@ public :
     void  EcrireId(const uchar id);
 //Chargement / déchargement de l'objet
     virtual bool Enregistrer(FILE * fichier);
-    virtual bool Charger(FILE * fichier, const int version);
+    virtual bool Charger(FILE * fichier, const short version);
 //Importation exportation de l'objet
     virtual bool Exporte(FILE * fichier);
     virtual bool Importe(FILE * fichier);

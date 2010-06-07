@@ -48,14 +48,25 @@ class MainWindow : public QMainWindow{
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    typedef enum {
+        ONGLET_CONFIG = 0,
+        ONGLET_BANK,
+        ONGLET_SET,
+        ONGLET_VOICE,
+        ONGLET_OPERATEURS
+    }ONGLET_NOM;
 private:
     Ui::MainWindow *ui;
 public slots:
+//Callbacks MIDI
     void on_cmbBox_MIDICtrl_activated(int index);
     void on_cmbBox_MIDIIn_activated(int index);
     void on_cmbBox_MIDIOut_activated(int index);
     void on_pshBut_refresh_midi_clicked(bool checked);
-
+//Callbacks clavier virtuel
+    void on_but_kybchan_valueChanged(int i);
+    void on_but_kybvelo_valueChanged(int i);
+//Callbacks menus
     void on_actionQuit_triggered(bool checked = false);
     void on_actionLoad_voice_triggered(bool checked = false);
     void on_actionSave_voice_triggered(bool checked = false);
@@ -63,33 +74,34 @@ public slots:
     void on_actionSave_set_triggered(bool checked = false);
     void on_actionLoad_bank_triggered(bool checked = false);
     void on_actionSave_bank_triggered(bool checked = false);
-
+    void on_actionImport_bank_triggered(bool checked = false);
+    void on_actionExport_bank_triggered(bool checked = false);
+    void on_actionImport_set_triggered(bool checked = false);
+    void on_actionExport_set_triggered(bool checked = false);
+    void on_actionImport_voice_triggered(bool checked = false);
+    void on_actionExport_voice_triggered(bool checked = false);
     void on_actionInitialize_triggered(bool checked = false);
     void on_actionRandomize_triggered(bool checked = false);
     void on_actionCopy_triggered(bool checked = false);
     void on_actionPaste_triggered(bool checked = false);
     void on_actionExchange_triggered(bool checked = false);
-
     void on_actionSend_current_config_triggered(bool checked = false);
-    void on_actionGet_current_config_triggered(bool checked = false);
     void on_actionSend_current_set_triggered(bool checked = false);
     void on_actionGet_current_set_triggered(bool checked = false);
     void on_actionSend_current_voice_triggered(bool checked = false);
     void on_actionGet_current_voice_triggered(bool checked = false);
-
     void on_actionAbout_triggered(bool checked = false);
     void on_actionRead_this_triggered(bool checked = false);
     void on_actionOnline_help_triggered(bool checked = false);
-
-    void on_spnBox_syschan_valueChanged(int i);
-    void on_spnBox_kybchan_valueChanged(int i);
-    void on_pshBut_combine_clicked(bool checked);
-    void on_cmbBox_reception_activated(int i);
-    void on_pshBut_memory_clicked(bool checked);
-    void on_spnBox_confnum_valueChanged(int i);
-    void on_hzSlider_mastvol_valueChanged(int i);
-
+//Callbacks sélection
     void on_pshBut_next_pressed();
+    void on_pshBut_bank_cur_1_clicked(bool checked);
+    void on_pshBut_bank_cur_2_clicked(bool checked);
+    void on_pshBut_bank_cur_3_clicked(bool checked);
+    void on_pshBut_bank_cur_4_clicked(bool checked);
+    void on_pshBut_bank_cur_5_clicked(bool checked);
+    void on_pshBut_bank_cur_6_clicked(bool checked);
+    void on_pshBut_bank_cur_7_clicked(bool checked);
     void on_pshBut_inst_cur_1_clicked(bool checked);
     void on_pshBut_inst_cur_2_clicked(bool checked);
     void on_pshBut_inst_cur_3_clicked(bool checked);
@@ -98,12 +110,11 @@ public slots:
     void on_pshBut_inst_cur_6_clicked(bool checked);
     void on_pshBut_inst_cur_7_clicked(bool checked);
     void on_pshBut_inst_cur_8_clicked(bool checked);
-    void on_txtEdit_setname_textChanged();
-
     void on_pshBut_op_cur_1_clicked(bool checked);
     void on_pshBut_op_cur_2_clicked(bool checked);
     void on_pshBut_op_cur_3_clicked(bool checked);
     void on_pshBut_op_cur_4_clicked(bool checked);
+//Callbacks activation
     void on_pshBut_OPon_1_clicked(bool checked);
     void on_pshBut_OPon_2_clicked(bool checked);
     void on_pshBut_OPon_3_clicked(bool checked);
