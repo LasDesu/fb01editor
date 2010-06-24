@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>571</width>
-    <height>241</height>
+    <width>572</width>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,6 +33,9 @@
       <width>101</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Right to write on memory</string>
     </property>
     <property name="text">
      <string>Enable</string>
@@ -76,7 +79,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Config. number :</string>
+     <string>Set. number :</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_mastvol">
@@ -107,6 +110,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Master level of the module</string>
+    </property>
     <property name="maximum">
      <number>127</number>
     </property>
@@ -120,18 +126,14 @@
    <widget class="QLabel" name="label_infos">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>170</y>
-      <width>211</width>
-      <height>31</height>
+      <width>221</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;These informations are not stored and cannot be retrieved from the synthesizer.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>These informations are not stored in files and cannot be retrieved from the module.</string>
     </property>
     <property name="textFormat">
      <enum>Qt::AutoText</enum>
@@ -177,11 +179,14 @@ p, li { white-space: pre-wrap; }
       <height>16</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string>The system channel of the module to be edited</string>
+    </property>
     <property name="text">
      <string>1</string>
     </property>
    </widget>
-   <widget class="QButton" name="but_confnum">
+   <widget class="QButton" name="but_setnum">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -195,6 +200,9 @@ p, li { white-space: pre-wrap; }
       <width>1</width>
       <height>20</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>The current set number</string>
     </property>
     <property name="text">
      <string>1</string>
@@ -233,6 +241,9 @@ p, li { white-space: pre-wrap; }
       <width>192</width>
       <height>63</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>Master detune of the module</string>
     </property>
     <property name="text">
      <string>0</string>
@@ -279,6 +290,9 @@ p, li { white-space: pre-wrap; }
       <height>21</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>When on, the global configuration of the last selected voice replace the instrument configuration</string>
+    </property>
     <property name="text">
      <string>Enable</string>
     </property>
@@ -294,6 +308,9 @@ p, li { white-space: pre-wrap; }
       <width>101</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Receive every or one in two MIDI orders</string>
     </property>
     <item>
      <property name="text">
@@ -338,6 +355,9 @@ p, li { white-space: pre-wrap; }
       <width>101</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>The name of the set</string>
     </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -405,6 +425,9 @@ p, li { white-space: pre-wrap; }
       <height>127</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string>The amplitude modulation provided by the LFO</string>
+    </property>
     <property name="text">
      <string>0</string>
     </property>
@@ -437,6 +460,9 @@ p, li { white-space: pre-wrap; }
       <height>22</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>The LFO speed for the set</string>
+    </property>
     <property name="minimum">
      <number>0</number>
     </property>
@@ -455,6 +481,9 @@ p, li { white-space: pre-wrap; }
       <width>101</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>The LFO waveform for the set</string>
     </property>
     <item>
      <property name="text">
@@ -510,6 +539,9 @@ p, li { white-space: pre-wrap; }
       <width>0</width>
       <height>127</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>The pitch modulation provided by the LFO</string>
     </property>
     <property name="text">
      <string>0</string>

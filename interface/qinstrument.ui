@@ -34,6 +34,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>The LFO enable state</string>
+    </property>
     <property name="text">
      <string>Enable</string>
     </property>
@@ -50,6 +53,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>The instrument response to a multiple notes play</string>
+    </property>
     <property name="text">
      <string>Poly</string>
     </property>
@@ -65,6 +71,9 @@
       <width>81</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>The kind of MIDI controler assigned to PMD</string>
     </property>
     <item>
      <property name="text">
@@ -101,6 +110,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>The upper limit of the keyboard playing range</string>
+    </property>
    </widget>
    <widget class="QComboBox" name="cmbBox_lower">
     <property name="geometry">
@@ -110,6 +122,9 @@
       <width>81</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>The lower limit of the keyboard playing range</string>
     </property>
    </widget>
    <widget class="QButton" name="but_notes">
@@ -126,6 +141,9 @@
       <width>0</width>
       <height>8</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>The polyphony level of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
@@ -146,6 +164,9 @@
       <height>16</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string>The MIDI channel of the instrument</string>
+    </property>
     <property name="text">
      <string>1</string>
     </property>
@@ -164,6 +185,9 @@
       <width>1</width>
       <height>7</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>The current bank of the selected voice</string>
     </property>
     <property name="text">
      <string>1</string>
@@ -184,6 +208,9 @@
       <height>48</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string>The current number of the selected voice</string>
+    </property>
     <property name="text">
      <string>1</string>
     </property>
@@ -202,6 +229,9 @@
       <width>254</width>
       <height>2</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>The transpose level of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
@@ -222,6 +252,9 @@
       <height>63</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string>The detune level of the instrument</string>
+    </property>
     <property name="text">
      <string>0</string>
     </property>
@@ -240,6 +273,9 @@
       <width>0</width>
       <height>127</height>
      </size>
+    </property>
+    <property name="toolTip">
+     <string>The portamento length of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
@@ -260,6 +296,9 @@
       <height>12</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string>The pitchbender range of the instrument</string>
+    </property>
     <property name="text">
      <string>0</string>
     </property>
@@ -272,6 +311,9 @@
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>The output level of the instrument</string>
     </property>
     <property name="maximum">
      <number>127</number>
@@ -288,6 +330,9 @@
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>The output panning of the instrument</string>
     </property>
     <property name="maximum">
      <number>127</number>

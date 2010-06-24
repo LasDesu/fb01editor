@@ -23,33 +23,34 @@
 
 /*****************************************************************************/
 Bank::Bank()
-    : Edit(0,0,0, NULL)
+    : Edit(0, 0, BANK_LEN_SYSEX, (uchar *) malloc(BANK_LEN_SYSEX))
 {
+//Initialise la classe
+    InitSysEx();
 }
 
 Bank::~Bank()
 {
+//Libère le sysex
+    free(sysEx);
 }
 
 /*****************************************************************************/
 bool Bank::Enregistrer(FILE * fichier)
 {
-//Sauvegarde la table
-    if(!Edit::Enregistrer(fichier))
-        return false;
-//Sauvegarde les instruments
+//Sauvegarde les données
+
     return true;
 }
 
 bool Bank::Charger(FILE * fichier, const short version)
 {
-//Recupère la table
+//Recupère les données
     if (version == VERSION) {
-        if(!Edit::Charger(fichier, version)) return false;
+
     }else{
     //Compatibilité editeur 1.0
     }
-//Récupère les instruments
     return true;
 }
 
@@ -78,7 +79,22 @@ uint Bank::RecevoirTout()
 /*****************************************************************************/
 void Bank::InitSysEx()
 {
-
+//Entête de message
+    Block::InitSysEx();
+    sysEx[0] = 0xF0; sysEx[1] = 0x43;
+    sysEx[2] = 0x75; sysEx[3] = 0x00;
+    sysEx[4] = 0x00; sysEx[5] = 0x00;
+    sysEx[6] = 0x00;
+//Taille du paquet entête
+    sysEx[7] = 0x00;
+    sysEx[8] = 0x40;
+//Taille des paquets voices
+    //for (int i = 0; i < 48; i++) {
+      //  sysEx[i * 0x83 + 0x5F] = 0x00;
+      //  sysEx[i * 0x83 + 0x60] = 0x40;
+    //}
+//Fin du message
+    sysEx[BANK_LEN_SYSEX - 1] = 0xF7;
 }
 
 /*****************************************************************************/

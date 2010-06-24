@@ -39,7 +39,7 @@ Set::~Set()
     for (int i=0; i < SET_NB_INSTRU; i++)
         delete instruments[i];
 //Libère le sysex
-    free(this->sysEx);
+    free(sysEx);
 }
 
 /*****************************************************************************/

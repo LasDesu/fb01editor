@@ -53,15 +53,21 @@
       <height>65535</height>
      </size>
     </property>
+    <property name="toolTip">
+     <string/>
+    </property>
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_config">
      <property name="enabled">
       <bool>true</bool>
+     </property>
+     <property name="toolTip">
+      <string/>
      </property>
      <attribute name="title">
       <string>Configuration</string>
@@ -75,6 +81,9 @@
         <height>141</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string/>
+      </property>
       <property name="title">
        <string>MIDI Ports :</string>
       </property>
@@ -86,6 +95,9 @@
          <width>501</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Select the device for MIDI IN</string>
        </property>
        <property name="maxVisibleItems">
         <number>15</number>
@@ -103,6 +115,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Select the device for MIDI OUT</string>
+       </property>
        <property name="maxVisibleItems">
         <number>15</number>
        </property>
@@ -118,6 +133,9 @@
          <width>91</width>
          <height>23</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Refresh the device lists</string>
        </property>
        <property name="text">
         <string>Refresh</string>
@@ -208,6 +226,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Select an other MIDI device for sending data to the module while being edited </string>
+       </property>
        <property name="maxVisibleItems">
         <number>15</number>
        </property>
@@ -249,6 +270,9 @@
          <height>16</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Set the MIDI channel of the virtual keyboard</string>
+       </property>
        <property name="text">
         <string>1</string>
        </property>
@@ -268,6 +292,9 @@
          <height>127</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Set the velocity parameter of the virtual keyboard</string>
+       </property>
        <property name="text">
         <string>100</string>
        </property>
@@ -278,13 +305,16 @@
        <rect>
         <x>20</x>
         <y>180</y>
-        <width>571</width>
-        <height>241</height>
+        <width>572</width>
+        <height>242</height>
        </rect>
       </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_banks">
+     <property name="toolTip">
+      <string/>
+     </property>
      <attribute name="title">
       <string>Banks</string>
      </attribute>
@@ -305,6 +335,9 @@
          <width>71</width>
          <height>20</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -335,6 +368,9 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -360,6 +396,9 @@
          <width>71</width>
          <height>20</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -387,6 +426,9 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -412,6 +454,9 @@
          <width>71</width>
          <height>20</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -439,6 +484,9 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -465,6 +513,9 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current bank to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -475,6 +526,9 @@
      </widget>
     </widget>
     <widget class="QWidget" name="tab_set">
+     <property name="toolTip">
+      <string/>
+     </property>
      <attribute name="title">
       <string>Current Set</string>
      </attribute>
@@ -611,7 +665,7 @@
        <string>Detune :</string>
       </property>
      </widget>
-     <widget class="QLabel" name="lbl_voice_2">
+     <widget class="QLabel" name="lbl_transpose">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -734,6 +788,9 @@
         <height>21</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Change the current instrument page </string>
+      </property>
       <property name="text">
        <string>Next page</string>
       </property>
@@ -802,6 +859,9 @@
          <height>23</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -817,6 +877,9 @@
          <width>81</width>
          <height>23</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -834,6 +897,9 @@
          <height>23</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -849,6 +915,9 @@
          <width>81</width>
          <height>23</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -922,6 +991,9 @@
          <height>23</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -937,6 +1009,9 @@
          <width>81</width>
          <height>23</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -954,6 +1029,9 @@
          <height>23</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
+       </property>
        <property name="text">
         <string>Current</string>
        </property>
@@ -969,6 +1047,9 @@
          <width>81</width>
          <height>23</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Set the current instrument to be edited</string>
        </property>
        <property name="text">
         <string>Current</string>
@@ -1018,6 +1099,9 @@
      </widget>
     </widget>
     <widget class="QWidget" name="tab_voice">
+     <property name="toolTip">
+      <string/>
+     </property>
      <attribute name="title">
       <string>Current Voice</string>
      </attribute>
@@ -1027,12 +1111,15 @@
         <x>20</x>
         <y>20</y>
         <width>574</width>
-        <height>274</height>
+        <height>302</height>
        </rect>
       </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_operas">
+     <property name="toolTip">
+      <string/>
+     </property>
      <attribute name="title">
       <string>Current Operators</string>
      </attribute>
@@ -1053,6 +1140,9 @@
          <width>31</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Enable the output of the operator</string>
        </property>
        <property name="text">
         <string>On</string>
@@ -1080,6 +1170,9 @@
          <height>31</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Enable the output of the operator</string>
+       </property>
        <property name="text">
         <string>On</string>
        </property>
@@ -1105,6 +1198,9 @@
          <width>31</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>Enable the output of the operator</string>
        </property>
        <property name="text">
         <string>On</string>
@@ -1132,6 +1228,9 @@
          <height>31</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>Enable the output of the operator</string>
+       </property>
        <property name="text">
         <string>On</string>
        </property>
@@ -1149,6 +1248,9 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Set the current operator to be edited</string>
+      </property>
       <property name="text">
        <string>Current</string>
       </property>
@@ -1164,6 +1266,9 @@
         <width>91</width>
         <height>23</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>Set the current operator to be edited</string>
       </property>
       <property name="text">
        <string>Current</string>
@@ -1181,6 +1286,9 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Set the current operator to be edited</string>
+      </property>
       <property name="text">
        <string>Current</string>
       </property>
@@ -1196,6 +1304,9 @@
         <width>91</width>
         <height>23</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>Set the current operator to be edited</string>
       </property>
       <property name="text">
        <string>Current</string>
@@ -1218,11 +1329,16 @@
     <property name="mouseTracking">
      <bool>true</bool>
     </property>
+    <property name="toolTip">
+     <string>The virtual keyboard sends notes to the VKey channel
+with the VKey velocity. If previously hitten, notes can be
+played with the computer's keyboard.</string>
+    </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/CLAVIER</pixmap>
+     <pixmap resource="../FB01.qrc">:/CLAVIER</pixmap>
     </property>
    </widget>
   </widget>
@@ -1538,6 +1654,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>

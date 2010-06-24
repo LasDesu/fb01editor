@@ -27,7 +27,7 @@ QConfig::QConfig(QWidget *parent) : QWidget(parent), m_ui(new Ui::QConfig)
     m_ui->setupUi(this);
     attente = true;
     m_ui->but_syschan->setValue(1);
-    m_ui->but_confnum->setValue(1);
+    m_ui->but_setnum->setValue(1);
     attente = false;
 }
 
@@ -75,7 +75,7 @@ void QConfig::on_pshBut_memory_clicked(bool checked)
     config->EcrireParam(Config::CONFIG_MEMORY_PROTECT, checked, true);
 }
 
-void QConfig::on_but_confnum_valueChanged(int i)
+void QConfig::on_but_setnum_valueChanged(int i)
 {
     if (!attente)
     config->EcrireParam(Config::CONFIG_CONFIG_NUMBER, i - 1, true);

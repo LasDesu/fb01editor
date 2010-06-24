@@ -39,7 +39,7 @@ Voice::~Voice()
     for (int i=0; i < 4; i++)
         delete operateurs[i];
 //Libère le sysex
-    free(this->sysEx);
+    free(sysEx);
 }
 
 /*****************************************************************************/

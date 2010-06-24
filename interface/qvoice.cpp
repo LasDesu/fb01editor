@@ -48,7 +48,7 @@ void QVoice::DefinirAuteur(QString auteur)
 
 void QVoice::DefinirComment(QString comment)
 {
-    m_ui->txtEdit_comment->setPlainText(comment);
+    m_ui->txtEdit_comments->setPlainText(comment);
 }
 
 /*****************************************************************************/

@@ -52,7 +52,7 @@ private:
 private slots:
     void on_but_syschan_valueChanged(int i);
     void on_pshBut_memory_clicked(bool checked = false);
-    void on_but_confnum_valueChanged(int i);
+    void on_but_setnum_valueChanged(int i);
     void on_but_mastdetune_valueChanged(int i);
     void on_hzSlider_mastvol_valueChanged(int i);
     void on_txtEdit_name_textChanged();
