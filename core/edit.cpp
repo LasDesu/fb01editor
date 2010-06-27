@@ -22,8 +22,8 @@
 #include "edit.h"
 
 /*****************************************************************************/
-Edit::Edit(const uchar id, const uchar nbParam, const uchar lenSysEx, uchar * sysEx)
-    : Block(nbParam, lenSysEx, sysEx)
+Edit::Edit(const uchar id, uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam)
+    : Block(sysEx, lenSysEx, nbParam, offParam)
 {
     this->id = id;
 }
@@ -47,7 +47,7 @@ void Edit::EcrireId(uchar id)
 bool Edit::Enregistrer(FILE * fichier)
 {
     uchar sauv[nbParam];
-    for (int i=0; i < nbParam; i++)
+    for (uint i = 0; i < nbParam; i++)
         sauv[i] = LireParam(i);
     fwrite(sauv, nbParam, 1, fichier);
     return true;
@@ -58,7 +58,7 @@ bool Edit::Charger(FILE * fichier, const short version)
     uchar sauv[nbParam];
     if (fread(sauv, nbParam, 1, fichier))
         return false;
-    for (int i=0; i < nbParam; i++)
+    for (uint i = 0; i < nbParam; i++)
         EcrireParam(i, sauv[i], true);
     return true;
 }
@@ -83,25 +83,40 @@ bool Edit::Importe(FILE * fichier)
 /*****************************************************************************/
 void Edit::Initialiser()
 {
-    for (int i=0; i < nbParam; i++)
+    for (uint i = 0; i < nbParam; i++)
         EcrireParam(i, 0, true);
 }
 
 void Edit::Randomiser()
 {
-    for (int i=0; i < nbParam; i++)
+    for (uint i = 0; i < nbParam; i++)
         EcrireParam(i, RAND(0, 255), true);
 }
 
 void Edit::Copier(uchar * table, const ulong len)
 {
-    if (len < lenSysEx) return;
+    if (len != lenSysEx) return;
     memcpy(table, sysEx, lenSysEx);
 }
 
-void Edit::Coller(const uchar * table, const ulong len)
+void Edit::Coller(const uchar * table, const ulong len, const bool envoi)
 {
-    if (len < lenSysEx) return;
+    if (len != lenSysEx) return;
     memcpy(sysEx, table, lenSysEx);
-    EnvoyerTout();
+    if (envoi) EnvoyerTout();
+}
+
+void Edit::Echanger(uchar * table, const ulong len, const bool envoi)
+{
+//Alloue la table temporaire
+    if (len != lenSysEx) return;
+    uchar * temp = (uchar *) malloc(lenSysEx);
+    if (temp == NULL) throw Memory_ex("Unable to allocate the temporary table for exchange !");
+//Echange les données
+    memcpy(temp, sysEx, lenSysEx);
+    memcpy(sysEx, table, lenSysEx);
+    memcpy(table, temp, lenSysEx);
+//Libère et envoie
+    free(temp);
+    if (envoi) EnvoyerTout();
 }

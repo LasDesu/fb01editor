@@ -22,6 +22,8 @@
 #ifndef INSTRUMENT_H
 #define INSTRUMENT_H
 
+#include <QMessageBox>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -31,9 +33,11 @@
 
 class Instrument : public Edit {
 public :
-//Paramêtres éditables
+//Constantes
     #define INSTRU_NB_PARAM 15
-    typedef enum {
+    #define INSTRU_LEN_SYSEX 32
+//Paramêtres éditables
+typedef enum {
         INSTRU_NB_NOTES = 0,
         INSTRU_CHANNEL,
         INSTRU_UPPER,
@@ -59,13 +63,7 @@ public :
     uchar LireParam(const uchar param);
     void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
-    uint EnvoyerTout();
-    uint RecevoirTout();
-private :
-//Gestion des messages SysEx
-    #define INSTRU_LEN_SYSEX 32
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
+    void Envoyer(const uint param);
 };
 
 #endif

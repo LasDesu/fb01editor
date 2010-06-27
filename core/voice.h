@@ -22,19 +22,30 @@
 #ifndef VOICE_H
 #define VOICE_H
 
+#include <QMessageBox>
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <strings.h>
 
 #include "../types.h"
+#include "../excep/memory_ex.h"
+
 #include "edit.h"
 #include "operateur.h"
 #include "midi.h"
 
 class Voice : public Edit {
 public :
+//Constantes
+    #define VOICE_LEN_SYSEX 139
+    #define VOICE_NB_PARAM  20
+    #define VOICE_OFF_PARAM 0x9
+    #define VOICE_NB_OPS 4
+    #define VOICE_LEN_AUTEUR 129
+    #define VOICE_LEN_COMMENT 129
+    #define VOICE_LEN_NOM 7
 //Paramêtres éditables
-    #define VOICE_NB_PARAM 20
-    #define VOICE_LEN_NOM  8
     typedef enum {
         VOICE_ALGORITHME = 0,
         VOICE_USERCODE,
@@ -75,24 +86,16 @@ public :
     char * LireNom();
     void   EcrireNom(char * nom, const bool envoi);
 //Envoi / Reception de l'objet
-    uint EnvoyerTout();
-    uint RecevoirTout();
+    void Envoyer(const uint param);
+    void EnvoyerTout();
+    void RecevoirTout();
 private :
 //Opérateurs intégrés
-    #define VOICE_NB_OPS 4
     Operateur * operateurs[VOICE_NB_OPS];
 //Paramêtres spéciaux
-    #define VOICE_LEN_AUTEUR  129
-    #define VOICE_LEN_COMMENT 129
-    #define VOICE_LEN_NOM     8
     char auteur[VOICE_LEN_AUTEUR];
     char comment[VOICE_LEN_COMMENT];
     char nom[VOICE_LEN_NOM];
-//Gestion des messages sysExs
-    #define VOICE_LEN_SYSEX 139
-    void  InitSysEx();
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

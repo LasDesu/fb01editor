@@ -30,21 +30,12 @@
 #include "../win32.h"
 #include "../linux.h"
 
+#include "../excep/midi_ex.h"
+#include "../excep/memory_ex.h"
+
 class MIDI
 {
 public:
-//Constantes erreurs
-    typedef enum {
-        MIDI_ERREUR_RIEN = 0,
-        MIDI_ERREUR_PREPARE,
-        MIDI_ERREUR_OPEN_IN,
-        MIDI_ERREUR_OPEN_OUT,
-        MIDI_ERREUR_NOIN,
-        MIDI_ERREUR_NOOUT,
-        MIDI_ERREUR_CONNECT,
-        MIDI_ERREUR_SEND,
-        MIDI_ERREUR_TIMEOUT
-    }MIDI_ERREURS;
 //Enumération des drivers
     static void EnumererDrivers();
     static void LibererDrivers();
@@ -55,9 +46,9 @@ public:
     static char * DriverOut(const int index);
     static char * DriverCtrl(const int index);
 //Initialisation des drivers
-    static uint ActiverIn(const int index);
-    static uint ActiverOut(const int index);
-    static uint ActiverCtrl(const int index);
+    static void ActiverIn(const int index);
+    static void ActiverOut(const int index);
+    static void ActiverCtrl(const int index);
     static void DesactiverIn();
     static void DesactiverOut();
     static void DesactiverCtrl();
@@ -65,9 +56,9 @@ public:
     static bool OutOk();
     static bool CtrlOk();
 //Envoi de messages
-    static uint EnvMsg(uchar * msg);
-    static uint EnvSysEx(uchar * sysEx, const int taille);
-    static uint RecSysEx(uchar * sysEx, const int taille);
+    static void EnvMsg(uchar * msg);
+    static void EnvSysEx(uchar * sysEx, const int taille);
+    static void RecSysEx(uchar * sysEx, const int taille);
 //Paramêtres de transmission
     static void  ChoisirMidiChannel(const uchar channel);
     static uchar MidiChannel();
@@ -101,7 +92,7 @@ protected:
     static MIDIHDR header;
     static bool prepare;
 //Gestion des tampons
-    static uint PreparerTampon();
+    static void PreparerTampon();
     static void DePreparerTampon();
     static void WINAPI Callback (uint hmi, uint msg, uint instance, uint param1, uint param2);
 #endif

@@ -22,20 +22,28 @@
 #ifndef SET_H
 #define SET_H
 
+#include <QMessageBox>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
 
 #include "../types.h"
+#include "../excep/memory_ex.h"
+
 #include "edit.h"
 #include "instrument.h"
 #include "midi.h"
 
 class Set : public Edit {
 public :
-//Paramêtres éditables
-    #define SET_NB_PARAM 0
+//Constantes
+    #define SET_NB_PARAM 1
+    #define SET_OFF_PARAM 0x9
     #define SET_LEN_NOM 8
+    #define SET_NB_INSTRU 8
+    #define SET_LEN_SYSEX 171
+//Paramêtres éditables
     typedef enum {
         SET_LFO_SPEED = 0,
         SET_LFO_WAVE,
@@ -60,17 +68,12 @@ public :
     char * LireNom();
     void   EcrireNom(char * nom, const bool envoi);
 //Envoi / Reception de l'objet
-    uint EnvoyerTout();
-    uint RecevoirTout();
+    void Envoyer(const uint param);
+    void EnvoyerTout();
+    void RecevoirTout();
 private :
 //Instruments du set
-    #define SET_NB_INSTRU 8
     Instrument * instruments[SET_NB_INSTRU];
-//Gestion des messages sysExs
-    #define SET_LEN_SYSEX 171
-    void  InitSysEx();
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

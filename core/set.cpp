@@ -23,21 +23,23 @@
 
 /*****************************************************************************/
 Set::Set()
-   : Edit(0, 0, SET_LEN_SYSEX, (uchar *) malloc(SET_LEN_SYSEX))
+   : Edit(0, (uchar *) malloc(SET_LEN_SYSEX), SET_LEN_SYSEX, 0, SET_OFF_PARAM)
 {
 //Initialise la classe
-    InitSysEx();
-    EcrireNom((char *) "none", false);
+    Initialiser();
 //Initialise les instruments
-    for (int i=0; i < SET_NB_INSTRU; i++)
+    memset(instruments, 0, sizeof(Instrument *) * SET_NB_INSTRU);
+    for (int i = 0; i < SET_NB_INSTRU; i++) {
         instruments[i] = new Instrument(i, &sysEx[0x29 + 0x10 * i]);
+        if (instruments[i] == NULL) throw Memory_ex("");
+    }
 }
 
 Set::~Set()
 {
 //Libère les instruments
-    for (int i=0; i < SET_NB_INSTRU; i++)
-        delete instruments[i];
+    for (int i = 0; i < SET_NB_INSTRU; i++)
+        if (instruments[i] != NULL) delete instruments[i];
 //Libère le sysex
     free(sysEx);
 }
@@ -82,53 +84,70 @@ bool Set::Charger(FILE * fichier, const short version)
 }
 
 /*****************************************************************************/
+const uchar initTab[SET_NB_PARAM] = {0,};
 void Set::Initialiser()
 {
-    EcrireNom((char *)"none", true);
+    uchar entSet[7] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x01, 0x00};
+//Entete du sysEx
+    Block::Initialiser(entSet, 7);
+    sysEx[7] = 0x00; sysEx[8] = 0x00;
+//Parametres initiaux
+    EcrireNom((char *) "none", false);
+    for (int  i = 0; i < SET_NB_PARAM; i++)
+        EcrireParam(i, initTab[i], false);
 }
 
 /*****************************************************************************/
 uchar Set::LireParam(const uchar param)
 {
-    switch(param) {
-    case SET_LFO_SPEED:
-        return LireSysEx(0x9);
-    case SET_LFO_WAVE:
-        return LireSysEx(0xC) & 0x3;
-    case SET_LFO_AMD:
-        return LireSysEx(0xA);
-    case SET_LFO_PMD:
-        return LireSysEx(0xB);
-    case SET_COMBINE_MODE:
-        return LireSysEx(0x8) & 0x1;
-    case SET_RECEPTION_MODE:
-        return LireSysEx(0xD) & 0x3;
-    default: return 0;
+    try {
+        switch(param) {
+        case SET_LFO_SPEED:
+            return LireParam1Oct(0x9);
+        case SET_LFO_WAVE:
+            return LireParam1Oct(0xC) & 0x3;
+        case SET_LFO_AMD:
+            return LireParam1Oct(0xA);
+        case SET_LFO_PMD:
+            return LireParam1Oct(0xB);
+        case SET_COMBINE_MODE:
+            return LireParam1Oct(0x8) & 0x1;
+        case SET_RECEPTION_MODE:
+            return LireParam1Oct(0xD) & 0x3;
+        default: return 0;
+        }
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        return 0;
     }
 }
 
 void Set::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 {
-    switch(param) {
-    case SET_LFO_SPEED:
-        EcrireSysEx(0x9, valeur & 0x7F, true);
-    break;
-    case SET_LFO_WAVE:
-        EcrireSysEx(0xC, valeur & 0x3, true);
-    break;
-    case SET_LFO_AMD:
-        EcrireSysEx(0xA, valeur & 0x7F, true);
-    break;
-    case SET_LFO_PMD:
-        EcrireSysEx(0xB, valeur & 0x7F, true);
-    break;
-    case SET_COMBINE_MODE:
-        EcrireSysEx(0x8, valeur & 0x1, true);
-    break;
-    case SET_RECEPTION_MODE:
-        EcrireSysEx(0xD, valeur & 0x3, true);
-    break;
-    default: return;
+    try {
+        switch(param) {
+        case SET_LFO_SPEED:
+            EcrireParam1Oct(0x9, valeur & 0x7F, envoi);
+        break;
+        case SET_LFO_WAVE:
+            EcrireParam1Oct(0xC, valeur & 0x3, envoi);
+        break;
+        case SET_LFO_AMD:
+            EcrireParam1Oct(0xA, valeur & 0x7F, envoi);
+        break;
+        case SET_LFO_PMD:
+            EcrireParam1Oct(0xB, valeur & 0x7F, envoi);
+        break;
+        case SET_COMBINE_MODE:
+            EcrireParam1Oct(0x8, valeur & 0x1, envoi);
+        break;
+        case SET_RECEPTION_MODE:
+            EcrireParam1Oct(0xD, valeur & 0x3, envoi);
+        break;
+        default: return;
+        }
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
     }
 }
 
@@ -136,72 +155,55 @@ void Set::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 char * Set::LireNom()
 {
     static char nom[SET_LEN_NOM + 1];
-    for (uchar i = 0; i < SET_LEN_NOM; i++)
-        nom[i] = (char) LireSysEx(i);
-    nom[SET_LEN_NOM] = 0;
-    return nom;
+    try {
+        for (uchar i = 0; i < SET_LEN_NOM; i++)
+            nom[i] = (char) LireParam1Oct(i);
+        nom[SET_LEN_NOM] = 0;
+        return nom;
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        return NULL;
+    }
 }
 
 void Set::EcrireNom(char * nom, const bool envoi)
 {
-    uchar i = 0;
-    int len = min(strlen(nom), SET_LEN_NOM);
-    for (; i < len; i++) EcrireSysEx(i, nom[i], envoi);
-    for (; i < SET_LEN_NOM; i++) EcrireSysEx(i, ' ', envoi);
+    uchar i;
+    try {
+        int len = min(strlen(nom), SET_LEN_NOM);
+        for (i = 0; i < len; i++)
+            EcrireParam1Oct(i, nom[i], envoi);
+        for (; i < SET_LEN_NOM; i++) EcrireParam1Oct(i, ' ', envoi);
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+    }
 }
 
 /*****************************************************************************/
-uint Set::EnvoyerTout()
+void Set::Envoyer(const uint param)
 {
-    uint res = MIDI::EnvSysEx(sysEx, SET_LEN_SYSEX);
-    if (res != MIDI::MIDI_ERREUR_RIEN) return res;
-    return MIDI::MIDI_ERREUR_RIEN;
+    uchar envSet[8] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
+//Construit le message
+    envSet[3] = MIDI::SysChannel();
+//Envoi les changements
+    envSet[5] = param & 0x7F;
+    envSet[6] = sysEx[param + SET_OFF_PARAM];
+//Envoi le message
+    MIDI::EnvSysEx(envSet, 8);
 }
 
-uint Set::RecevoirTout()
+void Set::EnvoyerTout()
+{
+    MIDI::EnvSysEx(sysEx, SET_LEN_SYSEX);
+}
+
+void Set::RecevoirTout()
 {
     uchar recSet[] = {0xF0, 0x43, 0x75, 0x00, 0x20, 0x01, 0x00, 0xF7};
 //Prépare la demande
     recSet[3] = MIDI::SysChannel();
 //Envoi le message
-    uint res = MIDI::EnvSysEx(recSet, 8);
-    if (res != MIDI::MIDI_ERREUR_RIEN) return res;
+    MIDI::EnvSysEx(recSet, 8);
 //Attend la reception
-    return MIDI::RecSysEx(sysEx, SET_LEN_SYSEX);
-}
-
-/*****************************************************************************/
-void Set::InitSysEx()
-{
-//Entête de message
-    Block::InitSysEx();
-    sysEx[0] = 0xF0; sysEx[1] = 0x43;
-    sysEx[2] = 0x75; sysEx[3] = 0x00;
-    sysEx[4] = 0x00; sysEx[5] = 0x01;
-    sysEx[6] = 0x00;
-//Taille du message
-    sysEx[7] = 0x00; sysEx[8] = 0x00;
-//Fin du message
-    sysEx[SET_LEN_SYSEX - 1] = 0xF7;
-}
-
-/*****************************************************************************/
-uchar Set::LireSysEx(const uchar param)
-{
-    return sysEx[param + 0x9];
-}
-
-void Set::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
-{
-    uchar envSet[8] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
-//Modifie le sysEx
-    sysEx[param + 0x9] = valeur & 0x7F;
-//Construit le message
-    if (!envoi) return;
-    envSet[3] = MIDI::SysChannel();
-//Envoi les changements
-    envSet[5] = param & 0x7F;
-    envSet[6] = valeur & 0x7F;
-//Envoi le message
-    MIDI::EnvSysEx(envSet, 8);
+    MIDI::RecSysEx(sysEx, SET_LEN_SYSEX);
 }

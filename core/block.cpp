@@ -22,11 +22,12 @@
 #include "block.h"
 
 /*****************************************************************************/
-Block::Block(const uchar nbParam, const uchar lenSysEx, uchar * sysEx)
+Block::Block(uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam)
 {
-    this->nbParam = nbParam;
-    this->lenSysEx = lenSysEx;
     this->sysEx = sysEx;
+    this->lenSysEx = lenSysEx;
+    this->nbParam  = nbParam;
+    this->offParam = offParam;
 }
 
 Block::~Block()
@@ -34,15 +35,88 @@ Block::~Block()
 }
 
 /*****************************************************************************/
-void Block::InitSysEx()
+uchar Block::LireParam(const uchar param)
 {
-    memset(sysEx, lenSysEx, 0);
+    return 0;
 }
 
-void Block::CheckSumSysEx()
+void Block::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+{
+}
+
+/*****************************************************************************/
+void Block::Envoyer(const uint param)
+{
+}
+
+void Block::EnvoyerTout()
+{
+}
+
+void Block::RecevoirTout()
+{
+}
+
+/*****************************************************************************/
+uchar Block::LireParam1Oct(const uint param)
+{
+    if (lenSysEx == 0) return 0;
+    return sysEx[param + offParam] & 0x7F;
+}
+
+void Block::EcrireParam1Oct(const uint param, const uchar valeur, const bool envoi)
+{
+    if (lenSysEx == 0) return;
+    sysEx[param + offParam] = valeur & 0x7F;
+    if (envoi) Envoyer(param);
+}
+
+/*****************************************************************************/
+uchar Block::LireParam2Oct(const uint param)
+{
+    uchar data;
+    if (lenSysEx == 0) return 0;
+    data  = sysEx[param * 2 + offParam] & 0xF;
+    data += (sysEx[param * 2 + offParam + 1] << 4);
+    return data;
+}
+
+void Block::EcrireParam2Oct(const uint param, const uchar valeur, const bool envoi)
+{
+    if (lenSysEx == 0) return;
+    sysEx[param * 2 + offParam] = valeur & 0xF;
+    sysEx[param * 2 + offParam + 1] = valeur >> 4;
+    if (envoi) Envoyer(param);
+}
+
+/*****************************************************************************/
+void Block::Initialiser(const uchar * entete, const uint lenEntete)
+{
+    if (lenSysEx == 0) return;
+    memset(sysEx, lenSysEx, 0);
+    memcpy(sysEx, entete, lenEntete);
+    sysEx[lenSysEx-1] = 0xF7;
+}
+
+/*****************************************************************************/
+void Block::CheckSum1Oct(const uint debut, const uint fin, const uint check)
 {
     uchar sum;
-    for(uint i = 7; i < lenSysEx - 2; i ++)
+    if (lenSysEx == 0) return;
+    for(uint i = debut; i <= fin; i ++)
         sum += sysEx[i];
-    sysEx[lenSysEx - 2] = (~sum) + 1;
+//Enregistre le checksum
+    sysEx[check] = (~sum) + 1;
+}
+
+void Block::CheckSum2Oct(const uint debut, const uint fin, const uint check)
+{
+    uchar sum;
+    if (lenSysEx == 0) return;
+    for(uint i = debut; i <= fin; i ++)
+        sum += sysEx[i];
+//Enregistre le checksum
+    sum = (~sum) + 1;
+    sysEx[check] = sum & 0xF;
+    sysEx[check+1] = sum >> 4;
 }

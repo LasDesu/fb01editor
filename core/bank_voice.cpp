@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -19,37 +19,17 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <strings.h>
-
-#include "../types.h"
-#include "edit.h"
-#include "midi.h"
+#include "bank_voice.h"
 
 /*****************************************************************************/
-class Config : public Edit {
-public :
-//Constantes
-    #define CONFIG_NB_PARAM 4
-//Paramêtres éditables
-    typedef enum {
-        CONFIG_SYSCHANNEL = 0,
-        CONFIG_MEMORY_PROTECT,
-        CONFIG_CONFIG_NUMBER,
-        CONFIG_DETUNE,
-        CONFIG_MASTER_VOLUME
-    }CONFIG_PARAM;
-//Constructeurs
-    Config();
-    ~Config();
-//Modification des propriétés
-    void EcrireParam(const uchar param, const uchar valeur, const bool envoi);
-//Envoi / Reception de l'objet
-    void Envoyer(const uint param, const uint valeur);
-};
+Bank_voice::Bank_voice(const uchar id, uchar * sysEx)
+    : Edit(id, sysEx, BANKVOICE_LEN_SYSEX, 0, 0)
+{
 
-#endif
+}
+
+Bank_voice::~Bank_voice()
+{
+
+}
+/*****************************************************************************/

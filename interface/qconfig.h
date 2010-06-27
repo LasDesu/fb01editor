@@ -47,7 +47,7 @@ protected:
 private:
     Ui::QConfig *m_ui;
     Config * config;
-    Set    * set;
+    Set * set;
     bool attente;
 private slots:
     void on_but_syschan_valueChanged(int i);

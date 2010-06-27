@@ -23,7 +23,7 @@
 
 /*****************************************************************************/
 Config::Config()
-       : Edit(0,CONFIG_NB_PARAM, 0, NULL)
+       : Edit(0, NULL, 0, CONFIG_NB_PARAM, 0)
 {
 }
 
@@ -32,52 +32,32 @@ Config::~Config()
 }
 
 /*****************************************************************************/
-uchar Config::LireParam(const uchar param)
-{
-    return 0;
-}
-
 void Config::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 {
+    if (!envoi) return;
     switch(param) {
     case CONFIG_SYSCHANNEL:
-        EcrireSysEx(0x20, valeur & 0xF, true);
+        Envoyer(0x20, valeur & 0xF);
         MIDI::ChoisirSysChannel(valeur);
     break;
     case CONFIG_MEMORY_PROTECT:
-        EcrireSysEx(0x21, valeur & 0x1, true);
+        Envoyer(0x21, valeur & 0x1);
     break;
     case CONFIG_CONFIG_NUMBER:
-        EcrireSysEx(0x22, valeur & 0x1F, true);
+        Envoyer(0x22, valeur & 0x1F);
     break;
     case CONFIG_DETUNE:
-        EcrireSysEx(0x23, valeur & 0x7F, true);
+        Envoyer(0x23, valeur & 0x7F);
     break;
     case CONFIG_MASTER_VOLUME:
-        EcrireSysEx(0x24, valeur & 0x7F, true);
+        Envoyer(0x24, valeur & 0x7F);
     break;
     default: return;
     }
 }
 
 /*****************************************************************************/
-uint Config::EnvoyerTout()
-{
-    return MIDI::MIDI_ERREUR_RIEN;
-}
-
-uint Config::RecevoirTout()
-{
-    return MIDI::MIDI_ERREUR_RIEN;
-}
-
-/*****************************************************************************/
-uchar Config::LireSysEx(const uchar param)
-{
-    return 0;
-}
-
-void Config::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
+void Config::Envoyer(const uint param, const uint valeur)
 {
     uchar envConfig[] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
 //Construit le message
@@ -86,5 +66,5 @@ void Config::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi
     envConfig[6] = valeur & 0x7F;
 //Transmet le paramêtre
     MIDI::EnvSysEx(envConfig, 8);
-    return;
 }
+

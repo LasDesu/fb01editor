@@ -22,37 +22,42 @@
 #ifndef BANK_H
 #define BANK_H
 
+#include <QMessageBox>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
 
 #include "../types.h"
-#include "edit.h"
+#include "../excep/memory_ex.h"
+
 #include "midi.h"
+#include "edit.h"
+#include "bank_voice.h"
 
 class Bank : public Edit {
 public :
 //Paramêtres éditables
-    #define BANK_NB_PARAM 0
-    #define BANK_LEN_NOM  0
+    #define BANK_LEN_NOM 8
+    #define BANK_LEN_SYSEX 0x18DB
+    #define BANK_NB_VOICES 48
 //Constructeurs
     Bank();
     ~Bank();
+//Modification des parametres
+    char * LireNom();
+    void   EcrireNom(char * nom, const bool envoi);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const short version);
-//Modification des propriétés
-    uchar LireParam(const uchar param);
-    void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
+//Edition de l'objet
+    void Initialiser();
 //Envoi / Reception de l'objet
-    uint EnvoyerTout();
-    uint RecevoirTout();
+    void EnvoyerTout();
+    void RecevoirTout();
 private :
-//Ecriture et lecture
-    #define BANK_LEN_SYSEX 0
-    void  InitSysEx();
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
+//Voices de la bank
+    Bank_voice * voices[BANK_NB_VOICES];
 };
 
 #endif

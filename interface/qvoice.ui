@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>302</height>
+    <height>292</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>191</width>
-     <height>121</height>
+     <height>111</height>
     </rect>
    </property>
    <property name="title">
@@ -29,7 +29,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>50</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -48,7 +48,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>60</y>
+      <y>50</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -152,7 +152,7 @@
       <x>100</x>
       <y>20</y>
       <width>81</width>
-      <height>31</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -171,14 +171,14 @@
      <string/>
     </property>
     <property name="maximumBlockCount">
-     <number>6</number>
+     <number>7</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_feedback">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
+      <y>80</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -197,7 +197,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>90</y>
+      <y>80</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -222,7 +222,7 @@
      <x>210</x>
      <y>0</y>
      <width>151</width>
-     <height>121</height>
+     <height>111</height>
     </rect>
    </property>
    <property name="title">
@@ -241,7 +241,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../FB01.qrc">:/ALGO1</pixmap>
+     <pixmap>:/ALGO1</pixmap>
     </property>
    </widget>
    <widget class="QButton" name="but_algo">
@@ -453,7 +453,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>130</y>
+     <y>120</y>
      <width>151</width>
      <height>171</height>
     </rect>
@@ -486,7 +486,7 @@
       <x>10</x>
       <y>40</y>
       <width>131</width>
-      <height>31</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -506,9 +506,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>90</y>
       <width>131</width>
-      <height>61</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -528,7 +528,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
+      <y>70</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -548,7 +548,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>130</y>
+     <y>120</y>
      <width>191</width>
      <height>171</height>
     </rect>
@@ -781,7 +781,7 @@
      <x>380</x>
      <y>150</y>
      <width>191</width>
-     <height>151</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="title">
@@ -960,8 +960,6 @@
    <header>interface/qbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

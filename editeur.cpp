@@ -22,26 +22,48 @@
 #include "editeur.h"
 
 //Objets principaux
-QApplication * application;
+QApplication * application = NULL;
 MainWindow   * mainWindow = NULL;
 Editeur      * editeur = NULL;
 
 /*****************************************************************************/
 int main(int argc, char *argv[])
 {
-//Créé l'interface de l'application
-    application = new QApplication(argc, argv);
-    mainWindow  = new MainWindow();
-    mainWindow->show();
-//Créé l'éditeur
-    editeur = new Editeur();
 //Démarre le programme
-    int res = application->exec();
+    try {
+    //Créé l'application et l'interface
+        if ((application = new QApplication(argc, argv)) == NULL)
+            throw Memory_ex("Unable to create the application !");
+        if ((mainWindow = new MainWindow()) == NULL)
+            throw Memory_ex("Unable to create the window !");
+        mainWindow->show();
+    //Créé l'éditeur
+        try {
+            if ((editeur = new Editeur()) == NULL)
+                throw Memory_ex("Unable to create the editor !");
+        }catch(Memory_ex ex) {
+            QMessageBox::critical(mainWindow, "FB01 SE:", ex.Info());
+            quit(); return 0;
+        }catch(MIDI_ex ex) {
+            QMessageBox::critical(mainWindow, "FB01 SE:", ex.Info());
+            quit(); return 0;
+        }
+    //Démarre le programme
+        application->exec();
+    }catch (Memory_ex ex) {
+        QMessageBox::critical(mainWindow, "FB01 SE:", ex.Info());
+    }catch (...) {
+        QMessageBox::critical(mainWindow, "FB01 SE:", "Unknown exception occured !");
+    }
 //Libère les ressources
-    delete editeur;
-    delete mainWindow;
-    delete application;
-    return res;
+    quit(); return 0;
+}
+
+void quit()
+{
+    if (application != NULL) delete application;
+    if (mainWindow != NULL)  delete mainWindow;
+    if (editeur != NULL)     delete editeur;
 }
 
 /*****************************************************************************/
@@ -57,6 +79,7 @@ Editeur::~Editeur()
 //Termine l'éditeur
     TerminerEditeur();
     TerminerInterface();
+    application->quit();
 }
 
 /*****************************************************************************/
@@ -201,9 +224,13 @@ void Editeur::ChoisirOP(const int OP)
 /*****************************************************************************/
 bool Editeur::ActualiserSet()
 {
-//Charge le set d'instruments
-    if (set.RecevoirTout() != MIDI::MIDI_ERREUR_RIEN) return false;
-//Actualise le set
+//Actualise le set courant
+    try {
+        set.RecevoirTout();
+    }catch (MIDI_ex ex) {
+        QMessageBox::information(mainWindow, "FB01 SE:", ex.Info());
+        return false;
+    }
     mainWindow->ui->widget_config->Actualiser();
 //Actualise les instruments
     if (pageSel == 0) {
@@ -222,9 +249,14 @@ bool Editeur::ActualiserSet()
 
 bool Editeur::ActualiserInstru()
 {
-//Charge l'instrument sélectionné
+//Actualise l'instrument courant
     voice.AssocierInstrument(instruSel);
-    if (voice.RecevoirTout() != MIDI::MIDI_ERREUR_RIEN) return false;
+    try {
+        voice.RecevoirTout();
+    }catch (MIDI_ex ex) {
+        QMessageBox::information(mainWindow, "FB01 SE:", ex.Info());
+        return false;
+    }
 //Actualise la voice et les opérateurs
     mainWindow->ui->widget_voice->Actualiser();
     mainWindow->ui->widget_opera_1->Actualiser();
@@ -327,18 +359,6 @@ void Editeur::AttribuerOperateurs()
 }
 
 /*****************************************************************************/
-void Editeur::ErreurMIDI()
-{
-    QMessageBox::information(mainWindow,"FB01 Editor :", "Error in MIDI communication,\nplease check your cables and devices !");
-    Reinitialiser();
-}
-
-void Editeur::ErreurConnection()
-{
-    QMessageBox::information(mainWindow,"FB01 Editor :", "Error when connecting to the MIDI driver,\nplease check your interfaces and refresh the drivers list !");
-}
-
-/*****************************************************************************/
 void Editeur::Actualiser()
 {
 //Vérifie la configuration
@@ -346,18 +366,9 @@ void Editeur::Actualiser()
     ConfigurerMenus(true);
     ConfigurerOnglets(true);
 //Récupère les informations
-    if (!ActualiserBanks()) {
-        ErreurMIDI();
-        return;
-    }
-    if (!ActualiserSet()) {
-        ErreurMIDI();
-        return;
-    }
-    if (!ActualiserInstru()) {
-        ErreurMIDI();
-        return;
-    }
+    if (!ActualiserBanks()) return;
+    if (!ActualiserSet()) return;
+    if (!ActualiserInstru()) return;
 }
 
 void Editeur::Reinitialiser()

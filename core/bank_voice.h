@@ -19,8 +19,8 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef BANK_VOICE_H
+#define BANK_VOICE_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,26 +30,15 @@
 #include "edit.h"
 #include "midi.h"
 
-/*****************************************************************************/
-class Config : public Edit {
+class Bank_voice : public Edit {
 public :
 //Constantes
-    #define CONFIG_NB_PARAM 4
-//Paramêtres éditables
-    typedef enum {
-        CONFIG_SYSCHANNEL = 0,
-        CONFIG_MEMORY_PROTECT,
-        CONFIG_CONFIG_NUMBER,
-        CONFIG_DETUNE,
-        CONFIG_MASTER_VOLUME
-    }CONFIG_PARAM;
+    #define BANKVOICE_LEN_SYSEX 0x83
 //Constructeurs
-    Config();
-    ~Config();
-//Modification des propriétés
-    void EcrireParam(const uchar param, const uchar valeur, const bool envoi);
-//Envoi / Reception de l'objet
-    void Envoyer(const uint param, const uint valeur);
+    Bank_voice(const uchar id, uchar * sysEx);
+   ~Bank_voice();
+private :
+
 };
 
-#endif
+#endif // BANK_VOICE_H

@@ -22,6 +22,8 @@
 #ifndef OPERATOR_H
 #define OPERATOR_H
 
+#include <QMessageBox>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
@@ -32,8 +34,10 @@
 
 class Operateur : public Edit {
 public :
-//Paramêtres éditables
+//Constantes
     #define OPERATOR_NB_PARAM 16
+    #define OPERATOR_LEN_SYSEX 16
+//Paramêtres éditables
     typedef enum {
         OPERATOR_LEVEL = 0,
         OPERATOR_LEVEL_CURB,
@@ -63,15 +67,10 @@ public :
     uchar LireParam(const uchar param);
     void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
-    uint EnvoyerTout();
-    uint RecevoirTout();
+    void Envoyer(const uint param);
 private :
 //Paramêtres globaux
     uchar instru;
-//Envoi et réception sysEx
-    #define OPERATOR_LEN_SYSEX 16
-    uchar LireSysEx(const uchar param);
-    void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi);
 };
 
 #endif

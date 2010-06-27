@@ -27,12 +27,14 @@
 #include <strings.h>
 
 #include "../types.h"
+#include "../excep/memory_ex.h"
+
 #include "block.h"
 
 class Edit : public Block {
 public :
 //Constructeurs
-    Edit(const uchar id, const uchar nbParam, const uchar lenSysEx, uchar * sysEx);
+    Edit(const uchar id, uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam);
     ~Edit();
 //Gestion de l'id objet
     uchar LireId();
@@ -47,7 +49,8 @@ public :
     virtual void Initialiser();
     virtual void Randomiser();
     virtual void Copier(uchar * table, const ulong len);
-    virtual void Coller(const uchar * table, const ulong len);
+    virtual void Coller(const uchar * table, const ulong len, const bool envoi);
+    virtual void Echanger(uchar * table, const ulong len, const bool envoi);
 protected :
 //Paramètres de l'objet
     uchar id;

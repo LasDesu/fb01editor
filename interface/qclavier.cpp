@@ -44,9 +44,11 @@ void QClavier::mousePressEvent(QMouseEvent * event)
 {
     int note = TrouverNoteSouris(event);
     if (note != noteSouris) {
-        MIDI::NoteOff(noteSouris);
-        MIDI::NoteOn(note);
-        noteSouris = note;
+        try {
+            MIDI::NoteOff(noteSouris);
+            MIDI::NoteOn(note);
+            noteSouris = note;
+        }catch (MIDI_ex ex) { return; }
     }
 }
 
@@ -54,22 +56,34 @@ void QClavier::keyPressEvent(QKeyEvent * event)
 {
     if (event->isAutoRepeat()) return;
     int note = TrouverNoteClavier(event);
-    if (note >= 0) MIDI::NoteOn(note);
+    if (note >= 0) {
+        try {
+            MIDI::NoteOn(note);
+        }catch (MIDI_ex ex) { return; }
+    }
 }
 
 /*****************************************************************************/
 void QClavier::mouseReleaseEvent(QMouseEvent * event)
 {
-    if (noteSouris != -1)
-        MIDI::NoteOff(noteSouris);
-    noteSouris = -1;
+    if (noteSouris != -1) {
+        try {
+            MIDI::NoteOff(noteSouris);
+            noteSouris = -1;
+        }catch (MIDI_ex ex) { return; }
+    }
 }
 
 void QClavier::keyReleaseEvent(QKeyEvent * event)
 {
     int note = TrouverNoteClavier(event);
-    if (note >= 0) MIDI::NoteOff(note);
+    if (note >= 0) {
+        try {
+            MIDI::NoteOff(note);
+        }catch (MIDI_ex ex) { return; }
+    }
 }
+
 
 /*****************************************************************************/
 int QClavier::TrouverNoteSouris(QMouseEvent * event)

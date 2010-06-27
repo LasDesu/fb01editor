@@ -66,74 +66,74 @@ void QConfig::Actualiser()
 void QConfig::on_but_syschan_valueChanged(int i)
 {
     if (!attente)
-    config->EcrireParam(Config::CONFIG_SYSCHANNEL, i - 1, true);
+        config->EcrireParam(Config::CONFIG_SYSCHANNEL, i - 1, true);
 }
 
 void QConfig::on_pshBut_memory_clicked(bool checked)
 {
     if (!attente)
-    config->EcrireParam(Config::CONFIG_MEMORY_PROTECT, checked, true);
+        config->EcrireParam(Config::CONFIG_MEMORY_PROTECT, checked, true);
 }
 
 void QConfig::on_but_setnum_valueChanged(int i)
 {
     if (!attente)
-    config->EcrireParam(Config::CONFIG_CONFIG_NUMBER, i - 1, true);
+        config->EcrireParam(Config::CONFIG_CONFIG_NUMBER, i - 1, true);
 }
 
 void QConfig::on_but_mastdetune_valueChanged(int i)
 {
     if (!attente)
-    config->EcrireParam(Config::CONFIG_DETUNE, i, true);
+        config->EcrireParam(Config::CONFIG_DETUNE, i, true);
 }
 
 void QConfig::on_hzSlider_mastvol_valueChanged(int i)
 {
     if (!attente)
-    config->EcrireParam(Config::CONFIG_MASTER_VOLUME, i, true);
+        config->EcrireParam(Config::CONFIG_MASTER_VOLUME, i, true);
 }
 
 /*****************************************************************************/
 void QConfig::on_txtEdit_name_textChanged()
 {
     if (!attente)
-    set->EcrireNom(m_ui->txtEdit_name->toPlainText().toAscii().data(), true);
+        set->EcrireNom(m_ui->txtEdit_name->toPlainText().toAscii().data(), true);
 }
 
 void QConfig::on_pshBut_combine_clicked(bool checked)
 {
     if (!attente)
-    set->EcrireParam(Set::SET_COMBINE_MODE, checked, true);
+        set->EcrireParam(Set::SET_COMBINE_MODE, checked, true);
 }
 
 void QConfig::on_cmbBox_reception_activated(int i)
 {
     if (!attente)
-    set->EcrireParam(Set::SET_RECEPTION_MODE, i, true);
+        set->EcrireParam(Set::SET_RECEPTION_MODE, i, true);
 }
 
 void QConfig::on_spnBox_LFOspeed_valueChanged(int i)
 {
     if (!attente)
-    set->EcrireParam(Set::SET_LFO_SPEED, i, true);
+        set->EcrireParam(Set::SET_LFO_SPEED, i, true);
 }
 
 void QConfig::on_cmbBox_LFOwave_activated(int i)
 {
     if (!attente)
-    set->EcrireParam(Set::SET_LFO_WAVE, i, true);
+        set->EcrireParam(Set::SET_LFO_WAVE, i, true);
 }
 
 void QConfig::on_but_AMD_valueChanged(int i)
 {
     if (!attente)
-    set->EcrireParam(Set::SET_LFO_AMD, i, true);
+        set->EcrireParam(Set::SET_LFO_AMD, i, true);
 }
 
 void QConfig::on_but_PMD_valueChanged(int i)
 {
     if (!attente)
-    set->EcrireParam(Set::SET_LFO_PMD, i, true);
+        set->EcrireParam(Set::SET_LFO_PMD, i, true);
 }
 
 /*****************************************************************************/

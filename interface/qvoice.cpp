@@ -93,97 +93,97 @@ void QVoice::on_but_algo_valueChanged(int i)
 void QVoice::on_txtEdit_voicename_textChanged()
 {
     if (!attente)
-    voice->EcrireNom(m_ui->txtEdit_voicename->toPlainText().toAscii().data(), true);
+        voice->EcrireNom(m_ui->txtEdit_voicename->toPlainText().toAscii().data(), true);
 }
 
 void QVoice::on_cmbBox_style_activated(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_USERCODE, i, true);
+        voice->EcrireParam(Voice::VOICE_USERCODE, i, true);
 }
 
 void QVoice::on_but_feedback_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_FEEDBACK, i, true);
+        voice->EcrireParam(Voice::VOICE_FEEDBACK, i, true);
 }
 
 void QVoice::on_but_trans_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_TRANSPOSE, i + 2, true);
+        voice->EcrireParam(Voice::VOICE_TRANSPOSE, i + 2, true);
 }
 
 void QVoice::on_pshBut_poly_clicked(bool checked)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_POLY, !checked, true);
+        voice->EcrireParam(Voice::VOICE_POLY, !checked, true);
 }
 
 void QVoice::on_but_porta_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_PORTAMENTO, i, true);
+        voice->EcrireParam(Voice::VOICE_PORTAMENTO, i, true);
 }
 
 void QVoice::on_but_pitch_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_PITCHBEND, i, true);
+        voice->EcrireParam(Voice::VOICE_PITCHBEND, i, true);
 }
 
 void QVoice::on_cmbBox_pmdctl_activated(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_CONTROLLER, i, true);
+        voice->EcrireParam(Voice::VOICE_CONTROLLER, i, true);
 }
 
 void QVoice::on_spnBox_LFOspeed_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_SPEED, i, true);
+        voice->EcrireParam(Voice::VOICE_LFO_SPEED, i, true);
 }
 
 void QVoice::on_cmbBox_LFOwave_activated(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_WAVE, i, true);
+        voice->EcrireParam(Voice::VOICE_LFO_WAVE, i, true);
 }
 
 void QVoice::on_pshBut_LFOload_clicked(bool checked)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_LOAD, !checked, true);
+        voice->EcrireParam(Voice::VOICE_LFO_LOAD, !checked, true);
 }
 
 void QVoice::on_pshBut_LFOsync_clicked(bool checked)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_SYNC, !checked, true);
+        voice->EcrireParam(Voice::VOICE_LFO_SYNC, !checked, true);
 }
 
 void QVoice::on_but_AMD_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_AMD, i, true);
+        voice->EcrireParam(Voice::VOICE_LFO_AMD, i, true);
 }
 
 void QVoice::on_but_AMS_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_AMS, i, true);
+        voice->EcrireParam(Voice::VOICE_LFO_AMS, i, true);
 }
 
 void QVoice::on_but_PMD_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_PMD, i, true);
+        voice->EcrireParam(Voice::VOICE_LFO_PMD, i, true);
 }
 
 void QVoice::on_but_PMS_valueChanged(int i)
 {
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_LFO_PMS, i, true);
+        voice->EcrireParam(Voice::VOICE_LFO_PMS, i, true);
 }
 
 /*****************************************************************************/

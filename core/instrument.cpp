@@ -23,10 +23,8 @@
 
 /*****************************************************************************/
 Instrument::Instrument(const uchar id, uchar * sysEx)
-          : Edit(id, INSTRU_NB_PARAM, INSTRU_LEN_SYSEX, sysEx)
+          : Edit(id, sysEx, INSTRU_LEN_SYSEX, INSTRU_NB_PARAM, 0)
 {
-//Initialise la classe
-    InitSysEx();
 }
 
 Instrument::~Instrument()
@@ -45,126 +43,115 @@ void Instrument::Initialiser()
 uchar Instrument::LireParam(const uchar param)
 {
     uchar temp;
-    switch(param) {
-    case INSTRU_NB_NOTES :
-        return LireSysEx(0) & 0xF;
-    case INSTRU_CHANNEL :
-        return LireSysEx(1) & 0xF;
-    case INSTRU_UPPER :
-        return LireSysEx(2);
-    case INSTRU_LOWER :
-        return LireSysEx(3) & 0xF;
-    case INSTRU_BANK :
-        return LireSysEx(4) & 0x7;
-    case INSTRU_VOICE :
-        return LireSysEx(5);
-    case INSTRU_DETUNE :
-        temp = LireSysEx(6);
-        if (temp > 63) temp += 0x80;
-        return temp;
-    case INSTRU_TRANS :
-        return LireSysEx(7) & 0x7;
-    case INSTRU_VOLUME :
-        return LireSysEx(8);
-    case INSTRU_PAN :
-        return LireSysEx(9);
-    case INSTRU_LFO :
-        return LireSysEx(10) & 0x1;
-    case INSTRU_PORTAMENTO :
-        temp = LireSysEx(11);
-        return temp;
-    case INSTRU_PITCHBEND :
-        return LireSysEx(12) & 0xF;
-    case INSTRU_POLY :
-        return LireSysEx(13) & 0x1;
-    case INSTRU_CONROLLER :
-        return LireSysEx(14) & 0x7;
-    default: return 0;
+    try {
+        switch(param) {
+        case INSTRU_NB_NOTES :
+            return LireParam1Oct(0) & 0xF;
+        case INSTRU_CHANNEL :
+            return LireParam1Oct(1) & 0xF;
+        case INSTRU_UPPER :
+            return LireParam1Oct(2);
+        case INSTRU_LOWER :
+            return LireParam1Oct(3) & 0xF;
+        case INSTRU_BANK :
+            return LireParam1Oct(4) & 0x7;
+        case INSTRU_VOICE :
+            return LireParam1Oct(5);
+        case INSTRU_DETUNE :
+            temp = LireParam1Oct(6);
+            if (temp > 63) temp += 0x80;
+            return temp;
+        case INSTRU_TRANS :
+            return LireParam1Oct(7) & 0x7;
+        case INSTRU_VOLUME :
+            return LireParam1Oct(8);
+        case INSTRU_PAN :
+            return LireParam1Oct(9);
+        case INSTRU_LFO :
+            return LireParam1Oct(10) & 0x1;
+        case INSTRU_PORTAMENTO :
+            temp = LireParam1Oct(11);
+            return temp;
+        case INSTRU_PITCHBEND :
+            return LireParam1Oct(12) & 0xF;
+        case INSTRU_POLY :
+            return LireParam1Oct(13) & 0x1;
+        case INSTRU_CONROLLER :
+            return LireParam1Oct(14) & 0x7;
+        default: return 0;
+        }
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        return 0;
     }
 }
 
 void Instrument::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
 {
-    switch(param) {
-    case INSTRU_NB_NOTES :
-        EcrireSysEx(0, valeur & 0xF, envoi);
-    break;
-    case INSTRU_CHANNEL :
-        EcrireSysEx(1, valeur & 0xF, envoi);
-    break;
-    case INSTRU_UPPER :
-        EcrireSysEx(2, valeur & 0xF, envoi);
-    break;
-    case INSTRU_LOWER :
-        EcrireSysEx(3, valeur & 0xF, envoi);
-    break;
-    case INSTRU_BANK :
-        EcrireSysEx(4, valeur & 0x7, envoi);
-    break;
-    case INSTRU_VOICE :
-        EcrireSysEx(5, valeur, envoi);
-    break;
-    case INSTRU_DETUNE :
-        EcrireSysEx(6, valeur, envoi);
-    break;
-    case INSTRU_TRANS :
-        EcrireSysEx(7, valeur & 0x7, envoi);
-    break;
-    case INSTRU_VOLUME :
-        EcrireSysEx(8, valeur, envoi);
-    break;
-    case INSTRU_PAN :
-        EcrireSysEx(9, valeur, envoi);
-    break;
-    case INSTRU_LFO :
-        EcrireSysEx(10, valeur & 0x1, envoi);
-    break;
-    case INSTRU_PORTAMENTO :
-        EcrireSysEx(11, valeur, envoi);
-    break;
-    case INSTRU_PITCHBEND :
-        EcrireSysEx(12, valeur & 0xF, envoi);
-    break;
-    case INSTRU_POLY :
-        EcrireSysEx(13, valeur & 0x1, envoi);
-    break;
-    case INSTRU_CONROLLER :
-        EcrireSysEx(14, valeur & 0x7, envoi);
-    break;
-    default : return;
+    try {
+        switch(param) {
+        case INSTRU_NB_NOTES :
+            EcrireParam1Oct(0, valeur & 0xF, envoi);
+        break;
+        case INSTRU_CHANNEL :
+            EcrireParam1Oct(1, valeur & 0xF, envoi);
+        break;
+        case INSTRU_UPPER :
+            EcrireParam1Oct(2, valeur & 0xF, envoi);
+        break;
+        case INSTRU_LOWER :
+            EcrireParam1Oct(3, valeur & 0xF, envoi);
+        break;
+        case INSTRU_BANK :
+            EcrireParam1Oct(4, valeur & 0x7, envoi);
+        break;
+        case INSTRU_VOICE :
+            EcrireParam1Oct(5, valeur, envoi);
+        break;
+        case INSTRU_DETUNE :
+            EcrireParam1Oct(6, valeur, envoi);
+        break;
+        case INSTRU_TRANS :
+            EcrireParam1Oct(7, valeur & 0x7, envoi);
+        break;
+        case INSTRU_VOLUME :
+            EcrireParam1Oct(8, valeur, envoi);
+        break;
+        case INSTRU_PAN :
+            EcrireParam1Oct(9, valeur, envoi);
+        break;
+        case INSTRU_LFO :
+            EcrireParam1Oct(10, valeur & 0x1, envoi);
+        break;
+        case INSTRU_PORTAMENTO :
+            EcrireParam1Oct(11, valeur, envoi);
+        break;
+        case INSTRU_PITCHBEND :
+            EcrireParam1Oct(12, valeur & 0xF, envoi);
+        break;
+        case INSTRU_POLY :
+            EcrireParam1Oct(13, valeur & 0x1, envoi);
+        break;
+        case INSTRU_CONROLLER :
+            EcrireParam1Oct(14, valeur & 0x7, envoi);
+        break;
+        default : return;
+        }
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
     }
 }
 
 /*****************************************************************************/
-uint Instrument::EnvoyerTout()
-{
-    return MIDI::MIDI_ERREUR_RIEN;
-}
-
-uint Instrument::RecevoirTout()
-{
-    return MIDI::MIDI_ERREUR_RIEN;
-}
-
-/*****************************************************************************/
-uchar Instrument::LireSysEx(const uchar param)
-{
-    return sysEx[param];
-}
-
-void Instrument::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
+void Instrument::Envoyer(const uint param)
 {
     uchar envInstrument[8] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0xF7};
-//Modifie le sysEx
-    sysEx[param] = valeur & 0x7F;
 //Construit le message
-    if (!envoi) return;
     envInstrument[3] = MIDI::SysChannel();
     envInstrument[4] = 0x18 + (id & 0x7);
 //Envoi les changements
     envInstrument[5] = param & 0x1F;
-    envInstrument[6] = valeur & 0x7F;
+    envInstrument[6] = sysEx[param] & 0x7F;
 //Envoi le message
     MIDI::EnvSysEx(envInstrument, 8);
 }
-

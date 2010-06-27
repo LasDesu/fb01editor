@@ -26,29 +26,35 @@
 #include <strings.h>
 
 #include "../types.h"
+#include "midi.h"
 
 class Block {
 public :
 //Constructeurs
-    Block(const uchar nbParam, const uchar lenSysEx, uchar * sysEx);
+    Block(uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam);
     ~Block();
 //Modification des propriétés
-    virtual uchar LireParam(const uchar param) = 0;
-    virtual void  EcrireParam(const uchar param, const uchar valeur, const bool envoi) = 0;
+    virtual uchar LireParam(const uchar param);
+    virtual void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
-    virtual uint EnvoyerTout() = 0;
-    virtual uint RecevoirTout() = 0;
+    virtual void Envoyer(const uint param);
+    virtual void EnvoyerTout();
+    virtual void RecevoirTout();
 protected :
-//Paramêtres sysEx
+//Paramêtres du sysEx
     uchar * sysEx;
     uint lenSysEx;
-    uchar nbParam;
-//Utilitaires SysEx
-    virtual void InitSysEx();
-    virtual void CheckSumSysEx();
-//Ecriture et lecture
-    virtual uchar LireSysEx(const uchar param) = 0;
-    virtual void  EcrireSysEx(const uchar param, const uchar valeur, const bool envoi) = 0;
+    uint nbParam;
+    uint offParam;
+//Modification du sysEx
+    uchar LireParam1Oct(const uint param);
+    uchar LireParam2Oct(const uint param);
+    void  EcrireParam1Oct(const uint param, const uchar valeur, const bool envoi);
+    void  EcrireParam2Oct(const uint param, const uchar valeur, const bool envoi);
+//Utilitaires du SysEx
+    virtual void Initialiser(const uchar * entete, const uint lenEntete);
+    virtual void CheckSum1Oct(const uint debut, const uint fin, const uint check);
+    virtual void CheckSum2Oct(const uint debut, const uint fin, const uint check);
 };
 
 #endif

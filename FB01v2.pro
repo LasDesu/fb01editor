@@ -35,7 +35,11 @@ HEADERS += types.h \
     editeur.h \
     core/config.h \
     core/edit.h \
-    interface/qconfig.h
+    interface/qconfig.h \
+    core/bank_voice.h \
+    excep/memory_ex.h \
+    excep/midi_ex.h \
+    excep/ex.h
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
@@ -55,7 +59,11 @@ SOURCES += core/set.cpp \
     editeur.cpp \
     core/config.cpp \
     core/edit.cpp \
-    interface/qconfig.cpp
+    interface/qconfig.cpp \
+    core/bank_voice.cpp \
+    excep/memory_ex.cpp \
+    excep/midi_ex.cpp \
+    excep/ex.cpp
 winnt { 
     DEFINES += WIN32
     LIBS += -luser32 \

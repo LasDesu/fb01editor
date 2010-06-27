@@ -22,7 +22,8 @@
 #include "mainwindow.h"
 #include "editeur.h"
 
-extern QApplication * MainApp;
+extern QApplication * application;
+extern QMainWindow * mainWindow;
 extern Editeur * editeur;
 
 /*****************************************************************************/
@@ -35,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow()
 {
+    mainWindow = NULL;
     delete ui;
 }
 
@@ -325,7 +327,6 @@ void MainWindow::on_actionPaste_triggered(bool checked)
     }
 }
 
-/*****************************************************************************/
 void MainWindow::on_actionExchange_triggered(bool checked)
 {
     /*
@@ -353,7 +354,7 @@ void MainWindow::on_actionExchange_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_actionQuit_triggered(bool checked)
 {
-    MainApp->quit();
+    application->quit();
 }
 
 /*****************************************************************************/
@@ -399,11 +400,15 @@ void MainWindow::on_cmbBox_MIDICtrl_activated(int index)
         MIDI::DesactiverCtrl();
     }else{
     //Sélectionne le driver
-        if (MIDI::ActiverCtrl(index - 1)) {
+        try {
+            MIDI::ActiverCtrl(index - 1);
+        }catch (MIDI_ex ex) {
+        //Désélectionne le driver
             ui->cmbBox_MIDICtrl->setCurrentIndex(0);
-            editeur->ErreurConnection();
+            QMessageBox::information(this, "FB01 SE:", ex.Info());
             return;
         }
+    //Actualise l'éditeur
         editeur->Actualiser();
     }
 }
@@ -417,11 +422,14 @@ void MainWindow::on_cmbBox_MIDIIn_activated(int index)
         editeur->ConfigurerMenus(false);
     }else{
     //Sélectionne le driver
-        if (MIDI::ActiverIn(index - 1)) {
+        try {
+            MIDI::ActiverIn(index - 1);
+        }catch (MIDI_ex ex){
             ui->cmbBox_MIDIIn->setCurrentIndex(0);
-            editeur->ErreurConnection();
+            QMessageBox::information(this, "FB01 SE:", ex.Info());
             return;
         }
+    //Actualise l'éditeur
         editeur->Actualiser();
     }
 }
@@ -437,11 +445,15 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
         editeur->ConfigurerMenus(false);
     }else{
     //Sélectionne le driver
-        if (MIDI::ActiverOut(index - 1)) {
+        try {
+            MIDI::ActiverOut(index - 1);
+        }catch (MIDI_ex ex) {
+        //Désélectionne le driver
             ui->cmbBox_MIDIOut->setCurrentIndex(0);
-            editeur->ErreurConnection();
+            QMessageBox::information(this, "FB01 SE:", ex.Info());
             return;
         }
+    //Actualise l'éditeur
         editeur->Actualiser();
     }
 }
@@ -449,28 +461,32 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
 /*****************************************************************************/
 void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 {
-//Efface les items
+//Initialise la liste des drivers
     ui->cmbBox_MIDICtrl->clear();
     ui->cmbBox_MIDIIn->clear();
     ui->cmbBox_MIDIOut->clear();
-//Liste les périphériques
-    MIDI::EnumererDrivers();
-    int nbIns = MIDI::NbDriversIn();
-    int nbOuts = MIDI::NbDriversOut();
     ui->cmbBox_MIDICtrl->addItem((QString) "No driver selected", 0);
     ui->cmbBox_MIDIIn->addItem((QString) "No driver selected", 0);
     ui->cmbBox_MIDIOut->addItem((QString) "No driver selected", 0);
+    ui->cmbBox_MIDICtrl->setCurrentIndex(0);
+    ui->cmbBox_MIDIIn->setCurrentIndex(0);
+    ui->cmbBox_MIDIOut->setCurrentIndex(0);
+//Enumère les drivers
+    try {
+        MIDI::EnumererDrivers();
+    }catch (MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+        return;
+    }
 //Ajoute les périphériques
+    int nbIns  = MIDI::NbDriversIn();
+    int nbOuts = MIDI::NbDriversOut();
     for (int i = 0; i < nbIns; i++) {
         ui->cmbBox_MIDICtrl->addItem((QString)MIDI::DriverIn(i), i+1);
         ui->cmbBox_MIDIIn->addItem((QString)MIDI::DriverIn(i), i+1);
     }
     for (int i = 0; i < nbOuts; i++)
         ui->cmbBox_MIDIOut->addItem((QString)MIDI::DriverOut(i), i+1);
-//Sélectionne le driver nul
-    ui->cmbBox_MIDICtrl->setCurrentIndex(0);
-    ui->cmbBox_MIDIIn->setCurrentIndex(0);
-    ui->cmbBox_MIDIOut->setCurrentIndex(0);
 }
 
 /*****************************************************************************/
@@ -487,17 +503,25 @@ void MainWindow::on_but_kybvelo_valueChanged(int i)
 /*****************************************************************************/
 void MainWindow::on_actionSend_current_config_triggered(bool checked)
 {
-    editeur->config.EnvoyerTout();
+    try {
+        editeur->config.EnvoyerTout();
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+    }
 }
 
 /*****************************************************************************/
 void MainWindow::on_actionSend_current_set_triggered(bool checked)
 {
-    editeur->set.EnvoyerTout();
+    try {
+        editeur->set.EnvoyerTout();
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+    }
 }
 
 void MainWindow::on_actionGet_current_set_triggered(bool checked)
-{
+{    
     editeur->ActualiserSet();
     editeur->RafraichirSet();
 }
@@ -505,7 +529,11 @@ void MainWindow::on_actionGet_current_set_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_actionSend_current_voice_triggered(bool checked)
 {
-    editeur->voice.EnvoyerTout();
+    try {
+        editeur->voice.EnvoyerTout();
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+    }
 }
 
 void MainWindow::on_actionGet_current_voice_triggered(bool checked)
@@ -554,57 +582,49 @@ void MainWindow::on_pshBut_bank_cur_7_clicked(bool checked)
 void MainWindow::on_pshBut_inst_cur_1_clicked(bool checked)
 {
     editeur->ChoisirInstru(0);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_2_clicked(bool checked)
 {
     editeur->ChoisirInstru(1);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_3_clicked(bool checked)
 {
     editeur->ChoisirInstru(2);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_4_clicked(bool checked)
 {
     editeur->ChoisirInstru(3);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_5_clicked(bool checked)
 {
     editeur->ChoisirInstru(4);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_6_clicked(bool checked)
 {
     editeur->ChoisirInstru(5);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_7_clicked(bool checked)
 {
     editeur->ChoisirInstru(6);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 void MainWindow::on_pshBut_inst_cur_8_clicked(bool checked)
 {
     editeur->ChoisirInstru(7);
-    if(!editeur->ActualiserInstru())
-        editeur->ErreurMIDI();
+    editeur->ActualiserInstru();
 }
 
 /*****************************************************************************/

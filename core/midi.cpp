@@ -34,6 +34,7 @@ uchar  MIDI::velocity = 127;
 uchar  MIDI::sysChannel = 0;
 uchar  MIDI::tampon[2][MIDI_LEN_TAMPON] = {{0,},};
 
+/*****************************************************************************/
 #ifdef WIN32
     MIDIHDR MIDI::header = {0,};
     bool MIDI::prepare = false;
@@ -51,15 +52,24 @@ void MIDI::EnumererDrivers()
     nbIns  = midiInGetNumDevs();
     nbOuts = midiOutGetNumDevs();
 //Alloue les configurations
-    if (nbIns != 0)
+    if (nbIns != 0) {
         ins = malloc(sizeof(MIDIINCAPS) * nbIns);
-    if (nbOuts != 0)
+        if (ins == NULL) throw Memory_ex("Unable to allocate driver list for MIDI in !");
+    }
+    if (nbOuts != 0) {
         outs = malloc(sizeof(MIDIOUTCAPS) * nbOuts);
+        if (outs == NULL) throw Memory_ex("Unable to allocate driver list for MIDI out !");
+    }
 //Récupère les configurations
     for (int i = 0; i < nbIns; i++)
-        midiInGetDevCapsA(i, &((MIDIINCAPS *)ins)[i], sizeof(MIDIINCAPS));
+        if (midiInGetDevCapsA(i, &((MIDIINCAPS *)ins)[i], sizeof(MIDIINCAPS))
+            != MMSYSERR_NOERROR)
+            throw MIDI_ex("Unable to get device caps for MIDI in !");
+
     for (int i = 0; i < nbOuts; i++)
-        midiOutGetDevCapsA(i, &((MIDIOUTCAPS *)outs)[i], sizeof(MIDIOUTCAPS));
+        if (midiOutGetDevCapsA(i, &((MIDIOUTCAPS *)outs)[i], sizeof(MIDIOUTCAPS))
+            != MMSYSERR_NOERROR)
+            throw MIDI_ex("Unable to get device caps for MIDI out !");
 #endif
 #ifdef LINUX
 
@@ -71,8 +81,8 @@ void MIDI::LibererDrivers()
 //Ferme les communications
 #ifdef WIN32
     if (hndCtrl != 0) DesactiverCtrl();
-    if (hndIn != 0) DesactiverIn();
-    if (hndOut != 0) DesactiverOut();
+    if (hndIn != 0)   DesactiverIn();
+    if (hndOut != 0)  DesactiverOut();
 //Libère les configurations
     if (ins != NULL) free(ins);
     if (outs != NULL) free(outs);
@@ -130,18 +140,17 @@ char * MIDI::DriverCtrl(const int index)
 }
 
 /*****************************************************************************/
-uint MIDI::ActiverIn(const int index)
+void MIDI::ActiverIn(const int index)
 {
 //Désactive le driver
     DesactiverIn();
 #ifdef WIN32
-//Ouvre le port
-    uint res = midiInOpen(&hndIn, index, (ulong) Callback, 0, CALLBACK_FUNCTION);
-    if (res) return MIDI_ERREUR_OPEN_IN;
+//Ouvre le port en entrée
+    if (midiInOpen(&hndIn, index, (ulong) Callback, 0, CALLBACK_FUNCTION)
+        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to open MIDI in !");
 #endif
 #ifdef LINUX
 #endif
-    return MIDI_ERREUR_RIEN;
 }
 
 void MIDI::DesactiverIn()
@@ -165,18 +174,17 @@ void MIDI::DesactiverIn()
 }
 
 /*****************************************************************************/
-uint MIDI::ActiverOut(const int index)
+void MIDI::ActiverOut(const int index)
 {
 //Désactive le port précédent
     DesactiverOut();
 #ifdef WIN32
-//Ouvre le port
-    uint res = midiOutOpen(&hndOut, index, 0, 0, 0);
-    if (res) return MIDI_ERREUR_OPEN_OUT;
+//Ouvre le port en sortie
+    if (midiOutOpen(&hndOut, index, 0, 0, 0)
+        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to open MIDI out !");
 #endif
 #ifdef LINUX
 #endif
-    return MIDI_ERREUR_RIEN;
 }
 
 void MIDI::DesactiverOut()
@@ -197,21 +205,20 @@ void MIDI::DesactiverOut()
 }
 
 /*****************************************************************************/
-uint MIDI::ActiverCtrl(const int index)
+void MIDI::ActiverCtrl(const int index)
 {
 //Désactive le port précédent
-    if (hndOut == 0) return MIDI_ERREUR_NOOUT;
+    if (!hndOut) throw MIDI_ex("No openned MIDI out port !");
     DesactiverCtrl();
 #ifdef WIN32
 //Ouvre le port
-    uint res = midiInOpen(&hndCtrl, index, 0, 0, CALLBACK_NULL);
-    if (res) return MIDI_ERREUR_OPEN_IN;
-    res = midiConnect(hndCtrl, hndOut, NULL);
-    if (res) return MIDI_ERREUR_CONNECT;
+    if (midiInOpen(&hndCtrl, index, 0, 0, CALLBACK_NULL)
+        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to open MIDI ctrl !");
+    if (midiConnect(hndCtrl, hndOut, NULL)
+        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to connect MIDI ctrl to MIDI out");
 #endif
 #ifdef LINUX
 #endif
-    return MIDI_ERREUR_RIEN;
 }
 
 void MIDI::DesactiverCtrl()
@@ -247,25 +254,24 @@ bool MIDI::CtrlOk()
 }
 
 /*****************************************************************************/
-uint MIDI::EnvMsg(uchar * msg)
+void MIDI::EnvMsg(uchar * msg)
 {
 //Vérifie l'ouverture
-    if (hndOut == 0) return MIDI_ERREUR_NOOUT;
+    if (hndOut == 0) throw MIDI_ex("No openned MIDI out port !");
 #ifdef WIN32
 //Envoie le message
-    if (midiOutShortMsg(hndOut, *(ulong *) msg))
-        return MIDI_ERREUR_SEND;
+    if (midiOutShortMsg(hndOut, *(ulong *) msg) != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to send MIDI data !");
 #endif
 #ifdef LINUX
 #endif
-    return MIDI_ERREUR_RIEN;
 }
 
-uint MIDI::EnvSysEx(uchar * sysEx, const int taille)
+void MIDI::EnvSysEx(uchar * sysEx, const int taille)
 {
 //Vérifie l'ouverture
-    if (hndIn == 0) return MIDI_ERREUR_NOIN;
-    if (hndOut == 0) return MIDI_ERREUR_NOOUT;
+    if (hndIn == 0)  throw MIDI_ex("No openned MIDI in port !");
+    if (hndOut == 0) throw MIDI_ex("No openned MIDI out port !");
 #ifdef WIN32
 //Créé l'entête
     MIDIHDR head;
@@ -273,34 +279,33 @@ uint MIDI::EnvSysEx(uchar * sysEx, const int taille)
     head.dwBufferLength = taille;
     head.lpData = (char *) sysEx;
 //Prépare le message
-    uint res = midiOutPrepareHeader(hndOut, &head, sizeof(MIDIHDR));
-    if (res) return MIDI_ERREUR_PREPARE;
-//Prepare la reception
-    if (PreparerTampon() != MIDI_ERREUR_RIEN) {
-        midiOutUnprepareHeader(hndOut, &head, sizeof(MIDIHDR));
-        return MIDI_ERREUR_PREPARE;
-    }
+    if (midiOutPrepareHeader(hndOut, &head, sizeof(MIDIHDR))
+        != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to prepare header !");
+//Prépare la réception
+    PreparerTampon();
     attente = true;
     midiInStart(hndIn);
 //Envoie le message
-    res = midiOutLongMsg(hndOut, &head, sizeof(MIDIHDR));
-    midiOutUnprepareHeader(hndOut, &head, sizeof(MIDIHDR));
-    if (res) {
+    if (midiOutLongMsg(hndOut, &head, sizeof(MIDIHDR))
+        != MMSYSERR_NOERROR) {
+    //Supprime l'attente de réception
         attente = false;
         midiInStop(hndIn);
-        return MIDI_ERREUR_SEND;
+        midiOutUnprepareHeader(hndOut, &head, sizeof(MIDIHDR));
+    //Envoie l'exception
+        throw MIDI_ex("Unable to send MIDI data !");
     }
+    midiOutUnprepareHeader(hndOut, &head, sizeof(MIDIHDR));
 #endif
 #ifdef LINUX
 #endif
-    return MIDI_ERREUR_RIEN;
 }
 
-uint MIDI::RecSysEx(uchar * sysEx, const int taille)
+void MIDI::RecSysEx(uchar * sysEx, const int taille)
 {
     ulong cmpt = 0;
 //Attend un message
-    if (taille > MIDI_LEN_TAMPON) return MIDI_ERREUR_PREPARE;
     while (cmpt < MIDI_ATTENTE_MESSAGE) {
     //Recoit un nouveau message
         if (!attente) {
@@ -308,13 +313,13 @@ uint MIDI::RecSysEx(uchar * sysEx, const int taille)
             midiInStop(hndIn);
             DePreparerTampon();
             memcpy(sysEx, tampon[1], taille);
-           return MIDI_ERREUR_RIEN;
+            return;
         }
     //Attend le message
         sleep(MIDI_ATTENTE);
         cmpt ++;
     }
-    return MIDI_ERREUR_TIMEOUT;
+    throw MIDI_ex("No MIDI data received !");
 }
 
 /*****************************************************************************/
@@ -387,28 +392,27 @@ void MIDI::AllNotesOff()
 
 /*****************************************************************************/
 #ifdef WIN32
-uint MIDI::PreparerTampon()
+void MIDI::PreparerTampon()
 {
 //Initialise le tampon
-    if (prepare) return MIDI_ERREUR_RIEN;
+    if (prepare) return;
+    attente = false;
     memset(tampon[0], 0, MIDI_LEN_TAMPON);
     memset(&header, 0, sizeof(MIDIHDR));
 //Configure l'entête
     header.dwBufferLength = MIDI_LEN_TAMPON;
     header.lpData = (char *) tampon;
 //Prépare le tampon
-    uint res = midiInPrepareHeader(hndIn, &header, sizeof(MIDIHDR));
-    if (res) return MIDI_ERREUR_PREPARE;
+    if (midiInPrepareHeader(hndIn, &header, sizeof(MIDIHDR))
+        != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to prepare header !");
 //Ajoute à la liste
-    res = midiInAddBuffer(hndIn, &header, sizeof(MIDIHDR));
-    if (res) {
+    if (midiInAddBuffer(hndIn, &header, sizeof(MIDIHDR))
+        != MMSYSERR_NOERROR) {
         midiInUnprepareHeader(hndIn, &header, sizeof(MIDIHDR));
-        return MIDI_ERREUR_PREPARE;
+        throw MIDI_ex("Unable to assign buffer to MIDI in !");
     }
- //Reset les drapeaux
-    attente = false;
     prepare = true;
-    return MIDI_ERREUR_RIEN;
 }
 #endif
 

@@ -22,15 +22,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "../ui_mainwindow.h"
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
 #include <QtGui/QInputDialog>
 #include <QtGui/QFileDialog>
 #include <QList>
 
+#include "../ui_mainwindow.h"
+
 #include "../editeur.h"
 #include "../core/midi.h"
+
 #include "qbank.h"
 #include "qinstrument.h"
 #include "qvoice.h"

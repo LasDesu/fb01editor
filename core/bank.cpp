@@ -23,14 +23,23 @@
 
 /*****************************************************************************/
 Bank::Bank()
-    : Edit(0, 0, BANK_LEN_SYSEX, (uchar *) malloc(BANK_LEN_SYSEX))
+    : Edit(0, (uchar *) malloc(BANK_LEN_SYSEX), BANK_LEN_SYSEX, 0, 0)
 {
 //Initialise la classe
-    InitSysEx();
+    Initialiser();
+//Initialise les voices
+    memset(voices, 0, sizeof(Bank_voice *) * BANK_NB_VOICES);
+    for (int i = 0; i < BANK_NB_VOICES; i ++) {
+        voices[i] = new Bank_voice(i, &sysEx[0x4A + i * 0x83]);
+        if (voices[i] == NULL) throw Memory_ex("Unable to allocate the voices of banks !");
+    }
 }
 
 Bank::~Bank()
 {
+//Libère les voices
+    for (int i = 0; i < BANK_NB_VOICES; i ++)
+        if (voices[i] != NULL) delete voices[i];
 //Libère le sysex
     free(sysEx);
 }
@@ -39,7 +48,6 @@ Bank::~Bank()
 bool Bank::Enregistrer(FILE * fichier)
 {
 //Sauvegarde les données
-
     return true;
 }
 
@@ -55,55 +63,25 @@ bool Bank::Charger(FILE * fichier, const short version)
 }
 
 /*****************************************************************************/
-uchar Bank::LireParam(const uchar param)
+void Bank::EnvoyerTout()
 {
-    return 0;
 }
 
-void Bank::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Bank::RecevoirTout()
 {
-    return;
-}
-
-/*****************************************************************************/
-uint Bank::EnvoyerTout()
-{
-    return MIDI::MIDI_ERREUR_RIEN;
-}
-
-uint Bank::RecevoirTout()
-{
-    return MIDI::MIDI_ERREUR_RIEN;
 }
 
 /*****************************************************************************/
-void Bank::InitSysEx()
+void Bank::Initialiser()
 {
+    uchar entBank[7] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00};
 //Entête de message
-    Block::InitSysEx();
-    sysEx[0] = 0xF0; sysEx[1] = 0x43;
-    sysEx[2] = 0x75; sysEx[3] = 0x00;
-    sysEx[4] = 0x00; sysEx[5] = 0x00;
-    sysEx[6] = 0x00;
-//Taille du paquet entête
-    sysEx[7] = 0x00;
-    sysEx[8] = 0x40;
+    Block::Initialiser(entBank, 7);
+    sysEx[7] = 0x00; sysEx[8] = 0x40;
 //Taille des paquets voices
     //for (int i = 0; i < 48; i++) {
       //  sysEx[i * 0x83 + 0x5F] = 0x00;
       //  sysEx[i * 0x83 + 0x60] = 0x40;
     //}
-//Fin du message
-    sysEx[BANK_LEN_SYSEX - 1] = 0xF7;
 }
 
-/*****************************************************************************/
-uchar Bank::LireSysEx(const uchar param)
-{
-    return 0;
-}
-
-void Bank::EcrireSysEx(const uchar param, const uchar valeur, const bool envoi)
-{
-    return;
-}

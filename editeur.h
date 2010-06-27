@@ -23,45 +23,50 @@
 #define EDITEUR_H
 
 #include <QApplication>
-
 #include "interface/mainwindow.h"
-
-#include "core/midi.h"
-#include "core/operateur.h"
-#include "core/voice.h"
-#include "core/instrument.h"
-#include "core/set.h"
-#include "core/bank.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
 
-#include "types.h"
-#include "win32.h"
-#include "linux.h"
+#include "excep/memory_ex.h"
+#include "excep/midi_ex.h"
+
+#include "core/midi.h"
+#include "core/voice.h"
+#include "core/operateur.h"
+#include "core/set.h"
+#include "core/instrument.h"
+#include "core/bank.h"
+#include "core/bank_voice.h"
+#include "core/config.h"
+
+
+//****************************************************************************/
+int main(int argc, char *argv[]);
+void quit();
 
 //****************************************************************************/
 class Editeur {
     friend class MainWindow;
 public :
-    Editeur();
-    ~Editeur();
-//Chargement et déchargement
+//Constantes
+    #define EDITEUR_NB_BANK 4
     typedef enum {
         FICHIER_VOICE = 0,
         FICHIER_SET,
         FICHIER_BANK,
         FICHIER_SYSEX
     }FICHIER_TYPE;
+//Constructeurs
+    Editeur();
+    ~Editeur();
+//Chargement et déchargement
     FILE * ChargerFichier(FICHIER_TYPE type, short * version);
     FILE * EnregistrerFichier(FICHIER_TYPE type);
 //Actualisation de l'éditeur
     void Actualiser();
     void Reinitialiser();
-//Gestion des erreurs
-    void ErreurMIDI();
-    void ErreurConnection();
 //Attribution des objets
     void AttribuerConfig();
     void AttribuerBanks();
@@ -86,7 +91,6 @@ public :
     void RafraichirInstru();
 private :
 //Objets de l'éditeur
-    #define EDITEUR_NB_BANK 4
     Bank   banks[EDITEUR_NB_BANK];
     Set    set;
     Voice  voice;
