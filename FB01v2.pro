@@ -39,7 +39,11 @@ HEADERS += types.h \
     core/bank_voice.h \
     excep/memory_ex.h \
     excep/midi_ex.h \
-    excep/ex.h
+    excep/ex.h \
+    interface/qautomation.h \
+    core/automation.h \
+    core/automated.h \
+    excep/automation_ex.h
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
@@ -63,7 +67,10 @@ SOURCES += core/set.cpp \
     core/bank_voice.cpp \
     excep/memory_ex.cpp \
     excep/midi_ex.cpp \
-    excep/ex.cpp
+    excep/ex.cpp \
+    interface/qautomation.cpp \
+    core/automation.cpp \
+    excep/automation_ex.cpp
 winnt { 
     DEFINES += WIN32
     LIBS += -luser32 \
@@ -84,4 +91,5 @@ FORMS += interface/qoperateur.ui \
     interface/qvoice.ui \
     interface/mainwindow.ui \
     interface/qbank.ui \
-    interface/qconfig.ui
+    interface/qconfig.ui \
+    interface/qautomation.ui

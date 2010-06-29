@@ -27,6 +27,7 @@ Set::Set()
 {
 //Initialise la classe
     Initialiser();
+    CreerCallbacks();
 //Initialise les instruments
     memset(instruments, 0, sizeof(Instrument *) * SET_NB_INSTRU);
     for (int i = 0; i < SET_NB_INSTRU; i++) {
@@ -93,12 +94,12 @@ void Set::Initialiser()
     sysEx[7] = 0x00; sysEx[8] = 0x00;
 //Parametres initiaux
     EcrireNom((char *) "none", false);
-    for (int  i = 0; i < SET_NB_PARAM; i++)
-        EcrireParam(i, initTab[i], false);
+    for (int i = 0; i < SET_NB_PARAM; i++)
+        EcrireParam((SET_PARAM) i, initTab[i], false);
 }
 
 /*****************************************************************************/
-uchar Set::LireParam(const uchar param)
+uchar Set::LireParam(const SET_PARAM param)
 {
     try {
         switch(param) {
@@ -122,7 +123,7 @@ uchar Set::LireParam(const uchar param)
     }
 }
 
-void Set::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Set::EcrireParam(const SET_PARAM param, const uchar valeur, const bool envoi)
 {
     try {
         switch(param) {
@@ -206,4 +207,23 @@ void Set::RecevoirTout()
     MIDI::EnvSysEx(recSet, 8);
 //Attend la reception
     MIDI::RecSysEx(sysEx, SET_LEN_SYSEX);
+}
+
+/*****************************************************************************/
+void Set::CreerCallbacks()
+{
+    Automation::AjouterCallback(this, SET_LFO_SPEED, "Set LFO Speed");
+    Automation::AjouterCallback(this, SET_LFO_WAVE, "Set LFO Waveform");
+    Automation::AjouterCallback(this, SET_LFO_AMD, "Set LFO AMD");
+    Automation::AjouterCallback(this, SET_LFO_PMD, "Set LFO PMD");
+}
+
+void Set::AppelerCallback(const uint index, const uchar valeur)
+{
+    switch(index) {
+    case SET_LFO_SPEED : EcrireParam(SET_LFO_SPEED, valeur, true); break;
+    case SET_LFO_WAVE : EcrireParam(SET_LFO_WAVE, valeur >> 5, true); break;
+    case SET_LFO_AMD : EcrireParam(SET_LFO_AMD, valeur, true); break;
+    case SET_LFO_PMD : EcrireParam(SET_LFO_PMD, valeur, true); break;
+    }
 }

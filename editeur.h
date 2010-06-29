@@ -41,7 +41,6 @@
 #include "core/bank_voice.h"
 #include "core/config.h"
 
-
 //****************************************************************************/
 int main(int argc, char *argv[]);
 void quit();
@@ -51,7 +50,8 @@ class Editeur {
     friend class MainWindow;
 public :
 //Constantes
-    #define EDITEUR_NB_BANK 4
+    #define EDITEUR_NB_BANK    4
+    #define EDITEUR_INTER_ACTU 500
     typedef enum {
         FICHIER_VOICE = 0,
         FICHIER_SET,
@@ -66,6 +66,7 @@ public :
     FILE * EnregistrerFichier(FICHIER_TYPE type);
 //Actualisation de l'éditeur
     void Actualiser();
+    void Rafraichir();
     void Reinitialiser();
 //Attribution des objets
     void AttribuerConfig();
@@ -76,27 +77,35 @@ public :
 //Configuration de l'interface
     void ConfigurerOnglets(const bool actifs);
     void ConfigurerMenus(const bool actifs);
-//Sélection des objets sélectionné
+//Sélection des pages
     void ChoisirPageSet(const int page);
+    void ChoisirPageBank(const int page);
+//Sélection des objets
     void ChoisirBank(const int bank);
     void ChoisirInstru(const int instru);
     void ChoisirOP(const int OP);
 //Actualisation des contenus
     bool ActualiserBanks();
     bool ActualiserSet();
-    bool ActualiserInstru();
+    bool ActualiserVoice();
+    void ActualiserAutomation();
 //Rafraichissement de l'affichage
     void RafraichirBanks();
     void RafraichirSet();
-    void RafraichirInstru();
+    void RafraichirVoice();
+    void RafraichirAutomation();
 private :
 //Objets de l'éditeur
     Bank   banks[EDITEUR_NB_BANK];
     Set    set;
     Voice  voice;
     Config config;
-//Sélection d'édition
-    int pageSel;
+//Fenêtre de l'éditeur
+    MainWindow * mainWindow;
+//Sélection des pages
+    int pageSetSel;
+    int pageBankSel;
+//Sélection des objets
     int instruSel;
     int OPSel;
     int bankSel;

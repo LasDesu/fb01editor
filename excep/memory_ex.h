@@ -32,7 +32,6 @@ class Memory_ex : public Ex
 {
 public :
     Memory_ex(const char * info);
-    ~Memory_ex();
 };
 
 #endif // MEMORY_EX_H

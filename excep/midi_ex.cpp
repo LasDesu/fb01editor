@@ -26,7 +26,3 @@ MIDI_ex::MIDI_ex(const char * info)
         :Ex(info)
 {
 }
-
-MIDI_ex::~MIDI_ex()
-{
-}

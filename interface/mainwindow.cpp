@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -23,20 +23,22 @@
 #include "editeur.h"
 
 extern QApplication * application;
-extern QMainWindow * mainWindow;
 extern Editeur * editeur;
 
 /*****************************************************************************/
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
+//Initialise l'interface
     ui->setupUi(this);
     ui->but_kybchan->setValue(1);
     ui->but_kybvelo->setValue(100);
+//Lance de timer d'actualisation
+    timer = startTimer(EDITEUR_INTER_ACTU);
 }
 
 MainWindow::~MainWindow()
 {
-    mainWindow = NULL;
+    if (timer != 0) killTimer(timer);
     delete ui;
 }
 
@@ -119,7 +121,7 @@ void MainWindow::on_actionLoad_voice_triggered(bool checked)
     if (fichier == NULL) return;
 //Charge la voice
     if (!editeur->voice.Charger(fichier, version)) goto ErrorReading;
-    editeur->RafraichirInstru();
+    editeur->RafraichirVoice();
 //Ferme le fichier
     fclose(fichier);
     return;
@@ -154,7 +156,7 @@ void MainWindow::on_actionImport_bank_triggered(bool checked)
     if (fichier == NULL) return;
 //Importe la bank
     if (editeur->banks[editeur->BankSel].Importe(fichier)) goto ErrorReading;
-    editeur->RafraichirInstru();
+    editeur->RafraichirVoice();
 //Ferme le fichier
     fclose(fichier);
     return;
@@ -223,7 +225,7 @@ void MainWindow::on_actionImport_voice_triggered(bool checked)
     if (fichier == NULL) return;
 //Importe la voice
     if (editeur->voice.Importe(fichier)) goto ErrorReading;
-    editeur->RafraichirInstru();
+    editeur->RafraichirVoice();
 //Ferme le fichier
     fclose(fichier);
     return;
@@ -259,11 +261,11 @@ void MainWindow::on_actionInitialize_triggered(bool checked)
         break;
     case ONGLET_VOICE :
         editeur->voice.Initialiser();
-        editeur->RafraichirInstru();
+        editeur->RafraichirVoice();
         break;
     case ONGLET_OPERATEURS :
         editeur->voice.RecupererOP(editeur->OPSel)->Initialiser();
-        editeur->RafraichirInstru();
+        editeur->RafraichirVoice();
         break;
     }
 }
@@ -277,11 +279,11 @@ void MainWindow::on_actionRandomize_triggered(bool checked)
         break;
     case ONGLET_VOICE :
         editeur->voice.Randomiser();
-        editeur->RafraichirInstru();
+        editeur->RafraichirVoice();
         break;
     case ONGLET_OPERATEURS :
         editeur->voice.RecupererOP(editeur->OPSel)->Randomiser();
-        editeur->RafraichirInstru();
+        editeur->RafraichirVoice();
         break;
     }
 }
@@ -318,11 +320,11 @@ void MainWindow::on_actionPaste_triggered(bool checked)
         break;
     case ONGLET_VOICE :
         //editeur->voice.Coller();
-        editeur->RafraichirInstru();
+        editeur->RafraichirVoice();
         break;
     case ONGLET_OPERATEURS :
         //editeur->voice.RecupererOP(editeur->OPSel)->Coller();
-        editeur->RafraichirInstru();
+        editeur->RafraichirVoice();
         break;
     }
 }
@@ -538,8 +540,8 @@ void MainWindow::on_actionSend_current_voice_triggered(bool checked)
 
 void MainWindow::on_actionGet_current_voice_triggered(bool checked)
 {
-    editeur->ActualiserInstru();
-    editeur->RafraichirInstru();
+    editeur->ActualiserVoice();
+    editeur->RafraichirVoice();
 }
 
 /*****************************************************************************/
@@ -582,49 +584,49 @@ void MainWindow::on_pshBut_bank_cur_7_clicked(bool checked)
 void MainWindow::on_pshBut_inst_cur_1_clicked(bool checked)
 {
     editeur->ChoisirInstru(0);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_2_clicked(bool checked)
 {
     editeur->ChoisirInstru(1);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_3_clicked(bool checked)
 {
     editeur->ChoisirInstru(2);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_4_clicked(bool checked)
 {
     editeur->ChoisirInstru(3);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_5_clicked(bool checked)
 {
     editeur->ChoisirInstru(4);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_6_clicked(bool checked)
 {
     editeur->ChoisirInstru(5);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_7_clicked(bool checked)
 {
     editeur->ChoisirInstru(6);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 void MainWindow::on_pshBut_inst_cur_8_clicked(bool checked)
 {
     editeur->ChoisirInstru(7);
-    editeur->ActualiserInstru();
+    editeur->ActualiserVoice();
 }
 
 /*****************************************************************************/
@@ -670,8 +672,30 @@ void MainWindow::on_pshBut_OPon_4_clicked(bool checked)
 }
 
 /*****************************************************************************/
-void MainWindow::on_pshBut_next_pressed()
+void MainWindow::on_pshBut_nextSet_pressed()
 {
-    editeur->ChoisirPageSet(1 - editeur->pageSel);
+    editeur->ChoisirPageSet(1 - editeur->pageSetSel);
 }
 
+void MainWindow::on_pshBut_nextBank_pressed()
+{
+    editeur->ChoisirPageSet(1 - editeur->pageBankSel);
+}
+
+/*****************************************************************************/
+void MainWindow::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::timerEvent(QTimerEvent *e)
+{
+    editeur->Rafraichir();
+}

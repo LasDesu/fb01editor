@@ -23,12 +23,14 @@
 #define QCLAVIER_H
 
 /*****************************************************************************/
-#include <QtGui/QLabel>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QKeyEvent>
+#include <QLabel>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 #include "../types.h"
 #include "../core/midi.h"
+
+#include "../excep/midi_ex.h"
 
 /*****************************************************************************/
 class QClavier : public QLabel
@@ -37,6 +39,14 @@ class QClavier : public QLabel
 public:
     QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~QClavier();
+protected:
+//Réimplémentation de la souris
+    void mouseMoveEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent * event);
+    void mouseReleaseEvent(QMouseEvent * event);
+//Réimplémentation du clavier
+    void keyPressEvent(QKeyEvent * event);
+    void keyReleaseEvent(QKeyEvent * event);
 private:
 //Note en cours
     #define G_REF 36
@@ -44,13 +54,6 @@ private:
 //Détermine la note
     int TrouverNoteSouris(QMouseEvent * event);
     int TrouverNoteClavier(QKeyEvent * event);
-//Réimplémentation de la souris
-    virtual void mouseMoveEvent(QMouseEvent * event);
-    virtual void mousePressEvent(QMouseEvent * event);
-    virtual void mouseReleaseEvent(QMouseEvent * event);
-//Réimplémentation du clavier
-    virtual void keyPressEvent(QKeyEvent * event);
-    virtual void keyReleaseEvent(QKeyEvent * event);
 };
 
 #endif // QCLAVIER_H

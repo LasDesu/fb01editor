@@ -43,7 +43,7 @@ void QOperateur::DefinirOP(Operateur * operateur)
 }
 
 /*****************************************************************************/
-void QOperateur::ActualiserEnveloppe()
+void QOperateur::RafraichirEnveloppe()
 {
     m_ui->label_env->DefinirEnveloppe(m_ui->but_AR->value(), m_ui->but_D1R->value(),
                                       m_ui->but_SL->value(), m_ui->but_D2R->value(),
@@ -51,10 +51,11 @@ void QOperateur::ActualiserEnveloppe()
     m_ui->label_env->repaint();
 }
 
-void QOperateur::Actualiser()
+void QOperateur::Rafraichir()
 {
     attente = true;
-    m_ui->hzSlider_volume->setValue(127 - operateur->LireParam(Operateur::OPERATOR_LEVEL));
+//Actualise le contenu des contrôles
+    m_ui->hzSlider_volume->setValue(127 - operateur->LireParam(Operateur::OPERATOR_VOLUME));
     m_ui->but_vellvl->setValue(operateur->LireParam(Operateur::OPERATOR_LEVEL_VELOCITY));
     m_ui->but_velAR->setValue(operateur->LireParam(Operateur::OPERATOR_ATTACK_VELOCITY));
     m_ui->but_adjTL->setValue(operateur->LireParam(Operateur::OPERATOR_ADJUST));
@@ -70,7 +71,8 @@ void QOperateur::Actualiser()
     m_ui->but_D2R->setValue(operateur->LireParam(Operateur::OPERATOR_DECAY2));
     m_ui->but_SL->setValue(15 - operateur->LireParam(Operateur::OPERATOR_SUSTAIN));
     m_ui->but_RR->setValue(operateur->LireParam(Operateur::OPERATOR_RELEASE));
-    ActualiserEnveloppe();
+//Actualise l'enveloppe
+    RafraichirEnveloppe();
     attente = false;
 }
 
@@ -78,7 +80,7 @@ void QOperateur::Actualiser()
 void QOperateur::on_hzSlider_volume_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_LEVEL, 127 - i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_VOLUME, 0x7F - i, true);
 }
 
 void QOperateur::on_pshBut_carrier_clicked(bool checked)
@@ -109,7 +111,7 @@ void QOperateur::on_but_AR_valueChanged(int i)
 {
     if (!attente) {
         operateur->EcrireParam(Operateur::OPERATOR_ATTACK, i, true);
-        ActualiserEnveloppe();
+        RafraichirEnveloppe();
     }
 }
 
@@ -117,15 +119,15 @@ void QOperateur::on_but_D1R_valueChanged(int i)
 {
     if (!attente) {
         operateur->EcrireParam(Operateur::OPERATOR_DECAY1, i, true);
-        ActualiserEnveloppe();
+        RafraichirEnveloppe();
     }
 }
 
 void QOperateur::on_but_SL_valueChanged(int i)
 {
     if (!attente) {
-        operateur->EcrireParam(Operateur::OPERATOR_SUSTAIN, 15 - i, true);
-        ActualiserEnveloppe();
+        operateur->EcrireParam(Operateur::OPERATOR_SUSTAIN, 0xF - i, true);
+        RafraichirEnveloppe();
     }
 }
 
@@ -133,7 +135,7 @@ void QOperateur::on_but_D2R_valueChanged(int i)
 {
     if (!attente) {
         operateur->EcrireParam(Operateur::OPERATOR_DECAY2, i, true);
-        ActualiserEnveloppe();
+        RafraichirEnveloppe();
     }
 }
 
@@ -141,7 +143,7 @@ void QOperateur::on_but_RR_valueChanged(int i)
 {
     if (!attente) {
         operateur->EcrireParam(Operateur::OPERATOR_RELEASE, i, true);
-        ActualiserEnveloppe();
+        RafraichirEnveloppe();
     }
 }
 

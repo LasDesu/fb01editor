@@ -22,12 +22,15 @@
 #ifndef QVOICE_H
 #define QVOICE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QPixmap>
-
 #include "../ui_qvoice.h"
-#include "../core/voice.h"
+
 #include "../core/midi.h"
+#include "../core/voice.h"
+
+#include "../excep/midi_ex.h"
+#include "../excep/memory_ex.h"
 
 /*****************************************************************************/
 namespace Ui {
@@ -37,16 +40,23 @@ namespace Ui {
 class QVoice : public QWidget {
     Q_OBJECT
 public:
+//Constantes
+    #define QVOICE_NB_ALGO 8
+//Constructeurs
     QVoice(QWidget *parent = 0);
     ~QVoice();
+//Association classe - contrôle
     void DefinirVoice(Voice * voice);
+//Changement des paramètres supplémentaires
     void DefinirAuteur(QString auteur);
     void DefinirComment(QString comment);
-    void Actualiser();
+//Actualisation graphique
+    void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
 private:
     Ui::QVoice *m_ui;
+    QPixmap algoIcones[QVOICE_NB_ALGO];
     Voice * voice;
     bool attente;
 private slots:

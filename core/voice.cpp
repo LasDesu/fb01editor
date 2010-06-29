@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -27,6 +27,7 @@ Voice::Voice()
 {
 //Initialise la classe
     Initialiser();
+    CreerCallbacks();
 //Initialise les opérateurs
     for (int i = 0; i < VOICE_NB_OPS; i++)
         operateurs[i] = new Operateur(i, &sysEx[0x29 + 0x10 * (VOICE_NB_OPS - i - 1)]);
@@ -100,15 +101,15 @@ void Voice::Initialiser()
 //Parametres initiaux
     EcrireNom((char *) "none", false);
     for (int  i = 0; i < VOICE_NB_PARAM; i++)
-        EcrireParam(i, initTab[i], false);
+        EcrireParam((VOICE_PARAM) i, initTab[i], false);
 }
 
 /*****************************************************************************/
-uchar Voice::LireParam(const uchar param)
+uchar Voice::LireParam(const VOICE_PARAM param)
 {
     try {
         switch(param) {
-        case VOICE_ALGORITHME :
+        case VOICE_ALGORITHM :
             return LireParam2Oct(0xC) & 0x7;
         case VOICE_USERCODE :
             return LireParam2Oct(0x7);
@@ -156,12 +157,12 @@ uchar Voice::LireParam(const uchar param)
     }
 }
 
-void Voice::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Voice::EcrireParam(const VOICE_PARAM param, const uchar valeur, const bool envoi)
 {
     uchar byte;
     try {
         switch(param) {
-        case VOICE_ALGORITHME :
+        case VOICE_ALGORITHM :
             byte  = LireParam2Oct(0xC) & 0xF8;
             byte += valeur & 0x7;
             EcrireParam2Oct(0xC, byte, envoi);
@@ -323,3 +324,17 @@ void Voice::RecevoirTout()
     MIDI::RecSysEx(sysEx, VOICE_LEN_SYSEX);
 }
 
+/*****************************************************************************/
+void Voice::CreerCallbacks()
+{
+    Automation::AjouterCallback(this, VOICE_ALGORITHM, "Voice algorithm");
+    Automation::AjouterCallback(this, VOICE_FEEDBACK, "Voice feedback");
+}
+
+void Voice::AppelerCallback(const uint index, const uchar valeur)
+{
+    switch(index) {
+    case VOICE_ALGORITHM : EcrireParam(VOICE_ALGORITHM, valeur >> 4, true); break;
+    case VOICE_FEEDBACK : EcrireParam(VOICE_FEEDBACK, valeur >> 4, true); break;
+    }
+}

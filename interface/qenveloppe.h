@@ -22,9 +22,9 @@
 #ifndef QENVELOPPE_H
 #define QENVELOPPE_H
 
-#include <QtGui/QLabel>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
+#include <QLabel>
+#include <QMouseEvent>
+#include <QPainter>
 
 /*****************************************************************************/
 class QEnveloppe : public QLabel
@@ -34,9 +34,10 @@ public:
     QEnveloppe(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~QEnveloppe();
     void DefinirEnveloppe(int AR, int DR1, int SL, int DR2, int RR);
+protected:
+    void paintEvent(QPaintEvent * event);
 private:
-    QPoint Points[5];
-    virtual void paintEvent (QPaintEvent * event);
+    QPoint Points[5];    
 };
 
 #endif // QENVELOPPE_H

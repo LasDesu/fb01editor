@@ -22,11 +22,17 @@
 #include "qvoice.h"
 
 /*****************************************************************************/
+QString algoNoms[] = {":/ALGO1", ":/ALGO2", ":/ALGO3", ":/ALGO4", ":/ALGO5", ":/ALGO6", ":/ALGO7", ":/ALGO8"};
 QVoice::QVoice(QWidget *parent) : QWidget(parent), m_ui(new Ui::QVoice)
 {
+//Initialise la classe
     m_ui->setupUi(this);
+    for (uint i = 0; i < QVOICE_NB_ALGO; i++)
+        algoIcones[i].load(algoNoms[i]);
+//Initialise certains contrôles
     attente = true;
     m_ui->but_algo->setValue(1);
+    m_ui->lbl_algo->setPixmap(algoIcones[0]);
     attente = false;
 }
 
@@ -52,12 +58,12 @@ void QVoice::DefinirComment(QString comment)
 }
 
 /*****************************************************************************/
-void QVoice::Actualiser()
+void QVoice::Rafraichir()
 {
     attente = true;
+//Actualise le contenu des contrôles
     m_ui->txtEdit_voicename->setPlainText((QString) voice->LireNom());
-    m_ui->txtEdit_voicename->repaint();
-    m_ui->but_algo->setValue(voice->LireParam(Voice::VOICE_ALGORITHME) + 1);
+    m_ui->but_algo->setValue(voice->LireParam(Voice::VOICE_ALGORITHM) + 1);
     m_ui->cmbBox_style->setCurrentIndex(voice->LireParam(Voice::VOICE_USERCODE));
     m_ui->cmbBox_LFOwave->setCurrentIndex(voice->LireParam(Voice::VOICE_LFO_WAVE));
     m_ui->spnBox_LFOspeed->setValue(voice->LireParam(Voice::VOICE_LFO_SPEED));
@@ -73,20 +79,17 @@ void QVoice::Actualiser()
     m_ui->but_porta->setValue(voice->LireParam(Voice::VOICE_PORTAMENTO));
     m_ui->cmbBox_pmdctl->setCurrentIndex(voice->LireParam(Voice::VOICE_CONTROLLER));
     m_ui->but_pitch->setValue(voice->LireParam(Voice::VOICE_PITCHBEND));
+//Repeind certains contrôles
+    m_ui->txtEdit_voicename->repaint();
     attente = false;
 }
 
 /*****************************************************************************/
-QString AlgNoms[] = {":/ALGO1", ":/ALGO2", ":/ALGO3", ":/ALGO4", ":/ALGO5", ":/ALGO6", ":/ALGO7", ":/ALGO8"};
 void QVoice::on_but_algo_valueChanged(int i)
 {
-    QPixmap Pix;
-//Change l'image
-    Pix.load(AlgNoms[i-1]);
-    m_ui->lbl_algo->setPixmap(Pix);
-//Envoie la donnée
     if (!attente)
-    voice->EcrireParam(Voice::VOICE_ALGORITHME, i - 1, true);
+        voice->EcrireParam(Voice::VOICE_ALGORITHM, i - 1, true);
+    m_ui->lbl_algo->setPixmap(algoIcones[i - 1]);
 }
 
 /*****************************************************************************/

@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -22,15 +22,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
-#include <QtGui/QInputDialog>
-#include <QtGui/QFileDialog>
+#include <QApplication>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QFileDialog>
 #include <QList>
 
 #include "../ui_mainwindow.h"
 
-#include "../editeur.h"
 #include "../core/midi.h"
 
 #include "qbank.h"
@@ -48,8 +47,7 @@ class MainWindow : public QMainWindow{
     Q_OBJECT
     friend class Editeur;
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+//Constantes générales
     typedef enum {
         ONGLET_CONFIG = 0,
         ONGLET_BANK,
@@ -57,9 +55,16 @@ public:
         ONGLET_VOICE,
         ONGLET_OPERATEURS
     }ONGLET_NOM;
+//Constructeurs
+    MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+protected:
+    void changeEvent(QEvent *e);
+    void timerEvent(QTimerEvent *e);
 private:
     Ui::MainWindow *ui;
-public slots:
+    int timer;
+private slots:
 //Callbacks MIDI
     void on_cmbBox_MIDICtrl_activated(int index);
     void on_cmbBox_MIDIIn_activated(int index);
@@ -96,7 +101,6 @@ public slots:
     void on_actionRead_this_triggered(bool checked = false);
     void on_actionOnline_help_triggered(bool checked = false);
 //Callbacks sélection
-    void on_pshBut_next_pressed();
     void on_pshBut_bank_cur_1_clicked(bool checked);
     void on_pshBut_bank_cur_2_clicked(bool checked);
     void on_pshBut_bank_cur_3_clicked(bool checked);
@@ -116,6 +120,9 @@ public slots:
     void on_pshBut_op_cur_2_clicked(bool checked);
     void on_pshBut_op_cur_3_clicked(bool checked);
     void on_pshBut_op_cur_4_clicked(bool checked);
+//Callbacks choix de page
+    void on_pshBut_nextSet_pressed();
+    void on_pshBut_nextBank_pressed();
 //Callbacks activation
     void on_pshBut_OPon_1_clicked(bool checked);
     void on_pshBut_OPon_2_clicked(bool checked);

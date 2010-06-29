@@ -48,17 +48,19 @@ void QConfig::DefinirSet(Set * set)
 }
 
 /*****************************************************************************/
-void QConfig::Actualiser()
+void QConfig::Rafraichir()
 {
     attente = true;
+//Rafraichit l'affichage
     m_ui->txtEdit_name->setPlainText((QString) set->LireNom());
-    m_ui->txtEdit_name->repaint();
     m_ui->pshBut_combine->setChecked(set->LireParam(Set::SET_COMBINE_MODE));
     m_ui->cmbBox_reception->setCurrentIndex(set->LireParam(Set::SET_RECEPTION_MODE));
     m_ui->spnBox_LFOspeed->setValue(set->LireParam(Set::SET_LFO_SPEED));
     m_ui->cmbBox_LFOwave->setCurrentIndex(set->LireParam(Set::SET_LFO_WAVE));
     m_ui->but_AMD->setValue(set->LireParam(Set::SET_LFO_AMD));
     m_ui->but_PMD->setValue(set->LireParam(Set::SET_LFO_PMD));
+//Repeind certains contrôles
+    m_ui->txtEdit_name->repaint();
     attente = false;
 }
 

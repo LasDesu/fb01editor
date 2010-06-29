@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -22,17 +22,24 @@
 #include "midi.h"
 
 /*****************************************************************************/
-uint   MIDI::hndIn   = 0;
-uint   MIDI::hndOut  = 0;
-uint   MIDI::hndCtrl = 0;
-void * MIDI::ins  = NULL;
-void * MIDI::outs = NULL;
-int    MIDI::nbIns  = 0;
-int    MIDI::nbOuts = 0;
-uchar  MIDI::midiChannel = 0;
-uchar  MIDI::velocity = 127;
-uchar  MIDI::sysChannel = 0;
-uchar  MIDI::tampon[2][MIDI_LEN_TAMPON] = {{0,},};
+uint MIDI::hndIn   = 0;
+uint MIDI::hndOut  = 0;
+uint MIDI::hndCtrl = 0;
+int MIDI::indIn    = -1;
+int MIDI::indOut   = -1;
+int MIDI::indCtrl  = -1;
+
+MIDI::DriversStr MIDI::ins = {NULL, 0};
+MIDI::DriversStr MIDI::outs = {NULL, 0};
+
+/*****************************************************************************/
+uchar MIDI::midiChannel = 0;
+uchar MIDI::velocity    = 127;
+uchar MIDI::sysChannel  = 0;
+
+bool  MIDI::relaiIn = true;
+bool  MIDI::relaiCtrl = true;
+uchar MIDI::tampon[2][MIDI_LEN_TAMPON];
 
 /*****************************************************************************/
 #ifdef WIN32
@@ -44,32 +51,36 @@ uchar  MIDI::tampon[2][MIDI_LEN_TAMPON] = {{0,},};
 /*****************************************************************************/
 void MIDI::EnumererDrivers()
 {
-//Libère les drivers
+//Libère les anciens drivers
     LibererDrivers();
 //Enumére les drivers disponibles
 #ifdef WIN32
 //Compte les drivers
-    nbIns  = midiInGetNumDevs();
-    nbOuts = midiOutGetNumDevs();
+    ins.nb  = midiInGetNumDevs();
+    outs.nb = midiOutGetNumDevs();
 //Alloue les configurations
-    if (nbIns != 0) {
-        ins = malloc(sizeof(MIDIINCAPS) * nbIns);
-        if (ins == NULL) throw Memory_ex("Unable to allocate driver list for MIDI in !");
+    if (ins.nb != 0) {
+        ins.desc = malloc(sizeof(MIDIINCAPS) * ins.nb);
+        if (ins.desc == NULL) {
+            ins.nb = 0;
+            throw Memory_ex("Unable to allocate driver list for MIDI IN !");
+        }
     }
-    if (nbOuts != 0) {
-        outs = malloc(sizeof(MIDIOUTCAPS) * nbOuts);
-        if (outs == NULL) throw Memory_ex("Unable to allocate driver list for MIDI out !");
+    if (outs.nb != 0) {
+        outs.desc = malloc(sizeof(MIDIOUTCAPS) * outs.nb);
+        if (outs.desc == NULL) {
+            outs.nb = 0;
+            throw Memory_ex("Unable to allocate driver list for MIDI OUT !");
+        }
     }
 //Récupère les configurations
-    for (int i = 0; i < nbIns; i++)
-        if (midiInGetDevCapsA(i, &((MIDIINCAPS *)ins)[i], sizeof(MIDIINCAPS))
-            != MMSYSERR_NOERROR)
-            throw MIDI_ex("Unable to get device caps for MIDI in !");
+    for (uint i = 0; i < ins.nb; i++)
+        if (midiInGetDevCapsA(i, &((MIDIINCAPS *)ins.desc)[i], sizeof(MIDIINCAPS)) != MMSYSERR_NOERROR)
+            throw MIDI_ex("Unable to get device caps for MIDI IN !");
 
-    for (int i = 0; i < nbOuts; i++)
-        if (midiOutGetDevCapsA(i, &((MIDIOUTCAPS *)outs)[i], sizeof(MIDIOUTCAPS))
-            != MMSYSERR_NOERROR)
-            throw MIDI_ex("Unable to get device caps for MIDI out !");
+    for (uint i = 0; i < outs.nb; i++)
+        if (midiOutGetDevCapsA(i, &((MIDIOUTCAPS *)outs.desc)[i], sizeof(MIDIOUTCAPS)) != MMSYSERR_NOERROR)
+            throw MIDI_ex("Unable to get device caps for MIDI OUT !");
 #endif
 #ifdef LINUX
 
@@ -81,38 +92,34 @@ void MIDI::LibererDrivers()
 //Ferme les communications
 #ifdef WIN32
     if (hndCtrl != 0) DesactiverCtrl();
-    if (hndIn != 0)   DesactiverIn();
-    if (hndOut != 0)  DesactiverOut();
+    if (hndIn   != 0) DesactiverIn();
+    if (hndOut  != 0) DesactiverOut();
 //Libère les configurations
-    if (ins != NULL) free(ins);
-    if (outs != NULL) free(outs);
-//Réinitialise la liste
-    nbIns  = 0; ins  = NULL;
-    nbOuts = 0; outs = NULL;
+    if (ins.desc  != NULL) free(ins.desc);
+    if (outs.desc != NULL) free(outs.desc);
+    ins.nb = 0; outs.nb = 0;
+//Réinitialise le gestionnaire
+    hndIn = 0; hndOut = 0; hndCtrl = 0;
+    indIn = -1; indOut = -1; indCtrl = -1;
 #endif
 }
 
 /*****************************************************************************/
 uint MIDI::NbDriversIn()
 {
-    return nbIns;
+    return ins.nb;
 }
 
 uint MIDI::NbDriversOut()
 {
-    return nbOuts;
-}
-
-uint MIDI::NbDriversCtrl()
-{
-    return nbIns;
+    return outs.nb;
 }
 
 /*****************************************************************************/
 char * MIDI::DriverIn(const int index)
 {
 #ifdef WIN32
-    return ((MIDIINCAPS *)ins)[index].szPname;
+    return ((MIDIINCAPS *)ins.desc)[index].szPname;
 #endif
 #ifdef LINUX
     return NULL;
@@ -122,17 +129,7 @@ char * MIDI::DriverIn(const int index)
 char * MIDI::DriverOut(const int index)
 {
 #ifdef WIN32
-    return ((MIDIOUTCAPS *)outs)[index].szPname;
-#endif
-#ifdef LINUX
-    return NULL;
-#endif
-}
-
-char * MIDI::DriverCtrl(const int index)
-{
-#ifdef WIN32
-    return ((MIDIOUTCAPS *)ins)[index].szPname;
+    return ((MIDIOUTCAPS *)outs.desc)[index].szPname;
 #endif
 #ifdef LINUX
     return NULL;
@@ -142,15 +139,21 @@ char * MIDI::DriverCtrl(const int index)
 /*****************************************************************************/
 void MIDI::ActiverIn(const int index)
 {
-//Désactive le driver
+//Désactive l'ancien driver
     DesactiverIn();
 #ifdef WIN32
 //Ouvre le port en entrée
-    if (midiInOpen(&hndIn, index, (ulong) Callback, 0, CALLBACK_FUNCTION)
-        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to open MIDI in !");
+    if (index == indCtrl)
+        throw MIDI_ex("Cannot select the same driver as MIDI CTRL !");
+    if (midiInOpen(&hndIn, index, (ulong) CallbackIn, 0, CALLBACK_FUNCTION) != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to open MIDI IN !");
+    if (midiInStart(hndIn) != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to start listenning to MIDI IN !");
 #endif
 #ifdef LINUX
 #endif
+//Sauvegarde l'index
+    indIn = index;
 }
 
 void MIDI::DesactiverIn()
@@ -162,29 +165,30 @@ void MIDI::DesactiverIn()
     attente = true;
     midiInStop(hndIn);
     midiInReset(hndIn);
-//Libère le tampon
     DePreparerTampon();
 //Ferme le port
     midiInClose(hndIn);
 #endif
 #ifdef LINUX
 #endif
-//Reset le handle
-    hndIn = 0;
+//Reset le gestionnaire
+    hndIn = 0; indIn = -1;
 }
 
 /*****************************************************************************/
 void MIDI::ActiverOut(const int index)
 {
-//Désactive le port précédent
+//Désactive l'ancien driver
     DesactiverOut();
 #ifdef WIN32
 //Ouvre le port en sortie
-    if (midiOutOpen(&hndOut, index, 0, 0, 0)
-        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to open MIDI out !");
+    if (midiOutOpen(&hndOut, index, 0, 0, 0) != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to open MIDI OUT !");
 #endif
 #ifdef LINUX
 #endif
+//Sauvegarde l'index
+    indOut = index;
 }
 
 void MIDI::DesactiverOut()
@@ -192,33 +196,35 @@ void MIDI::DesactiverOut()
 //Vérifie l'activation
     if (hndOut == 0) return;
 #ifdef WIN32
-//Désactive le controlleur
-    DesactiverCtrl();
-//Ferme le port
+//Arrête l'émission
     midiOutReset(hndOut);
+//Ferme le port
     midiOutClose(hndOut);
 #endif
 #ifdef LINUX
 #endif
-//Reset le handle
-    hndOut = 0;
+//Reset le gestionnaire
+    hndOut = 0; indOut = -1;
 }
 
 /*****************************************************************************/
 void MIDI::ActiverCtrl(const int index)
 {
-//Désactive le port précédent
-    if (!hndOut) throw MIDI_ex("No openned MIDI out port !");
+//Désactive l'ancien driver
     DesactiverCtrl();
 #ifdef WIN32
-//Ouvre le port
-    if (midiInOpen(&hndCtrl, index, 0, 0, CALLBACK_NULL)
-        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to open MIDI ctrl !");
-    if (midiConnect(hndCtrl, hndOut, NULL)
-        != MMSYSERR_NOERROR) throw MIDI_ex("Unable to connect MIDI ctrl to MIDI out");
+//Ouvre le port en entrée
+    if (index == indIn)
+        throw MIDI_ex("Cannot select the same driver as MIDI IN !");
+    if (midiInOpen(&hndCtrl, index, (ulong) CallbackCtrl, 0, CALLBACK_FUNCTION) != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to open MIDI CTRL !");
+    if (midiInStart(hndCtrl) != MMSYSERR_NOERROR)
+        throw MIDI_ex("Unable to start listenning to MIDI CTRL !");
 #endif
 #ifdef LINUX
 #endif
+//Sauvegarde l'index
+    indCtrl = index;
 }
 
 void MIDI::DesactiverCtrl()
@@ -226,15 +232,16 @@ void MIDI::DesactiverCtrl()
 //Vérifie l'activation
     if (hndCtrl == 0) return;
 #ifdef WIN32
-//Ferme le port
-    midiDisconnect(hndCtrl, hndOut, NULL);
+//Arrête l'écoute
+    midiInStop(hndCtrl);
     midiInReset(hndCtrl);
+//Ferme le port
     midiInClose(hndCtrl);
 #endif
 #ifdef LINUX
 #endif
-//Reset le handle
-    hndCtrl = 0;
+//Reset le gestionnaire
+    hndCtrl = 0; indCtrl = -1;
 }
 
 /*****************************************************************************/
@@ -257,7 +264,7 @@ bool MIDI::CtrlOk()
 void MIDI::EnvMsg(uchar * msg)
 {
 //Vérifie l'ouverture
-    if (hndOut == 0) throw MIDI_ex("No openned MIDI out port !");
+    if (hndOut == 0) throw MIDI_ex("No MIDI OUT port openned !");
 #ifdef WIN32
 //Envoie le message
     if (midiOutShortMsg(hndOut, *(ulong *) msg) != MMSYSERR_NOERROR)
@@ -269,29 +276,25 @@ void MIDI::EnvMsg(uchar * msg)
 
 void MIDI::EnvSysEx(uchar * sysEx, const int taille)
 {
+    MIDIHDR head;
 //Vérifie l'ouverture
-    if (hndIn == 0)  throw MIDI_ex("No openned MIDI in port !");
-    if (hndOut == 0) throw MIDI_ex("No openned MIDI out port !");
+    if (hndIn  == 0) throw MIDI_ex("No MIDI IN port openned !");
+    if (hndOut == 0) throw MIDI_ex("No MIDI OUT port openned !");
 #ifdef WIN32
 //Créé l'entête
-    MIDIHDR head;
     memset(&head, 0, sizeof(MIDIHDR));
     head.dwBufferLength = taille;
     head.lpData = (char *) sysEx;
 //Prépare le message
-    if (midiOutPrepareHeader(hndOut, &head, sizeof(MIDIHDR))
-        != MMSYSERR_NOERROR)
+    if (midiOutPrepareHeader(hndOut, &head, sizeof(MIDIHDR)) != MMSYSERR_NOERROR)
         throw MIDI_ex("Unable to prepare header !");
 //Prépare la réception
     PreparerTampon();
     attente = true;
-    midiInStart(hndIn);
 //Envoie le message
-    if (midiOutLongMsg(hndOut, &head, sizeof(MIDIHDR))
-        != MMSYSERR_NOERROR) {
+    if (midiOutLongMsg(hndOut, &head, sizeof(MIDIHDR)) != MMSYSERR_NOERROR) {
     //Supprime l'attente de réception
         attente = false;
-        midiInStop(hndIn);
         midiOutUnprepareHeader(hndOut, &head, sizeof(MIDIHDR));
     //Envoie l'exception
         throw MIDI_ex("Unable to send MIDI data !");
@@ -305,12 +308,13 @@ void MIDI::EnvSysEx(uchar * sysEx, const int taille)
 void MIDI::RecSysEx(uchar * sysEx, const int taille)
 {
     ulong cmpt = 0;
+//Vérifie l'ouverture
+    if (hndIn  == 0) throw MIDI_ex("No MIDI IN port openned !");
 //Attend un message
     while (cmpt < MIDI_ATTENTE_MESSAGE) {
     //Recoit un nouveau message
         if (!attente) {
         //Recopie le message
-            midiInStop(hndIn);
             DePreparerTampon();
             memcpy(sysEx, tampon[1], taille);
             return;
@@ -319,6 +323,7 @@ void MIDI::RecSysEx(uchar * sysEx, const int taille)
         sleep(MIDI_ATTENTE);
         cmpt ++;
     }
+//Delai d'attente dépassé
     throw MIDI_ex("No MIDI data received !");
 }
 
@@ -351,6 +356,17 @@ void MIDI::ChoisirSysChannel(const uchar channel)
 uchar MIDI::SysChannel()
 {
     return sysChannel;
+}
+
+/*****************************************************************************/
+void MIDI::ActiverRelaiIn(const bool active)
+{
+    relaiIn = active;
+}
+
+void MIDI::ActiverRelaiCtrl(const bool active)
+{
+    relaiCtrl = active;
 }
 
 /*****************************************************************************/
@@ -410,7 +426,7 @@ void MIDI::PreparerTampon()
     if (midiInAddBuffer(hndIn, &header, sizeof(MIDIHDR))
         != MMSYSERR_NOERROR) {
         midiInUnprepareHeader(hndIn, &header, sizeof(MIDIHDR));
-        throw MIDI_ex("Unable to assign buffer to MIDI in !");
+        throw MIDI_ex("Unable to add buffer to MIDI IN !");
     }
     prepare = true;
 }
@@ -432,6 +448,7 @@ void MIDI::DePreparerTampon()
 void MIDI::BackupTampon(char * chemin)
 {
     FILE * fichier;
+//Sauvegarde un backup binaire
     fichier = fopen(chemin, "wb+");
     if (fichier == NULL) return;
     fwrite(tampon[1], MIDI_LEN_TAMPON, 1, fichier);
@@ -440,12 +457,36 @@ void MIDI::BackupTampon(char * chemin)
 
 /*****************************************************************************/
 #ifdef WIN32
-void WINAPI MIDI::Callback (uint hmi, uint msg, uint instance, uint param1, uint param2)
+void WINAPI MIDI::CallbackIn(uint hmi, uint msg, uint instance, uint param1, uint param2)
 {
-    if (msg == MM_MIM_LONGDATA && attente) {
-    //Recopie du message
+    switch(msg) {
+    case MIM_LONGDATA :
+    //Récupère le sysEx
+        if (!attente) return;
         memcpy(tampon[1], tampon[0], MIDI_LEN_TAMPON);
         attente = false;
+    break;
+    case MIM_DATA :
+    //Relai les autres données
+        if (hndOut != 0 && relaiIn) midiOutShortMsg(hndOut, param1);
+    break;
     }
 }
+
+void WINAPI MIDI::CallbackCtrl(uint hmi, uint msg, uint instance, uint param1, uint param2)
+{
+    switch(msg) {
+    case MIM_DATA :
+    //Récupère les CCs
+        if ((param1 & 0xF0) == 0xB0) {
+            uchar CC = (param1 >> 8) & 0xFF;
+            uchar valeur = (param1 >> 16) & 0xFF;
+            Automation::ReagirCC(CC, valeur);
+        }
+    //Relai les autres données
+        if (hndOut != 0 && relaiCtrl) midiOutShortMsg(hndOut, param1);
+    break;
+    }
+}
+
 #endif

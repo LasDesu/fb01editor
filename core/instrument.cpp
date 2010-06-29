@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -25,6 +25,7 @@
 Instrument::Instrument(const uchar id, uchar * sysEx)
           : Edit(id, sysEx, INSTRU_LEN_SYSEX, INSTRU_NB_PARAM, 0)
 {
+    CreerCallbacks();
 }
 
 Instrument::~Instrument()
@@ -35,12 +36,12 @@ Instrument::~Instrument()
 const uchar initTab[INSTRU_NB_PARAM] = {1, 0, 127, 0, 2, 0, 0, 2, 127, 63, 0, 0, 4, 1, 1};
 void Instrument::Initialiser()
 {
-    for (int i=0; i < INSTRU_NB_PARAM; i++)
-        EcrireParam(i, initTab[i], true);
+    for (int i = 0; i < INSTRU_NB_PARAM; i++)
+        EcrireParam((INSTRU_PARAM) i, initTab[i], true);
 }
 
 /*****************************************************************************/
-uchar Instrument::LireParam(const uchar param)
+uchar Instrument::LireParam(const INSTRU_PARAM param)
 {
     uchar temp;
     try {
@@ -86,7 +87,7 @@ uchar Instrument::LireParam(const uchar param)
     }
 }
 
-void Instrument::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Instrument::EcrireParam(const INSTRU_PARAM param, const uchar valeur, const bool envoi)
 {
     try {
         switch(param) {
@@ -154,4 +155,34 @@ void Instrument::Envoyer(const uint param)
     envInstrument[6] = sysEx[param] & 0x7F;
 //Envoi le message
     MIDI::EnvSysEx(envInstrument, 8);
+}
+
+/*****************************************************************************/
+void Instrument::CreerCallbacks()
+{
+    char base[AUTO_LEN_NOM], text[AUTO_LEN_NOM];
+    char num;
+//Créé le nom de base
+    num = '1' + id;
+    strcpy(base, "Instrument ");
+    strncat(base, &num, 1);
+//Enregistre les callbacks
+    strcpy(text, base); strcat(text, " volume");
+    Automation::AjouterCallback(this,INSTRU_VOLUME, text);
+    strcpy(text, base); strcat(text, " pan");
+    Automation::AjouterCallback(this, INSTRU_PAN, text);
+    strcpy(text, base); strcat(text, " transpose");
+    Automation::AjouterCallback(this, INSTRU_TRANS, text);
+    strcpy(text, base); strcat(text, " detune");
+    Automation::AjouterCallback(this, INSTRU_DETUNE, text);
+}
+
+void Instrument::AppelerCallback(const uint index, const uchar valeur)
+{
+    switch(index) {
+    case INSTRU_VOLUME : EcrireParam(INSTRU_VOLUME, valeur, true); break;
+    case INSTRU_PAN : EcrireParam(INSTRU_PAN, valeur, true); break;
+    case INSTRU_TRANS : EcrireParam(INSTRU_TRANS, valeur >> 4, true); break;
+    case INSTRU_DETUNE : EcrireParam(INSTRU_DETUNE, valeur, true); break;
+    }
 }

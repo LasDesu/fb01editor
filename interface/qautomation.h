@@ -19,23 +19,42 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ex.h"
+#ifndef QAUTOMATION_H
+#define QAUTOMATION_H
 
-/*****************************************************************************/
-Ex::Ex(const char * info)
-{
-    DefinirInfo(info);
+#include <QWidget>
+
+#include "ui_qautomation.h"
+
+#include "../core/midi.h"
+#include "../core/automation.h"
+
+#include "../excep/midi_ex.h"
+#include "../excep/automation_ex.h"
+
+namespace Ui {
+    class QAutomation;
 }
 
 /*****************************************************************************/
-char * Ex::Info()
-{
-    return info;
-}
+class QAutomation : public QWidget {
+    Q_OBJECT
+public:
+//Intervalle d'actualisation
+    #define QAUTO_INTER_ACTU 200
+//Constructeurs
+    QAutomation(QWidget *parent = 0);
+    ~QAutomation();
+//Actualisation du contrôle
+    void Actualiser();
+    void Rafraichir();
+protected:
+    void changeEvent(QEvent *e);
+private:
+    Ui::QAutomation *m_ui;
+private slots:
+    void on_listWidget_CCs_itemClicked(QListWidgetItem * item);
+    void on_listWidget_FMs_itemClicked(QListWidgetItem * item);
+};
 
-void Ex::DefinirInfo(const char * info)
-{
-    int len = strlen(info);
-    strncpy(this->info, info, min(len + 1, EX_LEN_INFO));
-    this->info[EX_LEN_INFO-1] = 0;
-}
+#endif // QAUTOMATION_H

@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -29,17 +29,24 @@
 #include <strings.h>
 
 #include "../types.h"
-#include "edit.h"
-#include "midi.h"
+#include "../excep/memory_ex.h"
+#include "../excep/midi_ex.h"
+#include "../excep/automation_ex.h"
 
-class Operateur : public Edit {
+
+#include "automation.h"
+#include "automated.h"
+#include "midi.h"
+#include "edit.h"
+
+class Operateur : public Edit, public Automated {
 public :
 //Constantes
     #define OPERATOR_NB_PARAM 16
     #define OPERATOR_LEN_SYSEX 16
 //Paramêtres éditables
     typedef enum {
-        OPERATOR_LEVEL = 0,
+        OPERATOR_VOLUME = 0,
         OPERATOR_LEVEL_CURB,
         OPERATOR_LEVEL_VELOCITY,
         OPERATOR_LEVEL_DEPTH,
@@ -64,10 +71,13 @@ public :
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
-    uchar LireParam(const uchar param);
-    void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
+    uchar LireParam(const OPERATOR_PARAM param);
+    void  EcrireParam(const OPERATOR_PARAM param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param);
+//Callbacks automation
+    void CreerCallbacks();
+    void AppelerCallback(const uint index, const uchar valeur);
 private :
 //Paramêtres globaux
     uchar instru;

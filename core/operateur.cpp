@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -25,7 +25,9 @@
 Operateur::Operateur(const uchar id, uchar * sysEx)
          : Edit(id, sysEx, OPERATOR_LEN_SYSEX, OPERATOR_NB_PARAM, 0)
 {
+//Initialise la classe
     this->instru = 0;
+    CreerCallbacks();
 }
 
 Operateur::~Operateur()
@@ -42,16 +44,16 @@ void Operateur::AssocierInstrument(int index)
 const uchar initTab[OPERATOR_NB_PARAM] = {127, 0, 0, 0, 0, 0, 0, 0, 31, 1, 0, 31, 0, 0, 15, 15};
 void Operateur::Initialiser()
 {
-    for (int i=0; i < OPERATOR_NB_PARAM; i++)
-        EcrireParam(i, initTab[i], true);
+    for (int i = 0; i < OPERATOR_NB_PARAM; i++)
+        EcrireParam((OPERATOR_PARAM) i, initTab[i], true);
 }
 
 /*****************************************************************************/
-uchar Operateur::LireParam(const uchar param)
+uchar Operateur::LireParam(const OPERATOR_PARAM param)
 {
     try {
         switch(param) {
-        case OPERATOR_LEVEL :
+        case OPERATOR_VOLUME :
             return LireParam2Oct(0x0);
         case OPERATOR_LEVEL_CURB :
             return ((LireParam2Oct(0x1) >> 7) & 0x1)
@@ -92,12 +94,12 @@ uchar Operateur::LireParam(const uchar param)
     }
 }
 
-void Operateur::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Operateur::EcrireParam(const OPERATOR_PARAM param, const uchar valeur, const bool envoi)
 {
     uchar byte;
     try {
         switch(param) {
-        case OPERATOR_LEVEL :
+        case OPERATOR_VOLUME :
             byte = valeur & 0x7F;
             EcrireParam2Oct(0x0, byte, envoi);
         break;
@@ -199,4 +201,49 @@ void Operateur::Envoyer(const uint param)
     envOperateur[7] = sysEx[param * 2 + 1] >> 4;
 //Envoi le message
     MIDI::EnvSysEx(envOperateur, 9);
+}
+
+/*****************************************************************************/
+void Operateur::CreerCallbacks()
+{
+    char base[AUTO_LEN_NOM], text[AUTO_LEN_NOM];
+    char num;
+//Créé le nom de base
+    num = '1' + id;
+    strcpy(base, "Operator ");
+    strncat(base, &num, 1);
+//Enregistre les callbacks
+    strcpy(text, base); strcat(text, " attack rate");
+    Automation::AjouterCallback(this, OPERATOR_ATTACK, text);
+    strcpy(text, base); strcat(text, " decay 1 rate");
+    Automation::AjouterCallback(this, OPERATOR_DECAY1, text);
+    strcpy(text, base); strcat(text, " sustain level");
+    Automation::AjouterCallback(this, OPERATOR_SUSTAIN, text);
+    strcpy(text, base); strcat(text, " decay 2 rate");
+    Automation::AjouterCallback(this, OPERATOR_DECAY2, text);
+    strcpy(text, base); strcat(text, " release rate");
+    Automation::AjouterCallback(this, OPERATOR_RELEASE, text);
+    strcpy(text, base); strcat(text, " coarse");
+    Automation::AjouterCallback(this, OPERATOR_COARSE, text);
+    strcpy(text, base); strcat(text, " multiple");
+    Automation::AjouterCallback(this, OPERATOR_MULTIPLE, text);
+    strcpy(text, base); strcat(text, " fine");
+    Automation::AjouterCallback(this, OPERATOR_FINE, text);
+    strcpy(text, base); strcat(text, " volume");
+    Automation::AjouterCallback(this, OPERATOR_VOLUME, text);
+}
+
+void Operateur::AppelerCallback(const uint index, const uchar valeur)
+{
+    switch(index) {
+    case OPERATOR_ATTACK : EcrireParam(OPERATOR_ATTACK, valeur >> 2, true); break;
+    case OPERATOR_DECAY1 : EcrireParam(OPERATOR_DECAY1, valeur >> 2, true); break;
+    case OPERATOR_SUSTAIN : EcrireParam(OPERATOR_SUSTAIN, 0xF - (valeur >> 3), true); break;
+    case OPERATOR_DECAY2 : EcrireParam(OPERATOR_DECAY2, valeur >> 2, true); break;
+    case OPERATOR_RELEASE : EcrireParam(OPERATOR_RELEASE, valeur >> 3, true); break;
+    case OPERATOR_COARSE : EcrireParam(OPERATOR_COARSE, valeur >> 5, true); break;
+    case OPERATOR_MULTIPLE : EcrireParam(OPERATOR_MULTIPLE, valeur >> 3, true); break;
+    case OPERATOR_FINE : EcrireParam(OPERATOR_FINE, valeur >> 4, true); break;
+    case OPERATOR_VOLUME : EcrireParam(OPERATOR_VOLUME, 0x7F - valeur, true); break;
+    }
 }

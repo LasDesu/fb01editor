@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -30,6 +30,7 @@
 
 #include "../types.h"
 #include "../excep/memory_ex.h"
+#include "../excep/midi_ex.h"
 
 #include "midi.h"
 #include "edit.h"

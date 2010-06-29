@@ -32,7 +32,6 @@ class MIDI_ex : public Ex
 {
 public :
     MIDI_ex(const char * info);
-    ~MIDI_ex();
 };
 
 #endif // MIDI_EX_H

@@ -22,11 +22,14 @@
 #ifndef QINSTRUMENT_H
 #define QINSTRUMENT_H
 
-#include <QtGui/QWidget>
-
+#include <QWidget>
 #include "../ui_qinstrument.h"
-#include "../core/instrument.h"
+
 #include "../core/midi.h"
+#include "../core/instrument.h"
+
+#include "../excep/midi_ex.h"
+#include "../excep/memory_ex.h"
 
 namespace Ui {
     class QInstrument;
@@ -36,10 +39,13 @@ namespace Ui {
 class QInstrument : public QWidget {
     Q_OBJECT
 public:
+//Constructeurs
     QInstrument(QWidget *parent = 0);
     ~QInstrument();
+//Association classe - contrôle
     void DefinirInstrument(Instrument * instrument);
-    void Actualiser();
+//Actualisation graphique
+    void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
 private:

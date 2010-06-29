@@ -30,21 +30,20 @@ extern "C"
     #define CALLBACK_NULL     0
     #define CALLBACK_FUNCTION 0x30000
 
-    #define MMSYSERR_NOERROR 0
-    #define MMSYSERR_ERROR 1
+    #define MMSYSERR_NOERROR   0
+    #define MMSYSERR_ERROR     1
     #define MMSYSERR_ALLOCATED 4
 
-    #define MM_MIM_OPEN      0x3C1
-    #define MM_MIM_CLOSE     0x3C2
-    #define MM_MIM_DATA      0x3C3
-    #define MM_MIM_LONGDATA  0x3C4
-    #define MM_MIM_ERROR     0x3C5
-    #define MM_MIM_LONGERROR 0x3C6
-    #define MM_MIM_MOREDATA  0x3CC
-
-    #define MM_MOM_OPEN      0x3C7
-    #define MM_MOM_CLOSE     0x3C8
-    #define MM_MOM_DONE      0x3C9
+    #define MIM_OPEN      0x3C1
+    #define MIM_CLOSE     0x3C2
+    #define MIM_DATA      0x3C3
+    #define MIM_LONGDATA  0x3C4
+    #define MIM_ERROR     0x3C5
+    #define MIM_LONGERROR 0x3C6
+    #define MIM_MOREDATA  0x3CC
+    #define MM_MOM_OPEN   0x3C7
+    #define MM_MOM_CLOSE  0x3C8
+    #define MM_MOM_DONE   0x3C9
 
 //****************************************************************************/
     typedef struct

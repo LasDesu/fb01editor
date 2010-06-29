@@ -23,8 +23,8 @@
 #define QBUTTON_H
 
 /*****************************************************************************/
-#include <QtGui/QPushButton>
-#include <QtGui/QMouseEvent>
+#include <QPushButton>
+#include <QMouseEvent>
 
 /*****************************************************************************/
 class QButton : public QPushButton
@@ -38,6 +38,11 @@ public:
     int  value();
 //Réimplémentation du basesize
     void setBaseSize(const QSize size);
+protected:
+//Réimplémentation de la souris
+    void mouseMoveEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent * event);
+    void mouseReleaseEvent(QMouseEvent * event);
 private:
 //Valeurs du controle
     int valeur, ancValeur;
@@ -46,10 +51,6 @@ private:
     bool click;
     int  clickValeur;
     int  sourisX, sourisY;
-//Réimplémentation de la souris
-    virtual void mouseMoveEvent(QMouseEvent * event);
-    virtual void mousePressEvent(QMouseEvent * event);
-    virtual void mouseReleaseEvent(QMouseEvent * event);
 signals :
     void valueChanged(int value);
 };

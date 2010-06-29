@@ -22,11 +22,14 @@
 #ifndef QOPERATEUR_H
 #define QOPERATEUR_H
 
-#include <QtGui/QWidget>
-
+#include <QWidget>
 #include "../ui_qoperateur.h"
-#include "../core/operateur.h"
+
 #include "../core/midi.h"
+#include "../core/operateur.h"
+
+#include "../excep/midi_ex.h"
+#include "../excep/memory_ex.h"
 
 namespace Ui {
     class QOperateur;
@@ -36,11 +39,14 @@ namespace Ui {
 class QOperateur : public QWidget {
     Q_OBJECT
 public:
+//Constructeurs
     QOperateur(QWidget *parent = 0);
     ~QOperateur();
+//Association classe-contrôle
     void DefinirOP(Operateur * operateur);
-    void ActualiserEnveloppe();
-    void Actualiser();
+//Actualisation graphique
+    void RafraichirEnveloppe();
+    void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
 private:

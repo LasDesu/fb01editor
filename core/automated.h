@@ -19,23 +19,21 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ex.h"
+#ifndef AUTOMATED_H
+#define AUTOMATED_H
 
-/*****************************************************************************/
-Ex::Ex(const char * info)
-{
-    DefinirInfo(info);
-}
+#include <stdlib.h>
+#include <stdio.h>
 
-/*****************************************************************************/
-char * Ex::Info()
-{
-    return info;
-}
+#include "../types.h"
+#include "../win32.h"
+#include "../linux.h"
 
-void Ex::DefinirInfo(const char * info)
+class Automated
 {
-    int len = strlen(info);
-    strncpy(this->info, info, min(len + 1, EX_LEN_INFO));
-    this->info[EX_LEN_INFO-1] = 0;
-}
+public:
+    virtual void CreerCallbacks() = 0;
+    virtual void AppelerCallback(const uint index, const uchar valeur) = 0;
+};
+
+#endif // AUTOMATED_H

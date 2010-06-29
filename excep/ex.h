@@ -33,7 +33,6 @@ public :
     #define EX_LEN_INFO 101
 //Constructeur
     Ex(const char * info);
-    ~Ex();
 //Information sur l'exception
     char * Info();
     void   DefinirInfo(const char * info);

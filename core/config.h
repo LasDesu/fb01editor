@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -27,8 +27,11 @@
 #include <strings.h>
 
 #include "../types.h"
-#include "edit.h"
+#include "../excep/memory_ex.h"
+#include "../excep/midi_ex.h"
+
 #include "midi.h"
+#include "edit.h"
 
 /*****************************************************************************/
 class Config : public Edit {
@@ -47,7 +50,7 @@ public :
     Config();
     ~Config();
 //Modification des propriétés
-    void EcrireParam(const uchar param, const uchar valeur, const bool envoi);
+    void EcrireParam(const CONFIG_PARAM param, const uchar valeur, const bool envoi);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param, const uint valeur);
 };

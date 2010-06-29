@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -21,12 +21,18 @@
 
 #include "qbank.h"
 
-extern QApplication * MainApp;
-
 /*****************************************************************************/
 QBank::QBank(QWidget *parent) : QWidget(parent), m_ui(new Ui::QBank)
 {
     m_ui->setupUi(this);
+//Créé les colonnes
+    m_ui->listWidget_voices->setColumnCount(3);
+    QTableWidgetItem * voice = new QTableWidgetItem("Voice");
+    QTableWidgetItem * nom   = new QTableWidgetItem("Name");
+    QTableWidgetItem * style = new QTableWidgetItem("Style");
+    m_ui->listWidget_voices->setHorizontalHeaderItem(0, voice);
+    m_ui->listWidget_voices->setHorizontalHeaderItem(1, nom);
+    m_ui->listWidget_voices->setHorizontalHeaderItem(2, style);
 }
 
 QBank::~QBank()
@@ -41,15 +47,13 @@ void QBank::DefinirBank(Bank * bank)
 }
 
 /*****************************************************************************/
-void QBank::CreerTable()
+void QBank::Rafraichir()
 {
-    m_ui->voices->setColumnCount(3);
-    QTableWidgetItem * voice = new QTableWidgetItem("Voice");
-    QTableWidgetItem * nom   = new QTableWidgetItem("Name");
-    QTableWidgetItem * style = new QTableWidgetItem("Style");
-    m_ui->voices->setHorizontalHeaderItem(0, voice);
-    m_ui->voices->setHorizontalHeaderItem(1, nom);
-    m_ui->voices->setHorizontalHeaderItem(2, style);
+    attente = true;
+//Actualise l'interface
+    m_ui->lbl_voicename->setText(bank->LireNom());
+    m_ui->lbl_voicename->repaint();
+    attente = false;
 }
 
 /*****************************************************************************/
@@ -135,6 +139,7 @@ void QBank::on_cmbBox_voicestyle_activated(int Index)
     m_ui->table_bank->selectedItems().at(1)->setData(Qt::StatusTipRole, Index);
 }
 */
+
 /*****************************************************************************/
 void QBank::changeEvent(QEvent *e)
 {

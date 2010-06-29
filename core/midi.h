@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -30,6 +30,8 @@
 #include "../win32.h"
 #include "../linux.h"
 
+#include "automation.h"
+
 #include "../excep/midi_ex.h"
 #include "../excep/memory_ex.h"
 
@@ -41,17 +43,16 @@ public:
     static void LibererDrivers();
     static uint NbDriversIn();
     static uint NbDriversOut();
-    static uint NbDriversCtrl();
     static char * DriverIn(const int index);
     static char * DriverOut(const int index);
-    static char * DriverCtrl(const int index);
-//Initialisation des drivers
+//Activation des drivers
     static void ActiverIn(const int index);
     static void ActiverOut(const int index);
     static void ActiverCtrl(const int index);
     static void DesactiverIn();
     static void DesactiverOut();
     static void DesactiverCtrl();
+//Etat des drivers
     static bool InOk();
     static bool OutOk();
     static bool CtrlOk();
@@ -66,21 +67,32 @@ public:
     static uchar Velocity();
     static void  ChoisirSysChannel(const uchar channel);
     static uchar SysChannel();
+//Relaye les messages courts reçus vers la sortie
+    static void ActiverRelaiIn(bool active);
+    static void ActiverRelaiCtrl(bool active);
 //Envoi de notes
     static void NoteOn(const uchar note);
     static void NoteOff(const uchar note);
     static void AllNotesOff();
 //Debug
     static void BackupTampon(char * Chemin);
-protected:
+private:
+//Structures spécifiques
+    typedef struct {
+        void * desc;
+        uint nb;
+    }DriversStr;
 //Objets de la communication
-    static void * ins, * outs;
-    static int   nbIns, nbOuts;
-    static uint  hndIn, hndOut, hndCtrl;
+    static DriversStr ins, outs;
+    static uint hndIn, hndOut, hndCtrl;
+    static int  indIn, indOut, indCtrl;
 //Paramêtres de communication
     static uchar midiChannel;
     static uchar velocity;
     static uchar sysChannel;
+//Paramêtres de relai
+    static bool relaiIn;
+    static bool relaiCtrl;
 //Tampon de réception
     #define MIDI_LEN_TAMPON      0x2000
     #define MIDI_ATTENTE         100
@@ -94,7 +106,8 @@ protected:
 //Gestion des tampons
     static void PreparerTampon();
     static void DePreparerTampon();
-    static void WINAPI Callback (uint hmi, uint msg, uint instance, uint param1, uint param2);
+    static void WINAPI CallbackIn(uint hmi, uint msg, uint instance, uint param1, uint param2);
+    static void WINAPI CallbackCtrl(uint hmi, uint msg, uint instance, uint param1, uint param2);
 #endif
 #ifdef LINUX
 #endif

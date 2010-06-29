@@ -29,6 +29,9 @@
 #include "../core/config.h"
 #include "../core/set.h"
 
+#include "../excep/midi_ex.h"
+#include "../excep/memory_ex.h"
+
 namespace Ui {
     class QConfig;
 }
@@ -37,17 +40,20 @@ namespace Ui {
 class QConfig : public QWidget {
     Q_OBJECT
 public:
+//Constructeurs
     QConfig(QWidget *parent = 0);
     ~QConfig();
+//Association classe - contrôle
     void DefinirConfig(Config * config);
     void DefinirSet(Set * set);
-    void Actualiser();
+//Actualisation graphique
+    void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
 private:
     Ui::QConfig *m_ui;
     Config * config;
-    Set * set;
+    Set    * set;
     bool attente;
 private slots:
     void on_but_syschan_valueChanged(int i);

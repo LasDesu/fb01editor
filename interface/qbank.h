@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -22,7 +22,7 @@
 #ifndef QBANK_H
 #define QBANK_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "../ui_qbank.h"
 
 #include "../core/midi.h"
@@ -36,17 +36,18 @@ namespace Ui {
 class QBank : public QWidget {
     Q_OBJECT
 public:
+//Constructeurs
     QBank(QWidget *parent = 0);
     ~QBank();
+//Association classe - contrôle
     void DefinirBank(Bank * bank);
-    void Actualiser();
+//Actualisation graphique
+    void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
 private:
     Ui::QBank * m_ui;
     Bank * bank;
-//Fonctions internes
-    void CreerTable();
     bool attente;
 private slots:
  //   void on_table_bank_cellClicked(int row, int column);

@@ -42,9 +42,10 @@ QInstrument::~QInstrument()
 }
 
 /*****************************************************************************/
-void QInstrument::Actualiser()
+void QInstrument::Rafraichir()
 {
     attente = true;
+//Actualise le contenu des contrôles
     m_ui->but_notes->setValue(instrument->LireParam(Instrument::INSTRU_NB_NOTES));
     m_ui->but_channel->setValue(instrument->LireParam(Instrument::INSTRU_CHANNEL) + 1);
     m_ui->cmbBox_upper->setCurrentIndex(instrument->LireParam(Instrument::INSTRU_UPPER));

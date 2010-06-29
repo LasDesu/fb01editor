@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -23,37 +23,26 @@
 
 //Objets principaux
 QApplication * application = NULL;
-MainWindow   * mainWindow = NULL;
-Editeur      * editeur = NULL;
+Editeur * editeur = NULL;
 
 /*****************************************************************************/
 int main(int argc, char *argv[])
 {
 //Démarre le programme
     try {
-    //Créé l'application et l'interface
+    //Créé l'application et l'éditeur
         if ((application = new QApplication(argc, argv)) == NULL)
             throw Memory_ex("Unable to create the application !");
-        if ((mainWindow = new MainWindow()) == NULL)
-            throw Memory_ex("Unable to create the window !");
-        mainWindow->show();
-    //Créé l'éditeur
-        try {
-            if ((editeur = new Editeur()) == NULL)
-                throw Memory_ex("Unable to create the editor !");
-        }catch(Memory_ex ex) {
-            QMessageBox::critical(mainWindow, "FB01 SE:", ex.Info());
-            quit(); return 0;
-        }catch(MIDI_ex ex) {
-            QMessageBox::critical(mainWindow, "FB01 SE:", ex.Info());
-            quit(); return 0;
-        }
+        if ((editeur = new Editeur()) == NULL)
+            throw Memory_ex("Unable to create the editor !");
     //Démarre le programme
         application->exec();
+    }catch(MIDI_ex ex) {
+        QMessageBox::critical(NULL, "FB01 SE:", ex.Info());
     }catch (Memory_ex ex) {
-        QMessageBox::critical(mainWindow, "FB01 SE:", ex.Info());
+        QMessageBox::critical(NULL, "FB01 SE:", ex.Info());
     }catch (...) {
-        QMessageBox::critical(mainWindow, "FB01 SE:", "Unknown exception occured !");
+        QMessageBox::critical(NULL, "FB01 SE:", "Unknown exception occured !");
     }
 //Libère les ressources
     quit(); return 0;
@@ -61,9 +50,8 @@ int main(int argc, char *argv[])
 
 void quit()
 {
+    if (editeur != NULL) delete editeur;
     if (application != NULL) delete application;
-    if (mainWindow != NULL)  delete mainWindow;
-    if (editeur != NULL)     delete editeur;
 }
 
 /*****************************************************************************/
@@ -91,17 +79,25 @@ void Editeur::InitialiserEditeur()
     AttribuerInstruments();
     AttribuerVoice();
     AttribuerOperateurs();
-//Initialise les sélections
+//Sélectionne les pages
     ChoisirPageSet(0);
+    ChoisirPageBank(0);
+//Sélectionne les objets
     ChoisirBank(0);
     ChoisirInstru(0);
     ChoisirOP(0);
+//Initialise les automations
+    ActualiserAutomation();
 //Initialisations diverses
     //srand(QTime::currentTime().msec());
 }
 
 void Editeur::InitialiserInterface()
 {
+//Créé la fenêtre
+    if ((mainWindow = new MainWindow()) == NULL)
+        throw Memory_ex("Unable to create the window !");
+    mainWindow->show();
 //Liste les drivers
     mainWindow->on_pshBut_refresh_midi_clicked(false);
 //Désactive l'interface
@@ -120,7 +116,7 @@ void Editeur::TerminerEditeur()
 
 void Editeur::TerminerInterface()
 {
-
+    if (mainWindow != NULL) delete mainWindow;
 }
 
 /*****************************************************************************/
@@ -174,13 +170,26 @@ void Editeur::ConfigurerMenus(const bool actifs)
 void Editeur::ChoisirPageSet(const int page)
 {
 //Sélectionne la page
-    pageSel = page;
-    if (pageSel == 0) {
-        mainWindow->ui->frame_page_1->show();
-        mainWindow->ui->frame_page_2->hide();
+    pageSetSel = page;
+    if (pageSetSel == 0) {
+        mainWindow->ui->frame_set_1->show();
+        mainWindow->ui->frame_set_2->hide();
     }else{
-        mainWindow->ui->frame_page_2->show();
-        mainWindow->ui->frame_page_1->hide();
+        mainWindow->ui->frame_set_2->show();
+        mainWindow->ui->frame_set_1->hide();
+    }
+}
+
+void Editeur::ChoisirPageBank(const int page)
+{
+//Sélectionne la page
+    pageBankSel = page;
+    if (pageBankSel == 0) {
+        mainWindow->ui->frame_bank_1->show();
+        mainWindow->ui->frame_bank_2->hide();
+    }else{
+        mainWindow->ui->frame_bank_2->show();
+        mainWindow->ui->frame_bank_1->hide();
     }
 }
 
@@ -224,32 +233,35 @@ void Editeur::ChoisirOP(const int OP)
 /*****************************************************************************/
 bool Editeur::ActualiserSet()
 {
-//Actualise le set courant
     try {
         set.RecevoirTout();
     }catch (MIDI_ex ex) {
         QMessageBox::information(mainWindow, "FB01 SE:", ex.Info());
         return false;
     }
-    mainWindow->ui->widget_config->Actualiser();
-//Actualise les instruments
-    if (pageSel == 0) {
-        mainWindow->ui->widget_instru_1->Actualiser();
-        mainWindow->ui->widget_instru_2->Actualiser();
-        mainWindow->ui->widget_instru_3->Actualiser();
-        mainWindow->ui->widget_instru_4->Actualiser();
-    }else{
-        mainWindow->ui->widget_instru_5->Actualiser();
-        mainWindow->ui->widget_instru_6->Actualiser();
-        mainWindow->ui->widget_instru_7->Actualiser();
-        mainWindow->ui->widget_instru_8->Actualiser();
-    }
+    RafraichirSet();
     return true;
 }
 
-bool Editeur::ActualiserInstru()
+void Editeur::RafraichirSet()
 {
-//Actualise l'instrument courant
+    if (pageSetSel == 0) {
+        mainWindow->ui->widget_instru_1->Rafraichir();
+        mainWindow->ui->widget_instru_2->Rafraichir();
+        mainWindow->ui->widget_instru_3->Rafraichir();
+        mainWindow->ui->widget_instru_4->Rafraichir();
+    }else{
+        mainWindow->ui->widget_instru_5->Rafraichir();
+        mainWindow->ui->widget_instru_6->Rafraichir();
+        mainWindow->ui->widget_instru_7->Rafraichir();
+        mainWindow->ui->widget_instru_8->Rafraichir();
+    }
+    mainWindow->ui->widget_config->Rafraichir();
+}
+
+/*****************************************************************************/
+bool Editeur::ActualiserVoice()
+{
     voice.AssocierInstrument(instruSel);
     try {
         voice.RecevoirTout();
@@ -257,57 +269,54 @@ bool Editeur::ActualiserInstru()
         QMessageBox::information(mainWindow, "FB01 SE:", ex.Info());
         return false;
     }
-//Actualise la voice et les opérateurs
-    mainWindow->ui->widget_voice->Actualiser();
-    mainWindow->ui->widget_opera_1->Actualiser();
-    mainWindow->ui->widget_opera_2->Actualiser();
-    mainWindow->ui->widget_opera_3->Actualiser();
-    mainWindow->ui->widget_opera_4->Actualiser();
-//Actualise l'état des opérateurs
+    RafraichirVoice();
+    return true;
+}
+
+void Editeur::RafraichirVoice()
+{
+    mainWindow->ui->widget_voice->Rafraichir();
+    mainWindow->ui->widget_opera_1->Rafraichir();
+    mainWindow->ui->widget_opera_2->Rafraichir();
+    mainWindow->ui->widget_opera_3->Rafraichir();
+    mainWindow->ui->widget_opera_4->Rafraichir();
     mainWindow->ui->pshBut_OPon_1->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP1));
     mainWindow->ui->pshBut_OPon_2->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP2));
     mainWindow->ui->pshBut_OPon_3->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP3));
     mainWindow->ui->pshBut_OPon_4->setChecked(editeur->voice.LireParam(Voice::VOICE_ENABLE_OP4));
-    return true;
 }
 
+/*****************************************************************************/
 bool Editeur::ActualiserBanks()
 {
+    RafraichirBanks();
     return true;
 }
 
-/*****************************************************************************/
 void Editeur::RafraichirBanks()
 {
-    mainWindow->ui->widget_bank_1->repaint();
-    mainWindow->ui->widget_bank_2->repaint();
-    mainWindow->ui->widget_bank_3->repaint();
-    mainWindow->ui->widget_bank_4->repaint();
-    mainWindow->ui->widget_bank_5->repaint();
-    mainWindow->ui->widget_bank_6->repaint();
-    mainWindow->ui->widget_bank_7->repaint();
-}
-
-/*****************************************************************************/
-void Editeur::RafraichirSet()
-{
-    mainWindow->ui->widget_config->repaint();
-    if (pageSel == 0) {
-        mainWindow->ui->widget_instru_1->repaint();
-        mainWindow->ui->widget_instru_2->repaint();
-        mainWindow->ui->widget_instru_3->repaint();
-        mainWindow->ui->widget_instru_4->repaint();
+    if (pageBankSel == 0) {
+        mainWindow->ui->widget_bank_1->Rafraichir();
+        mainWindow->ui->widget_bank_2->Rafraichir();
+        mainWindow->ui->widget_bank_3->Rafraichir();
+        mainWindow->ui->widget_bank_4->Rafraichir();
     }else{
-        mainWindow->ui->widget_instru_5->repaint();
-        mainWindow->ui->widget_instru_6->repaint();
-        mainWindow->ui->widget_instru_7->repaint();
-        mainWindow->ui->widget_instru_8->repaint();
+        mainWindow->ui->widget_bank_5->Rafraichir();
+        mainWindow->ui->widget_bank_6->Rafraichir();
+        mainWindow->ui->widget_bank_7->Rafraichir();
     }
 }
 
-void Editeur::RafraichirInstru()
+/*****************************************************************************/
+void Editeur::ActualiserAutomation()
 {
-    mainWindow->ui->widget_voice->repaint();
+    mainWindow->ui->widget_automation->Actualiser();
+    RafraichirAutomation();
+}
+
+void Editeur::RafraichirAutomation()
+{
+    mainWindow->ui->widget_automation->Rafraichir();
 }
 
 /*****************************************************************************/
@@ -368,17 +377,29 @@ void Editeur::Actualiser()
 //Récupère les informations
     if (!ActualiserBanks()) return;
     if (!ActualiserSet()) return;
-    if (!ActualiserInstru()) return;
+    if (!ActualiserVoice()) return;
+    ActualiserAutomation();
 }
 
+void Editeur::Rafraichir()
+{
+//Rafraichit toute l'interface
+    RafraichirBanks();
+    RafraichirSet();
+    RafraichirVoice();
+    RafraichirAutomation();
+}
+
+/*****************************************************************************/
 void Editeur::Reinitialiser()
 {
 //Déselectionne les drivers
+    MIDI::DesactiverIn();
+    MIDI::DesactiverOut();
+    MIDI::DesactiverCtrl();
     mainWindow->ui->cmbBox_MIDIIn->setCurrentIndex(0);
     mainWindow->ui->cmbBox_MIDIOut->setCurrentIndex(0);
     mainWindow->ui->cmbBox_MIDICtrl->setCurrentIndex(0);
-    MIDI::DesactiverIn();
-    MIDI::DesactiverOut();
 //Vérrouille l'interface
     ConfigurerMenus(0);
     ConfigurerOnglets(0);

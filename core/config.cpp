@@ -32,7 +32,7 @@ Config::~Config()
 }
 
 /*****************************************************************************/
-void Config::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Config::EcrireParam(const CONFIG_PARAM param, const uchar valeur, const bool envoi)
 {
     if (!envoi) return;
     switch(param) {

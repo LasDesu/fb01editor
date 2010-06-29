@@ -19,23 +19,8 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ex.h"
+#include "automated.h"
 
-/*****************************************************************************/
-Ex::Ex(const char * info)
+Automated::Automated()
 {
-    DefinirInfo(info);
-}
-
-/*****************************************************************************/
-char * Ex::Info()
-{
-    return info;
-}
-
-void Ex::DefinirInfo(const char * info)
-{
-    int len = strlen(info);
-    strncpy(this->info, info, min(len + 1, EX_LEN_INFO));
-    this->info[EX_LEN_INFO-1] = 0;
 }

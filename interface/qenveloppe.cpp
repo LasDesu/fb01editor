@@ -87,7 +87,7 @@ void QEnveloppe::DefinirEnveloppe(int AR, int DR1, int SL, int DR2, int RR)
 }
 
 /*****************************************************************************/
-void QEnveloppe::paintEvent (QPaintEvent * event)
+void QEnveloppe::paintEvent(QPaintEvent * event)
 {
 //Dessine le widget
     QWidget::paintEvent(event);

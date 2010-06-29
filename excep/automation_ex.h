@@ -19,23 +19,19 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef AUTOMATION_EX_H
+#define AUTOMATION_EX_H
+
+#include <stdlib.h>
+#include <strings.h>
+
+#include "../types.h"
 #include "ex.h"
 
-/*****************************************************************************/
-Ex::Ex(const char * info)
+class Automation_ex : public Ex
 {
-    DefinirInfo(info);
-}
+public :
+    Automation_ex(const char * info);
+};
 
-/*****************************************************************************/
-char * Ex::Info()
-{
-    return info;
-}
-
-void Ex::DefinirInfo(const char * info)
-{
-    int len = strlen(info);
-    strncpy(this->info, info, min(len + 1, EX_LEN_INFO));
-    this->info[EX_LEN_INFO-1] = 0;
-}
+#endif // AUTOMATION_EX_H

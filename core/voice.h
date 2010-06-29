@@ -1,6 +1,6 @@
 /*
     FB01 : Sound editor
-    Copyright Meslin Frédéric 2009
+    Copyright Meslin Frédéric 2009 - 2010
     fredericmeslin@hotmail.com
 
     This file is part of FB01 SE
@@ -30,12 +30,16 @@
 
 #include "../types.h"
 #include "../excep/memory_ex.h"
+#include "../excep/midi_ex.h"
+#include "../excep/automation_ex.h"
 
+#include "automation.h"
+#include "automated.h"
+#include "midi.h"
 #include "edit.h"
 #include "operateur.h"
-#include "midi.h"
 
-class Voice : public Edit {
+class Voice : public Edit, public Automated {
 public :
 //Constantes
     #define VOICE_LEN_SYSEX 139
@@ -47,7 +51,7 @@ public :
     #define VOICE_LEN_NOM 7
 //Paramêtres éditables
     typedef enum {
-        VOICE_ALGORITHME = 0,
+        VOICE_ALGORITHM = 0,
         VOICE_USERCODE,
         VOICE_FEEDBACK,
         VOICE_TRANSPOSE,
@@ -81,14 +85,17 @@ public :
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
-    uchar  LireParam(const uchar param);
-    void   EcrireParam(const uchar param, const uchar valeur, const bool envoi);
+    uchar  LireParam(const VOICE_PARAM param);
+    void   EcrireParam(const VOICE_PARAM param, const uchar valeur, const bool envoi);
     char * LireNom();
     void   EcrireNom(char * nom, const bool envoi);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param);
     void EnvoyerTout();
     void RecevoirTout();
+//Callbacks automation
+    void CreerCallbacks();
+    void AppelerCallback(const uint index, const uchar valeur);
 private :
 //Opérateurs intégrés
     Operateur * operateurs[VOICE_NB_OPS];

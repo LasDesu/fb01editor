@@ -27,6 +27,3 @@ Memory_ex::Memory_ex(const char * info)
 {
 }
 
-Memory_ex::~Memory_ex()
-{
-}
