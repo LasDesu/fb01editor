@@ -26,6 +26,7 @@ Voice::Voice()
      : Edit(0, (uchar *) malloc(VOICE_LEN_SYSEX), VOICE_LEN_SYSEX, VOICE_NB_PARAM, VOICE_OFF_PARAM)
 {
 //Initialise la classe
+    if (sysEx == NULL) throw(Memory_ex("Unable to allocate the voice sysex !"));
     Initialiser();
     CreerCallbacks();
 //Initialise les opérateurs
@@ -39,7 +40,7 @@ Voice::~Voice()
     for (int i = 0; i < 4; i++)
         delete operateurs[i];
 //Libère le sysex
-    free(sysEx);
+    if (sysEx != NULL) free(sysEx);
 }
 
 /*****************************************************************************/
@@ -91,7 +92,7 @@ bool Voice::Charger(FILE * fichier, const short version)
 }
 
 /*****************************************************************************/
-const uchar initTab[VOICE_NB_PARAM] = {8, 0, 0, 0, 1, 0, 4, 1, 127, 0, 0, 1, 0, 0, 0, 0};
+const uchar initTab[VOICE_NB_PARAM] = {7, 0, 0, 2, 1, 0, 4, 2, 127, 0, 0, 1, 0, 0, 0, 0};
 void Voice::Initialiser()
 {
     uchar entVoice[7] = {0xF0, 0x43, 0x75, 0x00, 0x08, 0x00, 0x00};
@@ -100,7 +101,7 @@ void Voice::Initialiser()
     sysEx[7] = 0x00; sysEx[8] = 0x00;
 //Parametres initiaux
     EcrireNom((char *) "none", false);
-    for (int  i = 0; i < VOICE_NB_PARAM; i++)
+    for (int i = 0; i < VOICE_NB_PARAM; i++)
         EcrireParam((VOICE_PARAM) i, initTab[i], false);
 }
 

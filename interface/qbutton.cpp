@@ -98,4 +98,3 @@ void QButton::mouseReleaseEvent(QMouseEvent * event)
 {
     click = false;
 }
-

@@ -29,6 +29,7 @@
 
 #include "../types.h"
 #include "../core/midi.h"
+#include "../core/periph.h"
 
 #include "../excep/midi_ex.h"
 
@@ -37,23 +38,45 @@ class QClavier : public QLabel
 {
     Q_OBJECT
 public:
+//Constantes
+    #define CLAVIER_INTER_ACTU 100
+    #define CLAVIER_NB_TOUCHE  24
+//Disposition du clavier
+    typedef enum {
+        CLAVIER_AUCUNE = 0,
+        CLAVIER_QWERTY,
+        CLAVIER_AZERTY
+    }CLAVIER_DISPO;
+//Structure des touches
+    typedef struct {
+        char touche;
+        bool etat;
+    }ToucheStr;
+//Constructeurs
     QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~QClavier();
+//Paramêtres du clavier
+    void ActiverClavier(const bool actif);
+    void ChoisirClavier(const CLAVIER_DISPO dispo);
 protected:
 //Réimplémentation de la souris
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
     void mouseReleaseEvent(QMouseEvent * event);
-//Réimplémentation du clavier
-    void keyPressEvent(QKeyEvent * event);
-    void keyReleaseEvent(QKeyEvent * event);
+//Actualisation du clavier
+    void timerEvent(QTimerEvent *e);
 private:
 //Note en cours
     #define G_REF 36
     int noteSouris;
+    bool clavierActif;
+    CLAVIER_DISPO clavierDispo;
+//Scan clavier
+    int timer;
+    ToucheStr touches[CLAVIER_NB_TOUCHE];
 //Détermine la note
-    int TrouverNoteSouris(QMouseEvent * event);
-    int TrouverNoteClavier(QKeyEvent * event);
+    int TrouverNoteSouris(const int x, const int y);
+    int TrouverNoteClavier(const int index, const bool shift, const bool control);
 };
 
 #endif // QCLAVIER_H

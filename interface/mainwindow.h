@@ -70,10 +70,14 @@ private slots:
     void on_cmbBox_MIDIIn_activated(int index);
     void on_cmbBox_MIDIOut_activated(int index);
     void on_pshBut_refresh_midi_clicked(bool checked);
+    void on_pshBut_INToOUT_clicked(bool checked);
+    void on_pshBut_CTRLToOUT_clicked(bool checked);
 //Callbacks clavier virtuel
     void on_but_kybchan_valueChanged(int i);
     void on_but_kybvelo_valueChanged(int i);
-//Callbacks menus
+    void on_pshBut_kybQWERTY_clicked(bool checked);
+    void on_pshBut_kybAZERTY_clicked(bool checked);
+//Menu Fichier
     void on_actionQuit_triggered(bool checked = false);
     void on_actionLoad_voice_triggered(bool checked = false);
     void on_actionSave_voice_triggered(bool checked = false);
@@ -87,20 +91,25 @@ private slots:
     void on_actionExport_set_triggered(bool checked = false);
     void on_actionImport_voice_triggered(bool checked = false);
     void on_actionExport_voice_triggered(bool checked = false);
+//Menu édition
     void on_actionInitialize_triggered(bool checked = false);
     void on_actionRandomize_triggered(bool checked = false);
     void on_actionCopy_triggered(bool checked = false);
     void on_actionPaste_triggered(bool checked = false);
     void on_actionExchange_triggered(bool checked = false);
     void on_actionSend_current_config_triggered(bool checked = false);
+    void on_actionSend_current_bank_triggered(bool checked = false);
+    void on_actionGet_current_bank_triggered(bool checked = false);
     void on_actionSend_current_set_triggered(bool checked = false);
     void on_actionGet_current_set_triggered(bool checked = false);
     void on_actionSend_current_voice_triggered(bool checked = false);
     void on_actionGet_current_voice_triggered(bool checked = false);
-    void on_actionAbout_triggered(bool checked = false);
+//Menu aide
+    void on_actionAbout_FB01SE_triggered(bool checked = false);
+    void on_actionAbout_Qt_triggered(bool checked = false);
     void on_actionRead_this_triggered(bool checked = false);
-    void on_actionOnline_help_triggered(bool checked = false);
-//Callbacks sélection
+    void on_actionUser_manual_triggered(bool checked = false);
+//Sélection des banks
     void on_pshBut_bank_cur_1_clicked(bool checked);
     void on_pshBut_bank_cur_2_clicked(bool checked);
     void on_pshBut_bank_cur_3_clicked(bool checked);
@@ -108,6 +117,7 @@ private slots:
     void on_pshBut_bank_cur_5_clicked(bool checked);
     void on_pshBut_bank_cur_6_clicked(bool checked);
     void on_pshBut_bank_cur_7_clicked(bool checked);
+//Sélection des instruments
     void on_pshBut_inst_cur_1_clicked(bool checked);
     void on_pshBut_inst_cur_2_clicked(bool checked);
     void on_pshBut_inst_cur_3_clicked(bool checked);
@@ -116,6 +126,7 @@ private slots:
     void on_pshBut_inst_cur_6_clicked(bool checked);
     void on_pshBut_inst_cur_7_clicked(bool checked);
     void on_pshBut_inst_cur_8_clicked(bool checked);
+//Sélection des opérateurs
     void on_pshBut_op_cur_1_clicked(bool checked);
     void on_pshBut_op_cur_2_clicked(bool checked);
     void on_pshBut_op_cur_3_clicked(bool checked);

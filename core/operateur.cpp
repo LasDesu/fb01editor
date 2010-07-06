@@ -27,6 +27,7 @@ Operateur::Operateur(const uchar id, uchar * sysEx)
 {
 //Initialise la classe
     this->instru = 0;
+    Initialiser();
     CreerCallbacks();
 }
 
@@ -41,11 +42,11 @@ void Operateur::AssocierInstrument(int index)
 }
 
 /*****************************************************************************/
-const uchar initTab[OPERATOR_NB_PARAM] = {127, 0, 0, 0, 0, 0, 0, 0, 31, 1, 0, 31, 0, 0, 15, 15};
+const uchar initTab[OPERATOR_NB_PARAM] = {0, 1, 0, 0, 0, 4, 0, 0, 31, 1, 0, 31, 0, 0, 0, 15};
 void Operateur::Initialiser()
 {
     for (int i = 0; i < OPERATOR_NB_PARAM; i++)
-        EcrireParam((OPERATOR_PARAM) i, initTab[i], true);
+        EcrireParam((OPERATOR_PARAM) i, initTab[i], false);
 }
 
 /*****************************************************************************/

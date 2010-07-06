@@ -68,8 +68,8 @@ public:
     static void  ChoisirSysChannel(const uchar channel);
     static uchar SysChannel();
 //Relaye les messages courts reçus vers la sortie
-    static void ActiverRelaiIn(bool active);
-    static void ActiverRelaiCtrl(bool active);
+    static void ActiverINToOUT(const bool active);
+    static void ActiverCTRLToOUT(const bool active);
 //Envoi de notes
     static void NoteOn(const uchar note);
     static void NoteOff(const uchar note);
@@ -91,8 +91,8 @@ private:
     static uchar velocity;
     static uchar sysChannel;
 //Paramêtres de relai
-    static bool relaiIn;
-    static bool relaiCtrl;
+    static bool relaiIN;
+    static bool relaiCTRL;
 //Tampon de réception
     #define MIDI_LEN_TAMPON      0x2000
     #define MIDI_ATTENTE         100

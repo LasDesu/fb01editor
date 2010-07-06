@@ -37,8 +37,8 @@ uchar MIDI::midiChannel = 0;
 uchar MIDI::velocity    = 127;
 uchar MIDI::sysChannel  = 0;
 
-bool  MIDI::relaiIn = true;
-bool  MIDI::relaiCtrl = true;
+bool  MIDI::relaiIN = true;
+bool  MIDI::relaiCTRL = true;
 uchar MIDI::tampon[2][MIDI_LEN_TAMPON];
 
 /*****************************************************************************/
@@ -359,14 +359,14 @@ uchar MIDI::SysChannel()
 }
 
 /*****************************************************************************/
-void MIDI::ActiverRelaiIn(const bool active)
+void MIDI::ActiverINToOUT(const bool active)
 {
-    relaiIn = active;
+    relaiIN = active;
 }
 
-void MIDI::ActiverRelaiCtrl(const bool active)
+void MIDI::ActiverCTRLToOUT(const bool active)
 {
-    relaiCtrl = active;
+    relaiCTRL = active;
 }
 
 /*****************************************************************************/
@@ -468,7 +468,7 @@ void WINAPI MIDI::CallbackIn(uint hmi, uint msg, uint instance, uint param1, uin
     break;
     case MIM_DATA :
     //Relai les autres données
-        if (hndOut != 0 && relaiIn) midiOutShortMsg(hndOut, param1);
+        if (hndOut != 0 && relaiIN) midiOutShortMsg(hndOut, param1);
     break;
     }
 }
@@ -484,7 +484,7 @@ void WINAPI MIDI::CallbackCtrl(uint hmi, uint msg, uint instance, uint param1, u
             Automation::ReagirCC(CC, valeur);
         }
     //Relai les autres données
-        if (hndOut != 0 && relaiCtrl) midiOutShortMsg(hndOut, param1);
+        if (hndOut != 0 && relaiCTRL) midiOutShortMsg(hndOut, param1);
     break;
     }
 }

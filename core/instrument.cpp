@@ -26,6 +26,7 @@ Instrument::Instrument(const uchar id, uchar * sysEx)
           : Edit(id, sysEx, INSTRU_LEN_SYSEX, INSTRU_NB_PARAM, 0)
 {
     CreerCallbacks();
+    Initialiser();
 }
 
 Instrument::~Instrument()
@@ -33,11 +34,11 @@ Instrument::~Instrument()
 }
 
 /*****************************************************************************/
-const uchar initTab[INSTRU_NB_PARAM] = {1, 0, 127, 0, 2, 0, 0, 2, 127, 63, 0, 0, 4, 1, 1};
+const uchar initTab[INSTRU_NB_PARAM] = {1, 0, 127, 0, 2, 0, 0, 2, 127, 63, 0, 0, 4, 1, 2};
 void Instrument::Initialiser()
 {
     for (int i = 0; i < INSTRU_NB_PARAM; i++)
-        EcrireParam((INSTRU_PARAM) i, initTab[i], true);
+        EcrireParam((INSTRU_PARAM) i, initTab[i], false);
 }
 
 /*****************************************************************************/

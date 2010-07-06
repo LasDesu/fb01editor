@@ -32,6 +32,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     ui->but_kybchan->setValue(1);
     ui->but_kybvelo->setValue(100);
+//Initialise certaines valeurs par défaut
+    MIDI::ActiverINToOUT(true);
+    MIDI::ActiverCTRLToOUT(true);
+    MIDI::ChoisirSysChannel(0);
 //Lance de timer d'actualisation
     timer = startTimer(EDITEUR_INTER_ACTU);
 }
@@ -50,7 +54,7 @@ void MainWindow::on_actionLoad_bank_triggered(bool checked)
     FILE * fichier = editeur->ChargerFichier(Editeur::FICHIER_BANK, &version);
     if (fichier == NULL) return;
 //Charge la bank
-    if (!editeur->banks[editeur->bankSel].Charger(fichier, version)) goto ErrorReading;
+    if (!editeur->banks[editeur->bankSel]->Charger(fichier, version)) goto ErrorReading;
     editeur->RafraichirBanks();
 //Ferme le fichier
     fclose(fichier);
@@ -67,7 +71,7 @@ void MainWindow::on_actionSave_bank_triggered(bool checked)
     FILE * fichier = editeur->EnregistrerFichier(Editeur::FICHIER_BANK);
     if (fichier == NULL) return;
 //Sauvegarde la bank
-    if (!editeur->banks[editeur->bankSel].Enregistrer(fichier)) goto ErrorWriting;
+    if (!editeur->banks[editeur->bankSel]->Enregistrer(fichier)) goto ErrorWriting;
 //Ferme le fichier
     fclose(fichier);
     return;
@@ -354,44 +358,105 @@ void MainWindow::on_actionExchange_triggered(bool checked)
 }
 
 /*****************************************************************************/
+void MainWindow::on_actionSend_current_config_triggered(bool checked)
+{
+    try {
+        editeur->config.EnvoyerTout();
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+    }
+}
+
+/*****************************************************************************/
+void MainWindow::on_actionSend_current_bank_triggered(bool checked)
+{
+
+}
+
+void MainWindow::on_actionGet_current_bank_triggered(bool checked)
+{
+
+}
+
+/*****************************************************************************/
+void MainWindow::on_actionSend_current_set_triggered(bool checked)
+{
+    try {
+        editeur->set.EnvoyerTout();
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+    }
+}
+
+void MainWindow::on_actionGet_current_set_triggered(bool checked)
+{
+    editeur->ActualiserSet();
+    editeur->RafraichirSet();
+}
+
+/*****************************************************************************/
+void MainWindow::on_actionSend_current_voice_triggered(bool checked)
+{
+    try {
+        editeur->voice.EnvoyerTout();
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(this, "FB01 SE:", ex.Info());
+    }
+}
+
+void MainWindow::on_actionGet_current_voice_triggered(bool checked)
+{
+    editeur->ActualiserVoice();
+    editeur->RafraichirVoice();
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionQuit_triggered(bool checked)
 {
     application->quit();
 }
 
 /*****************************************************************************/
-void MainWindow::on_actionAbout_triggered(bool checked)
+void MainWindow::on_actionAbout_FB01SE_triggered(bool checked)
 {
-    QString Text;
+    QString text;
 //Informations sur le logiciel
-    Text.append("FB01 Sound Editor : V1.0 (06/02/10)\nCopyright Meslin Frederic 2010\nfredericmeslin@hotmail.com\n\n");
-    Text.append("A free computer editor for the Yamaha FB01 sound module\n");
-    Text.append("This program is under a GPL license, please read the COPYING file.\n\n");
-    Text.append("Main website : http://sourceforge.net/projects/fb01editor/\n");
-    QMessageBox::information(this, "FB01 SE :", Text);
+    text.append("FB01 Sound Editor : V1.0 (06/02/10)\nCopyright Meslin Frederic 2010\nfredericmeslin@hotmail.com\n\n");
+    text.append("A free computer editor for the Yamaha FB01 sound module\n");
+    text.append("This program is under a GPL license, please read the COPYING file.\n\n");
+    text.append("Main website : http://sourceforge.net/projects/fb01editor/\n");
+    QMessageBox::information(this, "FB01 SE :", text);
 }
 
+void MainWindow::on_actionAbout_Qt_triggered(bool checked)
+{
+    QString Text;
+//Informations sur la bibliothèque Qt
+    QMessageBox::aboutQt(this, "FB01 SE:");
+}
+
+/*****************************************************************************/
 void MainWindow::on_actionRead_this_triggered(bool checked)
 {
-    QString Text;
+    QString text;
 //Informations supplémentaires
-    Text.append("--- Thank you for using this program. ---\n");
-    Text.append("Please visit the FB01 website for updates, bug reports and tricks.\n\n");
-    Text.append("If you want to help the project author, you can either donate\n");
-    Text.append("or get involved into the developpment of the editor, by posting\n");
-    Text.append("bug reports or directly contacting me by email or on sourceforge.\n");
-    QMessageBox::information(this, "FB01 SE :", Text);
+    text.append("--- Thank you for using this program. ---\n");
+    text.append("Please visit the FB01 website for updates, bug reports and tricks.\n\n");
+    text.append("If you want to help the project author, you can either donate\n");
+    text.append("or get involved into the developpment of the editor, by posting\n");
+    text.append("bug reports or directly contacting me by email or on sourceforge.\n");
+    QMessageBox::information(this, "FB01 SE :", text);
 }
 
-void MainWindow::on_actionOnline_help_triggered(bool checked)
+void MainWindow::on_actionUser_manual_triggered(bool checked)
 {
-    QString Text;
+    QString text;
 //Informations supplémentaires
-    Text.append("Please look for the :\n\n");
-    Text.append("help.pdf file (ENGLISH)\n");
-    Text.append("aide.pdf file (FRANCAIS)\n\n");
-    Text.append("in the directory of the editor.\n");
-    QMessageBox::information(this, "FB01 SE :", Text);
+    text.append("Please look for the :\n\n");
+    text.append("help.pdf file (ENGLISH)\n");
+    text.append("aide.pdf file (FRANCAIS)\n\n");
+    text.append("in the directory of the editor.\n");
+    QMessageBox::information(this, "FB01 SE :", text);
 }
 
 /*****************************************************************************/
@@ -442,7 +507,6 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
     {
     //Déselectionne le driver
         MIDI::DesactiverOut();
-        ui->cmbBox_MIDICtrl->setCurrentIndex(0);
         editeur->ConfigurerOnglets(false);
         editeur->ConfigurerMenus(false);
     }else{
@@ -460,7 +524,6 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
     }
 }
 
-/*****************************************************************************/
 void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 {
 //Initialise la liste des drivers
@@ -492,6 +555,17 @@ void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
 }
 
 /*****************************************************************************/
+void MainWindow::on_pshBut_INToOUT_clicked(bool checked)
+{
+    MIDI::ActiverINToOUT(checked);
+}
+
+void MainWindow::on_pshBut_CTRLToOUT_clicked(bool checked)
+{
+    MIDI::ActiverCTRLToOUT(checked);
+}
+
+/*****************************************************************************/
 void MainWindow::on_but_kybchan_valueChanged(int i)
 {
     MIDI::ChoisirMidiChannel(i-1);
@@ -502,46 +576,24 @@ void MainWindow::on_but_kybvelo_valueChanged(int i)
     MIDI::ChoisirVelocity(i);
 }
 
-/*****************************************************************************/
-void MainWindow::on_actionSend_current_config_triggered(bool checked)
+void MainWindow::on_pshBut_kybQWERTY_clicked(bool checked)
 {
-    try {
-        editeur->config.EnvoyerTout();
-    }catch(MIDI_ex ex) {
-        QMessageBox::information(this, "FB01 SE:", ex.Info());
-    }
+//Active la prise en charge du clavier
+    if (checked) {
+        ui->lbl_clavier->ChoisirClavier(QClavier::CLAVIER_QWERTY);
+        ui->lbl_clavier->ActiverClavier(true);
+        ui->pshBut_kybAZERTY->setChecked(false);
+    }else ui->lbl_clavier->ActiverClavier(false);
 }
 
-/*****************************************************************************/
-void MainWindow::on_actionSend_current_set_triggered(bool checked)
+void MainWindow::on_pshBut_kybAZERTY_clicked(bool checked)
 {
-    try {
-        editeur->set.EnvoyerTout();
-    }catch(MIDI_ex ex) {
-        QMessageBox::information(this, "FB01 SE:", ex.Info());
-    }
-}
-
-void MainWindow::on_actionGet_current_set_triggered(bool checked)
-{    
-    editeur->ActualiserSet();
-    editeur->RafraichirSet();
-}
-
-/*****************************************************************************/
-void MainWindow::on_actionSend_current_voice_triggered(bool checked)
-{
-    try {
-        editeur->voice.EnvoyerTout();
-    }catch(MIDI_ex ex) {
-        QMessageBox::information(this, "FB01 SE:", ex.Info());
-    }
-}
-
-void MainWindow::on_actionGet_current_voice_triggered(bool checked)
-{
-    editeur->ActualiserVoice();
-    editeur->RafraichirVoice();
+//Active la prise en charge du clavier
+    if (checked) {
+        ui->lbl_clavier->ChoisirClavier(QClavier::CLAVIER_AZERTY);
+        ui->lbl_clavier->ActiverClavier(true);
+        ui->pshBut_kybQWERTY->setChecked(false);
+    }else ui->lbl_clavier->ActiverClavier(false);
 }
 
 /*****************************************************************************/

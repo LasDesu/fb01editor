@@ -19,46 +19,27 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BANK_H
-#define BANK_H
-
-#include <QMessageBox>
+#ifndef PERIPH_H
+#define PERIPH_H
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "../types.h"
+#include "../win32.h"
+#include "../linux.h"
+
 #include "../excep/memory_ex.h"
-#include "../excep/midi_ex.h"
 
-#include "midi.h"
-#include "edit.h"
-#include "bank_voice.h"
-
-class Bank : public Edit {
-public :
-//Paramêtres éditables
-    #define BANK_LEN_NOM 8
-    #define BANK_LEN_SYSEX 0x18DB
-    #define BANK_NB_VOICES 48
-//Constructeurs
-    Bank(const uchar id);
-    ~Bank();
-//Modification des parametres
-    char * LireNom();
-    void   EcrireNom(char * nom, const bool envoi);
-//Chargement / déchargement
-    bool Enregistrer(FILE * fichier);
-    bool Charger(FILE * fichier, const short version);
-//Edition de l'objet
-    void Initialiser();
-//Envoi / Reception de l'objet
-    void EnvoyerTout();
-    void RecevoirTout();
-private :
-//Voices de la bank
-    Bank_voice * voices[BANK_NB_VOICES];
+class Periph
+{
+public:
+//Détection de touches clavier
+    static bool ToucheASCII(const char code);
+    static bool ToucheShift();
+    static bool ToucheCtrl();
+    static bool ToucheAlt();
 };
 
-#endif
+#endif // PERIPH_H

@@ -73,6 +73,11 @@ Editeur::~Editeur()
 /*****************************************************************************/
 void Editeur::InitialiserEditeur()
 {
+//Alloue les banks
+    for (int i = 0; i < EDITEUR_NB_BANK; i++) {
+        banks[i] = new Bank(i);
+        if (banks[i] == NULL) throw(Memory_ex("Unable to allocate bank space !"));
+    }
 //Attribue les classes à l'interface
     AttribuerConfig();
     AttribuerBanks();
@@ -112,6 +117,9 @@ void Editeur::TerminerEditeur()
     MIDI::DesactiverIn();
     MIDI::DesactiverOut();
     MIDI::LibererDrivers();
+//Libère les banks
+    for (int i = 0; i < EDITEUR_NB_BANK; i++)
+        if (banks[i] != NULL) delete banks[i];
 }
 
 void Editeur::TerminerInterface()
@@ -123,6 +131,7 @@ void Editeur::TerminerInterface()
 void Editeur::ConfigurerOnglets(const bool actifs)
 {
 //Active ou désactive les onglets
+    mainWindow->ui->tab_automation->setEnabled(actifs);
     mainWindow->ui->tab_banks->setEnabled(actifs);
     mainWindow->ui->tab_set->setEnabled(actifs);
     mainWindow->ui->tab_operas->setEnabled(actifs);
@@ -130,8 +139,7 @@ void Editeur::ConfigurerOnglets(const bool actifs)
 //Active ou désactive le cadre de config
     mainWindow->ui->widget_config->setEnabled(actifs);
 //Sélectionne l'onglet de configuration
-    if (!actifs)
-        mainWindow->ui->tabWidget->setCurrentIndex(0);
+    if (!actifs) mainWindow->ui->tabWidget->setCurrentIndex(0);
 }
 
 void Editeur::ConfigurerMenus(const bool actifs)
@@ -157,11 +165,11 @@ void Editeur::ConfigurerMenus(const bool actifs)
     mainWindow->ui->actionExchange->setEnabled(actifs);
 //Menu FB01
     mainWindow->ui->actionGet_current_config->setEnabled(actifs);
-    mainWindow->ui->actionGet_bank->setEnabled(actifs);
+    mainWindow->ui->actionGet_current_bank->setEnabled(actifs);
     mainWindow->ui->actionGet_current_set->setEnabled(actifs);
     mainWindow->ui->actionGet_current_voice->setEnabled(actifs);
     mainWindow->ui->actionSend_current_config->setEnabled(actifs);
-    mainWindow->ui->actionSend_bank->setEnabled(actifs);
+    mainWindow->ui->actionSend_current_bank->setEnabled(actifs);
     mainWindow->ui->actionSend_current_set->setEnabled(actifs);
     mainWindow->ui->actionSend_current_voice->setEnabled(actifs);
 }
@@ -330,13 +338,13 @@ void Editeur::AttribuerConfig()
 void Editeur::AttribuerBanks()
 {
 //Attribue les banks aux contrôles
-    mainWindow->ui->widget_bank_1->DefinirBank(&banks[0]);
-    mainWindow->ui->widget_bank_2->DefinirBank(&banks[1]);
-    mainWindow->ui->widget_bank_3->DefinirBank(&banks[2]);
-    mainWindow->ui->widget_bank_4->DefinirBank(&banks[3]);
-    mainWindow->ui->widget_bank_5->DefinirBank(&banks[4]);
-    mainWindow->ui->widget_bank_6->DefinirBank(&banks[5]);
-    mainWindow->ui->widget_bank_7->DefinirBank(&banks[6]);
+    mainWindow->ui->widget_bank_1->DefinirBank(banks[0]);
+    mainWindow->ui->widget_bank_2->DefinirBank(banks[1]);
+    mainWindow->ui->widget_bank_3->DefinirBank(banks[2]);
+    mainWindow->ui->widget_bank_4->DefinirBank(banks[3]);
+    mainWindow->ui->widget_bank_5->DefinirBank(banks[4]);
+    mainWindow->ui->widget_bank_6->DefinirBank(banks[5]);
+    mainWindow->ui->widget_bank_7->DefinirBank(banks[6]);
 }
 
 void Editeur::AttribuerInstruments()

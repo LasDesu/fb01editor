@@ -23,17 +23,23 @@
 #define WIN32_H
 #ifdef WIN32
 
+//Inclusions génériques
 extern "C"
 {
     #define WINAPI __stdcall
-
     #define CALLBACK_NULL     0
     #define CALLBACK_FUNCTION 0x30000
 
+    void WINAPI Sleep(ulong dwMilliseconds);
+    #define sleep(t) (Sleep(t))
+}
+
+//Inclusions MIDI
+extern "C"
+{
     #define MMSYSERR_NOERROR   0
     #define MMSYSERR_ERROR     1
     #define MMSYSERR_ALLOCATED 4
-
     #define MIM_OPEN      0x3C1
     #define MIM_CLOSE     0x3C2
     #define MIM_DATA      0x3C3
@@ -45,7 +51,6 @@ extern "C"
     #define MM_MOM_CLOSE  0x3C8
     #define MM_MOM_DONE   0x3C9
 
-//****************************************************************************/
     typedef struct
     {
         ushort wMid;
@@ -80,7 +85,6 @@ extern "C"
         uint dwReserved[4];
     } MIDIHDR;
 
-//****************************************************************************/
     uint WINAPI midiOutGetNumDevs(void);
     uint WINAPI midiInGetNumDevs(void);
     uint WINAPI midiOutOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
@@ -104,10 +108,26 @@ extern "C"
     uint WINAPI midiOutLongMsg(uint hmo, MIDIHDR * lpMidiOutHdr, uint cbMidiOutHdr);
     uint WINAPI midiOutShortMsg(uint hmo, ulong dwMsg);
     uint WINAPI midiInAddBuffer(uint hmi, MIDIHDR * lpMidiInHdr, uint cbMidiInHdr);
-
-//****************************************************************************/
-    void WINAPI Sleep(ulong dwMilliseconds);
-    #define sleep(t) (Sleep(t))
 }
+
+//Inclusions périphériques
+extern "C"
+{
+    #define VK_SHIFT	16
+    #define VK_CONTROL	17
+    #define VK_MENU	18
+    #define VK_LSHIFT   0xA0
+    #define VK_RSHIFT   0xA1
+    #define VK_LCONTROL 0xA2
+    #define VK_RCONTROL 0xA3
+    #define VK_LMENU	0xA4
+    #define VK_RMENU	0xA5
+
+    bool  WINAPI EnableWindow(uint hWnd, bool bEnable);
+    short WINAPI GetAsyncKeyState(int vKey);
+    short WINAPI VkKeyScanA(char ch);
+    #define VkKeyScan VkKeyScanA
+}
+
 #endif
 #endif // WIN32_H

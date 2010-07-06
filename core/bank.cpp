@@ -22,10 +22,11 @@
 #include "bank.h"
 
 /*****************************************************************************/
-Bank::Bank()
-    : Edit(0, (uchar *) malloc(BANK_LEN_SYSEX), BANK_LEN_SYSEX, 0, 0)
+Bank::Bank(const uchar id)
+    : Edit(id, (uchar *) malloc(BANK_LEN_SYSEX), BANK_LEN_SYSEX, 0, 0)
 {
 //Initialise la classe
+    if (sysEx == NULL) throw(Memory_ex("Unable to allocate the bank sysex !"));
     Initialiser();
 //Initialise les voices
     memset(voices, 0, sizeof(Bank_voice *) * BANK_NB_VOICES);
@@ -41,7 +42,7 @@ Bank::~Bank()
     for (int i = 0; i < BANK_NB_VOICES; i ++)
         if (voices[i] != NULL) delete voices[i];
 //Libère le sysex
-    free(sysEx);
+    if (sysEx != NULL) free(sysEx);
 }
 
 /*****************************************************************************/

@@ -93,7 +93,7 @@ void Block::EcrireParam2Oct(const uint param, const uchar valeur, const bool env
 void Block::Initialiser(const uchar * entete, const uint lenEntete)
 {
     if (lenSysEx == 0) return;
-    memset(sysEx, lenSysEx, 0);
+    memset(sysEx, 0, lenSysEx);
     memcpy(sysEx, entete, lenEntete);
     sysEx[lenSysEx-1] = 0xF7;
 }

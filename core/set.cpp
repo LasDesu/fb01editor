@@ -26,6 +26,7 @@ Set::Set()
    : Edit(0, (uchar *) malloc(SET_LEN_SYSEX), SET_LEN_SYSEX, 0, SET_OFF_PARAM)
 {
 //Initialise la classe
+    if (sysEx == NULL) throw(Memory_ex("Unable to allocate the set sysex !"));
     Initialiser();
     CreerCallbacks();
 //Initialise les instruments
@@ -42,7 +43,7 @@ Set::~Set()
     for (int i = 0; i < SET_NB_INSTRU; i++)
         if (instruments[i] != NULL) delete instruments[i];
 //Libère le sysex
-    free(sysEx);
+    if (sysEx != NULL) free(sysEx);
 }
 
 /*****************************************************************************/

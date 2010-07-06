@@ -43,7 +43,8 @@ HEADERS += types.h \
     interface/qautomation.h \
     core/automation.h \
     core/automated.h \
-    excep/automation_ex.h
+    excep/automation_ex.h \
+    core/periph.h
 RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
@@ -70,7 +71,8 @@ SOURCES += core/set.cpp \
     excep/ex.cpp \
     interface/qautomation.cpp \
     core/automation.cpp \
-    excep/automation_ex.cpp
+    excep/automation_ex.cpp \
+    core/periph.cpp
 winnt { 
     DEFINES += WIN32
     LIBS += -luser32 \

@@ -25,7 +25,7 @@
 QBank::QBank(QWidget *parent) : QWidget(parent), m_ui(new Ui::QBank)
 {
     m_ui->setupUi(this);
-//Créé les colonnes
+//Créé les colonnes de la table
     m_ui->listWidget_voices->setColumnCount(3);
     QTableWidgetItem * voice = new QTableWidgetItem("Voice");
     QTableWidgetItem * nom   = new QTableWidgetItem("Name");
@@ -43,7 +43,10 @@ QBank::~QBank()
 /*****************************************************************************/
 void QBank::DefinirBank(Bank * bank)
 {
+    QString num;
     this->bank = bank;
+    num.setNum(bank->LireId() + 1, 10);
+    this->m_ui->grpBox_bank->setTitle((QString) "Bank " + num + " :");
 }
 
 /*****************************************************************************/

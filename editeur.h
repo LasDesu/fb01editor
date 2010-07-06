@@ -50,7 +50,7 @@ class Editeur {
     friend class MainWindow;
 public :
 //Constantes
-    #define EDITEUR_NB_BANK    4
+    #define EDITEUR_NB_BANK 7
     #define EDITEUR_INTER_ACTU 500
     typedef enum {
         FICHIER_VOICE = 0,
@@ -96,9 +96,9 @@ public :
     void RafraichirAutomation();
 private :
 //Objets de l'éditeur
-    Bank   banks[EDITEUR_NB_BANK];
-    Set    set;
-    Voice  voice;
+    Bank * banks[EDITEUR_NB_BANK];
+    Set set;
+    Voice voice;
     Config config;
 //Fenêtre de l'éditeur
     MainWindow * mainWindow;

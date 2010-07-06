@@ -24,13 +24,56 @@
 /*****************************************************************************/
 QClavier::QClavier(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
+    clavierDispo = CLAVIER_AUCUNE;
+    ChoisirClavier(CLAVIER_QWERTY);
+    clavierActif = false;
+    ActiverClavier(true);
     noteSouris = -1;
-    setFocusPolicy(Qt::StrongFocus);
 }
 
 QClavier::~QClavier()
 {
+    if (timer != 0) this->killTimer(timer);
     MIDI::AllNotesOff();
+}
+
+/*****************************************************************************/
+void QClavier::ActiverClavier(const bool actif)
+{
+    if (clavierActif == actif) return;
+//Initialise le clavier
+    if (actif) {
+        timer = this->startTimer(CLAVIER_INTER_ACTU);
+    }else{
+        if (timer != 0) this->killTimer(timer);
+        try {
+            timer = 0; noteSouris = -1;
+            MIDI::AllNotesOff();
+        }catch (MIDI_ex ex) { return; }
+    }
+//Sauvegarde l'état
+    clavierActif = actif;
+}
+
+const char dispoQWERTY[CLAVIER_NB_TOUCHE] = {'Q', '2', 'W', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
+                                             'Z', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', 'M'};
+const char dispoAZERTY[CLAVIER_NB_TOUCHE] = {'A', '2', 'Z', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
+                                             'W', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', ','};
+void QClavier::ChoisirClavier(const CLAVIER_DISPO dispo)
+{
+    const char * table;
+    if (clavierDispo == dispo) return;
+//Choisit le tableau
+    switch (dispo) {
+    case CLAVIER_QWERTY: table = dispoQWERTY; break;
+    case CLAVIER_AZERTY: table = dispoAZERTY; break;
+    default : return;
+    }
+//Effectue le mapping clavier
+    for (int i = 0; i < CLAVIER_NB_TOUCHE; i++) {
+        touches[i].touche = table[i];
+        touches[i].etat = false;
+    }
 }
 
 /*****************************************************************************/
@@ -39,10 +82,25 @@ void QClavier::mouseMoveEvent(QMouseEvent * event)
     if (event->buttons()) mousePressEvent(event);
 }
 
+
+void QClavier::timerEvent(QTimerEvent *e)
+{
+    for (int i = 0; i < CLAVIER_NB_TOUCHE; i ++) {
+        bool etat = Periph::ToucheASCII(touches[i].touche);
+        if (etat != touches[i].etat) {
+            try {
+                if (etat) MIDI::NoteOn(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
+                else MIDI::NoteOff(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
+                touches[i].etat = etat;
+            }catch (MIDI_ex ex) { return; }
+        }
+    }
+}
+
 /*****************************************************************************/
 void QClavier::mousePressEvent(QMouseEvent * event)
 {
-    int note = TrouverNoteSouris(event);
+    int note = TrouverNoteSouris(event->x(), event->y());
     if (note != noteSouris) {
         try {
             MIDI::NoteOff(noteSouris);
@@ -52,18 +110,6 @@ void QClavier::mousePressEvent(QMouseEvent * event)
     }
 }
 
-void QClavier::keyPressEvent(QKeyEvent * event)
-{
-    if (event->isAutoRepeat()) return;
-    int note = TrouverNoteClavier(event);
-    if (note >= 0) {
-        try {
-            MIDI::NoteOn(note);
-        }catch (MIDI_ex ex) { return; }
-    }
-}
-
-/*****************************************************************************/
 void QClavier::mouseReleaseEvent(QMouseEvent * event)
 {
     if (noteSouris != -1) {
@@ -74,60 +120,39 @@ void QClavier::mouseReleaseEvent(QMouseEvent * event)
     }
 }
 
-void QClavier::keyReleaseEvent(QKeyEvent * event)
-{
-    int note = TrouverNoteClavier(event);
-    if (note >= 0) {
-        try {
-            MIDI::NoteOff(note);
-        }catch (MIDI_ex ex) { return; }
-    }
-}
-
-
 /*****************************************************************************/
-int QClavier::TrouverNoteSouris(QMouseEvent * event)
+int QClavier::TrouverNoteSouris(const int x, const int y)
 {
 //Détermine l'octave
-    int octave = event->x() / 56;
-    int reste  = event->x() % 56;
-    int note   = octave * 12;
+    int octave   = x / 56;
+    int position = x % 56;
+    int note     = octave * 12;
 //Détermine la touche du piano
-    if (event->y() < 24)
+    if (y < 24)
     {
-        if      (reste > 4  && reste < 12) note += 1;
-        else if (reste > 12 && reste < 20) note += 3;
-        else if (reste > 28 && reste < 36) note += 6;
-        else if (reste > 36 && reste < 44) note += 8;
-        else if (reste > 44 && reste < 52) note += 10;
+        if      (position > 4  && position < 12) note += 1;
+        else if (position > 12 && position < 20) note += 3;
+        else if (position > 28 && position < 36) note += 6;
+        else if (position > 36 && position < 44) note += 8;
+        else if (position > 44 && position < 52) note += 10;
         else goto Blanche;
     }else{
     Blanche :
-        if      (reste > 8  && reste < 16) note += 2;
-        else if (reste > 16 && reste < 24) note += 4;
-        else if (reste > 24 && reste < 32) note += 5;
-        else if (reste > 32 && reste < 40) note += 7;
-        else if (reste > 40 && reste < 48) note += 9;
-        else if (reste > 48 && reste < 56) note += 11;
+        if      (position > 8  && position < 16) note += 2;
+        else if (position > 16 && position < 24) note += 4;
+        else if (position > 24 && position < 32) note += 5;
+        else if (position > 32 && position < 40) note += 7;
+        else if (position > 40 && position < 48) note += 9;
+        else if (position > 48 && position < 56) note += 11;
     }
  //Retourne la note
-    return (note > 127) ? 127 : note;
+    return min(note, 127);
 }
 
-const int clavierNotes[] = {Qt::Key_Q, Qt::Key_2, Qt::Key_W, Qt::Key_3, Qt::Key_E, Qt::Key_R, Qt::Key_5, Qt::Key_T, Qt::Key_6, Qt::Key_Y, Qt::Key_7, Qt::Key_U,
-                            Qt::Key_Z, Qt::Key_S, Qt::Key_X, Qt::Key_D, Qt::Key_C, Qt::Key_V, Qt::Key_G, Qt::Key_B, Qt::Key_H, Qt::Key_N, Qt::Key_J, Qt::Key_M};
-const int nbClavierNotes = sizeof(clavierNotes) / sizeof(int);
-int QClavier::TrouverNoteClavier(QKeyEvent * event)
+/*****************************************************************************/
+int QClavier::TrouverNoteClavier(const int index, const bool shift, const bool control)
 {
-    for(int i = 0; i < nbClavierNotes; i++)
-        if(event->key() == clavierNotes[i]) {
-            switch (event->modifiers()) {
-                case Qt::ShiftModifier: return i+24+G_REF;
-                case Qt::ControlModifier: return i+12+G_REF;
-                case Qt::AltModifier: return i-12+G_REF;
-                default: return i+G_REF;
-            }
-        }
-    return -1;
+    if (shift) return min(index + 12 + G_REF, 127);
+    if (control) return max(0, index - 12 + G_REF);
+    return index + G_REF;
 }
-

@@ -80,7 +80,7 @@
        <rect>
         <x>20</x>
         <y>20</y>
-        <width>571</width>
+        <width>351</width>
         <height>141</height>
        </rect>
       </property>
@@ -95,7 +95,7 @@
         <rect>
          <x>80</x>
          <y>20</y>
-         <width>481</width>
+         <width>261</width>
          <height>21</height>
         </rect>
        </property>
@@ -114,7 +114,7 @@
         <rect>
          <x>80</x>
          <y>50</y>
-         <width>481</width>
+         <width>261</width>
          <height>21</height>
         </rect>
        </property>
@@ -131,9 +131,9 @@
       <widget class="QPushButton" name="pshBut_refresh_midi">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>260</x>
          <y>110</y>
-         <width>61</width>
+         <width>81</width>
          <height>23</height>
         </rect>
        </property>
@@ -182,25 +182,6 @@
         <string>OUT :</string>
        </property>
       </widget>
-      <widget class="QLabel" name="lbl_kybchan">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>110</y>
-         <width>81</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>VKey channel :</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="lbl_MIDICtrl">
        <property name="geometry">
         <rect>
@@ -225,7 +206,7 @@
         <rect>
          <x>80</x>
          <y>80</y>
-         <width>481</width>
+         <width>261</width>
          <height>21</height>
         </rect>
        </property>
@@ -239,13 +220,51 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QLabel" name="lbl_kybvel">
+      <widget class="QPushButton" name="pshBut_INToOUT">
        <property name="geometry">
         <rect>
-         <x>430</x>
+         <x>80</x>
          <y>110</y>
-         <width>81</width>
-         <height>20</height>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>IN -&gt; OUT</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pshBut_CTRLToOUT">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>110</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>IN -&gt; OUT</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_Route">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>113</y>
+         <width>46</width>
+         <height>13</height>
         </rect>
        </property>
        <property name="font">
@@ -255,15 +274,38 @@
         </font>
        </property>
        <property name="text">
-        <string>VKey velocity :</string>
+        <string>Route :</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QConfig" name="widget_config" native="true">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>200</y>
+        <width>572</width>
+        <height>242</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="grpBox_VKey">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>20</y>
+        <width>171</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Virtual keyboard :</string>
+      </property>
       <widget class="QButton" name="but_kybchan">
        <property name="geometry">
         <rect>
-         <x>380</x>
-         <y>110</y>
-         <width>41</width>
+         <x>100</x>
+         <y>20</y>
+         <width>61</width>
          <height>23</height>
         </rect>
        </property>
@@ -280,12 +322,50 @@
         <string>1</string>
        </property>
       </widget>
+      <widget class="QLabel" name="lbl_kybvel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>81</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Note velocity :</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_kybchan">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>81</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>MIDI channel :</string>
+       </property>
+      </widget>
       <widget class="QButton" name="but_kybvelo">
        <property name="geometry">
         <rect>
-         <x>520</x>
-         <y>110</y>
-         <width>41</width>
+         <x>100</x>
+         <y>50</y>
+         <width>61</width>
          <height>23</height>
         </rect>
        </property>
@@ -302,48 +382,44 @@
         <string>100</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="chkBox_relaiIN">
+      <widget class="QPushButton" name="pshBut_kybQWERTY">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>114</y>
-         <width>81</width>
-         <height>17</height>
+         <x>10</x>
+         <y>80</y>
+         <width>151</width>
+         <height>23</height>
         </rect>
        </property>
        <property name="text">
-        <string>Relay IN</string>
+        <string>Use QWERTY keyboard</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QCheckBox" name="chkBox_relaiCTRL">
+      <widget class="QPushButton" name="pshBut_kybAZERTY">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>114</y>
-         <width>81</width>
-         <height>17</height>
+         <x>10</x>
+         <y>110</y>
+         <width>151</width>
+         <height>23</height>
         </rect>
        </property>
        <property name="text">
-        <string>Relay CTRL</string>
+        <string>Use AZERTY keyboard</string>
        </property>
-       <property name="checked">
+       <property name="checkable">
         <bool>true</bool>
        </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
       </widget>
-     </widget>
-     <widget class="QConfig" name="widget_config" native="true">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>180</y>
-        <width>572</width>
-        <height>242</height>
-       </rect>
-      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_automation">
@@ -1514,7 +1590,7 @@ played with the computer's keyboard.</string>
      <property name="title">
       <string>Get ..</string>
      </property>
-     <addaction name="actionGet_bank"/>
+     <addaction name="actionGet_current_bank"/>
      <addaction name="actionGet_current_set"/>
      <addaction name="actionGet_current_voice"/>
     </widget>
@@ -1522,7 +1598,7 @@ played with the computer's keyboard.</string>
      <property name="title">
       <string>Send ...</string>
      </property>
-     <addaction name="actionSend_bank"/>
+     <addaction name="actionSend_current_bank"/>
      <addaction name="actionSend_current_config"/>
      <addaction name="actionSend_current_set"/>
      <addaction name="actionSend_current_voice"/>
@@ -1637,7 +1713,7 @@ played with the computer's keyboard.</string>
     <string>Initialize</string>
    </property>
   </action>
-  <action name="actionGet_bank">
+  <action name="actionGet_current_bank">
    <property name="text">
     <string>Get current bank</string>
    </property>
@@ -1697,7 +1773,7 @@ played with the computer's keyboard.</string>
     <string>Export voice ...</string>
    </property>
   </action>
-  <action name="actionSend_bank">
+  <action name="actionSend_current_bank">
    <property name="text">
     <string>Send current bank</string>
    </property>
