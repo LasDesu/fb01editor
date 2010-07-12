@@ -77,7 +77,9 @@ public:
 //Debug
     static void BackupTampon(char * Chemin);
 private:
-//Structures spécifiques
+//Constantes communication
+    #define MIDI_ATT_MSG 10
+//Structures des drivers
     typedef struct {
         void * desc;
         uint nb;
@@ -94,8 +96,8 @@ private:
     static bool relaiIN;
     static bool relaiCTRL;
 //Tampon de réception
-    #define MIDI_LEN_TAMPON      0x2000
-    #define MIDI_ATTENTE         100
+    #define MIDI_LEN_TAMPON 0x2000
+    #define MIDI_ATTENTE 100
     #define MIDI_ATTENTE_MESSAGE 100
     static uchar tampon[2][MIDI_LEN_TAMPON];
     static bool  attente;

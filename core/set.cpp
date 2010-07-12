@@ -23,18 +23,21 @@
 
 /*****************************************************************************/
 Set::Set()
-   : Edit(0, (uchar *) malloc(SET_LEN_SYSEX), SET_LEN_SYSEX, 0, SET_OFF_PARAM)
+   : Edit(0, (uchar *) malloc(SET_LEN_SYSEX), SET_LEN_SYSEX,
+          0, SET_OFF_PARAM, EDIT_OBJ_SET)
 {
-//Initialise la classe
+//Vérifie l'allocation
     if (sysEx == NULL) throw(Memory_ex("Unable to allocate the set sysex !"));
+//Initialise la classe
     Initialiser();
     CreerCallbacks();
 //Initialise les instruments
     memset(instruments, 0, sizeof(Instrument *) * SET_NB_INSTRU);
     for (int i = 0; i < SET_NB_INSTRU; i++) {
-        instruments[i] = new Instrument(i, &sysEx[0x29 + 0x10 * i]);
+        instruments[i] = new Instrument(i, &sysEx[SET_OFF_INSTRU + INSTRU_LEN_SYSEX * i]);
         if (instruments[i] == NULL) throw Memory_ex("");
     }
+    AutoriserEnvoi(true);
 }
 
 Set::~Set()
@@ -47,7 +50,7 @@ Set::~Set()
 }
 
 /*****************************************************************************/
-Instrument * Set::RecupererInstrument(int index)
+Instrument * Set::RecupererInstrument(const uint index)
 {
     return instruments[index];
 }
@@ -55,8 +58,8 @@ Instrument * Set::RecupererInstrument(int index)
 /*****************************************************************************/
 bool Set::Enregistrer(FILE * fichier)
 {
-//Ecrit le nom
-    fread(LireNom(), 1, SET_LEN_NOM, fichier);
+//Sauvegarde le nom
+    if (fwrite(LireNom(), SET_LEN_NOM, 1, fichier) == 0) return false;
 //Sauvegarde la table
     if(!Edit::Enregistrer(fichier))
         return false;
@@ -71,11 +74,11 @@ bool Set::Charger(FILE * fichier, const short version)
 {
     char nom[SET_LEN_NOM];
 //Récupère le nom
-    fread(nom, 1, SET_LEN_NOM, fichier);
-    EcrireNom(nom, false);
+    if (fread(nom, SET_LEN_NOM, 1, fichier) == 0) return false;
+    EcrireNom(nom);
 //Recupère la table
     if (version == VERSION) {
-        if(!Edit::Charger(fichier, version))
+        if (!Edit::Charger(fichier, version))
             return false;
     }
 //Charge le set d'instruments
@@ -93,10 +96,10 @@ void Set::Initialiser()
 //Entete du sysEx
     Block::Initialiser(entSet, 7);
     sysEx[7] = 0x00; sysEx[8] = 0x00;
-//Parametres initiaux
-    EcrireNom((char *) "none", false);
+//Paramêtres initiaux
+    EcrireNom((char *) "none");
     for (int i = 0; i < SET_NB_PARAM; i++)
-        EcrireParam((SET_PARAM) i, initTab[i], false);
+        EcrireParam((SET_PARAM) i, initTab[i]);
 }
 
 /*****************************************************************************/
@@ -124,27 +127,27 @@ uchar Set::LireParam(const SET_PARAM param)
     }
 }
 
-void Set::EcrireParam(const SET_PARAM param, const uchar valeur, const bool envoi)
+void Set::EcrireParam(const SET_PARAM param, const uchar valeur)
 {
     try {
         switch(param) {
         case SET_LFO_SPEED:
-            EcrireParam1Oct(0x9, valeur & 0x7F, envoi);
+            EcrireParam1Oct(0x9, valeur & 0x7F);
         break;
         case SET_LFO_WAVE:
-            EcrireParam1Oct(0xC, valeur & 0x3, envoi);
+            EcrireParam1Oct(0xC, valeur & 0x3);
         break;
         case SET_LFO_AMD:
-            EcrireParam1Oct(0xA, valeur & 0x7F, envoi);
+            EcrireParam1Oct(0xA, valeur & 0x7F);
         break;
         case SET_LFO_PMD:
-            EcrireParam1Oct(0xB, valeur & 0x7F, envoi);
+            EcrireParam1Oct(0xB, valeur & 0x7F);
         break;
         case SET_COMBINE_MODE:
-            EcrireParam1Oct(0x8, valeur & 0x1, envoi);
+            EcrireParam1Oct(0x8, valeur & 0x1);
         break;
         case SET_RECEPTION_MODE:
-            EcrireParam1Oct(0xD, valeur & 0x3, envoi);
+            EcrireParam1Oct(0xD, valeur & 0x3);
         break;
         default: return;
         }
@@ -168,14 +171,15 @@ char * Set::LireNom()
     }
 }
 
-void Set::EcrireNom(char * nom, const bool envoi)
+void Set::EcrireNom(char * nom)
 {
     uchar i;
     try {
         int len = min(strlen(nom), SET_LEN_NOM);
         for (i = 0; i < len; i++)
-            EcrireParam1Oct(i, nom[i], envoi);
-        for (; i < SET_LEN_NOM; i++) EcrireParam1Oct(i, ' ', envoi);
+            EcrireParam1Oct(i, nom[i]);
+        for (; i < SET_LEN_NOM; i++)
+            EcrireParam1Oct(i, ' ');
     }catch(MIDI_ex ex) {
         QMessageBox::information(NULL, "FB01 SE:", ex.Info());
     }
@@ -222,9 +226,9 @@ void Set::CreerCallbacks()
 void Set::AppelerCallback(const uint index, const uchar valeur)
 {
     switch(index) {
-    case SET_LFO_SPEED : EcrireParam(SET_LFO_SPEED, valeur, true); break;
-    case SET_LFO_WAVE : EcrireParam(SET_LFO_WAVE, valeur >> 5, true); break;
-    case SET_LFO_AMD : EcrireParam(SET_LFO_AMD, valeur, true); break;
-    case SET_LFO_PMD : EcrireParam(SET_LFO_PMD, valeur, true); break;
+    case SET_LFO_SPEED : EcrireParam(SET_LFO_SPEED, valeur); break;
+    case SET_LFO_WAVE  : EcrireParam(SET_LFO_WAVE, valeur >> 5); break;
+    case SET_LFO_AMD   : EcrireParam(SET_LFO_AMD, valeur); break;
+    case SET_LFO_PMD   : EcrireParam(SET_LFO_PMD, valeur); break;
     }
 }

@@ -39,15 +39,19 @@
 class Bank : public Edit {
 public :
 //Paramêtres éditables
-    #define BANK_LEN_NOM 8
-    #define BANK_LEN_SYSEX 0x18DB
-    #define BANK_NB_VOICES 48
+    #define BANK_LEN_NOM    8
+    #define BANK_LEN_SYSEX  0x18DB
+    #define BANK_NB_VOICES  48
+    #define BANK_OFF_NOM    0x9
+    #define BANK_OFF_VOICES 0x4C
 //Constructeurs
     Bank(const uchar id);
     ~Bank();
+//Récupèration des voices
+    Bank_voice * RecupererVoice(const uint index);
 //Modification des parametres
     char * LireNom();
-    void   EcrireNom(char * nom, const bool envoi);
+    void   EcrireNom(char * nom);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const short version);

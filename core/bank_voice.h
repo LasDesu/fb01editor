@@ -22,6 +22,8 @@
 #ifndef BANK_VOICE_H
 #define BANK_VOICE_H
 
+#include <QMessageBox>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
@@ -34,11 +36,14 @@ class Bank_voice : public Edit {
 public :
 //Constantes
     #define BANKVOICE_LEN_SYSEX 0x83
+    #define BANKVOICE_LEN_NOM 7
+    #define BANKVOICE_PARAM_STYLE 0x7
 //Constructeurs
     Bank_voice(const uchar id, uchar * sysEx);
    ~Bank_voice();
-private :
-
+//Lecture des parametres
+    char * LireNom();
+    uchar  LireStyle();
 };
 
 #endif // BANK_VOICE_H

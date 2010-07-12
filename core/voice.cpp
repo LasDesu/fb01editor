@@ -23,15 +23,19 @@
 
 /*****************************************************************************/
 Voice::Voice()
-     : Edit(0, (uchar *) malloc(VOICE_LEN_SYSEX), VOICE_LEN_SYSEX, VOICE_NB_PARAM, VOICE_OFF_PARAM)
+     : Edit(0, (uchar *) malloc(VOICE_LEN_SYSEX), VOICE_LEN_SYSEX,
+            VOICE_NB_PARAM, VOICE_OFF_PARAM, EDIT_OBJ_VOICE)
 {
-//Initialise la classe
+//Vérifie l'allocation
     if (sysEx == NULL) throw(Memory_ex("Unable to allocate the voice sysex !"));
+//Initialise la classe
     Initialiser();
     CreerCallbacks();
 //Initialise les opérateurs
+    memset(operateurs, 0, sizeof(Operateur *) * VOICE_NB_OPS);
     for (int i = 0; i < VOICE_NB_OPS; i++)
-        operateurs[i] = new Operateur(i, &sysEx[0x29 + 0x10 * (VOICE_NB_OPS - i - 1)]);
+        operateurs[i] = new Operateur(i, &sysEx[VOICE_OFF_OPS + OPERATOR_LEN_SYSEX * (VOICE_NB_OPS - i - 1)]);
+    AutoriserEnvoi(true);
 }
 
 Voice::~Voice()
@@ -44,12 +48,12 @@ Voice::~Voice()
 }
 
 /*****************************************************************************/
-Operateur * Voice::RecupererOP(int index)
+Operateur * Voice::RecupererOP(const uint index)
 {
     return operateurs[index];
 }
 
-void Voice::AssocierInstrument(int index)
+void Voice::AssocierInstrument(const uint index)
 {
     this->id = index;
     for (int i=0; i < VOICE_NB_OPS; i++)
@@ -60,13 +64,13 @@ void Voice::AssocierInstrument(int index)
 bool Voice::Enregistrer(FILE * fichier)
 {
 //Sauvegarde des informations
-    fwrite(auteur, VOICE_LEN_AUTEUR, 1, fichier);
-    fwrite(comment, VOICE_LEN_COMMENT, 1, fichier);
-    fwrite(nom, VOICE_LEN_NOM, 1, fichier);
+    if (fwrite(auteur, VOICE_LEN_AUTEUR, 1, fichier) == 0) return false;
+    if (fwrite(comment, VOICE_LEN_COMMENT, 1, fichier) == 0) return false;
+    if (fwrite(LireNom(), VOICE_LEN_NOM, 1, fichier) == 0) return false;
 //Sauvegarde la table
     if (!Edit::Enregistrer(fichier)) return false;
 //Sauvegarde les opérateurs
-    for (int i=0; i < VOICE_NB_OPS; i ++)
+    for (int i = 0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Enregistrer(fichier))
             return false;
     return true;
@@ -74,10 +78,12 @@ bool Voice::Enregistrer(FILE * fichier)
 
 bool Voice::Charger(FILE * fichier, const short version)
 {
+    char nom[VOICE_LEN_NOM];
 //Récupère des informations
-    fread(auteur, VOICE_LEN_AUTEUR, 1, fichier);
-    fread(comment, VOICE_LEN_COMMENT, 1, fichier);
-    fread(nom, VOICE_LEN_NOM, 1, fichier);
+    if (fread(auteur, VOICE_LEN_AUTEUR, 1, fichier) == 0) return false;
+    if (fread(comment, VOICE_LEN_COMMENT, 1, fichier) == 0) return false;
+    if (fread(nom, VOICE_LEN_NOM, 1, fichier) == 0) return false;
+    EcrireNom(nom);
 //Récupère la table
     if (version == VERSION) {
         if (!Edit::Charger(fichier, version)) return false;
@@ -85,7 +91,7 @@ bool Voice::Charger(FILE * fichier, const short version)
     //Compatibilité éditeur 1.0
     }
 //Récupère les opérateurs
-    for (int i=0; i < VOICE_NB_OPS; i ++)
+    for (int i = 0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Charger(fichier, version))
             return false;
     return true;
@@ -100,9 +106,9 @@ void Voice::Initialiser()
     Block::Initialiser(entVoice, 7);
     sysEx[7] = 0x00; sysEx[8] = 0x00;
 //Parametres initiaux
-    EcrireNom((char *) "none", false);
+    EcrireNom((char *) "none");
     for (int i = 0; i < VOICE_NB_PARAM; i++)
-        EcrireParam((VOICE_PARAM) i, initTab[i], false);
+        EcrireParam((VOICE_PARAM) i, initTab[i]);
 }
 
 /*****************************************************************************/
@@ -158,7 +164,7 @@ uchar Voice::LireParam(const VOICE_PARAM param)
     }
 }
 
-void Voice::EcrireParam(const VOICE_PARAM param, const uchar valeur, const bool envoi)
+void Voice::EcrireParam(const VOICE_PARAM param, const uchar valeur)
 {
     uchar byte;
     try {
@@ -166,96 +172,96 @@ void Voice::EcrireParam(const VOICE_PARAM param, const uchar valeur, const bool 
         case VOICE_ALGORITHM :
             byte  = LireParam2Oct(0xC) & 0xF8;
             byte += valeur & 0x7;
-            EcrireParam2Oct(0xC, byte, envoi);
+            EcrireParam2Oct(0xC, byte);
         break;
         case VOICE_USERCODE :
-            EcrireParam2Oct(0x7, valeur, envoi);
+            EcrireParam2Oct(0x7, valeur);
         break;
         case VOICE_FEEDBACK :
             byte  = LireParam2Oct(0xC) & 0xC7;
             byte += (valeur & 0x7) << 3;
-            EcrireParam2Oct(0xC, byte, envoi);
+            EcrireParam2Oct(0xC, byte);
         break;
         case VOICE_TRANSPOSE :
-            EcrireParam2Oct(0xF, valeur, envoi);
+            EcrireParam2Oct(0xF, valeur);
         break;
         case VOICE_POLY :
             byte  = LireParam2Oct(0x3A) & 0x7F;
             byte += (valeur & 0x1) << 7;
-            EcrireParam2Oct(0x3A, byte, envoi);
+            EcrireParam2Oct(0x3A, byte);
         break;
         case VOICE_PORTAMENTO :
             byte  = LireParam2Oct(0x3A) & 0x80;
             byte += valeur & 0x7F;
-            EcrireParam2Oct(0x3A, byte, envoi);
+            EcrireParam2Oct(0x3A, byte);
         break;
         case VOICE_PITCHBEND :
             byte  = LireParam2Oct(0x3B) & 0xF0;
             byte += valeur & 0xF;
-            EcrireParam2Oct(0x3B, byte, envoi);
+            EcrireParam2Oct(0x3B, byte);
         break;
         case VOICE_CONTROLLER :
             byte  = LireParam2Oct(0x3B) & 0x8F;
             byte += (valeur & 0x7) << 4;
-            EcrireParam2Oct(0x3B, byte, envoi);
+            EcrireParam2Oct(0x3B, byte);
         break;
         case VOICE_LFO_SPEED :
-            EcrireParam2Oct(0x8, valeur, envoi);
+            EcrireParam2Oct(0x8, valeur);
         break;
         case VOICE_LFO_WAVE :
             byte  = LireParam2Oct(0xE) & 0x9F;
             byte += (valeur & 0x3) << 5;
-            EcrireParam2Oct(0xE, byte, envoi);
+            EcrireParam2Oct(0xE, byte);
         break;
         case VOICE_LFO_LOAD :
             byte  = LireParam2Oct(0x9) & 0x7F;
             byte += (valeur & 0x1) << 7;
-            EcrireParam2Oct(0x9, byte, envoi);
+            EcrireParam2Oct(0x9, byte);
         break;
         case VOICE_LFO_SYNC :
             byte  = LireParam2Oct(0xA) & 0x7F;
             byte += (valeur & 0x1) << 7;
-            EcrireParam2Oct(0xA, byte, envoi);
+            EcrireParam2Oct(0xA, byte);
         break;
         case VOICE_LFO_AMD :
             byte  = LireParam2Oct(0x9) & 0x80;
             byte += valeur & 0x7F;
-            EcrireParam2Oct(0x9, byte, envoi);
+            EcrireParam2Oct(0x9, byte);
         break;
         case VOICE_LFO_AMS :
             byte  = LireParam2Oct(0xD) & 0xFC;
             byte += valeur & 0x3;
-            EcrireParam2Oct(0xD, byte, envoi);
+            EcrireParam2Oct(0xD, byte);
         break;
         case VOICE_LFO_PMD :
             byte  = LireParam2Oct(0xA) & 0x80;
             byte += valeur & 0x7F;
-            EcrireParam2Oct(0xA, byte, envoi);
+            EcrireParam2Oct(0xA, byte);
         break;
         case VOICE_LFO_PMS :
             byte  = LireParam2Oct(0xD) & 0x8F;
             byte += (valeur & 0x7) << 4;
-            EcrireParam2Oct(0xD, byte, envoi);
+            EcrireParam2Oct(0xD, byte);
         break;
         case VOICE_ENABLE_OP1 :
             byte  = LireParam2Oct(0xB) & 0xBF;
             byte += (valeur & 0x1) << 6;
-            EcrireParam2Oct(0xB, byte, envoi);
+            EcrireParam2Oct(0xB, byte);
         break;
         case VOICE_ENABLE_OP2 :
             byte  = LireParam2Oct(0xB) & 0xDF;
             byte += (valeur & 0x1) << 5;
-            EcrireParam2Oct(0xB, byte, envoi);
+            EcrireParam2Oct(0xB, byte);
         break;
         case VOICE_ENABLE_OP3 :
             byte  = LireParam2Oct(0xB) & 0xEF;
             byte += (valeur & 0x1) << 4;
-            EcrireParam2Oct(0xB, byte, envoi);
+            EcrireParam2Oct(0xB, byte);
         break;
         case VOICE_ENABLE_OP4 :
             byte  = LireParam2Oct(0xB) & 0xF7;
             byte += (valeur & 0x1) << 3;
-            EcrireParam2Oct(0xB, byte, envoi);
+            EcrireParam2Oct(0xB, byte);
         break;
         default : return;
         }
@@ -279,15 +285,15 @@ char * Voice::LireNom()
     }
 }
 
-void Voice::EcrireNom(char * nom, const bool envoi)
+void Voice::EcrireNom(char * nom)
 {
     uchar i;
     try {
         int len = min(strlen(nom), VOICE_LEN_NOM);
         for (i = 0; i < len; i++)
-            EcrireParam2Oct(i, nom[i], envoi);
+            EcrireParam2Oct(i, nom[i]);
         for (; i < VOICE_LEN_NOM; i++)
-            EcrireParam2Oct(i, ' ', envoi);
+            EcrireParam2Oct(i, ' ');
     }catch(MIDI_ex ex) {
         QMessageBox::information(NULL, "FB01 SE:", ex.Info());
     }
@@ -335,7 +341,7 @@ void Voice::CreerCallbacks()
 void Voice::AppelerCallback(const uint index, const uchar valeur)
 {
     switch(index) {
-    case VOICE_ALGORITHM : EcrireParam(VOICE_ALGORITHM, valeur >> 4, true); break;
-    case VOICE_FEEDBACK : EcrireParam(VOICE_FEEDBACK, valeur >> 4, true); break;
+    case VOICE_ALGORITHM : EcrireParam(VOICE_ALGORITHM, valeur >> 4); break;
+    case VOICE_FEEDBACK  : EcrireParam(VOICE_FEEDBACK, valeur >> 4); break;
     }
 }

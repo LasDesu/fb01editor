@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>292</height>
+    <height>264</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>191</width>
-     <height>111</height>
+     <height>261</height>
     </rect>
    </property>
    <property name="title">
@@ -215,6 +215,224 @@
      <string>0</string>
     </property>
    </widget>
+   <widget class="QLabel" name="lbl_porta">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>170</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Porta. time :</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_porta">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>170</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>127</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The portamento length of the instrument</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_pitch">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Pitch bender :</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_trans">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>110</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>128</width>
+      <height>127</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The transpose level of the voice</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pshBut_poly">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>140</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>The voice response to a multiple notes play</string>
+    </property>
+    <property name="text">
+     <string>Poly</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cmbBox_pmdctl">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>230</y>
+      <width>81</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>The kind of MIDI controler assigned to PMD</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>Not assigned</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>After touch</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mod. wheel</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Breath ctl.</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Foot ctl.</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QButton" name="but_pitch">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>200</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>12</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The pitchbender range of the voice</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_trans">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Transpose :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_poly">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Mono / Poly :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_pmdctl">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>PMD Control. :</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="grpBox_algorithm">
    <property name="geometry">
@@ -222,7 +440,7 @@
      <x>210</x>
      <y>0</y>
      <width>151</width>
-     <height>111</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="title">
@@ -232,7 +450,7 @@
     <property name="geometry">
      <rect>
       <x>42</x>
-      <y>30</y>
+      <y>20</y>
       <width>71</width>
       <height>41</height>
      </rect>
@@ -248,7 +466,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>80</y>
+      <y>70</y>
       <width>91</width>
       <height>23</height>
      </rect>
@@ -273,7 +491,7 @@
      <x>380</x>
      <y>0</y>
      <width>191</width>
-     <height>141</height>
+     <height>261</height>
     </rect>
    </property>
    <property name="title">
@@ -448,14 +666,178 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QButton" name="but_PMS">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>230</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>7</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The pitch modulation sensitivity</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_AMD">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>AMD :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_PMS">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>PMS :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_AMS">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>170</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>AMS :</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_AMS">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>170</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>3</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The amplitude modulation sensitivity</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_PMD">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>200</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>127</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The pitch modulation</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_PMD">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>PMD :</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_AMD">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>140</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>0</width>
+      <height>127</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>The amplitude modulation</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="grpBox_informations">
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>120</y>
+     <y>110</y>
      <width>151</width>
-     <height>171</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -508,7 +890,7 @@
       <x>10</x>
       <y>90</y>
       <width>131</width>
-      <height>71</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -541,414 +923,6 @@
     </property>
     <property name="text">
      <string>Comments :</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="grpBox_globalconfig">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>120</y>
-     <width>191</width>
-     <height>171</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Global configuration :</string>
-   </property>
-   <widget class="QLabel" name="lbl_poly">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Mono / Poly :</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pshBut_poly">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>50</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>The voice response to a multiple notes play</string>
-    </property>
-    <property name="text">
-     <string>Poly</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QButton" name="but_trans">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>20</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>128</width>
-      <height>127</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The transpose level of the voice</string>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_trans">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Transpose :</string>
-    </property>
-   </widget>
-   <widget class="QButton" name="but_pitch">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>110</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>12</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The pitchbender range of the voice</string>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="cmbBox_pmdctl">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>140</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>The kind of MIDI controler assigned to PMD</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>Not assigned</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>After touch</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Mod. wheel</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Breath ctl.</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Foot ctl.</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QButton" name="but_porta">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>80</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The portamento length of the instrument</string>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_pitch">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Pitch bender :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_porta">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Porta. time :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_pmdctl">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>140</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>PMD Control. :</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="grpBox_modulation">
-   <property name="geometry">
-    <rect>
-     <x>380</x>
-     <y>150</y>
-     <width>191</width>
-     <height>141</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Modulation :</string>
-   </property>
-   <widget class="QLabel" name="lbl_AMD">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>41</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>AMD :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_PMD">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>PMD :</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_PMS">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>PMS :</string>
-    </property>
-   </widget>
-   <widget class="QButton" name="but_AMD">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>20</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The amplitude modulation</string>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_AMS">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>41</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>AMS :</string>
-    </property>
-   </widget>
-   <widget class="QButton" name="but_PMD">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>80</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The pitch modulation</string>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QButton" name="but_AMS">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>50</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>3</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The amplitude modulation sensitivity</string>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QButton" name="but_PMS">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>110</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>7</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>The pitch modulation sensitivity</string>
-    </property>
-    <property name="text">
-     <string>0</string>
     </property>
    </widget>
   </widget>

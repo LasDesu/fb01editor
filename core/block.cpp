@@ -24,10 +24,11 @@
 /*****************************************************************************/
 Block::Block(uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam)
 {
-    this->sysEx = sysEx;
+    this->sysEx    = sysEx;
     this->lenSysEx = lenSysEx;
     this->nbParam  = nbParam;
     this->offParam = offParam;
+    envoi = false;
 }
 
 Block::~Block()
@@ -40,8 +41,19 @@ uchar Block::LireParam(const uchar param)
     return 0;
 }
 
-void Block::EcrireParam(const uchar param, const uchar valeur, const bool envoi)
+void Block::EcrireParam(const uchar param, const uchar valeur)
 {
+}
+
+/*****************************************************************************/
+void Block::AutoriserEnvoi(const bool envoi)
+{
+    this->envoi = envoi;
+}
+
+bool Block::EnvoiAutorise()
+{
+    return envoi;
 }
 
 /*****************************************************************************/
@@ -51,6 +63,8 @@ void Block::Envoyer(const uint param)
 
 void Block::EnvoyerTout()
 {
+    for (uint i = 0; i < nbParam; i ++)
+        Envoyer(i);
 }
 
 void Block::RecevoirTout()
@@ -64,7 +78,7 @@ uchar Block::LireParam1Oct(const uint param)
     return sysEx[param + offParam] & 0x7F;
 }
 
-void Block::EcrireParam1Oct(const uint param, const uchar valeur, const bool envoi)
+void Block::EcrireParam1Oct(const uint param, const uchar valeur)
 {
     if (lenSysEx == 0) return;
     sysEx[param + offParam] = valeur & 0x7F;
@@ -77,11 +91,11 @@ uchar Block::LireParam2Oct(const uint param)
     uchar data;
     if (lenSysEx == 0) return 0;
     data  = sysEx[param * 2 + offParam] & 0xF;
-    data += (sysEx[param * 2 + offParam + 1] << 4);
+    data += sysEx[param * 2 + offParam + 1] << 4;
     return data;
 }
 
-void Block::EcrireParam2Oct(const uint param, const uchar valeur, const bool envoi)
+void Block::EcrireParam2Oct(const uint param, const uchar valeur)
 {
     if (lenSysEx == 0) return;
     sysEx[param * 2 + offParam] = valeur & 0xF;

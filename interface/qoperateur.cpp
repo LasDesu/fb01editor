@@ -80,37 +80,37 @@ void QOperateur::Rafraichir()
 void QOperateur::on_hzSlider_volume_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_VOLUME, 0x7F - i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_VOLUME, 0x7F - i);
 }
 
 void QOperateur::on_pshBut_carrier_clicked(bool checked)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_MODULATOR, checked, true);
+        operateur->EcrireParam(Operateur::OPERATOR_MODULATOR, checked);
 }
 
 void QOperateur::on_cmbBox_lvlcurb_activated(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_LEVEL_CURB, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_LEVEL_CURB, i);
 }
 
 void QOperateur::on_but_vellvl_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_LEVEL_VELOCITY, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_LEVEL_VELOCITY, i);
 }
 
 void QOperateur::on_but_velAR_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_ATTACK_VELOCITY, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_ATTACK_VELOCITY, i);
 }
 
 void QOperateur::on_but_AR_valueChanged(int i)
 {
     if (!attente) {
-        operateur->EcrireParam(Operateur::OPERATOR_ATTACK, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_ATTACK, i);
         RafraichirEnveloppe();
     }
 }
@@ -118,7 +118,7 @@ void QOperateur::on_but_AR_valueChanged(int i)
 void QOperateur::on_but_D1R_valueChanged(int i)
 {
     if (!attente) {
-        operateur->EcrireParam(Operateur::OPERATOR_DECAY1, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_DECAY1, i);
         RafraichirEnveloppe();
     }
 }
@@ -126,7 +126,7 @@ void QOperateur::on_but_D1R_valueChanged(int i)
 void QOperateur::on_but_SL_valueChanged(int i)
 {
     if (!attente) {
-        operateur->EcrireParam(Operateur::OPERATOR_SUSTAIN, 0xF - i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_SUSTAIN, 0xF - i);
         RafraichirEnveloppe();
     }
 }
@@ -134,7 +134,7 @@ void QOperateur::on_but_SL_valueChanged(int i)
 void QOperateur::on_but_D2R_valueChanged(int i)
 {
     if (!attente) {
-        operateur->EcrireParam(Operateur::OPERATOR_DECAY2, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_DECAY2, i);
         RafraichirEnveloppe();
     }
 }
@@ -142,7 +142,7 @@ void QOperateur::on_but_D2R_valueChanged(int i)
 void QOperateur::on_but_RR_valueChanged(int i)
 {
     if (!attente) {
-        operateur->EcrireParam(Operateur::OPERATOR_RELEASE, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_RELEASE, i);
         RafraichirEnveloppe();
     }
 }
@@ -150,37 +150,37 @@ void QOperateur::on_but_RR_valueChanged(int i)
 void QOperateur::on_but_coarse_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_COARSE, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_COARSE, i);
 }
 
 void QOperateur::on_but_fine_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_FINE, i + 4, true);
+        operateur->EcrireParam(Operateur::OPERATOR_FINE, i + 4);
 }
 
 void QOperateur::on_but_mult_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_MULTIPLE, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_MULTIPLE, i);
 }
 
 void QOperateur::on_but_lvldph_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_LEVEL_DEPTH, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_LEVEL_DEPTH, i);
 }
 
 void QOperateur::on_but_rtdph_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_RATE_DEPTH, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_RATE_DEPTH, i);
 }
 
 void QOperateur::on_but_adjTL_valueChanged(int i)
 {
     if (!attente)
-        operateur->EcrireParam(Operateur::OPERATOR_ADJUST, i, true);
+        operateur->EcrireParam(Operateur::OPERATOR_ADJUST, i);
 }
 
 /*****************************************************************************/

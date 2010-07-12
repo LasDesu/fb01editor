@@ -63,7 +63,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_config">
      <property name="enabled">
@@ -475,9 +475,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -504,9 +504,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -533,9 +533,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -565,9 +565,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -610,9 +610,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -639,9 +639,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -668,9 +668,9 @@
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>210</y>
+          <y>180</y>
           <width>71</width>
-          <height>20</height>
+          <height>22</height>
          </rect>
         </property>
         <property name="toolTip">
@@ -699,6 +699,19 @@
       </property>
       <property name="text">
        <string>Next page</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_loadBanks">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>508</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Load all banks</string>
       </property>
      </widget>
     </widget>
@@ -1288,7 +1301,7 @@
         <x>20</x>
         <y>20</y>
         <width>574</width>
-        <height>292</height>
+        <height>264</height>
        </rect>
       </property>
      </widget>

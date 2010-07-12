@@ -33,27 +33,45 @@
 
 class Edit : public Block {
 public :
+//Mecanisme de copie
+    typedef enum {
+        EDIT_OBJ_RIEN = 0,
+        EDIT_OBJ_OPERATEUR,
+        EDIT_OBJ_VOICE,
+        EDIT_OBJ_INSTRUMENT,
+        EDIT_OBJ_SET,
+        EDIT_OBJ_BANK_VOICE,
+        EDIT_OBJ_BANK
+    }EDIT_OBJET;
+    typedef struct {
+        EDIT_OBJET objet;
+        uchar * sysEx;
+        uint lenSysEx;
+        bool sysExTemp;
+    }CopieStr;
 //Constructeurs
-    Edit(const uchar id, uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam);
+    Edit(const uchar id, uchar * sysEx, const uint lenSysEx,
+         const uint nbParam, const uint offParam, const EDIT_OBJET objet);
     ~Edit();
 //Gestion de l'id objet
     uchar LireId();
     void  EcrireId(const uchar id);
+//Edition de l'objet
+    void Copier(CopieStr * copie);
+    void Coller(CopieStr * copie);
+    void Echanger(CopieStr * copie);
+    virtual void Initialiser();
+    virtual void Randomiser();
 //Chargement / déchargement de l'objet
     virtual bool Enregistrer(FILE * fichier);
     virtual bool Charger(FILE * fichier, const short version);
 //Importation exportation de l'objet
     virtual bool Exporte(FILE * fichier);
     virtual bool Importe(FILE * fichier);
-//Edition de l'objet
-    virtual void Initialiser();
-    virtual void Randomiser();
-    virtual void Copier(uchar * table, const ulong len);
-    virtual void Coller(const uchar * table, const ulong len, const bool envoi);
-    virtual void Echanger(uchar * table, const ulong len, const bool envoi);
 protected :
 //Paramètres de l'objet
     uchar id;
+    EDIT_OBJET objet;
 };
 
 #endif

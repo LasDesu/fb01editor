@@ -33,6 +33,7 @@
 #include "excep/midi_ex.h"
 
 #include "core/midi.h"
+#include "core/edit.h"
 #include "core/voice.h"
 #include "core/operateur.h"
 #include "core/set.h"
@@ -49,9 +50,10 @@ void quit();
 class Editeur {
     friend class MainWindow;
 public :
-//Constantes
+//Constantes générales
     #define EDITEUR_NB_BANK 7
     #define EDITEUR_INTER_ACTU 500
+//Types de fichiers
     typedef enum {
         FICHIER_VOICE = 0,
         FICHIER_SET,
@@ -66,7 +68,7 @@ public :
     FILE * EnregistrerFichier(FICHIER_TYPE type);
 //Actualisation de l'éditeur
     void Actualiser();
-    void Rafraichir();
+    void Rafraichir(const bool local = false);
     void Reinitialiser();
 //Attribution des objets
     void AttribuerConfig();
@@ -90,25 +92,26 @@ public :
     bool ActualiserVoice();
     void ActualiserAutomation();
 //Rafraichissement de l'affichage
-    void RafraichirBanks();
-    void RafraichirSet();
+    void RafraichirBanks(const bool local = false);
+    void RafraichirSet(const bool local = false);
     void RafraichirVoice();
     void RafraichirAutomation();
 private :
+//Fenêtre de l'éditeur
+    MainWindow * mainWindow;
 //Objets de l'éditeur
     Bank * banks[EDITEUR_NB_BANK];
     Set set;
     Voice voice;
     Config config;
-//Fenêtre de l'éditeur
-    MainWindow * mainWindow;
-//Sélection des pages
+//Sélection des pages et objets
     int pageSetSel;
     int pageBankSel;
-//Sélection des objets
     int instruSel;
     int OPSel;
     int bankSel;
+//Mécanisme de copier/coller
+    Edit::CopieStr copie;
 //Initialisation de l'éditeur
     void InitialiserEditeur();
     void InitialiserInterface();

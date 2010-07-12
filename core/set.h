@@ -44,9 +44,10 @@ public :
 //Constantes
     #define SET_NB_PARAM 1
     #define SET_OFF_PARAM 0x9
-    #define SET_LEN_NOM 8
+    #define SET_OFF_INSTRU 0x29
     #define SET_NB_INSTRU 8
-    #define SET_LEN_SYSEX 171
+    #define SET_LEN_NOM 8
+    #define SET_LEN_SYSEX 0xAB
 //Paramêtres éditables
     typedef enum {
         SET_LFO_SPEED = 0,
@@ -60,7 +61,7 @@ public :
     Set();
     ~Set();
 //Récupération des objets
-    Instrument * RecupererInstrument(int index);
+    Instrument * RecupererInstrument(const uint index);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const short version);
@@ -68,9 +69,9 @@ public :
     void Initialiser();
 //Modification des propriétés
     uchar  LireParam(const SET_PARAM param);
-    void   EcrireParam(const SET_PARAM param, const uchar valeur, const bool envoi);
+    void   EcrireParam(const SET_PARAM param, const uchar valeur);
     char * LireNom();
-    void   EcrireNom(char * nom, const bool envoi);
+    void   EcrireNom(char * nom);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param);
     void EnvoyerTout();

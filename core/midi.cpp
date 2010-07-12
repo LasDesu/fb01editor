@@ -272,6 +272,8 @@ void MIDI::EnvMsg(uchar * msg)
 #endif
 #ifdef LINUX
 #endif
+//Attente d'émission
+    Sleep(MIDI_ATT_MSG);
 }
 
 void MIDI::EnvSysEx(uchar * sysEx, const int taille)
@@ -303,6 +305,8 @@ void MIDI::EnvSysEx(uchar * sysEx, const int taille)
 #endif
 #ifdef LINUX
 #endif
+//Attente d'émission
+    Sleep(MIDI_ATT_MSG);
 }
 
 void MIDI::RecSysEx(uchar * sysEx, const int taille)

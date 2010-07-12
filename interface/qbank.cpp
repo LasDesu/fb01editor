@@ -26,13 +26,12 @@ QBank::QBank(QWidget *parent) : QWidget(parent), m_ui(new Ui::QBank)
 {
     m_ui->setupUi(this);
 //Créé les colonnes de la table
-    m_ui->listWidget_voices->setColumnCount(3);
-    QTableWidgetItem * voice = new QTableWidgetItem("Voice");
-    QTableWidgetItem * nom   = new QTableWidgetItem("Name");
-    QTableWidgetItem * style = new QTableWidgetItem("Style");
+    m_ui->listWidget_voices->setColumnCount(2);
+    QTableWidgetItem * voice  = new QTableWidgetItem("Voice");
+    QTableWidgetItem * style  = new QTableWidgetItem("Style");
     m_ui->listWidget_voices->setHorizontalHeaderItem(0, voice);
-    m_ui->listWidget_voices->setHorizontalHeaderItem(1, nom);
-    m_ui->listWidget_voices->setHorizontalHeaderItem(2, style);
+    m_ui->listWidget_voices->setHorizontalHeaderItem(1, style);
+    m_ui->listWidget_voices->setRowCount(BANK_NB_VOICES);
 }
 
 QBank::~QBank()
@@ -50,55 +49,29 @@ void QBank::DefinirBank(Bank * bank)
 }
 
 /*****************************************************************************/
+const char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass",
+                                "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
 void QBank::Rafraichir()
 {
     attente = true;
-//Actualise l'interface
-    m_ui->lbl_voicename->setText(bank->LireNom());
-    m_ui->lbl_voicename->repaint();
+//Actualise le texte
+    m_ui->txtEdit_bankName->setPlainText(bank->LireNom());
+    m_ui->txtEdit_voiceName->setPlainText("");
+    m_ui->txtEdit_bankName->repaint();
+    m_ui->txtEdit_voiceName->repaint();
+//Actualise la liste des voices
+    m_ui->listWidget_voices->clear();
+    for (uint i = 0; i < BANK_NB_VOICES; i++) {
+        QString nom(bank->RecupererVoice(i)->LireNom());
+        QString sty(bank->RecupererVoice(i)->LireStyle());
+        QTableWidgetItem * voice  = new QTableWidgetItem(nom);
+        QTableWidgetItem * style  = new QTableWidgetItem(sty);
+        m_ui->listWidget_voices->setItem(i, 0, voice);
+        m_ui->listWidget_voices->setItem(i, 1, style);
+    }
     attente = false;
 }
 
-/*****************************************************************************/
-    /*
-void QBank::on_pshBut_copy_clicked(bool checked)
-{
-    bool ok;
-    uchar Tampon[LNGBULK];
-//Sélectionne les banks
-    if (Attente) return;
-    if (!EXPANDEUR::BanksValide()) return;
-    int BankSrc = QInputDialog::getInt(MainApp->activeWindow(), "FB01 SE :", "Select the source bank :", 3, 1, 4, 1, &ok);
-    if (!ok) return;
-    int BankDst = QInputDialog::getInt(MainApp->activeWindow(), "FB01 SE :", "Select the destination bank :", 1, 1, 2, 1, &ok);
-    if (!ok) return;
-    if (BankSrc == BankDst) return;
-//Copie une bank sur une autre
-    Attente = true;
-    EXPANDEUR::CopierBank(BankSrc-1, Tampon);
-    EXPANDEUR::CollerBank(BankDst-1, Tampon);
- //Déverrouille et rafraichit
-    Attente = false;
-    Rafraichir();
-}
-
-void QBank::on_pshBut_exchange_clicked(bool checked)
-{
-    uchar Tampon1[LNGBULK];
-    uchar Tampon2[LNGBULK];
-//Echange les banks
-    if (Attente) return;
-    if (!EXPANDEUR::BanksValide()) return;
-    Attente = true;
-    EXPANDEUR::CopierBank(0, Tampon1);
-    EXPANDEUR::CopierBank(1, Tampon2);
-    EXPANDEUR::CollerBank(0, Tampon2);
-    EXPANDEUR::CollerBank(1, Tampon1);
-//Déverrouille et rafraichit
-    Attente = false;
-    Rafraichir();
-}
-*/
 /*****************************************************************************/
 /*
 void QBank::on_table_bank_cellClicked(int row, int column)

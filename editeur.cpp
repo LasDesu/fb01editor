@@ -67,14 +67,15 @@ Editeur::~Editeur()
 //Termine l'éditeur
     TerminerEditeur();
     TerminerInterface();
-    application->quit();
+//Quitte l'application
+    editeur = NULL;
 }
 
 /*****************************************************************************/
 void Editeur::InitialiserEditeur()
 {
 //Alloue les banks
-    for (int i = 0; i < EDITEUR_NB_BANK; i++) {
+    for (uchar i = 0; i < EDITEUR_NB_BANK; i++) {
         banks[i] = new Bank(i);
         if (banks[i] == NULL) throw(Memory_ex("Unable to allocate bank space !"));
     }
@@ -95,6 +96,8 @@ void Editeur::InitialiserEditeur()
     ActualiserAutomation();
 //Initialisations diverses
     //srand(QTime::currentTime().msec());
+    copie.objet = Edit::EDIT_OBJ_RIEN;
+    copie.sysExTemp = false;
 }
 
 void Editeur::InitialiserInterface()
@@ -118,13 +121,14 @@ void Editeur::TerminerEditeur()
     MIDI::DesactiverOut();
     MIDI::LibererDrivers();
 //Libère les banks
-    for (int i = 0; i < EDITEUR_NB_BANK; i++)
+    for (uchar i = 0; i < EDITEUR_NB_BANK; i++)
         if (banks[i] != NULL) delete banks[i];
+//Libère la table de copie
+    if (copie.sysExTemp) free (copie.sysEx);
 }
 
 void Editeur::TerminerInterface()
 {
-    if (mainWindow != NULL) delete mainWindow;
 }
 
 /*****************************************************************************/
@@ -136,7 +140,7 @@ void Editeur::ConfigurerOnglets(const bool actifs)
     mainWindow->ui->tab_set->setEnabled(actifs);
     mainWindow->ui->tab_operas->setEnabled(actifs);
     mainWindow->ui->tab_voice->setEnabled(actifs);
-//Active ou désactive le cadre de config
+//Active ou désactive des cadres
     mainWindow->ui->widget_config->setEnabled(actifs);
 //Sélectionne l'onglet de configuration
     if (!actifs) mainWindow->ui->tabWidget->setCurrentIndex(0);
@@ -251,18 +255,31 @@ bool Editeur::ActualiserSet()
     return true;
 }
 
-void Editeur::RafraichirSet()
+void Editeur::RafraichirSet(const bool local)
 {
-    if (pageSetSel == 0) {
-        mainWindow->ui->widget_instru_1->Rafraichir();
-        mainWindow->ui->widget_instru_2->Rafraichir();
-        mainWindow->ui->widget_instru_3->Rafraichir();
-        mainWindow->ui->widget_instru_4->Rafraichir();
+    if (local) {
+        switch (editeur->instruSel) {
+            case 0: mainWindow->ui->widget_instru_1->Rafraichir(); break;
+            case 1: mainWindow->ui->widget_instru_2->Rafraichir(); break;
+            case 2: mainWindow->ui->widget_instru_3->Rafraichir(); break;
+            case 3: mainWindow->ui->widget_instru_4->Rafraichir(); break;
+            case 4: mainWindow->ui->widget_instru_5->Rafraichir(); break;
+            case 5: mainWindow->ui->widget_instru_6->Rafraichir(); break;
+            case 6: mainWindow->ui->widget_instru_7->Rafraichir(); break;
+            case 7: mainWindow->ui->widget_instru_8->Rafraichir(); break;
+        }
     }else{
-        mainWindow->ui->widget_instru_5->Rafraichir();
-        mainWindow->ui->widget_instru_6->Rafraichir();
-        mainWindow->ui->widget_instru_7->Rafraichir();
-        mainWindow->ui->widget_instru_8->Rafraichir();
+        if (pageSetSel == 0) {
+            mainWindow->ui->widget_instru_1->Rafraichir();
+            mainWindow->ui->widget_instru_2->Rafraichir();
+            mainWindow->ui->widget_instru_3->Rafraichir();
+            mainWindow->ui->widget_instru_4->Rafraichir();
+        }else{
+            mainWindow->ui->widget_instru_5->Rafraichir();
+            mainWindow->ui->widget_instru_6->Rafraichir();
+            mainWindow->ui->widget_instru_7->Rafraichir();
+            mainWindow->ui->widget_instru_8->Rafraichir();
+        }
     }
     mainWindow->ui->widget_config->Rafraichir();
 }
@@ -297,21 +314,40 @@ void Editeur::RafraichirVoice()
 /*****************************************************************************/
 bool Editeur::ActualiserBanks()
 {
+    try {
+        for (uchar i = 0; i < EDITEUR_NB_BANK; i++)
+            banks[i]->RecevoirTout();
+    }catch (MIDI_ex ex) {
+        QMessageBox::information(mainWindow, "FB01 SE:", ex.Info());
+        return false;
+    }
     RafraichirBanks();
     return true;
 }
 
-void Editeur::RafraichirBanks()
+void Editeur::RafraichirBanks(const bool local)
 {
-    if (pageBankSel == 0) {
-        mainWindow->ui->widget_bank_1->Rafraichir();
-        mainWindow->ui->widget_bank_2->Rafraichir();
-        mainWindow->ui->widget_bank_3->Rafraichir();
-        mainWindow->ui->widget_bank_4->Rafraichir();
+    if (local) {
+        switch (editeur->bankSel) {
+            case 0 : mainWindow->ui->widget_bank_1->Rafraichir(); break;
+            case 1 : mainWindow->ui->widget_bank_2->Rafraichir(); break;
+            case 2 : mainWindow->ui->widget_bank_3->Rafraichir(); break;
+            case 3 : mainWindow->ui->widget_bank_4->Rafraichir(); break;
+            case 4 : mainWindow->ui->widget_bank_5->Rafraichir(); break;
+            case 5 : mainWindow->ui->widget_bank_6->Rafraichir(); break;
+            case 6 : mainWindow->ui->widget_bank_7->Rafraichir(); break;
+        }
     }else{
-        mainWindow->ui->widget_bank_5->Rafraichir();
-        mainWindow->ui->widget_bank_6->Rafraichir();
-        mainWindow->ui->widget_bank_7->Rafraichir();
+        if (pageBankSel == 0) {
+            mainWindow->ui->widget_bank_1->Rafraichir();
+            mainWindow->ui->widget_bank_2->Rafraichir();
+            mainWindow->ui->widget_bank_3->Rafraichir();
+            mainWindow->ui->widget_bank_4->Rafraichir();
+        }else{
+            mainWindow->ui->widget_bank_5->Rafraichir();
+            mainWindow->ui->widget_bank_6->Rafraichir();
+            mainWindow->ui->widget_bank_7->Rafraichir();
+        }
     }
 }
 
@@ -383,19 +419,27 @@ void Editeur::Actualiser()
     ConfigurerMenus(true);
     ConfigurerOnglets(true);
 //Récupère les informations
-    if (!ActualiserBanks()) return;
     if (!ActualiserSet()) return;
     if (!ActualiserVoice()) return;
     ActualiserAutomation();
 }
 
-void Editeur::Rafraichir()
+void Editeur::Rafraichir(const bool local)
 {
-//Rafraichit toute l'interface
-    RafraichirBanks();
-    RafraichirSet();
-    RafraichirVoice();
-    RafraichirAutomation();
+    if (local) {
+        switch (mainWindow->ui->tabWidget->currentIndex()) {
+        case MainWindow::ONGLET_BANK : RafraichirBanks(); break;
+        case MainWindow::ONGLET_SET : RafraichirSet(); break;
+        case MainWindow::ONGLET_VOICE : RafraichirVoice(); break;
+        case MainWindow::ONGLET_OPERATEURS : RafraichirVoice(); break;
+        default: break;
+        }
+    }else {
+        RafraichirBanks();
+        RafraichirSet();
+        RafraichirVoice();
+        RafraichirAutomation();
+    }
 }
 
 /*****************************************************************************/

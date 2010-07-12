@@ -42,8 +42,9 @@
 class Operateur : public Edit, public Automated {
 public :
 //Constantes
-    #define OPERATOR_NB_PARAM 16
-    #define OPERATOR_LEN_SYSEX 16
+    #define OPERATOR_NB_PARAM  16
+    #define OPERATOR_LEN_SYSEX 0x10
+    #define OPERATOR_OFF_PARAM 0x50
 //Paramêtres éditables
     typedef enum {
         OPERATOR_VOLUME = 0,
@@ -67,12 +68,12 @@ public :
     Operateur(const uchar id, uchar * sysEx);
     ~Operateur();
 //Association de l'instrument
-    void AssocierInstrument(int index);
+    void AssocierInstrument(const uint index);
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
     uchar LireParam(const OPERATOR_PARAM param);
-    void  EcrireParam(const OPERATOR_PARAM param, const uchar valeur, const bool envoi);
+    void  EcrireParam(const OPERATOR_PARAM param, const uchar valeur);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param);
 //Callbacks automation

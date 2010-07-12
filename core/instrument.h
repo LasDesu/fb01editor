@@ -42,7 +42,7 @@ class Instrument : public Edit, public Automated {
 public :
 //Constantes
     #define INSTRU_NB_PARAM 15
-    #define INSTRU_LEN_SYSEX 32
+    #define INSTRU_LEN_SYSEX 0x10
 //Paramêtres éditables
 typedef enum {
         INSTRU_NB_NOTES = 0,
@@ -68,7 +68,7 @@ typedef enum {
     void Initialiser();
 //Modification des propriétés
     uchar LireParam(const INSTRU_PARAM param);
-    void  EcrireParam(const INSTRU_PARAM param, const uchar valeur, const bool envoi);
+    void  EcrireParam(const INSTRU_PARAM param, const uchar valeur);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param);
 //Callbacks automation

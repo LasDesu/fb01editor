@@ -45,9 +45,9 @@ public:
     #define AUTO_LEN_NOM 41
 //Structure de données
     typedef struct {
-        Automated * automated;
         uint index;
         char nom[AUTO_LEN_NOM];
+        Automated * automated;
     }CallBackStr;
 //Enregistrement des automations
     static void AjouterCallback(Automated * automated, const uint index, const char * nom);

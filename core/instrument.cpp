@@ -23,10 +23,12 @@
 
 /*****************************************************************************/
 Instrument::Instrument(const uchar id, uchar * sysEx)
-          : Edit(id, sysEx, INSTRU_LEN_SYSEX, INSTRU_NB_PARAM, 0)
+          : Edit(id, sysEx, INSTRU_LEN_SYSEX, INSTRU_NB_PARAM, 0, EDIT_OBJ_INSTRUMENT)
 {
+//Initialise la classe
     CreerCallbacks();
     Initialiser();
+    AutoriserEnvoi(true);
 }
 
 Instrument::~Instrument()
@@ -38,7 +40,7 @@ const uchar initTab[INSTRU_NB_PARAM] = {1, 0, 127, 0, 2, 0, 0, 2, 127, 63, 0, 0,
 void Instrument::Initialiser()
 {
     for (int i = 0; i < INSTRU_NB_PARAM; i++)
-        EcrireParam((INSTRU_PARAM) i, initTab[i], false);
+        EcrireParam((INSTRU_PARAM) i, initTab[i]);
 }
 
 /*****************************************************************************/
@@ -88,54 +90,54 @@ uchar Instrument::LireParam(const INSTRU_PARAM param)
     }
 }
 
-void Instrument::EcrireParam(const INSTRU_PARAM param, const uchar valeur, const bool envoi)
+void Instrument::EcrireParam(const INSTRU_PARAM param, const uchar valeur)
 {
     try {
         switch(param) {
         case INSTRU_NB_NOTES :
-            EcrireParam1Oct(0, valeur & 0xF, envoi);
+            EcrireParam1Oct(0, valeur & 0xF);
         break;
         case INSTRU_CHANNEL :
-            EcrireParam1Oct(1, valeur & 0xF, envoi);
+            EcrireParam1Oct(1, valeur & 0xF);
         break;
         case INSTRU_UPPER :
-            EcrireParam1Oct(2, valeur & 0xF, envoi);
+            EcrireParam1Oct(2, valeur & 0xF);
         break;
         case INSTRU_LOWER :
-            EcrireParam1Oct(3, valeur & 0xF, envoi);
+            EcrireParam1Oct(3, valeur & 0xF);
         break;
         case INSTRU_BANK :
-            EcrireParam1Oct(4, valeur & 0x7, envoi);
+            EcrireParam1Oct(4, valeur & 0x7);
         break;
         case INSTRU_VOICE :
-            EcrireParam1Oct(5, valeur, envoi);
+            EcrireParam1Oct(5, valeur);
         break;
         case INSTRU_DETUNE :
-            EcrireParam1Oct(6, valeur, envoi);
+            EcrireParam1Oct(6, valeur);
         break;
         case INSTRU_TRANS :
-            EcrireParam1Oct(7, valeur & 0x7, envoi);
+            EcrireParam1Oct(7, valeur & 0x7);
         break;
         case INSTRU_VOLUME :
-            EcrireParam1Oct(8, valeur, envoi);
+            EcrireParam1Oct(8, valeur);
         break;
         case INSTRU_PAN :
-            EcrireParam1Oct(9, valeur, envoi);
+            EcrireParam1Oct(9, valeur);
         break;
         case INSTRU_LFO :
-            EcrireParam1Oct(10, valeur & 0x1, envoi);
+            EcrireParam1Oct(10, valeur & 0x1);
         break;
         case INSTRU_PORTAMENTO :
-            EcrireParam1Oct(11, valeur, envoi);
+            EcrireParam1Oct(11, valeur);
         break;
         case INSTRU_PITCHBEND :
-            EcrireParam1Oct(12, valeur & 0xF, envoi);
+            EcrireParam1Oct(12, valeur & 0xF);
         break;
         case INSTRU_POLY :
-            EcrireParam1Oct(13, valeur & 0x1, envoi);
+            EcrireParam1Oct(13, valeur & 0x1);
         break;
         case INSTRU_CONROLLER :
-            EcrireParam1Oct(14, valeur & 0x7, envoi);
+            EcrireParam1Oct(14, valeur & 0x7);
         break;
         default : return;
         }
@@ -181,9 +183,9 @@ void Instrument::CreerCallbacks()
 void Instrument::AppelerCallback(const uint index, const uchar valeur)
 {
     switch(index) {
-    case INSTRU_VOLUME : EcrireParam(INSTRU_VOLUME, valeur, true); break;
-    case INSTRU_PAN : EcrireParam(INSTRU_PAN, valeur, true); break;
-    case INSTRU_TRANS : EcrireParam(INSTRU_TRANS, valeur >> 4, true); break;
-    case INSTRU_DETUNE : EcrireParam(INSTRU_DETUNE, valeur, true); break;
+    case INSTRU_VOLUME : EcrireParam(INSTRU_VOLUME, valeur); break;
+    case INSTRU_PAN    : EcrireParam(INSTRU_PAN, valeur); break;
+    case INSTRU_TRANS  : EcrireParam(INSTRU_TRANS, valeur >> 4); break;
+    case INSTRU_DETUNE : EcrireParam(INSTRU_DETUNE, valeur); break;
     }
 }

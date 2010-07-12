@@ -42,10 +42,11 @@
 class Voice : public Edit, public Automated {
 public :
 //Constantes
-    #define VOICE_LEN_SYSEX 139
-    #define VOICE_NB_PARAM  20
-    #define VOICE_OFF_PARAM 0x9
     #define VOICE_NB_OPS 4
+    #define VOICE_NB_PARAM 20
+    #define VOICE_OFF_PARAM 0x9
+    #define VOICE_OFF_OPS 0x29
+    #define VOICE_LEN_SYSEX 0x8B
     #define VOICE_LEN_AUTEUR 129
     #define VOICE_LEN_COMMENT 129
     #define VOICE_LEN_NOM 7
@@ -76,9 +77,9 @@ public :
     Voice();
     ~Voice();
 //Récupération des objets
-    Operateur * RecupererOP(int index);
+    Operateur * RecupererOP(const uint index);
 //Association de l'instrument
-    void AssocierInstrument(int index);
+    void AssocierInstrument(const uint index);
 //Chargement / déchargement
     bool Enregistrer(FILE * fichier);
     bool Charger(FILE * fichier, const short version);
@@ -86,9 +87,9 @@ public :
     void Initialiser();
 //Modification des propriétés
     uchar  LireParam(const VOICE_PARAM param);
-    void   EcrireParam(const VOICE_PARAM param, const uchar valeur, const bool envoi);
+    void   EcrireParam(const VOICE_PARAM param, const uchar valeur);
     char * LireNom();
-    void   EcrireNom(char * nom, const bool envoi);
+    void   EcrireNom(char * nom);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param);
     void EnvoyerTout();
@@ -102,7 +103,6 @@ private :
 //Paramêtres spéciaux
     char auteur[VOICE_LEN_AUTEUR];
     char comment[VOICE_LEN_COMMENT];
-    char nom[VOICE_LEN_NOM];
 };
 
 #endif

@@ -23,12 +23,12 @@
 
 /*****************************************************************************/
 Operateur::Operateur(const uchar id, uchar * sysEx)
-         : Edit(id, sysEx, OPERATOR_LEN_SYSEX, OPERATOR_NB_PARAM, 0)
+         : Edit(id, sysEx, OPERATOR_LEN_SYSEX, OPERATOR_NB_PARAM, 0, EDIT_OBJ_OPERATEUR)
 {
-//Initialise la classe
     this->instru = 0;
     Initialiser();
     CreerCallbacks();
+    AutoriserEnvoi(true);
 }
 
 Operateur::~Operateur()
@@ -36,7 +36,7 @@ Operateur::~Operateur()
 }
 
 /*****************************************************************************/
-void Operateur::AssocierInstrument(int index)
+void Operateur::AssocierInstrument(const uint index)
 {
     this->instru = index;
 }
@@ -46,7 +46,7 @@ const uchar initTab[OPERATOR_NB_PARAM] = {0, 1, 0, 0, 0, 4, 0, 0, 31, 1, 0, 31, 
 void Operateur::Initialiser()
 {
     for (int i = 0; i < OPERATOR_NB_PARAM; i++)
-        EcrireParam((OPERATOR_PARAM) i, initTab[i], false);
+        EcrireParam((OPERATOR_PARAM) i, initTab[i]);
 }
 
 /*****************************************************************************/
@@ -95,92 +95,92 @@ uchar Operateur::LireParam(const OPERATOR_PARAM param)
     }
 }
 
-void Operateur::EcrireParam(const OPERATOR_PARAM param, const uchar valeur, const bool envoi)
+void Operateur::EcrireParam(const OPERATOR_PARAM param, const uchar valeur)
 {
     uchar byte;
     try {
         switch(param) {
         case OPERATOR_VOLUME :
             byte = valeur & 0x7F;
-            EcrireParam2Oct(0x0, byte, envoi);
+            EcrireParam2Oct(0x0, byte);
         break;
         case OPERATOR_LEVEL_CURB :
             byte  = LireParam2Oct(0x1) & 0x7F;
             byte += (valeur & 0x1) << 7;
-            EcrireParam2Oct(0x1, byte, envoi);
+            EcrireParam2Oct(0x1, byte);
             byte  = LireParam2Oct(3) & 0x7F;
             byte += (valeur & 0x2) << 6;
-            EcrireParam2Oct(0x3, byte, envoi);
+            EcrireParam2Oct(0x3, byte);
         break;
         case OPERATOR_LEVEL_VELOCITY :
             byte  = LireParam2Oct(0x1) & 0x8F;
             byte += (valeur & 0x7) << 4;
-            EcrireParam2Oct(0x1, byte, envoi);
+            EcrireParam2Oct(0x1, byte);
         break;
         case OPERATOR_LEVEL_DEPTH :
             byte  = LireParam2Oct(2) & 0xF;
             byte += (valeur & 0xF) << 4;
-            EcrireParam2Oct(2, byte, envoi);
+            EcrireParam2Oct(2, byte);
         break;
         case OPERATOR_ADJUST :
             byte  = LireParam2Oct(0x2) & 0xF0;
             byte += valeur & 0xF;
-            EcrireParam2Oct(0x2, byte, envoi);
+            EcrireParam2Oct(0x2, byte);
         break;
         case OPERATOR_FINE :
             byte = LireParam2Oct(0x3) & 0x8F;
             byte += (valeur & 0x7) << 4;
-            EcrireParam2Oct(0x3, byte, envoi);
+            EcrireParam2Oct(0x3, byte);
         break;
         case OPERATOR_MULTIPLE :
             byte = LireParam2Oct(0x3) & 0xF0;
             byte += valeur & 0xF;
-            EcrireParam2Oct(0x3, byte, envoi);
+            EcrireParam2Oct(0x3, byte);
         break;
         case OPERATOR_RATE_DEPTH :
             byte  = LireParam2Oct(4) & 0x3F;
             byte += (valeur & 0x3) << 6;
-            EcrireParam2Oct(4, byte, envoi);
+            EcrireParam2Oct(4, byte);
         break;
         case OPERATOR_ATTACK :
             byte = LireParam2Oct(0x4) & 0xE0;
             byte += valeur & 0x1F;
-            EcrireParam2Oct(0x4, byte, envoi);
+            EcrireParam2Oct(0x4, byte);
         break;
         case OPERATOR_MODULATOR :
             byte = LireParam2Oct(0x5) & 0x7F;
             byte += (valeur & 0x1) << 7;
-            EcrireParam2Oct(0x5, byte, envoi);
+            EcrireParam2Oct(0x5, byte);
         break;
         case OPERATOR_ATTACK_VELOCITY :
             byte  = LireParam2Oct(0x5) & 0x9F;
             byte += (valeur & 0x3) << 5;
-            EcrireParam2Oct(0x5, byte, envoi);
+            EcrireParam2Oct(0x5, byte);
         break;
         case OPERATOR_DECAY1 :
             byte = LireParam2Oct(0x5) & 0xE0;
             byte += valeur & 0x1F;
-            EcrireParam2Oct(0x5, byte, envoi);
+            EcrireParam2Oct(0x5, byte);
         break;
         case OPERATOR_COARSE :
             byte = LireParam2Oct(0x6) & 0x3F;
             byte += (valeur & 0x3) << 6;
-            EcrireParam2Oct(0x6, byte, envoi);
+            EcrireParam2Oct(0x6, byte);
         break;
         case OPERATOR_DECAY2 :
             byte = LireParam2Oct(0x6) & 0xE0;
             byte += valeur & 0x1F;
-            EcrireParam2Oct(0x6, byte, envoi);
+            EcrireParam2Oct(0x6, byte);
         break;
         case OPERATOR_SUSTAIN :
             byte = LireParam2Oct(0x7) & 0xF;
             byte += (valeur & 0xF) << 4;
-            EcrireParam2Oct(0x7, byte, envoi);
+            EcrireParam2Oct(0x7, byte);
         break;
         case OPERATOR_RELEASE :
             byte = LireParam2Oct(0x7) & 0xF0;
             byte += valeur & 0xF;
-            EcrireParam2Oct(0x7, byte, envoi);
+            EcrireParam2Oct(0x7, byte);
         break;
         default : return;
         }
@@ -197,9 +197,9 @@ void Operateur::Envoyer(const uint param)
     envOperateur[3] = MIDI::SysChannel();
     envOperateur[4] = 0x18 + (instru & 0x7);
 //Envoi les changements
-    envOperateur[5] = (param + (3 - id) * 0x8 + 0x50) & 0x7F;
-    envOperateur[6] = sysEx[param * 2] & 0xF;
-    envOperateur[7] = sysEx[param * 2 + 1] >> 4;
+    envOperateur[5] = (param + (3 - id) * OPERATOR_LEN_SYSEX / 2 + OPERATOR_OFF_PARAM) & 0x7F;
+    envOperateur[6] = sysEx[param * 2];
+    envOperateur[7] = sysEx[param * 2 + 1];
 //Envoi le message
     MIDI::EnvSysEx(envOperateur, 9);
 }
@@ -237,14 +237,14 @@ void Operateur::CreerCallbacks()
 void Operateur::AppelerCallback(const uint index, const uchar valeur)
 {
     switch(index) {
-    case OPERATOR_ATTACK : EcrireParam(OPERATOR_ATTACK, valeur >> 2, true); break;
-    case OPERATOR_DECAY1 : EcrireParam(OPERATOR_DECAY1, valeur >> 2, true); break;
-    case OPERATOR_SUSTAIN : EcrireParam(OPERATOR_SUSTAIN, 0xF - (valeur >> 3), true); break;
-    case OPERATOR_DECAY2 : EcrireParam(OPERATOR_DECAY2, valeur >> 2, true); break;
-    case OPERATOR_RELEASE : EcrireParam(OPERATOR_RELEASE, valeur >> 3, true); break;
-    case OPERATOR_COARSE : EcrireParam(OPERATOR_COARSE, valeur >> 5, true); break;
-    case OPERATOR_MULTIPLE : EcrireParam(OPERATOR_MULTIPLE, valeur >> 3, true); break;
-    case OPERATOR_FINE : EcrireParam(OPERATOR_FINE, valeur >> 4, true); break;
-    case OPERATOR_VOLUME : EcrireParam(OPERATOR_VOLUME, 0x7F - valeur, true); break;
+    case OPERATOR_ATTACK   : EcrireParam(OPERATOR_ATTACK, valeur >> 2); break;
+    case OPERATOR_DECAY1   : EcrireParam(OPERATOR_DECAY1, valeur >> 2); break;
+    case OPERATOR_SUSTAIN  : EcrireParam(OPERATOR_SUSTAIN, 0xF - (valeur >> 3)); break;
+    case OPERATOR_DECAY2   : EcrireParam(OPERATOR_DECAY2, valeur >> 2); break;
+    case OPERATOR_RELEASE  : EcrireParam(OPERATOR_RELEASE, valeur >> 3); break;
+    case OPERATOR_COARSE   : EcrireParam(OPERATOR_COARSE, valeur >> 5); break;
+    case OPERATOR_MULTIPLE : EcrireParam(OPERATOR_MULTIPLE, valeur >> 3); break;
+    case OPERATOR_FINE     : EcrireParam(OPERATOR_FINE, valeur >> 4); break;
+    case OPERATOR_VOLUME   : EcrireParam(OPERATOR_VOLUME, 0x7F - valeur); break;
     }
 }

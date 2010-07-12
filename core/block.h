@@ -35,7 +35,10 @@ public :
     ~Block();
 //Modification des propriétés
     virtual uchar LireParam(const uchar param);
-    virtual void  EcrireParam(const uchar param, const uchar valeur, const bool envoi);
+    virtual void  EcrireParam(const uchar param, const uchar valeur);
+//Etat des communications
+    void AutoriserEnvoi(const bool envoi);
+    bool EnvoiAutorise();
 //Envoi / Reception de l'objet
     virtual void Envoyer(const uint param);
     virtual void EnvoyerTout();
@@ -46,11 +49,13 @@ protected :
     uint lenSysEx;
     uint nbParam;
     uint offParam;
+//Paramêtres de communication
+    bool envoi;
 //Modification du sysEx
     uchar LireParam1Oct(const uint param);
     uchar LireParam2Oct(const uint param);
-    void  EcrireParam1Oct(const uint param, const uchar valeur, const bool envoi);
-    void  EcrireParam2Oct(const uint param, const uchar valeur, const bool envoi);
+    void  EcrireParam1Oct(const uint param, const uchar valeur);
+    void  EcrireParam2Oct(const uint param, const uchar valeur);
 //Utilitaires du SysEx
     virtual void Initialiser(const uchar * entete, const uint lenEntete);
     virtual void CheckSum1Oct(const uint debut, const uint fin, const uint check);

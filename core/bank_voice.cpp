@@ -23,7 +23,7 @@
 
 /*****************************************************************************/
 Bank_voice::Bank_voice(const uchar id, uchar * sysEx)
-    : Edit(id, sysEx, BANKVOICE_LEN_SYSEX, 0, 0)
+    : Edit(id, sysEx, BANKVOICE_LEN_SYSEX, 0, 0, EDIT_OBJ_BANK_VOICE)
 {
 
 }
@@ -32,4 +32,28 @@ Bank_voice::~Bank_voice()
 {
 
 }
+
 /*****************************************************************************/
+char * Bank_voice::LireNom()
+{
+    static char nom[BANKVOICE_LEN_NOM + 1];
+    try {
+        for (uchar i = 0; i < BANKVOICE_LEN_NOM; i++)
+            nom[i] = (char) LireParam2Oct(i);
+        nom[BANKVOICE_LEN_NOM] = 0;
+        return nom;
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        return NULL;
+    }
+}
+
+uchar Bank_voice::LireStyle()
+{
+    try {
+        return LireParam2Oct(BANKVOICE_PARAM_STYLE);
+    }catch(MIDI_ex ex) {
+        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        return NULL;
+    }
+}

@@ -23,7 +23,7 @@
 
 /*****************************************************************************/
 Config::Config()
-       : Edit(0, NULL, 0, CONFIG_NB_PARAM, 0)
+       : Edit(0, NULL, 0, CONFIG_NB_PARAM, 0, EDIT_OBJ_RIEN)
 {
 }
 
@@ -32,9 +32,9 @@ Config::~Config()
 }
 
 /*****************************************************************************/
-void Config::EcrireParam(const CONFIG_PARAM param, const uchar valeur, const bool envoi)
+void Config::EcrireParam(const CONFIG_PARAM param, const uchar valeur)
 {
-    if (!envoi) return;
+    if (!EnvoiAutorise()) return;
     switch(param) {
     case CONFIG_SYSCHANNEL:
         Envoyer(0x20, valeur & 0xF);

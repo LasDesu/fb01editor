@@ -50,6 +50,7 @@ public:
 //Constantes générales
     typedef enum {
         ONGLET_CONFIG = 0,
+        ONGLET_AUTOMATION,
         ONGLET_BANK,
         ONGLET_SET,
         ONGLET_VOICE,
@@ -117,6 +118,7 @@ private slots:
     void on_pshBut_bank_cur_5_clicked(bool checked);
     void on_pshBut_bank_cur_6_clicked(bool checked);
     void on_pshBut_bank_cur_7_clicked(bool checked);
+    void on_pshBut_loadBanks_pressed();
 //Sélection des instruments
     void on_pshBut_inst_cur_1_clicked(bool checked);
     void on_pshBut_inst_cur_2_clicked(bool checked);

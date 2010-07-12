@@ -22,10 +22,12 @@
 #include "edit.h"
 
 /*****************************************************************************/
-Edit::Edit(const uchar id, uchar * sysEx, const uint lenSysEx, const uint nbParam, const uint offParam)
+Edit::Edit(const uchar id, uchar * sysEx, const uint lenSysEx,
+           const uint nbParam, const uint offParam, const EDIT_OBJET objet)
     : Block(sysEx, lenSysEx, nbParam, offParam)
 {
     this->id = id;
+    this->objet = objet;
 }
 
 Edit::~Edit()
@@ -49,17 +51,18 @@ bool Edit::Enregistrer(FILE * fichier)
     uchar sauv[nbParam];
     for (uint i = 0; i < nbParam; i++)
         sauv[i] = LireParam(i);
-    fwrite(sauv, nbParam, 1, fichier);
+    if (fwrite(sauv, nbParam, 1, fichier) == 0)
+        return false;
     return true;
 }
 
 bool Edit::Charger(FILE * fichier, const short version)
 {
     uchar sauv[nbParam];
-    if (fread(sauv, nbParam, 1, fichier))
+    if (fread(sauv, nbParam, 1, fichier) == 0)
         return false;
     for (uint i = 0; i < nbParam; i++)
-        EcrireParam(i, sauv[i], true);
+        EcrireParam(i, sauv[i]);
     return true;
 }
 
@@ -67,56 +70,75 @@ bool Edit::Charger(FILE * fichier, const short version)
 bool Edit::Exporte(FILE * fichier)
 {
     if (sysEx == NULL) return false;
-    uint res = fwrite(sysEx, lenSysEx, 1, fichier);
-    if (res != lenSysEx) return false;
+    if (fwrite(sysEx, lenSysEx, 1, fichier) == 0)
+        return false;
     return true;
 }
 
 bool Edit::Importe(FILE * fichier)
 {
     if (sysEx == NULL) return false;
-    uint res = fread(sysEx, lenSysEx, 1, fichier);
-    if (res != lenSysEx) return false;
+    if (fread(sysEx, lenSysEx, 1, fichier) == 0)
+        return false;
     return true;
+}
+
+/*****************************************************************************/
+void Edit::Copier(CopieStr * copie)
+{
+//Vérifie la présence du sysEx
+    if (sysEx == NULL) return;
+//Libère un sysEx temporaire
+    if (copie->sysExTemp) free (copie->sysEx);
+//Copie le sysEx
+    copie->objet = objet;
+    copie->sysEx = sysEx;
+    copie->lenSysEx = lenSysEx;
+    copie->sysExTemp = false;
+}
+
+void Edit::Coller(CopieStr * copie)
+{
+//Vérifie la présence du sysEx
+    if (sysEx == NULL) return;
+//Colle le sysEx
+    if (copie->objet != objet || copie->objet == EDIT_OBJ_RIEN) return;
+    memcpy(sysEx, copie->sysEx, lenSysEx);
+//Actualise l'objet
+    if (EnvoiAutorise()) EnvoyerTout();
+}
+
+void Edit::Echanger(CopieStr * copie)
+{
+    uchar * tempSysEx;
+//Vérifie la présence du sysEx
+    if (sysEx == NULL) return;
+//Alloue la table temporaire
+    if (copie->objet != objet || copie->objet == EDIT_OBJ_RIEN) return;
+    tempSysEx = (uchar *) malloc(lenSysEx);
+    if (tempSysEx == NULL) throw Memory_ex("Unable to allocate the exchange table !");
+//Echange les sysEx
+    memcpy(tempSysEx, sysEx, lenSysEx);
+    memcpy(sysEx, copie->sysEx, lenSysEx);
+    if (copie->sysExTemp) free (copie->sysEx);
+//Actualise la structure de copie
+    copie->sysEx = tempSysEx;
+    copie->sysExTemp = true;
+//Actualise l'objet
+    if (EnvoiAutorise()) EnvoyerTout();
 }
 
 /*****************************************************************************/
 void Edit::Initialiser()
 {
+    if (sysEx == NULL) return;
     for (uint i = 0; i < nbParam; i++)
-        EcrireParam(i, 0, true);
+        EcrireParam(i, 0);
 }
 
 void Edit::Randomiser()
 {
+    if (sysEx == NULL) return;
     for (uint i = 0; i < nbParam; i++)
-        EcrireParam(i, RAND(0, 255), true);
-}
-
-void Edit::Copier(uchar * table, const ulong len)
-{
-    if (len != lenSysEx) return;
-    memcpy(table, sysEx, lenSysEx);
-}
-
-void Edit::Coller(const uchar * table, const ulong len, const bool envoi)
-{
-    if (len != lenSysEx) return;
-    memcpy(sysEx, table, lenSysEx);
-    if (envoi) EnvoyerTout();
-}
-
-void Edit::Echanger(uchar * table, const ulong len, const bool envoi)
-{
-//Alloue la table temporaire
-    if (len != lenSysEx) return;
-    uchar * temp = (uchar *) malloc(lenSysEx);
-    if (temp == NULL) throw Memory_ex("Unable to allocate the temporary table for exchange !");
-//Echange les données
-    memcpy(temp, sysEx, lenSysEx);
-    memcpy(sysEx, table, lenSysEx);
-    memcpy(table, temp, lenSysEx);
-//Libère et envoie
-    free(temp);
-    if (envoi) EnvoyerTout();
+        EcrireParam(i, RAND(0, 255));
 }

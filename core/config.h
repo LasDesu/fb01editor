@@ -50,7 +50,7 @@ public :
     Config();
     ~Config();
 //Modification des propriétés
-    void EcrireParam(const CONFIG_PARAM param, const uchar valeur, const bool envoi);
+    void EcrireParam(const CONFIG_PARAM param, const uchar valeur);
 //Envoi / Reception de l'objet
     void Envoyer(const uint param, const uint valeur);
 };

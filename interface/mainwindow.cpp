@@ -259,6 +259,10 @@ ErrorWriting :
 void MainWindow::on_actionInitialize_triggered(bool checked)
 {
     switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_CONFIG :
+        editeur->set.Initialiser();
+        editeur->RafraichirSet();
+        break;
     case ONGLET_SET :
         editeur->set.RecupererInstrument(editeur->instruSel)->Initialiser();
         editeur->RafraichirSet();
@@ -277,6 +281,10 @@ void MainWindow::on_actionInitialize_triggered(bool checked)
 void MainWindow::on_actionRandomize_triggered(bool checked)
 {
     switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_CONFIG :
+        editeur->set.Randomiser();
+        editeur->RafraichirSet();
+        break;
     case ONGLET_SET :
         editeur->set.RecupererInstrument(editeur->instruSel)->Randomiser();
         editeur->RafraichirSet();
@@ -296,65 +304,77 @@ void MainWindow::on_actionRandomize_triggered(bool checked)
 void MainWindow::on_actionCopy_triggered(bool checked)
 {
     switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_CONFIG :
+        editeur->set.Copier(&editeur->copie);
+        break;
     case ONGLET_BANK :
-        //editeur->banks[editeur->BankSel].Copier();
+        editeur->banks[editeur->bankSel]->Copier(&editeur->copie);
         break;
     case ONGLET_SET :
-        //editeur->set.RecupererInstrument(editeur->instruSel)->Copier();
+        editeur->set.RecupererInstrument(editeur->instruSel)->Copier(&editeur->copie);
         break;
     case ONGLET_VOICE :
-        //editeur->voice.Copier();
+        editeur->voice.Copier(&editeur->copie);
         break;
     case ONGLET_OPERATEURS :
-        //editeur->voice.RecupererOP(editeur->OPSel)->Copier();
+        editeur->voice.RecupererOP(editeur->OPSel)->Copier(&editeur->copie);
         break;
+    default: break;
     }
 }
 
 void MainWindow::on_actionPaste_triggered(bool checked)
 {
     switch(ui->tabWidget->currentIndex()) {
-    case ONGLET_BANK :
-        //editeur->banks[editeur->BankSel].Coller();
-        editeur->RafraichirBanks();
-        break;
-    case ONGLET_SET :
-        //editeur->set.RecupererInstrument(editeur->instruSel)->Coller();
+    case ONGLET_CONFIG :
+        editeur->set.Coller(&editeur->copie);
         editeur->RafraichirSet();
         break;
+    case ONGLET_BANK :
+        editeur->banks[editeur->bankSel]->Coller(&editeur->copie);
+        editeur->RafraichirBanks(true);
+        break;
+    case ONGLET_SET :
+        editeur->set.RecupererInstrument(editeur->instruSel)->Coller(&editeur->copie);
+        editeur->RafraichirSet(true);
+        break;
     case ONGLET_VOICE :
-        //editeur->voice.Coller();
+        editeur->voice.Coller(&editeur->copie);
         editeur->RafraichirVoice();
         break;
     case ONGLET_OPERATEURS :
-        //editeur->voice.RecupererOP(editeur->OPSel)->Coller();
+        editeur->voice.RecupererOP(editeur->OPSel)->Coller(&editeur->copie);
         editeur->RafraichirVoice();
         break;
+    default: break;
     }
 }
 
 void MainWindow::on_actionExchange_triggered(bool checked)
 {
-    /*
-    bool ok;
-    int Inst, OP;
-    if (Attente) return;
-    switch (ui->tabWidget->currentIndex())
-    {
-    case 1 : ui->widget_banks->Echanger(); break;
-    case 2 :
-        Inst = QInputDialog::getInt(this, "FB01 SE :", "With which instrument would you like to exchange ?", InstSel+1, 1, 8, 1, &ok);
-        if (!ok || Inst == InstSel+1) return;
-        Insts[InstSel]->Echanger(Insts[Inst-1]);
+    switch(ui->tabWidget->currentIndex()) {
+    case ONGLET_CONFIG :
+        editeur->set.Echanger(&editeur->copie);
+        editeur->RafraichirSet(true);
         break;
-    case 4 :
-        OP = QInputDialog::getInt(this, "FB01 SE :", "With which operator would you like to exchange ?", OPSel+1, 1, 4, 1, &ok);
-        if (!ok || OP == OPSel+1) return;
-        Operas[OPSel]->Echanger(Operas[OP-1]);
+    case ONGLET_BANK :
+        editeur->banks[editeur->bankSel]->Echanger(&editeur->copie);
+        editeur->RafraichirBanks(true);
         break;
-    default : break;
+    case ONGLET_SET :
+        editeur->set.RecupererInstrument(editeur->instruSel)->Echanger(&editeur->copie);
+        editeur->RafraichirSet();
+        break;
+    case ONGLET_VOICE :
+        editeur->voice.Echanger(&editeur->copie);
+        editeur->RafraichirVoice();
+        break;
+    case ONGLET_OPERATEURS :
+        editeur->voice.RecupererOP(editeur->OPSel)->Echanger(&editeur->copie);
+        editeur->RafraichirVoice();
+        break;
+    default: break;
     }
-    */
 }
 
 /*****************************************************************************/
@@ -413,6 +433,7 @@ void MainWindow::on_actionGet_current_voice_triggered(bool checked)
 /*****************************************************************************/
 void MainWindow::on_actionQuit_triggered(bool checked)
 {
+    delete editeur;
     application->quit();
 }
 
@@ -632,6 +653,11 @@ void MainWindow::on_pshBut_bank_cur_7_clicked(bool checked)
     editeur->ChoisirBank(6);
 }
 
+void MainWindow::on_pshBut_loadBanks_pressed()
+{
+    editeur->ActualiserBanks();
+}
+
 /*****************************************************************************/
 void MainWindow::on_pshBut_inst_cur_1_clicked(bool checked)
 {
@@ -705,22 +731,22 @@ void MainWindow::on_pshBut_op_cur_4_clicked(bool checked)
 /*****************************************************************************/
 void MainWindow::on_pshBut_OPon_1_clicked(bool checked)
 {
-    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP1, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP1, checked);
 }
 
 void MainWindow::on_pshBut_OPon_2_clicked(bool checked)
 {
-    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP2, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP2, checked);
 }
 
 void MainWindow::on_pshBut_OPon_3_clicked(bool checked)
 {
-    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP3, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP3, checked);
 }
 
 void MainWindow::on_pshBut_OPon_4_clicked(bool checked)
 {
-    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP4, checked, true);
+    editeur->voice.EcrireParam(Voice::VOICE_ENABLE_OP4, checked);
 }
 
 /*****************************************************************************/
@@ -731,7 +757,7 @@ void MainWindow::on_pshBut_nextSet_pressed()
 
 void MainWindow::on_pshBut_nextBank_pressed()
 {
-    editeur->ChoisirPageSet(1 - editeur->pageBankSel);
+    editeur->ChoisirPageBank(1 - editeur->pageBankSel);
 }
 
 /*****************************************************************************/
@@ -749,5 +775,5 @@ void MainWindow::changeEvent(QEvent *e)
 
 void MainWindow::timerEvent(QTimerEvent *e)
 {
-    editeur->Rafraichir();
+    editeur->Rafraichir(true);
 }
