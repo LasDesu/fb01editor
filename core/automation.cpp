@@ -22,10 +22,12 @@
 #include "automation.h"
 
 /*****************************************************************************/
-uint Automation::CCs[AUTO_NB_CCS][AUTO_NB_CBS];
 Automation::CallBackStr Automation::callbacks[AUTO_MAX_CBS];
+Automation::AutomationStr Automation::automations[AUTO_NB_CCS][AUTO_NB_CBS];
 uint Automation::nbCallbacks = 0;
+uint Automation::nbAutomations = 0;
 
+/*****************************************************************************/
 uchar Automation::dernierCC = -1;
 uchar Automation::derniereValeur = -1;
 
@@ -56,59 +58,79 @@ char * Automation::NomCallback(const uint index)
 }
 
 /*****************************************************************************/
-void Automation::AssocierCC(const uchar CC, const uint index)
+void Automation::Ajouter(const uchar CC, const uchar inFrom, const uchar inTo,
+                         const uint indexCB, const uchar outFrom, const uchar outTo)
 {
 //Vérifie si déjà associée
     for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (CCs[CC][i] == index + 1) return;
-//Associe la callback au CC
+        if (automations[CC][i].callback == &callbacks[indexCB])
+            throw Automation_ex("This automation already exist !");
+//Ajoute l'automation si place disponible
     for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (CCs[CC][i] == 0) {
-            CCs[CC][i] = index + 1;
+        if (automations[CC][i].callback == NULL) {
+        //Configure l'automation
+            automations[CC][i].CC = CC;
+            automations[CC][i].inFrom = inFrom;
+            automations[CC][i].inTo = inTo;
+            automations[CC][i].outFrom = outFrom;
+            automations[CC][i].outTo = outTo;
+            automations[CC][i].callback = &callbacks[indexCB];
+            nbAutomations ++;
             return;
         }
-//Manque de place
-    throw Automation_ex("Too much parameters assigned to the same CC !");
+//Signale le manque de place
+    throw Automation_ex("Too much automations associated to the same CC !");
 }
 
-void Automation::DissocierCC(const uchar CC,  const uint index)
+void Automation::Enlever(const uint indexAuto)
 {
-//Supprime la callback
-    for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (CCs[CC][i] == index + 1) {
-            CCs[CC][i] = 0;
-            return;
-        }
+    AutomationStr * au = TrouverAuto(indexAuto);
+    if (au == NULL) return;
+    au->callback = NULL;
+    nbAutomations --;
 }
 
-/*****************************************************************************/
-bool Automation::CallbackAssociee(const uint index, const uchar CC)
+uint Automation::NbAutomations()
 {
-//Vérifie si la callback est associée au CC
-    for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (CCs[CC][i] == index + 1) return true;
-    return false;
+    return nbAutomations;
 }
 
-bool Automation::CCAssocie(const uchar CC)
+char * Automation::DescAutomation(const uint indexAuto)
 {
-//Vérifie si le CC contient une callback
-    for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (CCs[CC][i] > 0) return true;
-    return false;
+    static char desc[AUTO_LEN_DESC]; desc[0] = 0;
+//Retrouve l'automation
+    AutomationStr * au = TrouverAuto(indexAuto);
+    if (au == NULL) return desc;
+//Génère un texte descriptif
+    sprintf(desc, "CC#%i from %i to %i : %s from %i to %i",
+            au->CC, au->inFrom, au->inTo, au->callback->nom, au->outFrom, au->outTo);
+    return desc;
 }
 
 /*****************************************************************************/
 void Automation::ReagirCC(const uchar CC, const uchar valeur)
 {
-//Execute les callbacks
-    for (uint i = 0; i < AUTO_NB_CBS; i ++) {
-        int cb = CCs[CC][i] - 1;
-        if (cb >= 0) callbacks[cb].automated->AppelerCallback(callbacks[cb].index, valeur);
-    }
-//Enregistre l'évenement
+    uint calcul;
+    AutomationStr * au;
+//Enregistre l'évènement
     dernierCC = CC;
     derniereValeur = valeur;
+//Execute les callbacks
+    for (uint i = 0; i < AUTO_NB_CBS; i ++) {
+        au = &automations[CC][i];
+        if (au->callback != NULL) {
+            if (valeur <= au->inFrom) {
+                au->callback->automated->AppelerCallback(au->callback->index, au->outFrom);
+            }else if (valeur >= au->inTo) {
+                au->callback->automated->AppelerCallback(au->callback->index, au->outTo);
+            }else{
+                calcul = (uint) valeur - au->inFrom;
+                calcul = (calcul * (au->outTo - au->outFrom + 1)) / (au->inTo - au->inFrom + 1);
+                calcul = calcul + au->outFrom;
+                au->callback->automated->AppelerCallback(au->callback->index, (uchar) calcul);
+            }
+        }else return;
+    }
 }
 
 /*****************************************************************************/
@@ -120,4 +142,17 @@ uchar Automation::DernierCC()
 uchar Automation::DerniereValeur()
 {
     return derniereValeur;
+}
+
+/*****************************************************************************/
+Automation::AutomationStr * Automation::TrouverAuto(const uint indexAuto)
+{
+    uint index = 0;
+    for (uint i = 0; i < AUTO_NB_CCS; i ++)
+    for (uint j = 0; j < AUTO_NB_CBS; j ++)
+        if (automations[i][j].callback != NULL) {
+            if (index == indexAuto) return &automations[i][j];
+            else index ++;
+        }
+    return NULL;
 }

@@ -70,7 +70,7 @@ private slots:
     void on_cmbBox_MIDICtrl_activated(int index);
     void on_cmbBox_MIDIIn_activated(int index);
     void on_cmbBox_MIDIOut_activated(int index);
-    void on_pshBut_refresh_midi_clicked(bool checked);
+    void on_pshBut_refresh_midi_pressed();
     void on_pshBut_INToOUT_clicked(bool checked);
     void on_pshBut_CTRLToOUT_clicked(bool checked);
 //Callbacks clavier virtuel

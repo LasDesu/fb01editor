@@ -23,6 +23,7 @@
 #define QAUTOMATION_H
 
 #include <QWidget>
+#include <QMessageBox>
 
 #include "ui_qautomation.h"
 
@@ -47,14 +48,15 @@ public:
     ~QAutomation();
 //Actualisation du contrôle
     void Actualiser();
+    void ActuAutos();
     void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
 private:
     Ui::QAutomation *m_ui;
 private slots:
-    void on_listWidget_CCs_itemClicked(QListWidgetItem * item);
-    void on_listWidget_FMs_itemClicked(QListWidgetItem * item);
+    void on_pshBut_add_pressed();
+    void on_pshBut_remove_pressed();
 };
 
 #endif // QAUTOMATION_H

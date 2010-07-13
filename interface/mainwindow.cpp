@@ -545,7 +545,7 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
     }
 }
 
-void MainWindow::on_pshBut_refresh_midi_clicked(bool checked)
+void MainWindow::on_pshBut_refresh_midi_pressed()
 {
 //Initialise la liste des drivers
     ui->cmbBox_MIDICtrl->clear();

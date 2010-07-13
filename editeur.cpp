@@ -107,7 +107,7 @@ void Editeur::InitialiserInterface()
         throw Memory_ex("Unable to create the window !");
     mainWindow->show();
 //Liste les drivers
-    mainWindow->on_pshBut_refresh_midi_clicked(false);
+    mainWindow->on_pshBut_refresh_midi_pressed();
 //Désactive l'interface
     ConfigurerMenus(false);
     ConfigurerOnglets(false);
@@ -428,6 +428,7 @@ void Editeur::Rafraichir(const bool local)
 {
     if (local) {
         switch (mainWindow->ui->tabWidget->currentIndex()) {
+        case MainWindow::ONGLET_AUTOMATION : RafraichirAutomation(); break;
         case MainWindow::ONGLET_BANK : RafraichirBanks(); break;
         case MainWindow::ONGLET_SET : RafraichirSet(); break;
         case MainWindow::ONGLET_VOICE : RafraichirVoice(); break;
@@ -435,10 +436,10 @@ void Editeur::Rafraichir(const bool local)
         default: break;
         }
     }else {
+        RafraichirAutomation();
         RafraichirBanks();
         RafraichirSet();
         RafraichirVoice();
-        RafraichirAutomation();
     }
 }
 

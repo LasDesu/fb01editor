@@ -63,7 +63,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_config">
      <property name="enabled">
@@ -435,7 +435,7 @@
         <x>10</x>
         <y>20</y>
         <width>602</width>
-        <height>272</height>
+        <height>312</height>
        </rect>
       </property>
      </widget>
