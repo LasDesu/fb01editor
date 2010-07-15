@@ -46,21 +46,21 @@ void QInstrument::Rafraichir()
 {
     attente = true;
 //Actualise le contenu des contrôles
-    m_ui->but_notes->setValue(instrument->LireParam(Instrument::INSTRU_NB_NOTES));
-    m_ui->but_channel->setValue(instrument->LireParam(Instrument::INSTRU_CHANNEL) + 1);
-    m_ui->cmbBox_upper->setCurrentIndex(instrument->LireParam(Instrument::INSTRU_UPPER));
-    m_ui->cmbBox_lower->setCurrentIndex(instrument->LireParam(Instrument::INSTRU_LOWER));
-    m_ui->but_bank->setValue(instrument->LireParam(Instrument::INSTRU_BANK) + 1);
-    m_ui->but_voice->setValue(instrument->LireParam(Instrument::INSTRU_VOICE) + 1);
-    m_ui->but_detune->setValue(instrument->LireParam(Instrument::INSTRU_DETUNE));
-    m_ui->but_trans->setValue(instrument->LireParam(Instrument::INSTRU_TRANS) - 2);
-    m_ui->hzSlider_volume->setValue(instrument->LireParam(Instrument::INSTRU_VOLUME));
-    m_ui->hzSlider_pan->setValue(instrument->LireParam(Instrument::INSTRU_PAN));
-    m_ui->pshBut_LFO->setChecked(!instrument->LireParam(Instrument::INSTRU_LFO));
-    m_ui->but_porta->setValue(instrument->LireParam(Instrument::INSTRU_PORTAMENTO));
-    m_ui->but_pitch->setValue(instrument->LireParam(Instrument::INSTRU_PITCHBEND));
-    m_ui->pshBut_poly->setChecked(!instrument->LireParam(Instrument::INSTRU_POLY));
-    m_ui->cmbBox_pmdctl->setCurrentIndex(instrument->LireParam(Instrument::INSTRU_CONROLLER));
+    m_ui->but_notes->setValue(instrument->LireParam(INSTRU_NB_NOTES));
+    m_ui->but_channel->setValue(instrument->LireParam(INSTRU_CHANNEL) + 1);
+    m_ui->cmbBox_upper->setCurrentIndex(instrument->LireParam(INSTRU_UPPER));
+    m_ui->cmbBox_lower->setCurrentIndex(instrument->LireParam(INSTRU_LOWER));
+    m_ui->but_bank->setValue(instrument->LireParam(INSTRU_BANK) + 1);
+    m_ui->but_voice->setValue(instrument->LireParam(INSTRU_VOICE) + 1);
+    m_ui->but_detune->setValue(((char) instrument->LireParam(INSTRU_DETUNE)));
+    m_ui->but_trans->setValue(instrument->LireParam(INSTRU_TRANS) - 2);
+    m_ui->hzSlider_volume->setValue(instrument->LireParam(INSTRU_VOLUME));
+    m_ui->hzSlider_pan->setValue(instrument->LireParam(INSTRU_PAN));
+    m_ui->pshBut_LFO->setChecked(!instrument->LireParam(INSTRU_LFO));
+    m_ui->but_porta->setValue(instrument->LireParam(INSTRU_PORTAMENTO));
+    m_ui->but_pitch->setValue(instrument->LireParam(INSTRU_PITCHBEND));
+    m_ui->pshBut_poly->setChecked(!instrument->LireParam(INSTRU_POLY));
+    m_ui->cmbBox_pmdctl->setCurrentIndex(min(instrument->LireParam(INSTRU_CONTROLLER), 4));
     attente = false;
 }
 
@@ -93,91 +93,91 @@ void QInstrument::InitialiserNotes(QComboBox * box)
 void QInstrument::on_but_notes_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_NB_NOTES, i);
+        instrument->EcrireParam(INSTRU_NB_NOTES, i);
 }
 
 void QInstrument::on_but_channel_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_CHANNEL, i - 1);
+        instrument->EcrireParam(INSTRU_CHANNEL, i - 1);
 }
 
 void QInstrument::on_cmbBox_upper_activated(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_UPPER, i);
+        instrument->EcrireParam(INSTRU_UPPER, i);
 }
 
 void QInstrument::on_cmbBox_lower_activated(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_LOWER, i);
+        instrument->EcrireParam(INSTRU_LOWER, i);
 }
 
 void QInstrument::on_but_bank_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_BANK, i - 1);
+        instrument->EcrireParam(INSTRU_BANK, i - 1);
 }
 
 void QInstrument::on_but_voice_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_VOICE, i - 1);
+        instrument->EcrireParam(INSTRU_VOICE, i - 1);
 }
 
 void QInstrument::on_but_detune_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_DETUNE, i);
+        instrument->EcrireParam(INSTRU_DETUNE, i);
 }
 
 void QInstrument::on_but_trans_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_TRANS, i + 2);
+        instrument->EcrireParam(INSTRU_TRANS, i + 2);
 }
 
 void QInstrument::on_hzSlider_volume_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_VOLUME, i);
+        instrument->EcrireParam(INSTRU_VOLUME, i);
 }
 
 void QInstrument::on_hzSlider_pan_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_PAN, i);
+        instrument->EcrireParam(INSTRU_PAN, i);
 }
 
 void QInstrument::on_pshBut_LFO_clicked(bool checked)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_LFO, !checked);
+        instrument->EcrireParam(INSTRU_LFO, !checked);
 }
 
 void QInstrument::on_pshBut_poly_clicked(bool checked)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_POLY, !checked);
+        instrument->EcrireParam(INSTRU_POLY, !checked);
 }
 
 void QInstrument::on_but_porta_valueChanged(int i)
 {
     if (!attente)
-    instrument->EcrireParam(Instrument::INSTRU_PORTAMENTO, i);
+    instrument->EcrireParam(INSTRU_PORTAMENTO, i);
 }
 
 void QInstrument::on_but_pitch_valueChanged(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_PITCHBEND, i);
+        instrument->EcrireParam(INSTRU_PITCHBEND, i);
 }
 
 void QInstrument::on_cmbBox_pmdctl_activated(int i)
 {
     if (!attente)
-        instrument->EcrireParam(Instrument::INSTRU_CONROLLER, i);
+        instrument->EcrireParam(INSTRU_CONTROLLER, i);
 }
 
 /*****************************************************************************/

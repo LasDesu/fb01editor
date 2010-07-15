@@ -52,12 +52,11 @@ class Editeur {
 public :
 //Constantes générales
     #define EDITEUR_NB_BANK 7
-    #define EDITEUR_INTER_ACTU 500
 //Types de fichiers
     typedef enum {
         FICHIER_VOICE = 0,
         FICHIER_SET,
-        FICHIER_BANK,
+        FICHIER_AUTOMATION,
         FICHIER_SYSEX
     }FICHIER_TYPE;
 //Constructeurs
@@ -68,7 +67,7 @@ public :
     FILE * EnregistrerFichier(FICHIER_TYPE type);
 //Actualisation de l'éditeur
     void Actualiser();
-    void Rafraichir(const bool local = false);
+    void Rafraichir(const bool visible = false);
     void Reinitialiser();
 //Attribution des objets
     void AttribuerConfig();
@@ -76,9 +75,11 @@ public :
     void AttribuerInstruments();
     void AttribuerVoice();
     void AttribuerOperateurs();
+    void InitialiserAutomation();
 //Configuration de l'interface
-    void ConfigurerOnglets(const bool actifs);
-    void ConfigurerMenus(const bool actifs);
+    void ActiverOnglets(const bool actifs);
+    void ActiverMenus(const bool actifs);
+    void ActualiserEdition(const int onglet);
 //Sélection des pages
     void ChoisirPageSet(const int page);
     void ChoisirPageBank(const int page);
@@ -88,21 +89,24 @@ public :
     void ChoisirOP(const int OP);
 //Actualisation des contenus
     bool ActualiserBanks();
+    bool ActualiserBank(const int bank);
     bool ActualiserSet();
     bool ActualiserVoice();
     void ActualiserAutomation();
 //Rafraichissement de l'affichage
-    void RafraichirBanks(const bool local = false);
-    void RafraichirSet(const bool local = false);
-    void RafraichirVoice();
     void RafraichirAutomation();
+    void RafraichirBanks();
+    void RafraichirBank(const int bank);
+    void RafraichirSet(const bool visible = false);
+    void RafraichirConfig(const bool visible = false);
+    void RafraichirVoice(const bool visible = false);
 private :
 //Fenêtre de l'éditeur
-    MainWindow * mainWindow;
+    MainWindow mainWindow;
 //Objets de l'éditeur
     Bank * banks[EDITEUR_NB_BANK];
-    Set set;
-    Voice voice;
+    Set    set;
+    Voice  voice;
     Config config;
 //Sélection des pages et objets
     int pageSetSel;

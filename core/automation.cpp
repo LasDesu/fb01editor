@@ -28,8 +28,8 @@ uint Automation::nbCallbacks = 0;
 uint Automation::nbAutomations = 0;
 
 /*****************************************************************************/
-uchar Automation::dernierCC = -1;
-uchar Automation::derniereValeur = -1;
+uchar Automation::dernierCC = 0;
+uchar Automation::derniereValeur = 0;
 
 /*****************************************************************************/
 void Automation::AjouterCallback(Automated * automated, const uint index, const char * nom)
@@ -38,10 +38,10 @@ void Automation::AjouterCallback(Automated * automated, const uint index, const 
     if (nbCallbacks == AUTO_MAX_CBS)
         throw Automation_ex("Too much callbacks registrated !");
 //Enregistre la callback
-    int len = min(strlen(nom), AUTO_LEN_NOM);
     callbacks[nbCallbacks].automated = automated;
     callbacks[nbCallbacks].index = index;
-    strncpy(callbacks[nbCallbacks].nom, nom, len);
+    strncpy(callbacks[nbCallbacks].nom, nom, AUTO_LEN_NOM - 1);
+    callbacks[nbCallbacks].nom[AUTO_LEN_NOM - 1] = 0;
  //Passe à la suivante
     nbCallbacks ++;
 }
@@ -63,18 +63,19 @@ void Automation::Ajouter(const uchar CC, const uchar inFrom, const uchar inTo,
 {
 //Vérifie si déjà associée
     for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (automations[CC][i].callback == &callbacks[indexCB])
+        if (automations[CC][i].valide && (automations[CC][i].indexCB == indexCB))
             throw Automation_ex("This automation already exist !");
 //Ajoute l'automation si place disponible
     for (uint i = 0; i < AUTO_NB_CBS; i ++)
-        if (automations[CC][i].callback == NULL) {
+        if (!automations[CC][i].valide) {
         //Configure l'automation
-            automations[CC][i].CC = CC;
-            automations[CC][i].inFrom = inFrom;
-            automations[CC][i].inTo = inTo;
+            automations[CC][i].CC      = CC;
+            automations[CC][i].inFrom  = inFrom;
+            automations[CC][i].inTo    = inTo;
             automations[CC][i].outFrom = outFrom;
-            automations[CC][i].outTo = outTo;
-            automations[CC][i].callback = &callbacks[indexCB];
+            automations[CC][i].outTo   = outTo;
+            automations[CC][i].indexCB = indexCB;
+            automations[CC][i].valide  = true;
             nbAutomations ++;
             return;
         }
@@ -84,12 +85,17 @@ void Automation::Ajouter(const uchar CC, const uchar inFrom, const uchar inTo,
 
 void Automation::Enlever(const uint indexAuto)
 {
-    AutomationStr * au = TrouverAuto(indexAuto);
-    if (au == NULL) return;
-    au->callback = NULL;
+    TrouverAuto(indexAuto)->valide = false;
     nbAutomations --;
 }
 
+void Automation::EnleverTout()
+{
+    while (nbAutomations > 0)
+        Enlever(0);
+}
+
+/*****************************************************************************/
 uint Automation::NbAutomations()
 {
     return nbAutomations;
@@ -97,13 +103,10 @@ uint Automation::NbAutomations()
 
 char * Automation::DescAutomation(const uint indexAuto)
 {
-    static char desc[AUTO_LEN_DESC]; desc[0] = 0;
-//Retrouve l'automation
+    static char desc[AUTO_LEN_DESC];
     AutomationStr * au = TrouverAuto(indexAuto);
-    if (au == NULL) return desc;
-//Génère un texte descriptif
     sprintf(desc, "CC#%i from %i to %i : %s from %i to %i",
-            au->CC, au->inFrom, au->inTo, au->callback->nom, au->outFrom, au->outTo);
+            au->CC, au->inFrom, au->inTo, callbacks[au->indexCB].nom, au->outFrom, au->outTo);
     return desc;
 }
 
@@ -118,16 +121,16 @@ void Automation::ReagirCC(const uchar CC, const uchar valeur)
 //Execute les callbacks
     for (uint i = 0; i < AUTO_NB_CBS; i ++) {
         au = &automations[CC][i];
-        if (au->callback != NULL) {
+        if (au->valide) {
             if (valeur <= au->inFrom) {
-                au->callback->automated->AppelerCallback(au->callback->index, au->outFrom);
+                callbacks[au->indexCB].automated->AppelerCallback(callbacks[au->indexCB].index, au->outFrom);
             }else if (valeur >= au->inTo) {
-                au->callback->automated->AppelerCallback(au->callback->index, au->outTo);
+                callbacks[au->indexCB].automated->AppelerCallback(callbacks[au->indexCB].index, au->outTo);
             }else{
                 calcul = (uint) valeur - au->inFrom;
                 calcul = (calcul * (au->outTo - au->outFrom + 1)) / (au->inTo - au->inFrom + 1);
                 calcul = calcul + au->outFrom;
-                au->callback->automated->AppelerCallback(au->callback->index, (uchar) calcul);
+                callbacks[au->indexCB].automated->AppelerCallback(callbacks[au->indexCB].index, (uchar) calcul);
             }
         }else return;
     }
@@ -145,14 +148,49 @@ uchar Automation::DerniereValeur()
 }
 
 /*****************************************************************************/
+bool Automation::Enregistrer(FILE * fichier)
+{
+    ushort nb = nbAutomations;
+    if (fwrite(&nb, 2, 1, fichier) == 0) return false;
+    for (uint i = 0; i < nbAutomations; i++)
+        if (fwrite(TrouverAuto(i), sizeof(AutomationStr), 1, fichier) == 0) return false;
+    return true;
+}
+
+bool Automation::Charger(FILE * fichier, const short version)
+{
+    AutomationStr au;
+    ushort nb;
+//Supprime toutes les automations
+    EnleverTout();
+//Charge les automations du fichier
+    if (fread(&nb, 2, 1, fichier) == 0) return false;
+    for (uint i = 0; i < nb; i++) {
+    //Récupère l'automation
+        if (fread(&au, sizeof(AutomationStr), 1, fichier) == 0) return false;
+    //Vérifie le format
+        if (au.indexCB >= nbCallbacks) return false;
+        if (au.CC >= AUTO_NB_CCS) return false;
+        if (!au.valide) return false;
+    //Ajoute l'automation
+        Ajouter(au.CC, au.inFrom, au.inTo, au.indexCB, au.outFrom, au.outTo);
+    }
+    return true;
+}
+
+/*****************************************************************************/
 Automation::AutomationStr * Automation::TrouverAuto(const uint indexAuto)
 {
     uint index = 0;
+//Vérifie l'existance de l'automation
+    if (indexAuto >= nbAutomations)
+        throw Automation_ex("Bad automation index !");
+//Trouve la bonne automation
     for (uint i = 0; i < AUTO_NB_CCS; i ++)
     for (uint j = 0; j < AUTO_NB_CBS; j ++)
-        if (automations[i][j].callback != NULL) {
+        if (automations[i][j].valide) {
             if (index == indexAuto) return &automations[i][j];
             else index ++;
         }
-    return NULL;
+    throw Automation_ex("Unable to find the automation !");
 }

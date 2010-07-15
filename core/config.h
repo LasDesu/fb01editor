@@ -34,25 +34,31 @@
 #include "edit.h"
 
 /*****************************************************************************/
-class Config : public Edit {
+class Config : public Edit, public Automated {
 public :
 //Constantes
     #define CONFIG_NB_PARAM 4
 //Paramêtres éditables
-    typedef enum {
-        CONFIG_SYSCHANNEL = 0,
-        CONFIG_MEMORY_PROTECT,
-        CONFIG_CONFIG_NUMBER,
-        CONFIG_DETUNE,
-        CONFIG_MASTER_VOLUME
-    }CONFIG_PARAM;
+    #define CONFIG_SYSCHANNEL 0
+    #define CONFIG_MEMORY_PROTECT 1
+    #define CONFIG_CONFIG_NUMBER 2
+    #define CONFIG_MASTER_DETUNE 3
+    #define CONFIG_MASTER_VOLUME 4
 //Constructeurs
     Config();
     ~Config();
 //Modification des propriétés
-    void EcrireParam(const CONFIG_PARAM param, const uchar valeur);
+    uchar LireParam(const uchar param);
+    void  EcrireParam(const uchar param, const uchar valeur);
 //Envoi / Reception de l'objet
-    void Envoyer(const uint param, const uint valeur);
+    void Envoyer(const uchar param, const uchar valeur);
+//Gestion des callbacks automation
+    void CreerCallbacks();
+    void AppelerCallback(const uint index, const uchar valeur);
+private :
+//Paramêtres temporaires
+    uchar masterVolume;
+    uchar masterDetune;
 };
 
 #endif

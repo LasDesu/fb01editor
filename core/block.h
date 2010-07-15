@@ -40,9 +40,12 @@ public :
     void AutoriserEnvoi(const bool envoi);
     bool EnvoiAutorise();
 //Envoi / Reception de l'objet
-    virtual void Envoyer(const uint param);
+    virtual void Envoyer(const uchar param);
     virtual void EnvoyerTout();
     virtual void RecevoirTout();
+//Vérification de la transmission
+    virtual uchar CalculerCheckSum(const uint debut, const uint longueur);
+    virtual void  VerifierCheckSum(const uint debut, const uint longueur, const uint position);
 protected :
 //Paramêtres du sysEx
     uchar * sysEx;
@@ -52,14 +55,12 @@ protected :
 //Paramêtres de communication
     bool envoi;
 //Modification du sysEx
-    uchar LireParam1Oct(const uint param);
-    uchar LireParam2Oct(const uint param);
-    void  EcrireParam1Oct(const uint param, const uchar valeur);
-    void  EcrireParam2Oct(const uint param, const uchar valeur);
+    uchar LireParam1Oct(const uchar param);
+    uchar LireParam2Oct(const uchar param);
+    void  EcrireParam1Oct(const uchar param, const uchar valeur);
+    void  EcrireParam2Oct(const uchar param, const uchar valeur);
 //Utilitaires du SysEx
-    virtual void Initialiser(const uchar * entete, const uint lenEntete);
-    virtual void CheckSum1Oct(const uint debut, const uint fin, const uint check);
-    virtual void CheckSum2Oct(const uint debut, const uint fin, const uint check);
+    virtual void  Preparer(const uchar * entete, const uint lenEntete);
 };
 
 #endif

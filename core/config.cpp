@@ -25,6 +25,10 @@
 Config::Config()
        : Edit(0, NULL, 0, CONFIG_NB_PARAM, 0, EDIT_OBJ_RIEN)
 {
+    masterVolume = 127;
+    masterDetune = 64;
+    CreerCallbacks();
+    AutoriserEnvoi(true);
 }
 
 Config::~Config()
@@ -32,9 +36,8 @@ Config::~Config()
 }
 
 /*****************************************************************************/
-void Config::EcrireParam(const CONFIG_PARAM param, const uchar valeur)
+void Config::EcrireParam(const uchar param, const uchar valeur)
 {
-    if (!EnvoiAutorise()) return;
     switch(param) {
     case CONFIG_SYSCHANNEL:
         Envoyer(0x20, valeur & 0xF);
@@ -46,18 +49,29 @@ void Config::EcrireParam(const CONFIG_PARAM param, const uchar valeur)
     case CONFIG_CONFIG_NUMBER:
         Envoyer(0x22, valeur & 0x1F);
     break;
-    case CONFIG_DETUNE:
+    case CONFIG_MASTER_DETUNE:
         Envoyer(0x23, valeur & 0x7F);
+        masterDetune = valeur;
     break;
     case CONFIG_MASTER_VOLUME:
         Envoyer(0x24, valeur & 0x7F);
+        masterVolume = valeur;
     break;
     default: return;
     }
 }
 
+uchar Config::LireParam(const uchar param)
+{
+    switch(param) {
+    case CONFIG_MASTER_DETUNE: return masterDetune;
+    case CONFIG_MASTER_VOLUME: return masterVolume;
+    default: return 0;
+    }
+}
+
 /*****************************************************************************/
-void Config::Envoyer(const uint param, const uint valeur)
+void Config::Envoyer(const uchar param, const uchar valeur)
 {
     uchar envConfig[] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
 //Construit le message
@@ -68,3 +82,18 @@ void Config::Envoyer(const uint param, const uint valeur)
     MIDI::EnvSysEx(envConfig, 8);
 }
 
+/*****************************************************************************/
+void Config::CreerCallbacks()
+{
+    Automation::AjouterCallback(this, CONFIG_MASTER_VOLUME, "Config master volume");
+    Automation::AjouterCallback(this, CONFIG_MASTER_DETUNE, "Config master detune");
+}
+
+void Config::AppelerCallback(const uint index, const uchar valeur)
+{
+    switch (index) {
+        case CONFIG_MASTER_VOLUME: EcrireParam(CONFIG_MASTER_VOLUME, valeur); break;
+        case CONFIG_MASTER_DETUNE: EcrireParam(CONFIG_MASTER_DETUNE, valeur - 64); break;
+        default: break;
+    }
+}

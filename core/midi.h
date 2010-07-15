@@ -58,7 +58,7 @@ public:
     static bool CtrlOk();
 //Envoi de messages
     static void EnvMsg(uchar * msg);
-    static void EnvSysEx(uchar * sysEx, const int taille);
+    static void EnvSysEx(uchar * sysEx, const int taille, const bool reponse = false);
     static void RecSysEx(uchar * sysEx, const int taille);
 //Paramêtres de transmission
     static void  ChoisirMidiChannel(const uchar channel);
@@ -79,6 +79,9 @@ public:
 private:
 //Constantes communication
     #define MIDI_ATT_MSG 10
+    #define MIDI_LEN_TAMPON 0x2000
+    #define MIDI_ATTENTE 100
+    #define MIDI_ATTENTE_MESSAGE 100
 //Structures des drivers
     typedef struct {
         void * desc;
@@ -96,9 +99,6 @@ private:
     static bool relaiIN;
     static bool relaiCTRL;
 //Tampon de réception
-    #define MIDI_LEN_TAMPON 0x2000
-    #define MIDI_ATTENTE 100
-    #define MIDI_ATTENTE_MESSAGE 100
     static uchar tampon[2][MIDI_LEN_TAMPON];
     static bool  attente;
 #ifdef WIN32

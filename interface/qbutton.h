@@ -36,21 +36,19 @@ public:
 //Accesseurs
     void setValue(int value);
     int  value();
-//Réimplémentation du basesize
-    void setBaseSize(const QSize size);
 protected:
 //Réimplémentation de la souris
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
     void mouseReleaseEvent(QMouseEvent * event);
 private:
-//Valeurs du controle
+//Valeurs du contrôle
     int valeur, ancValeur;
-    int valMin, valMax;
-//Gestion du click
+    int valeurMin, valeurMax;
+//Tracking souris
     bool click;
-    int  clickValeur;
-    int  sourisX, sourisY;
+    int clickValeur;
+    int sourisX, sourisY;
 signals :
     void valueChanged(int value);
 };

@@ -23,9 +23,9 @@
 
 /*****************************************************************************/
 Bank_voice::Bank_voice(const uchar id, uchar * sysEx)
-    : Edit(id, sysEx, BANKVOICE_LEN_SYSEX, 0, 0, EDIT_OBJ_BANK_VOICE)
+    : Edit(id, sysEx, BANKVOICE_LEN_SYSEX, 0, BANKVOICE_OFF_PARAM, EDIT_OBJ_BANK_VOICE)
 {
-
+    AutoriserEnvoi(true);
 }
 
 Bank_voice::~Bank_voice()
@@ -43,17 +43,59 @@ char * Bank_voice::LireNom()
         nom[BANKVOICE_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return NULL;
     }
 }
 
-uchar Bank_voice::LireStyle()
+void Bank_voice::EcrireNom(const char * nom)
+{
+    char temp[BANKVOICE_LEN_NOM];
+    try {
+        strncpy(temp, nom, BANKVOICE_LEN_NOM);
+        for (uint i = 0; i < BANKVOICE_LEN_NOM; i++) {
+            if (temp[i] == 0) EcrireParam2Oct(i, ' ');
+            else EcrireParam2Oct(i, temp[i]);
+        }
+    }catch(MIDI_ex ex) {
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+    }
+}
+
+/*****************************************************************************/
+uchar Bank_voice::LireParam(const uchar param)
 {
     try {
-        return LireParam2Oct(BANKVOICE_PARAM_STYLE);
+        switch(param) {
+        case BANKVOICE_STYLE :
+            return LireParam2Oct(0x7) & 0x7F;
+        default : return 0;
+        }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
-        return NULL;
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        return 0;
     }
+}
+
+void Bank_voice::EcrireParam(const uchar param, const uchar valeur)
+{
+    try {
+        switch(param) {
+        case BANKVOICE_STYLE :
+            EcrireParam2Oct(0x7, valeur & 0x7F);
+        break;
+        default : return;
+        }
+    }catch(MIDI_ex ex) {
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+    }
+}
+
+/*****************************************************************************/
+void Bank_voice::GenererEntete()
+{
+//Créé l'entête du sysEx
+    sysEx[0x0] = 0x1;
+    sysEx[0x1] = 0x0;
+    sysEx[BANKVOICE_OFF_CHECK] = CalculerCheckSum(BANKVOICE_OFF_PARAM, BANKVOICE_LEN_PARAM);
 }

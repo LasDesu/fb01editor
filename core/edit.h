@@ -33,7 +33,7 @@
 
 class Edit : public Block {
 public :
-//Mecanisme de copie
+//Type d'objet
     typedef enum {
         EDIT_OBJ_RIEN = 0,
         EDIT_OBJ_OPERATEUR,
@@ -43,6 +43,7 @@ public :
         EDIT_OBJ_BANK_VOICE,
         EDIT_OBJ_BANK
     }EDIT_OBJET;
+//Mécanisme de copie
     typedef struct {
         EDIT_OBJET objet;
         uchar * sysEx;
@@ -57,10 +58,10 @@ public :
     uchar LireId();
     void  EcrireId(const uchar id);
 //Edition de l'objet
-    void Copier(CopieStr * copie);
-    void Coller(CopieStr * copie);
-    void Echanger(CopieStr * copie);
     virtual void Initialiser();
+    virtual void Copier(CopieStr * copie);
+    virtual void Coller(CopieStr * copie);
+    virtual void Echanger(CopieStr * copie);
     virtual void Randomiser();
 //Chargement / déchargement de l'objet
     virtual bool Enregistrer(FILE * fichier);

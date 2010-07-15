@@ -44,33 +44,32 @@ public :
     #define INSTRU_NB_PARAM 15
     #define INSTRU_LEN_SYSEX 0x10
 //Paramêtres éditables
-typedef enum {
-        INSTRU_NB_NOTES = 0,
-        INSTRU_CHANNEL,
-        INSTRU_UPPER,
-        INSTRU_LOWER,
-        INSTRU_BANK,
-        INSTRU_VOICE,
-        INSTRU_DETUNE,
-        INSTRU_TRANS,
-        INSTRU_VOLUME,
-        INSTRU_PAN,
-        INSTRU_LFO,
-        INSTRU_PORTAMENTO,
-        INSTRU_PITCHBEND,
-        INSTRU_POLY,
-        INSTRU_CONROLLER
-    }INSTRU_PARAM;
+    #define INSTRU_NB_NOTES 0
+    #define INSTRU_CHANNEL 1
+    #define INSTRU_UPPER 2
+    #define INSTRU_LOWER 3
+    #define INSTRU_BANK 4
+    #define INSTRU_VOICE 5
+    #define INSTRU_DETUNE 6
+    #define INSTRU_TRANS 7
+    #define INSTRU_VOLUME 8
+    #define INSTRU_PAN 9
+    #define INSTRU_LFO 10
+    #define INSTRU_PORTAMENTO 11
+    #define INSTRU_PITCHBEND 12
+    #define INSTRU_POLY 13
+    #define INSTRU_CONTROLLER 14
 //Constructeurs
     Instrument(const uchar id, uchar * sysEx);
     ~Instrument();
 //Edition de l'objet
     void Initialiser();
+    void Randomiser();
 //Modification des propriétés
-    uchar LireParam(const INSTRU_PARAM param);
-    void  EcrireParam(const INSTRU_PARAM param, const uchar valeur);
+    uchar LireParam(const uchar param);
+    void  EcrireParam(const uchar param, const uchar valeur);
 //Envoi / Reception de l'objet
-    void Envoyer(const uint param);
+    void Envoyer(const uchar param);
 //Callbacks automation
     void CreerCallbacks();
     void AppelerCallback(const uint index, const uchar valeur);

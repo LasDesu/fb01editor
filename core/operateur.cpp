@@ -45,12 +45,12 @@ void Operateur::AssocierInstrument(const uint index)
 const uchar initTab[OPERATOR_NB_PARAM] = {0, 1, 0, 0, 0, 4, 0, 0, 31, 1, 0, 31, 0, 0, 0, 15};
 void Operateur::Initialiser()
 {
-    for (int i = 0; i < OPERATOR_NB_PARAM; i++)
-        EcrireParam((OPERATOR_PARAM) i, initTab[i]);
+    for (uchar i = 0; i < OPERATOR_NB_PARAM; i++)
+        EcrireParam(i, initTab[i]);
 }
 
 /*****************************************************************************/
-uchar Operateur::LireParam(const OPERATOR_PARAM param)
+uchar Operateur::LireParam(const uchar param)
 {
     try {
         switch(param) {
@@ -90,12 +90,12 @@ uchar Operateur::LireParam(const OPERATOR_PARAM param)
         default : return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return 0;
     }
 }
 
-void Operateur::EcrireParam(const OPERATOR_PARAM param, const uchar valeur)
+void Operateur::EcrireParam(const uchar param, const uchar valeur)
 {
     uchar byte;
     try {
@@ -185,12 +185,12 @@ void Operateur::EcrireParam(const OPERATOR_PARAM param, const uchar valeur)
         default : return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
     }
 }
 
 /*****************************************************************************/
-void Operateur::Envoyer(const uint param)
+void Operateur::Envoyer(const uchar param)
 {
     uchar envOperateur[9] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Construit le message

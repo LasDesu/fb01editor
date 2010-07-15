@@ -50,7 +50,10 @@ private:
     Bank * bank;
     bool attente;
 private slots:
- //   void on_table_bank_cellClicked(int row, int column);
+    void on_txtEdit_bankName_textChanged();
+    void on_cmbBox_style_activated(int i);
+    void on_txtEdit_voiceName_textChanged();
+    void on_listWidget_voices_cellClicked(int row, int column);
 };
 
 #endif // QBANK_H

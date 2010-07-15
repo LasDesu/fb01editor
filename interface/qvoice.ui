@@ -93,6 +93,11 @@
     </item>
     <item>
      <property name="text">
+      <string>Wood</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Synth</string>
      </property>
     </item>
@@ -202,17 +207,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>7</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The level of feedback for the synthesis</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>7</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_porta">
@@ -243,17 +248,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The portamento length of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>127</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_pitch">
@@ -284,17 +289,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>128</width>
-      <height>127</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The transpose level of the voice</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>-128</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <string>127</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pshBut_poly">
@@ -363,17 +368,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>12</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The pitchbender range of the voice</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>12</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_trans">
@@ -459,7 +464,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../FB01.qrc">:/ALGO1</pixmap>
+     <pixmap>:/ALGO1</pixmap>
     </property>
    </widget>
    <widget class="QButton" name="but_algo">
@@ -471,17 +476,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>1</width>
-      <height>8</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The sound algorithm of the voice</string>
     </property>
     <property name="text">
      <string>1</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>1</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>8</number>
     </property>
    </widget>
   </widget>
@@ -548,28 +553,6 @@
       <string>S&amp;H</string>
      </property>
     </item>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_LFOspeed">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>20</y>
-      <width>81</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>The requested speed for the LFO</string>
-    </property>
-    <property name="minimum">
-     <number>0</number>
-    </property>
-    <property name="maximum">
-     <number>255</number>
-    </property>
-    <property name="value">
-     <number>0</number>
-    </property>
    </widget>
    <widget class="QLabel" name="lbl_LFOspeed">
     <property name="geometry">
@@ -675,17 +658,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>7</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The pitch modulation sensitivity</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>7</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_AMD">
@@ -754,17 +737,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>3</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The amplitude modulation sensitivity</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>3</number>
     </property>
    </widget>
    <widget class="QButton" name="but_PMD">
@@ -776,17 +759,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The pitch modulation</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>127</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_PMD">
@@ -817,17 +800,39 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
+    <property name="toolTip">
+     <string>The amplitude modulation</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>127</number>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_LFOspeed">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
     </property>
     <property name="toolTip">
      <string>The amplitude modulation</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>255</number>
     </property>
    </widget>
   </widget>
@@ -934,8 +939,6 @@
    <header>interface/qbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../FB01.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

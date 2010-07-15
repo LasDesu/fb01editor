@@ -329,17 +329,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>31</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The influence of key velocity on the output level</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>31</number>
     </property>
    </widget>
    <widget class="QButton" name="but_velAR">
@@ -351,17 +351,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>3</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The influence of key velocity on attack rate</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>3</number>
     </property>
    </widget>
    <widget class="QButton" name="but_AR">
@@ -373,17 +373,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>31</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The attack rate of the enveloppe</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>31</number>
     </property>
    </widget>
    <widget class="QButton" name="but_D1R">
@@ -395,17 +395,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>31</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The decay 1 rate of the enveloppe</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>31</number>
     </property>
    </widget>
    <widget class="QButton" name="but_SL">
@@ -417,17 +417,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>15</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The sustain level of the enveloppe</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>15</number>
     </property>
    </widget>
    <widget class="QButton" name="but_D2R">
@@ -439,17 +439,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>31</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The decay 2 rate of the enveloppe</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>31</number>
     </property>
    </widget>
    <widget class="QButton" name="but_RR">
@@ -461,17 +461,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>15</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The release rate of the enveloppe</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>15</number>
     </property>
    </widget>
    <widget class="QButton" name="but_coarse">
@@ -483,17 +483,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>3</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The coarse detune level</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>3</number>
     </property>
    </widget>
    <widget class="QButton" name="but_mult">
@@ -505,17 +505,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>15</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string/>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>15</number>
     </property>
    </widget>
    <widget class="QButton" name="but_fine">
@@ -527,17 +527,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>252</width>
-      <height>3</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The fine detune level</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>-4</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>3</number>
     </property>
    </widget>
    <widget class="QButton" name="but_lvldph">
@@ -549,12 +549,6 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>15</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The influence of the note height on the output level</string>
     </property>
@@ -563,6 +557,12 @@
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>15</number>
     </property>
    </widget>
    <widget class="QButton" name="but_rtdph">
@@ -574,17 +574,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>3</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The influence of the note height on the enveloppe rates</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>3</number>
     </property>
    </widget>
    <widget class="QButton" name="but_adjTL">
@@ -596,17 +596,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>15</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>Fine adjustement for the output level</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>15</number>
     </property>
    </widget>
   </widget>

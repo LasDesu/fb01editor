@@ -45,7 +45,6 @@ HEADERS += types.h \
     core/automated.h \
     excep/automation_ex.h \
     core/periph.h
-RESOURCES += FB01.qrc
 SOURCES += core/set.cpp \
     core/midi.cpp \
     core/block.cpp \
@@ -73,21 +72,7 @@ SOURCES += core/set.cpp \
     core/automation.cpp \
     excep/automation_ex.cpp \
     core/periph.cpp
-winnt { 
-    DEFINES += WIN32
-    LIBS += -luser32 \
-        \ \
-        -lwinmm
-}
-win32 { 
-    DEFINES += WIN32
-    LIBS += -luser32 \
-        -lwinmm
-}
-unix { 
-    DEFINES += LINUX
-    LIBS += 
-}
+RESOURCES += FB01.qrc
 FORMS += interface/qoperateur.ui \
     interface/qinstrument.ui \
     interface/qvoice.ui \
@@ -95,3 +80,17 @@ FORMS += interface/qoperateur.ui \
     interface/qbank.ui \
     interface/qconfig.ui \
     interface/qautomation.ui
+winnt { 
+    DEFINES += WIN32
+    LIBS += -luser32 -lwinmm
+    RC_FILE  = FB01.rc
+}
+win32 { 
+    DEFINES += WIN32
+    LIBS += -luser32 -lwinmm
+    RC_FILE  = FB01.rc
+}
+unix { 
+    DEFINES += LINUX
+    LIBS += 
+}

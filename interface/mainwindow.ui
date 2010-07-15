@@ -63,7 +63,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_config">
      <property name="enabled">
@@ -309,17 +309,17 @@
          <height>23</height>
         </rect>
        </property>
-       <property name="baseSize">
-        <size>
-         <width>1</width>
-         <height>16</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>Set the MIDI channel of the virtual keyboard</string>
        </property>
        <property name="text">
         <string>1</string>
+       </property>
+       <property name="minValue" stdset="0">
+        <number>1</number>
+       </property>
+       <property name="maxValue" stdset="0">
+        <number>16</number>
        </property>
       </widget>
       <widget class="QLabel" name="lbl_kybvel">
@@ -369,17 +369,17 @@
          <height>23</height>
         </rect>
        </property>
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>127</height>
-        </size>
-       </property>
        <property name="toolTip">
         <string>Set the velocity parameter of the virtual keyboard</string>
        </property>
        <property name="text">
         <string>100</string>
+       </property>
+       <property name="minValue" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="maxValue" stdset="0">
+        <number>127</number>
        </property>
       </widget>
       <widget class="QPushButton" name="pshBut_kybQWERTY">
@@ -435,7 +435,7 @@
         <x>10</x>
         <y>20</y>
         <width>602</width>
-        <height>312</height>
+        <height>342</height>
        </rect>
       </property>
      </widget>
@@ -701,17 +701,69 @@
        <string>Next page</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pshBut_loadBanks">
+     <widget class="QPushButton" name="pshBut_loadAll">
       <property name="geometry">
        <rect>
-        <x>520</x>
+        <x>540</x>
         <y>508</y>
-        <width>91</width>
+        <width>71</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Load all banks</string>
+       <string>Load all</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_loadCurrent">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>508</y>
+        <width>71</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Load current</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_copyBank">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>508</y>
+        <width>71</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Copy</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_pasteBank">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>508</y>
+        <width>71</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Paste</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pshBut_exchangeBank">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>508</y>
+        <width>71</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Exchange</string>
       </property>
      </widget>
     </widget>
@@ -1549,17 +1601,19 @@ played with the computer's keyboard.</string>
      <property name="title">
       <string>Load</string>
      </property>
-     <addaction name="actionLoad_bank"/>
      <addaction name="actionLoad_set"/>
      <addaction name="actionLoad_voice"/>
+     <addaction name="separator"/>
+     <addaction name="actionLoad_automations"/>
     </widget>
     <widget class="QMenu" name="menuSave">
      <property name="title">
       <string>Save</string>
      </property>
-     <addaction name="actionSave_bank"/>
      <addaction name="actionSave_set"/>
      <addaction name="actionSave_voice"/>
+     <addaction name="separator"/>
+     <addaction name="actionSave_automations"/>
     </widget>
     <widget class="QMenu" name="menuImport">
      <property name="title">
@@ -1593,7 +1647,6 @@ played with the computer's keyboard.</string>
     <addaction name="actionAbout_Qt"/>
     <addaction name="separator"/>
     <addaction name="actionRead_this"/>
-    <addaction name="actionUser_manual"/>
    </widget>
    <widget class="QMenu" name="menuFB01">
     <property name="title">
@@ -1611,8 +1664,9 @@ played with the computer's keyboard.</string>
      <property name="title">
       <string>Send ...</string>
      </property>
-     <addaction name="actionSend_current_bank"/>
      <addaction name="actionSend_current_config"/>
+     <addaction name="separator"/>
+     <addaction name="actionSend_current_bank"/>
      <addaction name="actionSend_current_set"/>
      <addaction name="actionSend_current_voice"/>
     </widget>
@@ -1804,6 +1858,16 @@ played with the computer's keyboard.</string>
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt ...</string>
+   </property>
+  </action>
+  <action name="actionLoad_automations">
+   <property name="text">
+    <string>Load automations ...</string>
+   </property>
+  </action>
+  <action name="actionSave_automations">
+   <property name="text">
+    <string>Save automations ...</string>
    </property>
   </action>
  </widget>

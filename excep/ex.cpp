@@ -35,7 +35,6 @@ char * Ex::Info()
 
 void Ex::DefinirInfo(const char * info)
 {
-    int len = strlen(info);
-    strncpy(this->info, info, min(len + 1, EX_LEN_INFO));
-    this->info[EX_LEN_INFO-1] = 0;
+    strncpy(this->info, info, EX_LEN_INFO - 1);
+    this->info[EX_LEN_INFO - 1] = 0;
 }

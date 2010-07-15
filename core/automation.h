@@ -39,11 +39,30 @@ class Automation
 {
 public:
 //Constantes
-    #define AUTO_NB_CCS   128
-    #define AUTO_NB_CBS   4
-    #define AUTO_MAX_CBS  100
     #define AUTO_LEN_NOM  41
-    #define AUTO_LEN_DESC 61
+    #define AUTO_LEN_DESC 81
+//Gestion des callbacks
+    static void   AjouterCallback(Automated * automated, const uint index, const char * nom);
+    static uint   NbCallbacks();
+    static char * NomCallback(const uint index);
+//Gestion des automations
+    static void   Ajouter(const uchar CC, const uchar inFrom, const uchar inTo, const uint indexCB, const uchar outFrom, const uchar outTo);
+    static void   Enlever(const uint indexAuto);
+    static void   EnleverTout();
+    static uint   NbAutomations();
+    static char * DescAutomation(const uint indexAuto);
+//Réaction aux MIDI CCs
+    static void  ReagirCC(const uchar CC, const uchar valeur);
+    static uchar DernierCC();
+    static uchar DerniereValeur();
+//Chargement / enregistrement
+    static bool Enregistrer(FILE * fichier);
+    static bool Charger(FILE * fichier, const short version);
+private :
+//Constantes
+    #define AUTO_NB_CCS 128
+    #define AUTO_NB_CBS 4
+    #define AUTO_MAX_CBS 100
 //Structures des callbacks
     typedef struct {
         char nom[AUTO_LEN_NOM];
@@ -54,27 +73,13 @@ public:
         uchar CC;
         uchar inFrom, inTo;
         uchar outFrom, outTo;
-        CallBackStr * callback;
+        uint  indexCB;
+        bool  valide;
     }AutomationStr;
-//Gestion des callbacks
-    static void   AjouterCallback(Automated * automated, const uint index, const char * nom);
-    static uint   NbCallbacks();
-    static char * NomCallback(const uint index);
-//Gestion des automations
-    static void   Ajouter(const uchar CC, const uchar inFrom, const uchar inTo, const uint indexCB, const uchar outFrom, const uchar outTo);
-    static void   Enlever(const uint indexAuto);
-    static uint   NbAutomations();
-    static char * DescAutomation(const uint indexAuto);
-//Réaction aux MIDI CCs
-    static void  ReagirCC(const uchar CC, const uchar valeur);
-    static uchar DernierCC();
-    static uchar DerniereValeur();
-protected :
 //Retrouve une automation
     static AutomationStr * TrouverAuto(const uint indexAuto);
-private :
 //Liste des callbacks et automations
-    static CallBackStr   callbacks[AUTO_MAX_CBS];
+    static CallBackStr callbacks[AUTO_MAX_CBS];
     static AutomationStr automations[AUTO_NB_CCS][AUTO_NB_CBS];
     static uint nbCallbacks, nbAutomations;
 //Statistiques évenements CC

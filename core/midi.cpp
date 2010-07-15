@@ -276,7 +276,7 @@ void MIDI::EnvMsg(uchar * msg)
     Sleep(MIDI_ATT_MSG);
 }
 
-void MIDI::EnvSysEx(uchar * sysEx, const int taille)
+void MIDI::EnvSysEx(uchar * sysEx, const int taille, const bool reponse)
 {
     MIDIHDR head;
 //Vérifie l'ouverture
@@ -291,8 +291,10 @@ void MIDI::EnvSysEx(uchar * sysEx, const int taille)
     if (midiOutPrepareHeader(hndOut, &head, sizeof(MIDIHDR)) != MMSYSERR_NOERROR)
         throw MIDI_ex("Unable to prepare header !");
 //Prépare la réception
-    PreparerTampon();
-    attente = true;
+    if (reponse) {
+        PreparerTampon();
+        attente = true;
+    }
 //Envoie le message
     if (midiOutLongMsg(hndOut, &head, sizeof(MIDIHDR)) != MMSYSERR_NOERROR) {
     //Supprime l'attente de réception
@@ -314,6 +316,7 @@ void MIDI::RecSysEx(uchar * sysEx, const int taille)
     ulong cmpt = 0;
 //Vérifie l'ouverture
     if (hndIn  == 0) throw MIDI_ex("No MIDI IN port openned !");
+    if (!prepare) throw MIDI_ex("No response awaited !");
 //Attend un message
     while (cmpt < MIDI_ATTENTE_MESSAGE) {
     //Recoit un nouveau message
@@ -328,6 +331,7 @@ void MIDI::RecSysEx(uchar * sysEx, const int taille)
         cmpt ++;
     }
 //Delai d'attente dépassé
+    DePreparerTampon();
     throw MIDI_ex("No MIDI data received !");
 }
 
@@ -439,11 +443,10 @@ void MIDI::PreparerTampon()
 #ifdef WIN32
 void MIDI::DePreparerTampon()
 {
-//Déprépare le tampon
     if (!prepare) return;
-    midiInUnprepareHeader(hndIn, &header, sizeof(MIDIHDR));
-//Reset les drapeaux
+//Déprepare le tampon
     attente = false;
+    midiInUnprepareHeader(hndIn, &header, sizeof(MIDIHDR));
     prepare = false;
 }
 #endif

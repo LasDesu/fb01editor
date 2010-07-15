@@ -24,56 +24,37 @@
 /*****************************************************************************/
 QClavier::QClavier(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
-    clavierDispo = CLAVIER_AUCUNE;
+    timer = 0;
     ChoisirClavier(CLAVIER_QWERTY);
-    clavierActif = false;
-    ActiverClavier(true);
-    noteSouris = -1;
 }
 
 QClavier::~QClavier()
 {
-    if (timer != 0) this->killTimer(timer);
-    MIDI::AllNotesOff();
+    Reinitialiser();
 }
 
 /*****************************************************************************/
-void QClavier::ActiverClavier(const bool actif)
-{
-    if (clavierActif == actif) return;
-//Initialise le clavier
-    if (actif) {
-        timer = this->startTimer(CLAVIER_INTER_ACTU);
-    }else{
-        if (timer != 0) this->killTimer(timer);
-        try {
-            timer = 0; noteSouris = -1;
-            MIDI::AllNotesOff();
-        }catch (MIDI_ex ex) { return; }
-    }
-//Sauvegarde l'état
-    clavierActif = actif;
-}
-
-const char dispoQWERTY[CLAVIER_NB_TOUCHE] = {'Q', '2', 'W', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
-                                             'Z', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', 'M'};
-const char dispoAZERTY[CLAVIER_NB_TOUCHE] = {'A', '2', 'Z', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
-                                             'W', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', ','};
+const char dispoQWERTY[CLAVIER_NB_TOUCHES] = {'Q', '2', 'W', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
+                                              'Z', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', 'M'};
+const char dispoAZERTY[CLAVIER_NB_TOUCHES] = {'A', '2', 'Z', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
+                                              'W', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', ','};
 void QClavier::ChoisirClavier(const CLAVIER_DISPO dispo)
 {
     const char * table;
+//Réinitialise le clavier
     if (clavierDispo == dispo) return;
-//Choisit le tableau
+    Reinitialiser();
+//Choisie la disposition des touches
     switch (dispo) {
-    case CLAVIER_QWERTY: table = dispoQWERTY; break;
-    case CLAVIER_AZERTY: table = dispoAZERTY; break;
-    default : return;
+        case CLAVIER_AUCUNE: return;
+        case CLAVIER_QWERTY: table = dispoQWERTY; break;
+        case CLAVIER_AZERTY: table = dispoAZERTY; break;
+        default : return;
     }
 //Effectue le mapping clavier
-    for (int i = 0; i < CLAVIER_NB_TOUCHE; i++) {
+    for (uint i = 0; i < CLAVIER_NB_TOUCHES; i++)
         touches[i].touche = table[i];
-        touches[i].etat = false;
-    }
+    timer = this->startTimer(CLAVIER_INTER_ACTU);
 }
 
 /*****************************************************************************/
@@ -85,12 +66,12 @@ void QClavier::mouseMoveEvent(QMouseEvent * event)
 
 void QClavier::timerEvent(QTimerEvent *e)
 {
-    for (int i = 0; i < CLAVIER_NB_TOUCHE; i ++) {
+    for (uint i = 0; i < CLAVIER_NB_TOUCHES; i ++) {
         bool etat = Periph::ToucheASCII(touches[i].touche);
         if (etat != touches[i].etat) {
             try {
                 if (etat) MIDI::NoteOn(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
-                else MIDI::NoteOff(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
+                else      MIDI::NoteOff(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
                 touches[i].etat = etat;
             }catch (MIDI_ex ex) { return; }
         }
@@ -149,10 +130,23 @@ int QClavier::TrouverNoteSouris(const int x, const int y)
     return min(note, 127);
 }
 
-/*****************************************************************************/
 int QClavier::TrouverNoteClavier(const int index, const bool shift, const bool control)
 {
     if (shift) return min(index + 12 + G_REF, 127);
     if (control) return max(0, index - 12 + G_REF);
     return index + G_REF;
+}
+
+/*****************************************************************************/
+void QClavier::Reinitialiser()
+{
+//Réinitialise les commandes
+    if (timer != 0) this->killTimer(timer);
+    for (uint i = 0; i < CLAVIER_NB_TOUCHES; i++)
+        touches[i].etat = false;
+    noteSouris = -1;
+//Arrête toute note jouée
+    try {
+        MIDI::AllNotesOff();
+    }catch (MIDI_ex ex) { return; }
 }

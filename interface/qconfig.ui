@@ -101,7 +101,7 @@
      <string>Master volume :</string>
     </property>
    </widget>
-   <widget class="QSlider" name="hzSlider_mastvol">
+   <widget class="QSlider" name="hzSlider_mastvolume">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -173,17 +173,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>1</width>
-      <height>16</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The system channel of the module to be edited</string>
     </property>
     <property name="text">
      <string>1</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>1</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>16</number>
     </property>
    </widget>
    <widget class="QButton" name="but_setnum">
@@ -195,17 +195,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>1</width>
-      <height>20</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The current set number</string>
     </property>
     <property name="text">
      <string>1</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>1</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>20</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_mastdetune">
@@ -236,17 +236,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>192</width>
-      <height>63</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>Master detune of the module</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>-64</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>63</number>
     </property>
    </widget>
   </widget>
@@ -419,17 +419,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The amplitude modulation provided by the LFO</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>127</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_AMD">
@@ -449,28 +449,6 @@
     </property>
     <property name="text">
      <string>AMD :</string>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="spnBox_LFOspeed">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>120</y>
-      <width>101</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>The LFO speed for the set</string>
-    </property>
-    <property name="minimum">
-     <number>0</number>
-    </property>
-    <property name="maximum">
-     <number>255</number>
-    </property>
-    <property name="value">
-     <number>0</number>
     </property>
    </widget>
    <widget class="QComboBox" name="cmbBox_LFOwave">
@@ -534,17 +512,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The pitch modulation provided by the LFO</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>127</number>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_LFOwave">
@@ -564,6 +542,28 @@
     </property>
     <property name="text">
      <string>LFO wave :</string>
+    </property>
+   </widget>
+   <widget class="QButton" name="but_LFOspeed">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>120</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>The pitch modulation provided by the LFO</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>255</number>
     </property>
    </widget>
   </widget>

@@ -24,29 +24,31 @@
 /*****************************************************************************/
 QButton::QButton(QWidget * parent) : QPushButton(parent)
 {
-//Initialise le controle
-    this->valeur = 0;
-    this->ancValeur = 0;
-    this->click = false;
-    this->valMax = 0;
-    this->valMin = 0;
+//Initialise les valeurs
+    valeur = 0;
+    ancValeur = 0;
+    valeurMin = 0;
+    valeurMax = 0;
+//Initialise le tracking
+    click = false;
 }
 
 QButton::~QButton()
 {
+
 }
 
 /*****************************************************************************/
 void QButton::setValue(int value)
 {
-    static QString text;
+    static QString num;
 //Change la valeur interne
-    this->valeur = (char) value;
+    this->valeur = value;
     this->ancValeur = valeur;
     emit valueChanged(valeur);
 //Affiche la nouvelle valeur
-    text.setNum(valeur, 10);
-    setText(text);
+    num.setNum(valeur, 10);
+    setText(num);
     repaint();
 }
 
@@ -58,39 +60,39 @@ int QButton::value()
 /*****************************************************************************/
 void QButton::mouseMoveEvent(QMouseEvent * event)
 {
-    static QString text;
+    static QString num;
     if (!click) return;
 //Augmente ou diminue la valeur
     valeur = clickValeur;
     valeur += (sourisY - event->y()) >> 2;
     valeur += (event->x() - sourisX) >> 4;
 //Limite la plage
-    if(valeur > valMax) valeur = valMax;
-    if(valeur < valMin) valeur = valMin;
-//Change la valeur du controle
+    if(valeur > valeurMax) valeur = valeurMax;
+    if(valeur < valeurMin) valeur = valeurMin;
+//Actualise le contrôle
     if (valeur != ancValeur) {
+    //Emet le signal
         emit valueChanged(valeur);
         ancValeur = valeur;
-        text.setNum(valeur, 10);
-        setText(text);
+    //Change le texte
+        num.setNum(valeur, 10);
+        setText(num);
+        repaint();
     }
-}
-
-/*****************************************************************************/
-void QButton::setBaseSize(const QSize size)
-{
-    QPushButton::setBaseSize(size);
-    this->valMin = (char) size.width();
-    this->valMax = (char) size.height();
 }
 
 /*****************************************************************************/
 void QButton::mousePressEvent(QMouseEvent * event)
 {
-//Sauvegarde la position
+//Sauvegarde la position et la valeur
     clickValeur = valeur;
     sourisX = event->x();
     sourisY = event->y();
+//Initialise le tracking
+    QVariant valmin = this->property("minValue");
+    if (valmin.isValid()) valeurMin = valmin.toInt();
+    QVariant valmax = this->property("maxValue");
+    if (valmax.isValid()) valeurMax = valmax.toInt();
     click = true;
 }
 

@@ -46,33 +46,33 @@ public :
     #define VOICE_NB_PARAM 20
     #define VOICE_OFF_PARAM 0x9
     #define VOICE_OFF_OPS 0x29
+    #define VOICE_OFF_CHECK 0x89
+    #define VOICE_LEN_PARAM 0x80
     #define VOICE_LEN_SYSEX 0x8B
     #define VOICE_LEN_AUTEUR 129
-    #define VOICE_LEN_COMMENT 129
+    #define VOICE_LEN_COMMENTS 129
     #define VOICE_LEN_NOM 7
 //Paramêtres éditables
-    typedef enum {
-        VOICE_ALGORITHM = 0,
-        VOICE_USERCODE,
-        VOICE_FEEDBACK,
-        VOICE_TRANSPOSE,
-        VOICE_POLY,
-        VOICE_PORTAMENTO,
-        VOICE_PITCHBEND,
-        VOICE_CONTROLLER,
-        VOICE_LFO_SPEED,
-        VOICE_LFO_WAVE,
-        VOICE_LFO_LOAD,
-        VOICE_LFO_SYNC,
-        VOICE_LFO_AMD,
-        VOICE_LFO_AMS,
-        VOICE_LFO_PMD,
-        VOICE_LFO_PMS,
-        VOICE_ENABLE_OP1,
-        VOICE_ENABLE_OP2,
-        VOICE_ENABLE_OP3,
-        VOICE_ENABLE_OP4,
-    }VOICE_PARAM;
+    #define VOICE_ALGORITHM 0
+    #define VOICE_USERCODE 1
+    #define VOICE_FEEDBACK 2
+    #define VOICE_TRANSPOSE 3
+    #define VOICE_POLY 4
+    #define VOICE_PORTAMENTO 5
+    #define VOICE_PITCHBEND 6
+    #define VOICE_CONTROLLER 7
+    #define VOICE_LFO_SPEED 8
+    #define VOICE_LFO_WAVE 9
+    #define VOICE_LFO_LOAD 10
+    #define VOICE_LFO_SYNC 11
+    #define VOICE_LFO_AMD 12
+    #define VOICE_LFO_AMS 13
+    #define VOICE_LFO_PMD 14
+    #define VOICE_LFO_PMS 15
+    #define VOICE_ENABLE_OP1 16
+    #define VOICE_ENABLE_OP2 17
+    #define VOICE_ENABLE_OP3 18
+    #define VOICE_ENABLE_OP4 19
 //Constructeurs
     Voice();
     ~Voice();
@@ -85,16 +85,22 @@ public :
     bool Charger(FILE * fichier, const short version);
 //Edition de l'objet
     void Initialiser();
+    void Randomiser();
 //Modification des propriétés
-    uchar  LireParam(const VOICE_PARAM param);
-    void   EcrireParam(const VOICE_PARAM param, const uchar valeur);
+    uchar  LireParam(const uchar param);
+    void   EcrireParam(const uchar param, const uchar valeur);
     char * LireNom();
     void   EcrireNom(char * nom);
+//Modification des informations additionnelles
+    char * LireAuteur();
+    void   EcrireAuteur(char * auteur);
+    char * LireCommentaires();
+    void   EcrireCommentaires(char * commentaires);
 //Envoi / Reception de l'objet
-    void Envoyer(const uint param);
+    void Envoyer(const uchar param);
     void EnvoyerTout();
     void RecevoirTout();
-//Callbacks automation
+//Gestion des callbacks automation
     void CreerCallbacks();
     void AppelerCallback(const uint index, const uchar valeur);
 private :
@@ -102,7 +108,7 @@ private :
     Operateur * operateurs[VOICE_NB_OPS];
 //Paramêtres spéciaux
     char auteur[VOICE_LEN_AUTEUR];
-    char comment[VOICE_LEN_COMMENT];
+    char commentaires[VOICE_LEN_COMMENTS];
 };
 
 #endif

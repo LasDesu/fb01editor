@@ -47,16 +47,20 @@ public:
     QAutomation(QWidget *parent = 0);
     ~QAutomation();
 //Actualisation du contrôle
+    void InitialiserListes();
     void Actualiser();
-    void ActuAutos();
     void Rafraichir();
 protected:
     void changeEvent(QEvent *e);
-private:
+    void timerEvent(QTimerEvent *e);
+private:    
     Ui::QAutomation *m_ui;
+    int timer;
 private slots:
     void on_pshBut_add_pressed();
-    void on_pshBut_remove_pressed();
+    void on_pshBut_delete_pressed();
+    void on_pshBut_deleteAll_pressed();
+    void on_pshBut_autorefresh_clicked(bool checked);
 };
 
 #endif // QAUTOMATION_H

@@ -61,10 +61,8 @@ public:
     ~MainWindow();
 protected:
     void changeEvent(QEvent *e);
-    void timerEvent(QTimerEvent *e);
 private:
     Ui::MainWindow *ui;
-    int timer;
 private slots:
 //Callbacks MIDI
     void on_cmbBox_MIDICtrl_activated(int index);
@@ -84,8 +82,8 @@ private slots:
     void on_actionSave_voice_triggered(bool checked = false);
     void on_actionLoad_set_triggered(bool checked = false);
     void on_actionSave_set_triggered(bool checked = false);
-    void on_actionLoad_bank_triggered(bool checked = false);
-    void on_actionSave_bank_triggered(bool checked = false);
+    void on_actionLoad_automations_triggered(bool checked = false);
+    void on_actionSave_automations_triggered(bool checked = false);
     void on_actionImport_bank_triggered(bool checked = false);
     void on_actionExport_bank_triggered(bool checked = false);
     void on_actionImport_set_triggered(bool checked = false);
@@ -109,7 +107,6 @@ private slots:
     void on_actionAbout_FB01SE_triggered(bool checked = false);
     void on_actionAbout_Qt_triggered(bool checked = false);
     void on_actionRead_this_triggered(bool checked = false);
-    void on_actionUser_manual_triggered(bool checked = false);
 //Sélection des banks
     void on_pshBut_bank_cur_1_clicked(bool checked);
     void on_pshBut_bank_cur_2_clicked(bool checked);
@@ -118,7 +115,12 @@ private slots:
     void on_pshBut_bank_cur_5_clicked(bool checked);
     void on_pshBut_bank_cur_6_clicked(bool checked);
     void on_pshBut_bank_cur_7_clicked(bool checked);
-    void on_pshBut_loadBanks_pressed();
+//Edition des banks
+    void on_pshBut_loadCurrent_pressed();
+    void on_pshBut_loadAll_pressed();
+    void on_pshBut_copyBank_pressed();
+    void on_pshBut_pasteBank_pressed();
+    void on_pshBut_exchangeBank_pressed();
 //Sélection des instruments
     void on_pshBut_inst_cur_1_clicked(bool checked);
     void on_pshBut_inst_cur_2_clicked(bool checked);
@@ -141,6 +143,8 @@ private slots:
     void on_pshBut_OPon_2_clicked(bool checked);
     void on_pshBut_OPon_3_clicked(bool checked);
     void on_pshBut_OPon_4_clicked(bool checked);
+//Changement d'onglet
+    void on_tabWidget_currentChanged(int index);
 };
 
 #endif // MAINWINDOW_H

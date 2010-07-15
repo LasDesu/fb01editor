@@ -40,7 +40,7 @@ class QClavier : public QLabel
 public:
 //Constantes
     #define CLAVIER_INTER_ACTU 100
-    #define CLAVIER_NB_TOUCHE  24
+    #define CLAVIER_NB_TOUCHES 24
 //Disposition du clavier
     typedef enum {
         CLAVIER_AUCUNE = 0,
@@ -56,7 +56,6 @@ public:
     QClavier(QWidget * parent = 0, Qt::WindowFlags f = 0);
     ~QClavier();
 //Paramêtres du clavier
-    void ActiverClavier(const bool actif);
     void ChoisirClavier(const CLAVIER_DISPO dispo);
 protected:
 //Réimplémentation de la souris
@@ -66,17 +65,17 @@ protected:
 //Actualisation du clavier
     void timerEvent(QTimerEvent *e);
 private:
-//Note en cours
+//Pilotage par souris
     #define G_REF 36
     int noteSouris;
-    bool clavierActif;
+//Pilotage par clavier
+    ToucheStr touches[CLAVIER_NB_TOUCHES];
     CLAVIER_DISPO clavierDispo;
-//Scan clavier
     int timer;
-    ToucheStr touches[CLAVIER_NB_TOUCHE];
-//Détermine la note
-    int TrouverNoteSouris(const int x, const int y);
-    int TrouverNoteClavier(const int index, const bool shift, const bool control);
+//Gère les notes
+    int  TrouverNoteSouris(const int x, const int y);
+    int  TrouverNoteClavier(const int index, const bool shift, const bool control);
+    void Reinitialiser();
 };
 
 #endif // QCLAVIER_H

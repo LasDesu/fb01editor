@@ -28,13 +28,15 @@ Voice::Voice()
 {
 //Vérifie l'allocation
     if (sysEx == NULL) throw(Memory_ex("Unable to allocate the voice sysex !"));
+    memset(operateurs, 0, sizeof(Operateur *) * VOICE_NB_OPS);
 //Initialise la classe
     Initialiser();
     CreerCallbacks();
 //Initialise les opérateurs
-    memset(operateurs, 0, sizeof(Operateur *) * VOICE_NB_OPS);
-    for (int i = 0; i < VOICE_NB_OPS; i++)
+    for (int i = 0; i < VOICE_NB_OPS; i++) {
         operateurs[i] = new Operateur(i, &sysEx[VOICE_OFF_OPS + OPERATOR_LEN_SYSEX * (VOICE_NB_OPS - i - 1)]);
+        if (operateurs[i] == NULL) throw Memory_ex("Unable to allocate the operators !");
+    }
     AutoriserEnvoi(true);
 }
 
@@ -65,12 +67,12 @@ bool Voice::Enregistrer(FILE * fichier)
 {
 //Sauvegarde des informations
     if (fwrite(auteur, VOICE_LEN_AUTEUR, 1, fichier) == 0) return false;
-    if (fwrite(comment, VOICE_LEN_COMMENT, 1, fichier) == 0) return false;
+    if (fwrite(commentaires, VOICE_LEN_COMMENTS, 1, fichier) == 0) return false;
     if (fwrite(LireNom(), VOICE_LEN_NOM, 1, fichier) == 0) return false;
 //Sauvegarde la table
     if (!Edit::Enregistrer(fichier)) return false;
 //Sauvegarde les opérateurs
-    for (int i = 0; i < VOICE_NB_OPS; i ++)
+    for (uint i = 0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Enregistrer(fichier))
             return false;
     return true;
@@ -81,38 +83,47 @@ bool Voice::Charger(FILE * fichier, const short version)
     char nom[VOICE_LEN_NOM];
 //Récupère des informations
     if (fread(auteur, VOICE_LEN_AUTEUR, 1, fichier) == 0) return false;
-    if (fread(comment, VOICE_LEN_COMMENT, 1, fichier) == 0) return false;
+    if (fread(commentaires, VOICE_LEN_COMMENTS, 1, fichier) == 0) return false;
     if (fread(nom, VOICE_LEN_NOM, 1, fichier) == 0) return false;
     EcrireNom(nom);
 //Récupère la table
-    if (version == VERSION) {
-        if (!Edit::Charger(fichier, version)) return false;
-    }else {
-    //Compatibilité éditeur 1.0
-    }
+    if (!Edit::Charger(fichier, version)) return false;
 //Récupère les opérateurs
-    for (int i = 0; i < VOICE_NB_OPS; i ++)
+    for (uint i = 0; i < VOICE_NB_OPS; i ++)
         if (!operateurs[i]->Charger(fichier, version))
             return false;
     return true;
 }
 
 /*****************************************************************************/
-const uchar initTab[VOICE_NB_PARAM] = {7, 0, 0, 2, 1, 0, 4, 2, 127, 0, 0, 1, 0, 0, 0, 0};
+const uchar initTab[VOICE_NB_PARAM] = {7, 0, 0, 2, 1, 0, 4, 2, 127, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1};
 void Voice::Initialiser()
 {
     uchar entVoice[7] = {0xF0, 0x43, 0x75, 0x00, 0x08, 0x00, 0x00};
 //Entete du sysEx
-    Block::Initialiser(entVoice, 7);
-    sysEx[7] = 0x00; sysEx[8] = 0x00;
-//Parametres initiaux
+    Preparer(entVoice, 7);
+//Chaines de caractères
     EcrireNom((char *) "none");
-    for (int i = 0; i < VOICE_NB_PARAM; i++)
-        EcrireParam((VOICE_PARAM) i, initTab[i]);
+    EcrireAuteur((char *) "unknown");
+    EcrireCommentaires((char *) "none");
+//Paramêtres internes
+    for (uchar i = 0; i < VOICE_NB_PARAM; i++)
+        EcrireParam(i, initTab[i]);
+//Paramêtres opérateurs
+    for (uint i = 0; i < VOICE_NB_OPS; i++)
+        if (operateurs[i] != NULL) operateurs[i]->Initialiser();
+}
+
+void Voice::Randomiser()
+{
+    Edit::Randomiser();
+//Limite la randomisation
+    if (LireParam(VOICE_CONTROLLER) > 4)
+        EcrireParam(VOICE_CONTROLLER, 4);
 }
 
 /*****************************************************************************/
-uchar Voice::LireParam(const VOICE_PARAM param)
+uchar Voice::LireParam(const uchar param)
 {
     try {
         switch(param) {
@@ -159,12 +170,12 @@ uchar Voice::LireParam(const VOICE_PARAM param)
         default : return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return 0;
     }
 }
 
-void Voice::EcrireParam(const VOICE_PARAM param, const uchar valeur)
+void Voice::EcrireParam(const uchar param, const uchar valeur)
 {
     uchar byte;
     try {
@@ -266,7 +277,7 @@ void Voice::EcrireParam(const VOICE_PARAM param, const uchar valeur)
         default : return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
     }
 }
 
@@ -280,27 +291,50 @@ char * Voice::LireNom()
         nom[VOICE_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return NULL;
     }
 }
 
 void Voice::EcrireNom(char * nom)
 {
-    uchar i;
+    char temp[VOICE_LEN_NOM];
     try {
-        int len = min(strlen(nom), VOICE_LEN_NOM);
-        for (i = 0; i < len; i++)
-            EcrireParam2Oct(i, nom[i]);
-        for (; i < VOICE_LEN_NOM; i++)
-            EcrireParam2Oct(i, ' ');
+        strncpy(temp, nom, VOICE_LEN_NOM);
+        for (uint i = 0; i < VOICE_LEN_NOM; i++) {
+            if (temp[i] == 0) EcrireParam2Oct(i, ' ');
+            else EcrireParam2Oct(i, temp[i]);
+        }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
     }
 }
 
+/*****************************************************************************/
+char * Voice::LireAuteur()
+{
+    return auteur;
+}
+
+void Voice::EcrireAuteur(char * auteur)
+{
+    strncpy(this->auteur, auteur, VOICE_LEN_AUTEUR);
+    this->auteur[VOICE_LEN_AUTEUR - 1] = 0;
+}
+
+char * Voice::LireCommentaires()
+{
+    return commentaires;
+}
+
+void Voice::EcrireCommentaires(char * commentaires)
+{
+    strncpy(this->commentaires, commentaires, VOICE_LEN_COMMENTS);
+    this->commentaires[VOICE_LEN_COMMENTS - 1] = 0;
+}
+
 /*****************************************************************************/    
-void Voice::Envoyer(const uint param)
+void Voice::Envoyer(const uchar param)
 {
     uchar envVoice[9] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Construit le message
@@ -316,6 +350,15 @@ void Voice::Envoyer(const uint param)
 
 void Voice::EnvoyerTout()
 {
+//Actualise l'entête
+    if (!EnvoiAutorise()) return;
+    sysEx[VOICE_OFF_CHECK] = CalculerCheckSum(VOICE_OFF_PARAM, VOICE_LEN_PARAM);
+    sysEx[VOICE_OFF_PARAM-2] = 0x1;
+    sysEx[VOICE_OFF_PARAM-1] = 0x0;
+//Actualise la destination
+    sysEx[3] = MIDI::SysChannel();
+    sysEx[4] = 0x8 + (id & 0x7);
+//Envoie le sysEx
     MIDI::EnvSysEx(sysEx, VOICE_LEN_SYSEX);
 }
 
@@ -325,10 +368,14 @@ void Voice::RecevoirTout()
 //Prépare la demande
     recVoice[3] = MIDI::SysChannel();
     recVoice[4] = 0x20 + ((id + 0x8) & 0xF);
-//Envoi le message
-    MIDI::EnvSysEx(recVoice, 8);
-//Attend la reception
+//Attend la réception
+    MIDI::EnvSysEx(recVoice, 8, true);
     MIDI::RecSysEx(sysEx, VOICE_LEN_SYSEX);
+//Vérifie le sysex
+    VerifierCheckSum(VOICE_OFF_PARAM, VOICE_LEN_PARAM, VOICE_OFF_CHECK);
+//Initialise les informations
+    EcrireAuteur((char *) "unknown");
+    EcrireCommentaires((char *) "none");
 }
 
 /*****************************************************************************/

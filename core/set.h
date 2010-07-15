@@ -42,21 +42,21 @@
 class Set : public Edit,  public Automated {
 public :
 //Constantes
-    #define SET_NB_PARAM 1
+    #define SET_NB_PARAM 6
+    #define SET_NB_INSTRU 8
     #define SET_OFF_PARAM 0x9
     #define SET_OFF_INSTRU 0x29
-    #define SET_NB_INSTRU 8
+    #define SET_OFF_CHECK 0xA9
+    #define SET_LEN_PARAM 0xA0
     #define SET_LEN_NOM 8
     #define SET_LEN_SYSEX 0xAB
 //Paramêtres éditables
-    typedef enum {
-        SET_LFO_SPEED = 0,
-        SET_LFO_WAVE,
-        SET_LFO_AMD,
-        SET_LFO_PMD,
-        SET_COMBINE_MODE,
-        SET_RECEPTION_MODE
-    }SET_PARAM;
+    #define SET_LFO_SPEED 0
+    #define SET_LFO_WAVE 1
+    #define SET_LFO_AMD 2
+    #define SET_LFO_PMD 3
+    #define SET_COMBINE_MODE 4
+    #define SET_RECEPTION_MODE 5
 //Constructeurs
     Set();
     ~Set();
@@ -67,16 +67,17 @@ public :
     bool Charger(FILE * fichier, const short version);
 //Edition de l'objet
     void Initialiser();
+    void Randomiser();
 //Modification des propriétés
-    uchar  LireParam(const SET_PARAM param);
-    void   EcrireParam(const SET_PARAM param, const uchar valeur);
+    uchar  LireParam(const uchar param);
+    void   EcrireParam(const uchar param, const uchar valeur);
     char * LireNom();
     void   EcrireNom(char * nom);
 //Envoi / Reception de l'objet
-    void Envoyer(const uint param);
+    void Envoyer(const uchar param);
     void EnvoyerTout();
     void RecevoirTout();
-//Callbacks automation
+//Gestion des callbacks automation
     void CreerCallbacks();
     void AppelerCallback(const uint index, const uchar valeur);
 private :

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>602</width>
-    <height>312</height>
+    <height>342</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>601</width>
-     <height>311</height>
+     <height>341</height>
     </rect>
    </property>
    <property name="title">
@@ -199,17 +199,17 @@
        <height>23</height>
       </rect>
      </property>
-     <property name="baseSize">
-      <size>
-       <width>0</width>
-       <height>127</height>
-      </size>
-     </property>
      <property name="toolTip">
       <string/>
      </property>
      <property name="text">
       <string>0</string>
+     </property>
+     <property name="minValue" stdset="0">
+      <number>0</number>
+     </property>
+     <property name="maxValue" stdset="0">
+      <number>127</number>
      </property>
     </widget>
     <widget class="QButton" name="but_INTo">
@@ -221,17 +221,17 @@
        <height>23</height>
       </rect>
      </property>
-     <property name="baseSize">
-      <size>
-       <width>0</width>
-       <height>127</height>
-      </size>
-     </property>
      <property name="toolTip">
       <string/>
      </property>
      <property name="text">
       <string>127</string>
+     </property>
+     <property name="minValue" stdset="0">
+      <number>0</number>
+     </property>
+     <property name="maxValue" stdset="0">
+      <number>127</number>
      </property>
     </widget>
    </widget>
@@ -294,17 +294,17 @@
        <height>23</height>
       </rect>
      </property>
-     <property name="baseSize">
-      <size>
-       <width>0</width>
-       <height>127</height>
-      </size>
-     </property>
      <property name="toolTip">
       <string/>
      </property>
      <property name="text">
       <string>0</string>
+     </property>
+     <property name="minValue" stdset="0">
+      <number>0</number>
+     </property>
+     <property name="maxValue" stdset="0">
+      <number>127</number>
      </property>
     </widget>
     <widget class="QButton" name="but_OUTTo">
@@ -316,17 +316,17 @@
        <height>23</height>
       </rect>
      </property>
-     <property name="baseSize">
-      <size>
-       <width>0</width>
-       <height>127</height>
-      </size>
-     </property>
      <property name="toolTip">
       <string/>
      </property>
      <property name="text">
       <string>127</string>
+     </property>
+     <property name="minValue" stdset="0">
+      <number>0</number>
+     </property>
+     <property name="maxValue" stdset="0">
+      <number>127</number>
      </property>
     </widget>
    </widget>
@@ -336,7 +336,7 @@
       <x>10</x>
       <y>200</y>
       <width>431</width>
-      <height>101</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="title">
@@ -348,7 +348,7 @@
        <x>10</x>
        <y>20</y>
        <width>411</width>
-       <height>71</height>
+       <height>101</height>
       </rect>
      </property>
      <property name="verticalScrollBarPolicy">
@@ -366,8 +366,8 @@
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>270</y>
-      <width>61</width>
+      <y>300</y>
+      <width>41</width>
       <height>23</height>
      </rect>
     </property>
@@ -375,17 +375,49 @@
      <string>Add</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pshBut_remove">
+   <widget class="QPushButton" name="pshBut_delete">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>270</y>
-      <width>61</width>
+      <x>500</x>
+      <y>300</y>
+      <width>41</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Remove</string>
+     <string>Del.</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pshBut_deleteAll">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>300</y>
+      <width>41</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Del. All</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pshBut_autorefresh">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>270</y>
+      <width>141</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Auto refresh</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

@@ -70,6 +70,7 @@ bool Edit::Charger(FILE * fichier, const short version)
 bool Edit::Exporte(FILE * fichier)
 {
     if (sysEx == NULL) return false;
+//Enregistre le sysEx
     if (fwrite(sysEx, lenSysEx, 1, fichier) == 0)
         return false;
     return true;
@@ -78,8 +79,14 @@ bool Edit::Exporte(FILE * fichier)
 bool Edit::Importe(FILE * fichier)
 {
     if (sysEx == NULL) return false;
+//Vérifie la taille du sysEx
+    fseek(fichier, 0, SEEK_END);
+    if (ftell(fichier) != (int) lenSysEx) return false;
+    fseek(fichier, 0, SEEK_SET);
+//Charge le sysEx
     if (fread(sysEx, lenSysEx, 1, fichier) == 0)
         return false;
+    EnvoyerTout();
     return true;
 }
 
@@ -105,7 +112,7 @@ void Edit::Coller(CopieStr * copie)
     if (copie->objet != objet || copie->objet == EDIT_OBJ_RIEN) return;
     memcpy(sysEx, copie->sysEx, lenSysEx);
 //Actualise l'objet
-    if (EnvoiAutorise()) EnvoyerTout();
+    EnvoyerTout();
 }
 
 void Edit::Echanger(CopieStr * copie)
@@ -125,7 +132,7 @@ void Edit::Echanger(CopieStr * copie)
     copie->sysEx = tempSysEx;
     copie->sysExTemp = true;
 //Actualise l'objet
-    if (EnvoiAutorise()) EnvoyerTout();
+    EnvoyerTout();
 }
 
 /*****************************************************************************/

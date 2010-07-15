@@ -43,78 +43,95 @@ QBank::~QBank()
 void QBank::DefinirBank(Bank * bank)
 {
     QString num;
+//Associe la bank
     this->bank = bank;
     num.setNum(bank->LireId() + 1, 10);
-    this->m_ui->grpBox_bank->setTitle((QString) "Bank " + num + " :");
+    m_ui->grpBox_bank->setTitle((QString) "Bank " + num + " :");
+//Verrouille certains contrôles
+    if (bank->LireId() >= 2) {
+        m_ui->txtEdit_bankName->setEnabled(false);
+        m_ui->txtEdit_voiceName->setEnabled(false);
+        m_ui->cmbBox_style->setEnabled(false);
+    }
 }
 
 /*****************************************************************************/
-const char BankStyles[14][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass",
+const char BankStyles[15][8] = {"Piano", "Keys", "Organ", "Guitar", "Bass", "Orch", "Brass", "Wood",
                                 "Synth", "Pad", "Ethnic", "Bells", "Rythm", "Sfx", "Other"};
 void QBank::Rafraichir()
 {
     attente = true;
 //Actualise le texte
     m_ui->txtEdit_bankName->setPlainText(bank->LireNom());
-    m_ui->txtEdit_voiceName->setPlainText("");
     m_ui->txtEdit_bankName->repaint();
+    m_ui->txtEdit_voiceName->setPlainText("");
     m_ui->txtEdit_voiceName->repaint();
+    m_ui->cmbBox_style->setCurrentIndex(0);
 //Actualise la liste des voices
-    m_ui->listWidget_voices->clear();
+    m_ui->listWidget_voices->clearContents();
     for (uint i = 0; i < BANK_NB_VOICES; i++) {
+    //Récupère les informations
         QString nom(bank->RecupererVoice(i)->LireNom());
-        QString sty(bank->RecupererVoice(i)->LireStyle());
+        uchar s = bank->RecupererVoice(i)->LireParam(BANKVOICE_STYLE);
+        if (s >= 14) s = 14; QString sty(BankStyles[s]);
+    //Créé les items
         QTableWidgetItem * voice  = new QTableWidgetItem(nom);
         QTableWidgetItem * style  = new QTableWidgetItem(sty);
         m_ui->listWidget_voices->setItem(i, 0, voice);
         m_ui->listWidget_voices->setItem(i, 1, style);
     }
+//Sélectionne la voice
+    m_ui->listWidget_voices->setCurrentCell(bank->VoiceSelectionnee(), 0);
     attente = false;
 }
 
 /*****************************************************************************/
-/*
-void QBank::on_table_bank_cellClicked(int row, int column)
+void QBank::on_txtEdit_bankName_textChanged()
 {
-//Limite la sélection
-    QList <QTableWidgetItem *> Liste = m_ui->table_bank->selectedItems();
-    if (Liste.count() > 8)
-    {
-        for (int i=0; i < 4; i++)
-            Liste.at(8+i)->setSelected(false);
-        m_ui->table_bank->setCurrentItem(Liste.at(0));
-        return;
-    }
-//Affiche les informations
-    Attente = true;
-    m_ui->txtEdit_voicename->setPlainText(m_ui->table_bank->item(row, 0)->text());
-    m_ui->cmbBox_voicestyle->setCurrentIndex(m_ui->table_bank->item(row, 1)->data(Qt::StatusTipRole).toInt());
-    Attente = false;
+    if (attente) return;
+    bank->EcrireNom(m_ui->txtEdit_bankName->toPlainText().toAscii().data());
 }
 
-void QBank::on_txtEdit_voicename_textChanged()
+void QBank::on_txtEdit_voiceName_textChanged()
 {
-    if (Attente) return;
-    if (m_ui->table_bank->item(0,0) == NULL) return;
-//Change le nom de la voice
-    uchar Bank  = m_ui->table_bank->selectedItems().at(0)->row() / NBVOICES;
-    uchar Voice = m_ui->table_bank->selectedItems().at(0)->row() % NBVOICES;
-    EXPANDEUR::EcrireBankNom(Bank, Voice, m_ui->txtEdit_voicename->toPlainText().toAscii().constData());
-    m_ui->table_bank->selectedItems().at(0)->setText(m_ui->txtEdit_voicename->toPlainText().left(8));
+    Bank_voice * voice;
+    if (attente) return;
+    int row = m_ui->listWidget_voices->currentRow();
+    if (row < 0) return;
+//Modifie la voice
+    voice = bank->RecupererVoice(row);
+    voice->EcrireNom(m_ui->txtEdit_voiceName->toPlainText().toAscii().data());
+//Actualise le nom
+    QString nom = m_ui->txtEdit_voiceName->toPlainText().left(BANKVOICE_LEN_NOM);
+    m_ui->listWidget_voices->item(row, 0)->setText(nom);
 }
 
-void QBank::on_cmbBox_voicestyle_activated(int Index)
+void QBank::on_cmbBox_style_activated(int Index)
 {
-    if (Attente) return;
-    if (m_ui->table_bank->item(0,0) == NULL) return;
-//Change le style de la voice
-    uchar Bank  = m_ui->table_bank->selectedItems().at(0)->row() / NBVOICES;
-    uchar Voice = m_ui->table_bank->selectedItems().at(0)->row() % NBVOICES;
-    EXPANDEUR::EcrireBankParam(Bank, Voice, 0x07, Index);
-    m_ui->table_bank->selectedItems().at(1)->setText(m_ui->cmbBox_voicestyle->currentText());
-    m_ui->table_bank->selectedItems().at(1)->setData(Qt::StatusTipRole, Index);
+    Bank_voice * voice;
+    if (attente) return;
+    int row = m_ui->listWidget_voices->currentRow();
+    if (row < 0) return;
+//Modifie la voice
+    voice = bank->RecupererVoice(row);
+    voice->EcrireParam(BANKVOICE_STYLE, m_ui->cmbBox_style->currentIndex());
+//Actualise le style
+    m_ui->listWidget_voices->item(row, 1)->setText((QString) BankStyles[m_ui->cmbBox_style->currentIndex()]);
 }
-*/
+
+/*****************************************************************************/
+void QBank::on_listWidget_voices_cellClicked(int row, int column)
+{
+    Bank_voice * voice;
+    attente = true;
+//Actualise les paramêtres
+    voice = bank->RecupererVoice(row);
+    m_ui->txtEdit_voiceName->setPlainText((QString) voice->LireNom());
+    m_ui->cmbBox_style->setCurrentIndex(voice->LireParam(BANKVOICE_STYLE));
+//Sélectionne la voice
+    bank->SelectionnerVoice(row);
+    attente = false;
+}
 
 /*****************************************************************************/
 void QBank::changeEvent(QEvent *e)

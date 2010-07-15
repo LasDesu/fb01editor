@@ -39,12 +39,20 @@ Instrument::~Instrument()
 const uchar initTab[INSTRU_NB_PARAM] = {1, 0, 127, 0, 2, 0, 0, 2, 127, 63, 0, 0, 4, 1, 2};
 void Instrument::Initialiser()
 {
-    for (int i = 0; i < INSTRU_NB_PARAM; i++)
-        EcrireParam((INSTRU_PARAM) i, initTab[i]);
+    for (uchar i = 0; i < INSTRU_NB_PARAM; i++)
+        EcrireParam(i, initTab[i]);
+}
+
+void Instrument::Randomiser()
+{
+    Edit::Randomiser();
+//Limite la randomisation
+    if (LireParam(INSTRU_CONTROLLER) > 4)
+        EcrireParam(INSTRU_CONTROLLER, 4);
 }
 
 /*****************************************************************************/
-uchar Instrument::LireParam(const INSTRU_PARAM param)
+uchar Instrument::LireParam(const uchar param)
 {
     uchar temp;
     try {
@@ -56,15 +64,14 @@ uchar Instrument::LireParam(const INSTRU_PARAM param)
         case INSTRU_UPPER :
             return LireParam1Oct(2);
         case INSTRU_LOWER :
-            return LireParam1Oct(3) & 0xF;
+            return LireParam1Oct(3);
         case INSTRU_BANK :
             return LireParam1Oct(4) & 0x7;
         case INSTRU_VOICE :
             return LireParam1Oct(5);
         case INSTRU_DETUNE :
             temp = LireParam1Oct(6);
-            if (temp > 63) temp += 0x80;
-            return temp;
+            return temp > 63 ? temp + 0x80 : temp;
         case INSTRU_TRANS :
             return LireParam1Oct(7) & 0x7;
         case INSTRU_VOLUME :
@@ -74,23 +81,22 @@ uchar Instrument::LireParam(const INSTRU_PARAM param)
         case INSTRU_LFO :
             return LireParam1Oct(10) & 0x1;
         case INSTRU_PORTAMENTO :
-            temp = LireParam1Oct(11);
-            return temp;
+            return LireParam1Oct(11);
         case INSTRU_PITCHBEND :
             return LireParam1Oct(12) & 0xF;
         case INSTRU_POLY :
             return LireParam1Oct(13) & 0x1;
-        case INSTRU_CONROLLER :
+        case INSTRU_CONTROLLER :
             return LireParam1Oct(14) & 0x7;
         default: return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return 0;
     }
 }
 
-void Instrument::EcrireParam(const INSTRU_PARAM param, const uchar valeur)
+void Instrument::EcrireParam(const uchar param, const uchar valeur)
 {
     try {
         switch(param) {
@@ -101,10 +107,10 @@ void Instrument::EcrireParam(const INSTRU_PARAM param, const uchar valeur)
             EcrireParam1Oct(1, valeur & 0xF);
         break;
         case INSTRU_UPPER :
-            EcrireParam1Oct(2, valeur & 0xF);
+            EcrireParam1Oct(2, valeur);
         break;
         case INSTRU_LOWER :
-            EcrireParam1Oct(3, valeur & 0xF);
+            EcrireParam1Oct(3, valeur);
         break;
         case INSTRU_BANK :
             EcrireParam1Oct(4, valeur & 0x7);
@@ -136,18 +142,18 @@ void Instrument::EcrireParam(const INSTRU_PARAM param, const uchar valeur)
         case INSTRU_POLY :
             EcrireParam1Oct(13, valeur & 0x1);
         break;
-        case INSTRU_CONROLLER :
+        case INSTRU_CONTROLLER :
             EcrireParam1Oct(14, valeur & 0x7);
         break;
         default : return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
     }
 }
 
 /*****************************************************************************/
-void Instrument::Envoyer(const uint param)
+void Instrument::Envoyer(const uchar param)
 {
     uchar envInstrument[8] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x00, 0x00, 0xF7};
 //Construit le message
@@ -186,6 +192,6 @@ void Instrument::AppelerCallback(const uint index, const uchar valeur)
     case INSTRU_VOLUME : EcrireParam(INSTRU_VOLUME, valeur); break;
     case INSTRU_PAN    : EcrireParam(INSTRU_PAN, valeur); break;
     case INSTRU_TRANS  : EcrireParam(INSTRU_TRANS, valeur >> 4); break;
-    case INSTRU_DETUNE : EcrireParam(INSTRU_DETUNE, valeur); break;
+    case INSTRU_DETUNE : EcrireParam(INSTRU_DETUNE, valeur - 64); break;
     }
 }

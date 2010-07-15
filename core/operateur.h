@@ -46,24 +46,22 @@ public :
     #define OPERATOR_LEN_SYSEX 0x10
     #define OPERATOR_OFF_PARAM 0x50
 //Paramêtres éditables
-    typedef enum {
-        OPERATOR_VOLUME = 0,
-        OPERATOR_LEVEL_CURB,
-        OPERATOR_LEVEL_VELOCITY,
-        OPERATOR_LEVEL_DEPTH,
-        OPERATOR_ADJUST,
-        OPERATOR_FINE,
-        OPERATOR_MULTIPLE,
-        OPERATOR_RATE_DEPTH,
-        OPERATOR_ATTACK,
-        OPERATOR_MODULATOR,
-        OPERATOR_ATTACK_VELOCITY,
-        OPERATOR_DECAY1,
-        OPERATOR_COARSE,
-        OPERATOR_DECAY2,
-        OPERATOR_SUSTAIN,
-        OPERATOR_RELEASE
-    }OPERATOR_PARAM;
+    #define OPERATOR_VOLUME 0
+    #define OPERATOR_LEVEL_CURB 1
+    #define OPERATOR_LEVEL_VELOCITY 2
+    #define OPERATOR_LEVEL_DEPTH 3
+    #define OPERATOR_ADJUST 4
+    #define OPERATOR_FINE 5
+    #define OPERATOR_MULTIPLE 6
+    #define OPERATOR_RATE_DEPTH 7
+    #define OPERATOR_ATTACK 8
+    #define OPERATOR_MODULATOR 9
+    #define OPERATOR_ATTACK_VELOCITY 10
+    #define OPERATOR_DECAY1 11
+    #define OPERATOR_COARSE 12
+    #define OPERATOR_DECAY2 13
+    #define OPERATOR_SUSTAIN 14
+    #define OPERATOR_RELEASE 15
 //Constructeurs
     Operateur(const uchar id, uchar * sysEx);
     ~Operateur();
@@ -72,11 +70,11 @@ public :
 //Edition de l'objet
     void Initialiser();
 //Modification des propriétés
-    uchar LireParam(const OPERATOR_PARAM param);
-    void  EcrireParam(const OPERATOR_PARAM param, const uchar valeur);
+    uchar LireParam(const uchar param);
+    void  EcrireParam(const uchar param, const uchar valeur);
 //Envoi / Reception de l'objet
-    void Envoyer(const uint param);
-//Callbacks automation
+    void Envoyer(const uchar param);
+//Gestion des callbacks automation
     void CreerCallbacks();
     void AppelerCallback(const uint index, const uchar valeur);
 private :

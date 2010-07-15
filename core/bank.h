@@ -39,11 +39,13 @@
 class Bank : public Edit {
 public :
 //Paramêtres éditables
-    #define BANK_LEN_NOM    8
-    #define BANK_LEN_SYSEX  0x18DB
-    #define BANK_NB_VOICES  48
-    #define BANK_OFF_NOM    0x9
-    #define BANK_OFF_VOICES 0x4C
+    #define BANK_LEN_NOM 8
+    #define BANK_LEN_SYSEX 0x18DB
+    #define BANK_LEN_PARAM 0x40
+    #define BANK_OFF_PARAM 0x9
+    #define BANK_OFF_VOICES 0x4A
+    #define BANK_OFF_CHECK 0x49
+    #define BANK_NB_VOICES 48
 //Constructeurs
     Bank(const uchar id);
     ~Bank();
@@ -52,17 +54,21 @@ public :
 //Modification des parametres
     char * LireNom();
     void   EcrireNom(char * nom);
-//Chargement / déchargement
-    bool Enregistrer(FILE * fichier);
-    bool Charger(FILE * fichier, const short version);
 //Edition de l'objet
-    void Initialiser();
+    void  Initialiser();
+    void  CopierVoice(CopieStr * copie);
+    void  CollerVoice(CopieStr * copie);
+    void  EchangerVoice(CopieStr * copie);
+//Sélection de la voice
+    void  SelectionnerVoice(const uchar index);
+    uchar VoiceSelectionnee();
 //Envoi / Reception de l'objet
     void EnvoyerTout();
     void RecevoirTout();
 private :
 //Voices de la bank
     Bank_voice * voices[BANK_NB_VOICES];
+    uchar voiceSel;
 };
 
 #endif

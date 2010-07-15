@@ -48,19 +48,23 @@ void QConfig::DefinirSet(Set * set)
 }
 
 /*****************************************************************************/
-void QConfig::Rafraichir()
+void QConfig::Rafraichir(const bool noTexts)
 {
     attente = true;
-//Rafraichit l'affichage
-    m_ui->txtEdit_name->setPlainText((QString) set->LireNom());
-    m_ui->pshBut_combine->setChecked(set->LireParam(Set::SET_COMBINE_MODE));
-    m_ui->cmbBox_reception->setCurrentIndex(set->LireParam(Set::SET_RECEPTION_MODE));
-    m_ui->spnBox_LFOspeed->setValue(set->LireParam(Set::SET_LFO_SPEED));
-    m_ui->cmbBox_LFOwave->setCurrentIndex(set->LireParam(Set::SET_LFO_WAVE));
-    m_ui->but_AMD->setValue(set->LireParam(Set::SET_LFO_AMD));
-    m_ui->but_PMD->setValue(set->LireParam(Set::SET_LFO_PMD));
-//Repeind certains contrôles
-    m_ui->txtEdit_name->repaint();
+//Actualise les paramêtres principaux
+    m_ui->pshBut_combine->setChecked(set->LireParam(SET_COMBINE_MODE));
+    m_ui->cmbBox_reception->setCurrentIndex(set->LireParam(SET_RECEPTION_MODE));
+    m_ui->but_LFOspeed->setValue(set->LireParam(SET_LFO_SPEED));
+    m_ui->cmbBox_LFOwave->setCurrentIndex(set->LireParam(SET_LFO_WAVE));
+    m_ui->but_AMD->setValue(set->LireParam(SET_LFO_AMD));
+    m_ui->but_PMD->setValue(set->LireParam(SET_LFO_PMD));
+    m_ui->hzSlider_mastvolume->setValue(config->LireParam(CONFIG_MASTER_VOLUME));
+    m_ui->but_mastdetune->setValue(((char) config->LireParam(CONFIG_MASTER_DETUNE)));
+//Actualise les paramêtres textuels
+    if (!noTexts) {
+        m_ui->txtEdit_name->setPlainText((QString) set->LireNom());
+        m_ui->txtEdit_name->repaint();
+    }
     attente = false;
 }
 
@@ -68,31 +72,31 @@ void QConfig::Rafraichir()
 void QConfig::on_but_syschan_valueChanged(int i)
 {
     if (!attente)
-        config->EcrireParam(Config::CONFIG_SYSCHANNEL, i - 1);
+        config->EcrireParam(CONFIG_SYSCHANNEL, i - 1);
 }
 
 void QConfig::on_pshBut_memory_clicked(bool checked)
 {
     if (!attente)
-        config->EcrireParam(Config::CONFIG_MEMORY_PROTECT, checked);
+        config->EcrireParam(CONFIG_MEMORY_PROTECT, checked);
 }
 
 void QConfig::on_but_setnum_valueChanged(int i)
 {
     if (!attente)
-        config->EcrireParam(Config::CONFIG_CONFIG_NUMBER, i - 1);
+        config->EcrireParam(CONFIG_CONFIG_NUMBER, i - 1);
 }
 
 void QConfig::on_but_mastdetune_valueChanged(int i)
 {
     if (!attente)
-        config->EcrireParam(Config::CONFIG_DETUNE, i);
+        config->EcrireParam(CONFIG_MASTER_DETUNE, i);
 }
 
-void QConfig::on_hzSlider_mastvol_valueChanged(int i)
+void QConfig::on_hzSlider_mastvolume_valueChanged(int i)
 {
     if (!attente)
-        config->EcrireParam(Config::CONFIG_MASTER_VOLUME, i);
+        config->EcrireParam(CONFIG_MASTER_VOLUME, i);
 }
 
 /*****************************************************************************/
@@ -105,37 +109,37 @@ void QConfig::on_txtEdit_name_textChanged()
 void QConfig::on_pshBut_combine_clicked(bool checked)
 {
     if (!attente)
-        set->EcrireParam(Set::SET_COMBINE_MODE, checked);
+        set->EcrireParam(SET_COMBINE_MODE, checked);
 }
 
 void QConfig::on_cmbBox_reception_activated(int i)
 {
     if (!attente)
-        set->EcrireParam(Set::SET_RECEPTION_MODE, i);
+        set->EcrireParam(SET_RECEPTION_MODE, i);
 }
 
-void QConfig::on_spnBox_LFOspeed_valueChanged(int i)
+void QConfig::on_but_LFOspeed_valueChanged(int i)
 {
     if (!attente)
-        set->EcrireParam(Set::SET_LFO_SPEED, i);
+        set->EcrireParam(SET_LFO_SPEED, i);
 }
 
 void QConfig::on_cmbBox_LFOwave_activated(int i)
 {
     if (!attente)
-        set->EcrireParam(Set::SET_LFO_WAVE, i);
+        set->EcrireParam(SET_LFO_WAVE, i);
 }
 
 void QConfig::on_but_AMD_valueChanged(int i)
 {
     if (!attente)
-        set->EcrireParam(Set::SET_LFO_AMD, i);
+        set->EcrireParam(SET_LFO_AMD, i);
 }
 
 void QConfig::on_but_PMD_valueChanged(int i)
 {
     if (!attente)
-        set->EcrireParam(Set::SET_LFO_PMD, i);
+        set->EcrireParam(SET_LFO_PMD, i);
 }
 
 /*****************************************************************************/

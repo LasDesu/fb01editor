@@ -136,17 +136,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>8</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The polyphony level of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>8</number>
     </property>
    </widget>
    <widget class="QButton" name="but_channel">
@@ -158,17 +158,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>1</width>
-      <height>16</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The MIDI channel of the instrument</string>
     </property>
     <property name="text">
      <string>1</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>1</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>16</number>
     </property>
    </widget>
    <widget class="QButton" name="but_bank">
@@ -180,17 +180,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>1</width>
-      <height>7</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The current bank of the selected voice</string>
     </property>
     <property name="text">
      <string>1</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>1</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>7</number>
     </property>
    </widget>
    <widget class="QButton" name="but_voice">
@@ -202,17 +202,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>1</width>
-      <height>48</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The current number of the selected voice</string>
     </property>
     <property name="text">
      <string>1</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>1</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>48</number>
     </property>
    </widget>
    <widget class="QButton" name="but_trans">
@@ -224,17 +224,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>254</width>
-      <height>2</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The transpose level of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>-2</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>2</number>
     </property>
    </widget>
    <widget class="QButton" name="but_detune">
@@ -246,17 +246,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>192</width>
-      <height>63</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The detune level of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>-64</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>63</number>
     </property>
    </widget>
    <widget class="QButton" name="but_porta">
@@ -268,17 +268,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>127</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The portamento length of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>127</number>
     </property>
    </widget>
    <widget class="QButton" name="but_pitch">
@@ -290,17 +290,17 @@
       <height>23</height>
      </rect>
     </property>
-    <property name="baseSize">
-     <size>
-      <width>0</width>
-      <height>12</height>
-     </size>
-    </property>
     <property name="toolTip">
      <string>The pitchbender range of the instrument</string>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="minValue" stdset="0">
+     <number>0</number>
+    </property>
+    <property name="maxValue" stdset="0">
+     <number>12</number>
     </property>
    </widget>
    <widget class="QSlider" name="hzSlider_volume">

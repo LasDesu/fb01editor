@@ -23,19 +23,18 @@
 
 /*****************************************************************************/
 Set::Set()
-   : Edit(0, (uchar *) malloc(SET_LEN_SYSEX), SET_LEN_SYSEX,
-          0, SET_OFF_PARAM, EDIT_OBJ_SET)
+   : Edit(0, (uchar *) malloc(SET_LEN_SYSEX), SET_LEN_SYSEX, SET_NB_PARAM, SET_OFF_PARAM, EDIT_OBJ_SET)
 {
 //Vérifie l'allocation
     if (sysEx == NULL) throw(Memory_ex("Unable to allocate the set sysex !"));
+    memset(instruments, 0, sizeof(Instrument *) * SET_NB_INSTRU);
 //Initialise la classe
     Initialiser();
     CreerCallbacks();
 //Initialise les instruments
-    memset(instruments, 0, sizeof(Instrument *) * SET_NB_INSTRU);
     for (int i = 0; i < SET_NB_INSTRU; i++) {
         instruments[i] = new Instrument(i, &sysEx[SET_OFF_INSTRU + INSTRU_LEN_SYSEX * i]);
-        if (instruments[i] == NULL) throw Memory_ex("");
+        if (instruments[i] == NULL) throw Memory_ex("Unable to allocate the instruments !");
     }
     AutoriserEnvoi(true);
 }
@@ -77,10 +76,7 @@ bool Set::Charger(FILE * fichier, const short version)
     if (fread(nom, SET_LEN_NOM, 1, fichier) == 0) return false;
     EcrireNom(nom);
 //Recupère la table
-    if (version == VERSION) {
-        if (!Edit::Charger(fichier, version))
-            return false;
-    }
+    if (!Edit::Charger(fichier, version)) return false;
 //Charge le set d'instruments
     for (int i = 0; i < SET_NB_INSTRU; i++)
         if (!instruments[i]->Charger(fichier, version))
@@ -94,16 +90,26 @@ void Set::Initialiser()
 {
     uchar entSet[7] = {0xF0, 0x43, 0x75, 0x00, 0x00, 0x01, 0x00};
 //Entete du sysEx
-    Block::Initialiser(entSet, 7);
-    sysEx[7] = 0x00; sysEx[8] = 0x00;
-//Paramêtres initiaux
+    Preparer(entSet, 7);
+//Paramêtres internes
     EcrireNom((char *) "none");
-    for (int i = 0; i < SET_NB_PARAM; i++)
-        EcrireParam((SET_PARAM) i, initTab[i]);
+    for (uchar i = 0; i < SET_NB_PARAM; i++)
+        EcrireParam(i, initTab[i]);
+//Paramêtres instruments
+    for (uint i = 0; i < SET_NB_INSTRU; i++)
+        if (instruments[i] != NULL) instruments[i]->Initialiser();
+}
+
+void Set::Randomiser()
+{
+    Edit::Randomiser();
+//Limite la randomisation
+    if (LireParam(SET_RECEPTION_MODE) > 2)
+        EcrireParam(SET_RECEPTION_MODE, 2);
 }
 
 /*****************************************************************************/
-uchar Set::LireParam(const SET_PARAM param)
+uchar Set::LireParam(const uchar param)
 {
     try {
         switch(param) {
@@ -122,12 +128,12 @@ uchar Set::LireParam(const SET_PARAM param)
         default: return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return 0;
     }
 }
 
-void Set::EcrireParam(const SET_PARAM param, const uchar valeur)
+void Set::EcrireParam(const uchar param, const uchar valeur)
 {
     try {
         switch(param) {
@@ -152,7 +158,7 @@ void Set::EcrireParam(const SET_PARAM param, const uchar valeur)
         default: return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
     }
 }
 
@@ -166,30 +172,31 @@ char * Set::LireNom()
         nom[SET_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
         return NULL;
     }
 }
 
 void Set::EcrireNom(char * nom)
 {
-    uchar i;
+    char temp[SET_LEN_NOM];
     try {
-        int len = min(strlen(nom), SET_LEN_NOM);
-        for (i = 0; i < len; i++)
-            EcrireParam1Oct(i, nom[i]);
-        for (; i < SET_LEN_NOM; i++)
-            EcrireParam1Oct(i, ' ');
+        strncpy(temp, nom, SET_LEN_NOM);
+        for (uint i = 0; i < SET_LEN_NOM; i++) {
+            if (temp[i] == 0) EcrireParam1Oct(i, ' ');
+            else EcrireParam1Oct(i, temp[i]);
+        }
     }catch(MIDI_ex ex) {
-        QMessageBox::information(NULL, "FB01 SE:", ex.Info());
+        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
     }
 }
 
 /*****************************************************************************/
-void Set::Envoyer(const uint param)
+void Set::Envoyer(const uchar param)
 {
     uchar envSet[8] = {0xF0, 0x43, 0x75, 0x00, 0x10, 0x00, 0x00, 0xF7};
 //Construit le message
+    if (!EnvoiAutorise()) return;
     envSet[3] = MIDI::SysChannel();
 //Envoi les changements
     envSet[5] = param & 0x7F;
@@ -200,6 +207,14 @@ void Set::Envoyer(const uint param)
 
 void Set::EnvoyerTout()
 {
+//Actualise l'entête
+    if (!EnvoiAutorise()) return;
+    sysEx[SET_OFF_CHECK] = CalculerCheckSum(SET_OFF_PARAM, SET_LEN_PARAM);
+    sysEx[SET_OFF_PARAM-2] = 0x01;
+    sysEx[SET_OFF_PARAM-1] = 0x20;
+//Actualise la destination
+    sysEx[3] = MIDI::SysChannel();
+//Envoie le sysEx
     MIDI::EnvSysEx(sysEx, SET_LEN_SYSEX);
 }
 
@@ -208,10 +223,11 @@ void Set::RecevoirTout()
     uchar recSet[] = {0xF0, 0x43, 0x75, 0x00, 0x20, 0x01, 0x00, 0xF7};
 //Prépare la demande
     recSet[3] = MIDI::SysChannel();
-//Envoi le message
-    MIDI::EnvSysEx(recSet, 8);
-//Attend la reception
+//Attend la réception
+    MIDI::EnvSysEx(recSet, 8, true);
     MIDI::RecSysEx(sysEx, SET_LEN_SYSEX);
+//Vérifie le sysex
+    VerifierCheckSum(SET_OFF_PARAM, SET_LEN_PARAM, SET_OFF_CHECK);
 }
 
 /*****************************************************************************/

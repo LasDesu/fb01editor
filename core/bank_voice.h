@@ -35,15 +35,23 @@
 class Bank_voice : public Edit {
 public :
 //Constantes
+    #define BANKVOICE_OFF_CHECK 0x82
+    #define BANKVOICE_OFF_PARAM 0x2
+    #define BANKVOICE_LEN_PARAM 0x80
     #define BANKVOICE_LEN_SYSEX 0x83
     #define BANKVOICE_LEN_NOM 7
-    #define BANKVOICE_PARAM_STYLE 0x7
+//Paramêtres éditables
+    #define BANKVOICE_STYLE 0
 //Constructeurs
     Bank_voice(const uchar id, uchar * sysEx);
    ~Bank_voice();
-//Lecture des parametres
+//Modification des paramêtres
     char * LireNom();
-    uchar  LireStyle();
+    void   EcrireNom(const char * nom);
+    uchar  LireParam(const uchar param);
+    void   EcrireParam(const uchar param, const uchar valeur);
+//Gestion du sysEx
+    void GenererEntete();
 };
 
 #endif // BANK_VOICE_H

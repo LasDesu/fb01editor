@@ -20,6 +20,9 @@
 */
 
 #include "qautomation.h"
+#include "editeur.h"
+
+extern Editeur * editeur;
 
 /*****************************************************************************/
 QAutomation::QAutomation(QWidget *parent) : QWidget(parent), m_ui(new Ui::QAutomation)
@@ -30,15 +33,18 @@ QAutomation::QAutomation(QWidget *parent) : QWidget(parent), m_ui(new Ui::QAutom
     m_ui->but_INTo->setValue(127);
     m_ui->but_OUTFrom->setValue(0);
     m_ui->but_OUTTo->setValue(127);
+//Initialise le timer
+    timer = 0;
 }
 
 QAutomation::~QAutomation()
 {
+    if (timer != 0) this->killTimer(timer);
     delete m_ui;
 }
 
 /*****************************************************************************/
-void QAutomation::Actualiser()
+void QAutomation::InitialiserListes()
 {
     QString num;
 //Ajoute tous les MIDI CCs
@@ -54,11 +60,10 @@ void QAutomation::Actualiser()
         QListWidgetItem * item = new QListWidgetItem(Automation::NomCallback(i));
         m_ui->listWidget_FMs->addItem(item);
     }
-//Actualise les automations
-    ActuAutos();
 }
 
-void QAutomation::ActuAutos()
+/*****************************************************************************/
+void QAutomation::Actualiser()
 {
 //Ajoute toutes les automations
     m_ui->listWidget_autos->clear();
@@ -93,17 +98,30 @@ void QAutomation::on_pshBut_add_pressed()
         Automation::Ajouter(m_ui->listWidget_CCs->currentRow(), m_ui->but_INFrom->value(), m_ui->but_INTo->value(),
                             m_ui->listWidget_FMs->currentRow(), m_ui->but_OUTFrom->value(), m_ui->but_OUTTo->value());
     }catch (Automation_ex ex) {
-        QMessageBox::information(this, "FB01 SE:", ex.Info());
+        QMessageBox::warning(this, "FB01 SE:", ex.Info());
         return;
     }
-    ActuAutos();
+    Actualiser();
 }
 
-void QAutomation::on_pshBut_remove_pressed()
+void QAutomation::on_pshBut_delete_pressed()
 {
     if (m_ui->listWidget_autos->currentRow() < 0) return;
     Automation::Enlever(m_ui->listWidget_autos->currentRow());
-    ActuAutos();
+    Actualiser();
+}
+
+void QAutomation::on_pshBut_deleteAll_pressed()
+{
+    Automation::EnleverTout();
+    Actualiser();
+}
+
+/*****************************************************************************/
+void QAutomation::on_pshBut_autorefresh_clicked(bool checked)
+{
+    if (checked) timer = this->startTimer(QAUTO_INTER_ACTU);
+    else this->killTimer(timer);
 }
 
 /*****************************************************************************/
@@ -118,3 +136,9 @@ void QAutomation::changeEvent(QEvent *e)
         break;
     }
 }
+
+void QAutomation::timerEvent(QTimerEvent *e)
+{
+    editeur->Rafraichir(true);
+}
+

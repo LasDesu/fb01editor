@@ -47,7 +47,7 @@ public:
     void DefinirConfig(Config * config);
     void DefinirSet(Set * set);
 //Actualisation graphique
-    void Rafraichir();
+    void Rafraichir(const bool noTexts = false);
 protected:
     void changeEvent(QEvent *e);
 private:
@@ -60,11 +60,11 @@ private slots:
     void on_pshBut_memory_clicked(bool checked = false);
     void on_but_setnum_valueChanged(int i);
     void on_but_mastdetune_valueChanged(int i);
-    void on_hzSlider_mastvol_valueChanged(int i);
+    void on_hzSlider_mastvolume_valueChanged(int i);
     void on_txtEdit_name_textChanged();
     void on_pshBut_combine_clicked(bool checked = false);
     void on_cmbBox_reception_activated(int i);
-    void on_spnBox_LFOspeed_valueChanged(int i);
+    void on_but_LFOspeed_valueChanged(int i);
     void on_cmbBox_LFOwave_activated(int i);
     void on_but_AMD_valueChanged(int i);
     void on_but_PMD_valueChanged(int i);

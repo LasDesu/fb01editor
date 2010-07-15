@@ -57,13 +57,14 @@ bool Block::EnvoiAutorise()
 }
 
 /*****************************************************************************/
-void Block::Envoyer(const uint param)
+void Block::Envoyer(const uchar param)
 {
 }
 
 void Block::EnvoyerTout()
 {
-    for (uint i = 0; i < nbParam; i ++)
+    if (!envoi) return;
+    for (uchar i = 0; i < nbParam; i ++)
         Envoyer(i);
 }
 
@@ -72,13 +73,13 @@ void Block::RecevoirTout()
 }
 
 /*****************************************************************************/
-uchar Block::LireParam1Oct(const uint param)
+uchar Block::LireParam1Oct(const uchar param)
 {
     if (lenSysEx == 0) return 0;
     return sysEx[param + offParam] & 0x7F;
 }
 
-void Block::EcrireParam1Oct(const uint param, const uchar valeur)
+void Block::EcrireParam1Oct(const uchar param, const uchar valeur)
 {
     if (lenSysEx == 0) return;
     sysEx[param + offParam] = valeur & 0x7F;
@@ -86,7 +87,7 @@ void Block::EcrireParam1Oct(const uint param, const uchar valeur)
 }
 
 /*****************************************************************************/
-uchar Block::LireParam2Oct(const uint param)
+uchar Block::LireParam2Oct(const uchar param)
 {
     uchar data;
     if (lenSysEx == 0) return 0;
@@ -95,7 +96,7 @@ uchar Block::LireParam2Oct(const uint param)
     return data;
 }
 
-void Block::EcrireParam2Oct(const uint param, const uchar valeur)
+void Block::EcrireParam2Oct(const uchar param, const uchar valeur)
 {
     if (lenSysEx == 0) return;
     sysEx[param * 2 + offParam] = valeur & 0xF;
@@ -104,7 +105,7 @@ void Block::EcrireParam2Oct(const uint param, const uchar valeur)
 }
 
 /*****************************************************************************/
-void Block::Initialiser(const uchar * entete, const uint lenEntete)
+void Block::Preparer(const uchar * entete, const uint lenEntete)
 {
     if (lenSysEx == 0) return;
     memset(sysEx, 0, lenSysEx);
@@ -113,24 +114,23 @@ void Block::Initialiser(const uchar * entete, const uint lenEntete)
 }
 
 /*****************************************************************************/
-void Block::CheckSum1Oct(const uint debut, const uint fin, const uint check)
+uchar Block::CalculerCheckSum(const uint debut, const uint longueur)
 {
-    uchar sum;
-    if (lenSysEx == 0) return;
-    for(uint i = debut; i <= fin; i ++)
-        sum += sysEx[i];
-//Enregistre le checksum
-    sysEx[check] = (~sum) + 1;
+    uchar sum = 0;
+    if (lenSysEx == 0) return 0;
+    for(uint i = 0; i < longueur; i ++)
+        sum += sysEx[i + debut];
+    return (-sum) & 0x7F;
 }
 
-void Block::CheckSum2Oct(const uint debut, const uint fin, const uint check)
+void Block::VerifierCheckSum(const uint debut, const uint longueur, const uint position)
 {
-    uchar sum;
-    if (lenSysEx == 0) return;
-    for(uint i = debut; i <= fin; i ++)
-        sum += sysEx[i];
-//Enregistre le checksum
-    sum = (~sum) + 1;
-    sysEx[check] = sum & 0xF;
-    sysEx[check+1] = sum >> 4;
+    uchar sum = CalculerCheckSum(debut, longueur);
+    if (sum != sysEx[position]) {
+    //Erreur de transmission
+        char text[71];
+        sprintf(text, "Bad checksum received :\nFB01 checksum %x, editor checksum %x",
+                sysEx[position], sum);
+        throw MIDI_ex(text);
+    }
 }

@@ -193,6 +193,11 @@
     </item>
     <item>
      <property name="text">
+      <string>Wood</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Synth</string>
      </property>
     </item>
