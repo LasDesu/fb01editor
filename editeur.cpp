@@ -183,6 +183,7 @@ void Editeur::ActualiserEdition(const int onglet)
 //Active seulement ceux utilisés
     switch (onglet) {
     case MainWindow::ONGLET_CONFIG :
+        if (!mainWindow.ui->widget_config->isEnabled()) return;
     case MainWindow::ONGLET_VOICE :
         mainWindow.ui->actionInitialize->setEnabled(true);
         mainWindow.ui->actionRandomize->setEnabled(true);

@@ -70,7 +70,7 @@ void MIDI::EnumererDrivers()
     for (uint i = 0; i < n; i++) {
         MIDIINCAPS * desc = (MIDIINCAPS *) malloc(sizeof(MIDIINCAPS));
         if (desc == NULL) throw Memory_ex("Unable to allocate driver descriptor !");
-        if (midiInGetDevCapsA(i, desc, sizeof(MIDIINCAPS)) != MMSYSERR_NOERROR)
+        if (midiInGetDevCapsA(i, desc, sizeof(MIDIINCAPS)) == MMSYSERR_NOERROR)
             AjouterDriverIn((void *) desc, "");
         else free(desc);
     }
@@ -79,7 +79,7 @@ void MIDI::EnumererDrivers()
     for (uint i = 0; i < n; i++) {
         MIDIOUTCAPS * desc = (MIDIOUTCAPS *) malloc(sizeof(MIDIOUTCAPS));
         if (desc == NULL) throw Memory_ex("Unable to allocate driver descriptor !");
-        if (midiOutGetDevCapsA(i, desc, sizeof(MIDIOUTCAPS)) != MMSYSERR_NOERROR)
+        if (midiOutGetDevCapsA(i, desc, sizeof(MIDIOUTCAPS)) == MMSYSERR_NOERROR)
             AjouterDriverOut((void *) desc, "");
         else free(desc);
     }
