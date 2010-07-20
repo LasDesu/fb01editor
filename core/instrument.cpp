@@ -91,7 +91,7 @@ uchar Instrument::LireParam(const uchar param)
         default: return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Instrument exception : %s\n\r", ex.Info());
         return 0;
     }
 }
@@ -148,7 +148,7 @@ void Instrument::EcrireParam(const uchar param, const uchar valeur)
         default : return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Instrument exception : %s\n\r", ex.Info());
     }
 }
 

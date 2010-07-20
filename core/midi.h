@@ -41,17 +41,15 @@ public:
 //Enumération des drivers
     static void EnumererDrivers();
     static void LibererDrivers();
+//Récupération du nom
+    static const char * DriverIn(const int index);
+    static const char * DriverOut(const int index);
     static uint NbDriversIn();
     static uint NbDriversOut();
-    static char * DriverIn(const int index);
-    static char * DriverOut(const int index);
 //Activation des drivers
     static void ActiverIn(const int index);
     static void ActiverOut(const int index);
     static void ActiverCtrl(const int index);
-    static void DesactiverIn();
-    static void DesactiverOut();
-    static void DesactiverCtrl();
 //Etat des drivers
     static bool InOk();
     static bool OutOk();
@@ -74,23 +72,31 @@ public:
     static void NoteOn(const uchar note);
     static void NoteOff(const uchar note);
     static void AllNotesOff();
-//Debug
-    static void BackupTampon(char * Chemin);
+//Backup du tampon de réception
+    static bool BackupTampon(char * Chemin);
 private:
 //Constantes communication
-    #define MIDI_ATT_MSG 10
     #define MIDI_LEN_TAMPON 0x2000
-    #define MIDI_ATTENTE 100
-    #define MIDI_ATTENTE_MESSAGE 100
+    #define MIDI_ATTENTE 10000
+    #define MIDI_PAUSE_MESSAGE 10
+    #define MIDI_PAUSE_THREAD 1
+//Constantes drivers
+    #define MIDI_MAX_DRIVERS 32
+    #define MIDI_LEN_CHEMIN 40
 //Structures des drivers
     typedef struct {
-        void * desc;
-        uint nb;
+        void * descr;
+        char   chemin[MIDI_LEN_CHEMIN];
+        union {
+            uint   handleNum;
+            void * handleStruct;
+        };
     }DriversStr;
 //Objets de la communication
-    static DriversStr ins, outs;
-    static uint hndIn, hndOut, hndCtrl;
-    static int  indIn, indOut, indCtrl;
+    static DriversStr ins[MIDI_MAX_DRIVERS];
+    static DriversStr outs[MIDI_MAX_DRIVERS];
+    static uint nbIns, nbOuts;
+    static int indIn, indOut, indCtrl;
 //Paramêtres de communication
     static uchar midiChannel;
     static uchar velocity;
@@ -99,19 +105,39 @@ private:
     static bool relaiIN;
     static bool relaiCTRL;
 //Tampon de réception
-    static uchar tampon[2][MIDI_LEN_TAMPON];
+    static uchar tampon[MIDI_LEN_TAMPON];
+    static bool  prepare;
     static bool  attente;
+//Gestion interne des drivers
+    static void AjouterDriverIn(void * descr, const char * chemin);
+    static void AjouterDriverOut(void * descr, const char * chemin);
+//Déclarations spécifiques windows
 #ifdef WIN32
 //Statut des tampons
     static MIDIHDR header;
-    static bool prepare;
 //Gestion des tampons
     static void PreparerTampon();
     static void DePreparerTampon();
+//Callbacks MIDI
     static void WINAPI CallbackIn(uint hmi, uint msg, uint instance, uint param1, uint param2);
     static void WINAPI CallbackCtrl(uint hmi, uint msg, uint instance, uint param1, uint param2);
 #endif
+//Déclarations spécifiques linux
 #ifdef LINUX
+//Structure de réception
+    typedef struct {
+        uchar tamponSysEx[MIDI_LEN_TAMPON];
+        uchar tamponNormal[4];
+        bool recSysEx, recNormal;
+        uint posSysEx, posNormal;
+    }ReceptionStr;
+//Réception des données
+    static void RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec, bool * okNormal, bool * okSysEx);
+//Threads MIDI
+    static void * CallbackIn(void * param);
+    static void * CallbackCtrl(void * param);
+    static pthread_t threadIn,threadCtrl;
+    static bool runIn, runCtrl;
 #endif
 };
 

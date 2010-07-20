@@ -35,11 +35,20 @@
 class Periph
 {
 public:
+//Initialisation du module
+    static void Initialiser(void * X11display);
+    static void Terminer();
 //Détection de touches clavier
     static bool ToucheASCII(const char code);
     static bool ToucheShift();
     static bool ToucheCtrl();
     static bool ToucheAlt();
+private:
+//Déclarations spécifiques linux
+#ifdef LINUX
+    static Display * display;
+    static bool EtatToucheSpeciale(KeySym keysym);
+#endif
 };
 
 #endif // PERIPH_H

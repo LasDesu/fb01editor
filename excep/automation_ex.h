@@ -23,7 +23,8 @@
 #define AUTOMATION_EX_H
 
 #include <stdlib.h>
-#include <strings.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "../types.h"
 #include "ex.h"

@@ -25,6 +25,7 @@
 QClavier::QClavier(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
     timer = 0;
+    clavierDispo = CLAVIER_AUCUNE;
     ChoisirClavier(CLAVIER_QWERTY);
 }
 
@@ -54,7 +55,7 @@ void QClavier::ChoisirClavier(const CLAVIER_DISPO dispo)
 //Effectue le mapping clavier
     for (uint i = 0; i < CLAVIER_NB_TOUCHES; i++)
         touches[i].touche = table[i];
-    timer = this->startTimer(CLAVIER_INTER_ACTU);
+    timer = this->startTimer(CLAVIER_PAUSE_ACTU);
 }
 
 /*****************************************************************************/
@@ -64,7 +65,7 @@ void QClavier::mouseMoveEvent(QMouseEvent * event)
 }
 
 
-void QClavier::timerEvent(QTimerEvent *e)
+void QClavier::timerEvent(QTimerEvent * event)
 {
     for (uint i = 0; i < CLAVIER_NB_TOUCHES; i ++) {
         bool etat = Periph::ToucheASCII(touches[i].touche);

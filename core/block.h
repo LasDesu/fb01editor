@@ -23,7 +23,7 @@
 #define BLOCK_H
 
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 #include "../types.h"
 #include "midi.h"

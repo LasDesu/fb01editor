@@ -19,7 +19,10 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "editeur.h"
 #include "qconfig.h"
+
+extern Editeur * editeur;
 
 /*****************************************************************************/
 QConfig::QConfig(QWidget *parent) : QWidget(parent), m_ui(new Ui::QConfig)
@@ -83,8 +86,11 @@ void QConfig::on_pshBut_memory_clicked(bool checked)
 
 void QConfig::on_but_setnum_valueChanged(int i)
 {
-    if (!attente)
+    if (!attente) {
         config->EcrireParam(CONFIG_CONFIG_NUMBER, i - 1);
+        editeur->ActualiserSet();
+    }
+
 }
 
 void QConfig::on_but_mastdetune_valueChanged(int i)

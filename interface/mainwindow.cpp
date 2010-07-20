@@ -19,8 +19,8 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mainwindow.h"
 #include "editeur.h"
+#include "mainwindow.h"
 
 extern QApplication * application;
 extern Editeur * editeur;
@@ -380,7 +380,8 @@ void MainWindow::on_actionAbout_FB01SE_triggered(bool checked)
 {
     QString text;
 //Informations sur le logiciel
-    text.append("FB01 Sound Editor : V2.0 (15/07/10)\nCopyright Meslin Frederic 2009 - 2010\n\n");
+    text.append("FB01 Sound Editor : V2.1 (20/07/10)\n");
+    text.append("Copyright Meslin Frederic 2009 - 2010\n\n");
     text.append("This is an open source computer editor for the Yamaha FB01 sound module.\n");
     text.append("This program is under a GPL license, for legal informations, please read the COPYING file.\n\n");
     text.append("In order to support the project or download the latest release, try the following links :\n\n");
@@ -402,15 +403,15 @@ void MainWindow::on_actionRead_this_triggered(bool checked)
 {
     QString text;
 //Informations supplémentaires
-    text.append("FB01 Sound Editor : V2.0 (15/07/10)\nCopyright Meslin Frederic 2009 - 2010\n\n");
-    text.append("This program was developped carefully but it might still contain\n");
-    text.append("bugs and features that need to be improved, so try to visit\n");
+    text.append("FB01 Sound Editor : V2.1 (20/07/10)\nCopyright Meslin Frederic 2009 - 2010\n\n");
+    text.append("This program was developped carefully but it might still contain ");
+    text.append("bugs and features that need to be improved, so try to visit ");
     text.append("sometimes the main website to get the latest editor release.\n\n");
-    text.append("As you can figure out, developping such a project needs a lot of time.\n");
-    text.append("While I am doing that, I do not work and I do not record music at all.\n");
-    text.append("I will release soon a CD version with the editor, a complete FM tutorial\n");
+    text.append("As you can figure out, developping such a project needs a lot of time. ");
+    text.append("While I am doing that, I do not work and I do not record music at all. ");
+    text.append("I will release soon a CD version with the editor, a complete FM tutorial ");
     text.append("and a complete library of sounds ready to use.\n\n");
-    text.append("If you want to support my work and take advantage of the tutorial and\n");
+    text.append("If you want to support my work and take advantage of the tutorial and ");
     text.append("the sound library, please contact me to order this CD version.\n");
     QMessageBox::information(this, "FB01 SE :", text);
 }
@@ -420,7 +421,7 @@ void MainWindow::on_cmbBox_MIDICtrl_activated(int index)
 {
     if (index < 1) {
     //Déselectionne le driver
-        MIDI::DesactiverCtrl();
+        MIDI::ActiverCtrl(-1);
         ui->tab_automation->setEnabled(false);
     }else{
     //Sélectionne le driver
@@ -440,7 +441,7 @@ void MainWindow::on_cmbBox_MIDIIn_activated(int index)
 {
     if (index < 1) {
     //Déselectionne le driver
-        MIDI::DesactiverIn();
+        MIDI::ActiverIn(-1);
         editeur->ActiverOnglets(false);
         editeur->ActiverMenus(false);
     }else{
@@ -461,7 +462,7 @@ void MainWindow::on_cmbBox_MIDIOut_activated(int index)
 {
     if (index < 1) {
     //Déselectionne le driver
-        MIDI::DesactiverOut();
+        MIDI::ActiverOut(-1);
         editeur->ActiverOnglets(false);
         editeur->ActiverMenus(false);
     }else{
@@ -485,10 +486,13 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
     ui->cmbBox_MIDICtrl->clear();
     ui->cmbBox_MIDIIn->clear();
     ui->cmbBox_MIDIOut->clear();
-//Ajoute le driver nul
     ui->cmbBox_MIDICtrl->addItem((QString) "No driver selected", 0);
     ui->cmbBox_MIDIIn->addItem((QString) "No driver selected", 0);
     ui->cmbBox_MIDIOut->addItem((QString) "No driver selected", 0);
+//Initialise la sélection
+    ui->cmbBox_MIDICtrl->setCurrentIndex(0);
+    ui->cmbBox_MIDIIn->setCurrentIndex(0);
+    ui->cmbBox_MIDIOut->setCurrentIndex(0);
 //Enumère les drivers
     try {
         MIDI::EnumererDrivers();
@@ -505,10 +509,6 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
     int nbOuts = MIDI::NbDriversOut();
     for (int i = 0; i < nbOuts; i++)
         ui->cmbBox_MIDIOut->addItem((QString)MIDI::DriverOut(i), i+1);
-//Initialise la sélection
-    ui->cmbBox_MIDICtrl->setCurrentIndex(0);
-    ui->cmbBox_MIDIIn->setCurrentIndex(0);
-    ui->cmbBox_MIDIOut->setCurrentIndex(0);
 }
 
 /*****************************************************************************/

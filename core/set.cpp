@@ -128,7 +128,7 @@ uchar Set::LireParam(const uchar param)
         default: return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Set exception : %s\n\r", ex.Info());
         return 0;
     }
 }
@@ -158,7 +158,7 @@ void Set::EcrireParam(const uchar param, const uchar valeur)
         default: return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Set exception : %s\n\r", ex.Info());
     }
 }
 
@@ -172,7 +172,7 @@ char * Set::LireNom()
         nom[SET_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Set exception : %s\n\r", ex.Info());
         return NULL;
     }
 }
@@ -187,7 +187,7 @@ void Set::EcrireNom(char * nom)
             else EcrireParam1Oct(i, temp[i]);
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Set exception : %s\n\r", ex.Info());
     }
 }
 

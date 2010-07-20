@@ -22,10 +22,22 @@
 #ifndef LINUX_H
 #define LINUX_H
 #ifdef LINUX
+
+//Inclusions génériques
 extern "C"
 {
-//****************************************************************************/
-        #define sleep(t) (usleep(t * 1000))
+    #include "X11/Xlib.h"
+    #include "X11/keysym.h"
+    #include <unistd.h>
+    #define stdSleep(t) usleep(t * 1000)
 }
+
+//Inclusions relatives au MIDI
+extern "C"
+{
+    #include "pthread.h"
+    #include "alsa/asoundlib.h"
+}
+
 #endif
 #endif // LINUX_H

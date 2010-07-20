@@ -31,12 +31,13 @@ extern "C"
     #define CALLBACK_FUNCTION 0x30000
 
     void WINAPI Sleep(ulong dwMilliseconds);
-    #define sleep(t) (Sleep(t))
+    #define stdSleep(t) Sleep(t)
 }
 
-//Inclusions MIDI
+//Inclusions relatives au MIDI
 extern "C"
 {
+//Constantes MIDI
     #define MMSYSERR_NOERROR   0
     #define MMSYSERR_ERROR     1
     #define MMSYSERR_ALLOCATED 4
@@ -51,6 +52,7 @@ extern "C"
     #define MM_MOM_CLOSE  0x3C8
     #define MM_MOM_DONE   0x3C9
 
+//Structures MIDI
     typedef struct
     {
         ushort wMid;
@@ -85,6 +87,7 @@ extern "C"
         uint dwReserved[4];
     } MIDIHDR;
 
+//Fonctions MIDI
     uint WINAPI midiOutGetNumDevs(void);
     uint WINAPI midiInGetNumDevs(void);
     uint WINAPI midiOutOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
@@ -113,6 +116,7 @@ extern "C"
 //Inclusions périphériques
 extern "C"
 {
+//Constantes clavier
     #define VK_SHIFT	16
     #define VK_CONTROL	17
     #define VK_MENU	18
@@ -123,6 +127,7 @@ extern "C"
     #define VK_LMENU	0xA4
     #define VK_RMENU	0xA5
 
+//Fonctions clavier
     bool  WINAPI EnableWindow(uint hWnd, bool bEnable);
     short WINAPI GetAsyncKeyState(int vKey);
     short WINAPI VkKeyScanA(char ch);

@@ -27,7 +27,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "excep/memory_ex.h"
 #include "excep/midi_ex.h"

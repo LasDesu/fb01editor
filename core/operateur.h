@@ -22,17 +22,14 @@
 #ifndef OPERATOR_H
 #define OPERATOR_H
 
-#include <QMessageBox>
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "../types.h"
 #include "../excep/memory_ex.h"
 #include "../excep/midi_ex.h"
 #include "../excep/automation_ex.h"
-
 
 #include "automation.h"
 #include "automated.h"

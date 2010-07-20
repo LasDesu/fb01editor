@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
+    <width>591</width>
     <height>264</height>
    </rect>
   </property>
@@ -18,9 +18,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>191</width>
+     <width>201</width>
      <height>261</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Voice configuration :</string>
@@ -30,12 +35,13 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -47,11 +53,16 @@
    <widget class="QComboBox" name="cmbBox_style">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>50</y>
       <width>81</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The style of the voice (stored as user code)</string>
@@ -137,12 +148,13 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -154,11 +166,16 @@
    <widget class="QPlainTextEdit" name="txtEdit_voicename">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>20</y>
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The name of the voice</string>
@@ -184,12 +201,13 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -201,11 +219,16 @@
    <widget class="QButton" name="but_feedback">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>80</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The level of feedback for the synthesis</string>
@@ -225,12 +248,13 @@
      <rect>
       <x>10</x>
       <y>170</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -242,11 +266,16 @@
    <widget class="QButton" name="but_porta">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>170</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The portamento length of the instrument</string>
@@ -266,12 +295,13 @@
      <rect>
       <x>10</x>
       <y>200</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -283,11 +313,16 @@
    <widget class="QButton" name="but_trans">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>110</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The transpose level of the voice</string>
@@ -305,11 +340,16 @@
    <widget class="QPushButton" name="pshBut_poly">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>140</y>
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The voice response to a multiple notes play</string>
@@ -324,11 +364,16 @@
    <widget class="QComboBox" name="cmbBox_pmdctl">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>230</y>
       <width>81</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The kind of MIDI controler assigned to PMD</string>
@@ -362,11 +407,16 @@
    <widget class="QButton" name="but_pitch">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>200</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The pitchbender range of the voice</string>
@@ -386,12 +436,13 @@
      <rect>
       <x>10</x>
       <y>110</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -405,12 +456,13 @@
      <rect>
       <x>10</x>
       <y>140</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -424,12 +476,13 @@
      <rect>
       <x>10</x>
       <y>230</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -442,11 +495,16 @@
   <widget class="QGroupBox" name="grpBox_algorithm">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>220</x>
      <y>0</y>
      <width>151</width>
      <height>101</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Algorithm :</string>
@@ -464,7 +522,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/ALGO1</pixmap>
+     <pixmap resource="../FB01.qrc">:/ALGO1</pixmap>
     </property>
    </widget>
    <widget class="QButton" name="but_algo">
@@ -473,8 +531,13 @@
       <x>30</x>
       <y>70</y>
       <width>91</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The sound algorithm of the voice</string>
@@ -493,11 +556,16 @@
   <widget class="QGroupBox" name="grpBox_LFO">
    <property name="geometry">
     <rect>
-     <x>380</x>
+     <x>390</x>
      <y>0</y>
-     <width>191</width>
+     <width>201</width>
      <height>261</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>LFO configuration :</string>
@@ -507,12 +575,13 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -524,11 +593,16 @@
    <widget class="QComboBox" name="cmbBox_LFOwave">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>50</y>
       <width>81</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The requested waveform for the LFO</string>
@@ -559,12 +633,13 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -578,12 +653,13 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -595,11 +671,16 @@
    <widget class="QPushButton" name="pshBut_LFOload">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>80</y>
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>Set the LFO configuration when loading the voice</string>
@@ -616,12 +697,13 @@
      <rect>
       <x>10</x>
       <y>110</y>
-      <width>81</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -633,11 +715,16 @@
    <widget class="QPushButton" name="pshBut_LFOsync">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>110</y>
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>Synchronize the LFO with key pressing</string>
@@ -652,11 +739,16 @@
    <widget class="QButton" name="but_PMS">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>230</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The pitch modulation sensitivity</string>
@@ -676,12 +768,13 @@
      <rect>
       <x>10</x>
       <y>140</y>
-      <width>41</width>
-      <height>20</height>
+      <width>91</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -695,12 +788,13 @@
      <rect>
       <x>10</x>
       <y>230</y>
-      <width>41</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -714,12 +808,13 @@
      <rect>
       <x>10</x>
       <y>170</y>
-      <width>41</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -731,11 +826,16 @@
    <widget class="QButton" name="but_AMS">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>170</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The amplitude modulation sensitivity</string>
@@ -753,11 +853,16 @@
    <widget class="QButton" name="but_PMD">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>200</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The pitch modulation</string>
@@ -777,12 +882,13 @@
      <rect>
       <x>10</x>
       <y>200</y>
-      <width>41</width>
+      <width>91</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -794,11 +900,16 @@
    <widget class="QButton" name="but_AMD">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>140</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The amplitude modulation</string>
@@ -816,11 +927,16 @@
    <widget class="QButton" name="but_LFOspeed">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>20</y>
       <width>81</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The amplitude modulation</string>
@@ -839,11 +955,16 @@
   <widget class="QGroupBox" name="grpBox_informations">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>220</x>
      <y>110</y>
      <width>151</width>
      <height>151</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Voice informations :</string>
@@ -853,12 +974,13 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>46</width>
-      <height>14</height>
+      <width>131</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -875,6 +997,11 @@
       <width>131</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The proud author of the voice</string>
@@ -898,6 +1025,11 @@
       <height>51</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>Any comments about the voice</string>
     </property>
@@ -916,12 +1048,13 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>71</width>
+      <width>131</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -939,6 +1072,8 @@
    <header>interface/qbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>

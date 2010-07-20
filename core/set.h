@@ -22,11 +22,9 @@
 #ifndef SET_H
 #define SET_H
 
-#include <QMessageBox>
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "../types.h"
 #include "../excep/memory_ex.h"

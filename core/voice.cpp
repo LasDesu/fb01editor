@@ -170,7 +170,7 @@ uchar Voice::LireParam(const uchar param)
         default : return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Voice exception : %s\n\r", ex.Info());
         return 0;
     }
 }
@@ -277,7 +277,7 @@ void Voice::EcrireParam(const uchar param, const uchar valeur)
         default : return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Voice exception : %s\n\r", ex.Info());
     }
 }
 
@@ -291,7 +291,7 @@ char * Voice::LireNom()
         nom[VOICE_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Voice exception : %s\n\r", ex.Info());
         return NULL;
     }
 }
@@ -306,7 +306,7 @@ void Voice::EcrireNom(char * nom)
             else EcrireParam2Oct(i, temp[i]);
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Voice exception : %s\n\r", ex.Info());
     }
 }
 

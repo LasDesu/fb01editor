@@ -22,8 +22,6 @@
 #ifndef INSTRUMENT_H
 #define INSTRUMENT_H
 
-#include <QMessageBox>
-
 #include <stdlib.h>
 #include <stdio.h>
 

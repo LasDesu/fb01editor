@@ -21,9 +21,13 @@
 
 #include "editeur.h"
 
-//Objets principaux
+#ifdef LINUX
+    #include <QX11Info>
+#endif
+
+//Objets principaux editeur
 QApplication * application = NULL;
-Editeur * editeur = NULL;
+Editeur      * editeur = NULL;
 
 /*****************************************************************************/
 int main(int argc, char *argv[])
@@ -83,6 +87,14 @@ void Editeur::InitialiserEditeur()
     AttribuerInstruments();
     AttribuerVoice();
     AttribuerOperateurs();
+//Initialise les modules
+#ifdef WIN32
+    Periph::Initialiser(NULL);
+#endif
+#ifdef LINUX
+    Periph::Initialiser((void *) mainWindow.x11Info().display());
+#endif
+    InitialiserAutomation();
 //Sélectionne les pages
     ChoisirPageSet(0);
     ChoisirPageBank(0);
@@ -90,8 +102,6 @@ void Editeur::InitialiserEditeur()
     ChoisirBank(0);
     ChoisirInstru(0);
     ChoisirOP(0);
-//Initialise les automations
-    InitialiserAutomation();
 //Initialisations diverses
     //srand(QTime::currentTime().msec());
     copie.objet = Edit::EDIT_OBJ_RIEN;
@@ -100,22 +110,24 @@ void Editeur::InitialiserEditeur()
 
 void Editeur::InitialiserInterface()
 {
-//Liste les drivers
-    mainWindow.show();
-    mainWindow.on_pshBut_refresh_midi_pressed();
 //Désactive l'interface
+    mainWindow.show();
     ActiverMenus(false);
     ActiverOnglets(false);
+//Liste les drivers
+    mainWindow.on_pshBut_refresh_midi_pressed();
 }
 
 void Editeur::TerminerEditeur()
 {
-//Réinitialise l'éditeur
-    Reinitialiser();
+//Libère les ressources
     for (uchar i = 0; i < EDITEUR_NB_BANK; i++)
         if (banks[i] != NULL) delete banks[i];
 //Libère la table de copie
     if (copie.sysExTemp) free (copie.sysEx);
+//Réinitialise les modules
+    MIDI::LibererDrivers();
+    Periph::Terminer();
 }
 
 /*****************************************************************************/
@@ -503,9 +515,9 @@ void Editeur::Rafraichir(const bool visible)
 void Editeur::Reinitialiser()
 {
 //Déselectionne les drivers
-    MIDI::DesactiverIn();
-    MIDI::DesactiverOut();
-    MIDI::DesactiverCtrl();
+    MIDI::ActiverIn(-1);
+    MIDI::ActiverOut(-1);
+    MIDI::ActiverCtrl(-1);
     mainWindow.ui->cmbBox_MIDIIn->setCurrentIndex(0);
     mainWindow.ui->cmbBox_MIDIOut->setCurrentIndex(0);
     mainWindow.ui->cmbBox_MIDICtrl->setCurrentIndex(0);

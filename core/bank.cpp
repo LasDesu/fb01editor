@@ -133,7 +133,7 @@ char * Bank::LireNom()
         nom[BANK_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Bank exception : %s\n\r", ex.Info());
         return NULL;
     }
 }
@@ -148,7 +148,7 @@ void Bank::EcrireNom(char * nom)
             else EcrireParam2Oct(i, temp[i]);
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Bank exception : %s\n\r", ex.Info());
     }
 }
 

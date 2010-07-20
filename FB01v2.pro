@@ -22,16 +22,16 @@ HEADERS += types.h \
     core/operateur.h \
     core/instrument.h \
     core/voice.h \
+    core/bank.h \
     interface/qoperateur.h \
     interface/qbutton.h \
     interface/qclavier.h \
     interface/qvoice.h \
     interface/qinstrument.h \
     interface/qenveloppe.h \
-    core/bank.h \
     interface/mainwindow.h \
     interface/qbank.h \
-    interface/mainwindow.h \
+    interface/qautomation.h \
     editeur.h \
     core/config.h \
     core/edit.h \
@@ -40,7 +40,6 @@ HEADERS += types.h \
     excep/memory_ex.h \
     excep/midi_ex.h \
     excep/ex.h \
-    interface/qautomation.h \
     core/automation.h \
     core/automated.h \
     excep/automation_ex.h \
@@ -82,15 +81,19 @@ FORMS += interface/qoperateur.ui \
     interface/qautomation.ui
 winnt { 
     DEFINES += WIN32
-    LIBS += -luser32 -lwinmm
+    LIBS    += -luser32 -lwinmm
     RC_FILE  = FB01.rc
 }
 win32 { 
     DEFINES += WIN32
-    LIBS += -luser32 -lwinmm
+    LIBS    += -luser32 -lwinmm
     RC_FILE  = FB01.rc
+}
+linux {
+    DEFINES += LINUX
+    LIBS += -lasound
 }
 unix { 
     DEFINES += LINUX
-    LIBS += 
+    LIBS += -lasound
 }

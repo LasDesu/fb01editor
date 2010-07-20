@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>264</width>
-    <height>224</height>
+    <width>271</width>
+    <height>221</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>261</width>
+     <width>271</width>
      <height>221</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="title">
     <string>Operator :</string>
@@ -28,66 +33,106 @@
    <widget class="QLabel" name="lbl_AR">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>70</y>
-      <width>20</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>AR</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_D1R">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>60</x>
       <y>70</y>
-      <width>20</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>D1R</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_SL">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>110</x>
       <y>70</y>
-      <width>20</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string> SL</string>
+     <string>SL</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_D2R">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>160</x>
       <y>70</y>
-      <width>20</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>D2R</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_RR">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>210</x>
       <y>70</y>
-      <width>20</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>RR</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_ARvel">
@@ -99,8 +144,16 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>AR. Vel.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_lvlAR">
@@ -112,47 +165,79 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string> Lvl. Vel.</string>
+     <string>Lvl. Vel.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_detune">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>120</y>
-      <width>31</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Fine</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_coarse">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
+      <x>110</x>
       <y>120</y>
       <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Fine</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_coarse">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Coarse</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_multiple">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>60</x>
       <y>120</y>
-      <width>31</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Mult.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_lvldph">
@@ -164,21 +249,37 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>6</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Lvl. Dph.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_lvlcurb">
     <property name="geometry">
      <rect>
-      <x>8</x>
+      <x>10</x>
       <y>170</y>
-      <width>51</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>6</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Lvl. Curb.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_rtdph">
@@ -190,21 +291,37 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>6</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Rt. Dph.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_adjTL">
     <property name="geometry">
      <rect>
-      <x>164</x>
+      <x>160</x>
       <y>170</y>
       <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>6</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Adj. Vol</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pshBut_carrier">
@@ -215,6 +332,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The operator output mode</string>
@@ -231,25 +353,41 @@
      <rect>
       <x>158</x>
       <y>120</y>
-      <width>51</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>6</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Car./Mod.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_volume">
     <property name="geometry">
      <rect>
-      <x>214</x>
+      <x>204</x>
       <y>120</y>
-      <width>41</width>
+      <width>51</width>
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Volume</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QComboBox" name="cmbBox_lvlcurb">
@@ -260,6 +398,11 @@
       <width>41</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The response curb of the output level to the note height</string>
@@ -329,6 +472,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>The influence of key velocity on the output level</string>
     </property>
@@ -350,6 +498,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The influence of key velocity on attack rate</string>
@@ -373,6 +526,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>The attack rate of the enveloppe</string>
     </property>
@@ -394,6 +552,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The decay 1 rate of the enveloppe</string>
@@ -417,6 +580,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>The sustain level of the enveloppe</string>
     </property>
@@ -438,6 +606,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The decay 2 rate of the enveloppe</string>
@@ -461,6 +634,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>The release rate of the enveloppe</string>
     </property>
@@ -482,6 +660,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The coarse detune level</string>
@@ -505,6 +688,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string/>
     </property>
@@ -527,6 +715,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>The fine detune level</string>
     </property>
@@ -548,6 +741,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>The influence of the note height on the output level</string>
@@ -574,6 +772,11 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="toolTip">
      <string>The influence of the note height on the enveloppe rates</string>
     </property>
@@ -595,6 +798,11 @@
       <width>41</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="toolTip">
      <string>Fine adjustement for the output level</string>

@@ -19,8 +19,8 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "qautomation.h"
 #include "editeur.h"
+#include "qautomation.h"
 
 extern Editeur * editeur;
 
@@ -120,15 +120,15 @@ void QAutomation::on_pshBut_deleteAll_pressed()
 /*****************************************************************************/
 void QAutomation::on_pshBut_autorefresh_clicked(bool checked)
 {
-    if (checked) timer = this->startTimer(QAUTO_INTER_ACTU);
+    if (checked) timer = this->startTimer(QAUTO_PAUSE_ACTU);
     else this->killTimer(timer);
 }
 
 /*****************************************************************************/
-void QAutomation::changeEvent(QEvent *e)
+void QAutomation::changeEvent(QEvent * event)
 {
-    QWidget::changeEvent(e);
-    switch (e->type()) {
+    QWidget::changeEvent(event);
+    switch (event->type()) {
     case QEvent::LanguageChange:
         m_ui->retranslateUi(this);
         break;
@@ -137,7 +137,7 @@ void QAutomation::changeEvent(QEvent *e)
     }
 }
 
-void QAutomation::timerEvent(QTimerEvent *e)
+void QAutomation::timerEvent(QTimerEvent * event)
 {
     editeur->Rafraichir(true);
 }

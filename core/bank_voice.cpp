@@ -43,7 +43,7 @@ char * Bank_voice::LireNom()
         nom[BANKVOICE_LEN_NOM] = 0;
         return nom;
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Bank_voice exception : %s\n\r", ex.Info());
         return NULL;
     }
 }
@@ -58,7 +58,7 @@ void Bank_voice::EcrireNom(const char * nom)
             else EcrireParam2Oct(i, temp[i]);
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Bank_voice exception : %s\n\r", ex.Info());
     }
 }
 
@@ -72,7 +72,7 @@ uchar Bank_voice::LireParam(const uchar param)
         default : return 0;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Bank_voice exception : %s\n\r", ex.Info());
         return 0;
     }
 }
@@ -87,7 +87,7 @@ void Bank_voice::EcrireParam(const uchar param, const uchar valeur)
         default : return;
         }
     }catch(MIDI_ex ex) {
-        QMessageBox::warning(NULL, "FB01 SE:", ex.Info());
+        printf("Bank_voice exception : %s\n\r", ex.Info());
     }
 }
 

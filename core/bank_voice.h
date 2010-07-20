@@ -22,11 +22,9 @@
 #ifndef BANK_VOICE_H
 #define BANK_VOICE_H
 
-#include <QMessageBox>
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 #include "../types.h"
 #include "edit.h"

@@ -42,7 +42,7 @@ class QAutomation : public QWidget {
     Q_OBJECT
 public:
 //Intervalle d'actualisation
-    #define QAUTO_INTER_ACTU 200
+    #define QAUTO_PAUSE_ACTU 200
 //Constructeurs
     QAutomation(QWidget *parent = 0);
     ~QAutomation();

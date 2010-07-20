@@ -39,7 +39,7 @@ class QClavier : public QLabel
     Q_OBJECT
 public:
 //Constantes
-    #define CLAVIER_INTER_ACTU 100
+    #define CLAVIER_PAUSE_ACTU 10
     #define CLAVIER_NB_TOUCHES 24
 //Disposition du clavier
     typedef enum {
@@ -63,7 +63,7 @@ protected:
     void mousePressEvent(QMouseEvent * event);
     void mouseReleaseEvent(QMouseEvent * event);
 //Actualisation du clavier
-    void timerEvent(QTimerEvent *e);
+    void timerEvent(QTimerEvent * event);
 private:
 //Pilotage par souris
     #define G_REF 36
