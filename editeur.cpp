@@ -114,6 +114,7 @@ void Editeur::InitialiserInterface()
     mainWindow.show();
     ActiverMenus(false);
     ActiverOnglets(false);
+    ActualiserEdition(MainWindow::ONGLET_CONFIG);
 //Liste les drivers
     mainWindow.on_pshBut_refresh_midi_pressed();
 }
