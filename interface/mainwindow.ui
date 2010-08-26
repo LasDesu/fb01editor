@@ -86,7 +86,7 @@
         <x>20</x>
         <y>30</y>
         <width>351</width>
-        <height>141</height>
+        <height>181</height>
        </rect>
       </property>
       <property name="font">
@@ -277,7 +277,7 @@
         </font>
        </property>
        <property name="text">
-        <string>IN -&gt; OUT</string>
+        <string>CTRL -&gt; OUT</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -306,12 +306,28 @@
         <string>Route :</string>
        </property>
       </widget>
+      <widget class="QLabel" name="lbll_RouteInfo">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>140</y>
+         <width>321</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>The routing feature transmits all MIDI data from the IN or CTRL device to the OUT device when activated.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
      <widget class="QConfig" name="widget_config" native="true">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>210</y>
+        <y>260</y>
         <width>591</width>
         <height>242</height>
        </rect>
@@ -323,7 +339,7 @@
         <x>420</x>
         <y>30</y>
         <width>191</width>
-        <height>141</height>
+        <height>181</height>
        </rect>
       </property>
       <property name="font">
@@ -432,7 +448,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>80</y>
+         <y>110</y>
          <width>171</width>
          <height>21</height>
         </rect>
@@ -456,7 +472,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>110</y>
+         <y>140</y>
          <width>171</width>
          <height>21</height>
         </rect>
@@ -474,6 +490,26 @@
        </property>
        <property name="checked">
         <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Keyboard layout :</string>
        </property>
       </widget>
      </widget>

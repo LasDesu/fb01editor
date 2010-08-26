@@ -144,9 +144,9 @@
    <widget class="QLabel" name="label_infos">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>170</y>
-      <width>231</width>
+      <width>251</width>
       <height>61</height>
      </rect>
     </property>
@@ -157,12 +157,6 @@
     </property>
     <property name="text">
      <string>These informations are not stored in files and cannot be retrieved from the module.</string>
-    </property>
-    <property name="textFormat">
-     <enum>Qt::AutoText</enum>
-    </property>
-    <property name="scaledContents">
-     <bool>false</bool>
     </property>
     <property name="wordWrap">
      <bool>true</bool>

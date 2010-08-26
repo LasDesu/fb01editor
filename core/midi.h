@@ -106,8 +106,8 @@ private:
     static bool relaiCTRL;
 //Tampon de réception
     static uchar tampon[MIDI_LEN_TAMPON];
-    static bool  prepare;
-    static bool  attente;
+    static bool prepare;
+    static bool attente;
 //Gestion interne des drivers
     static void AjouterDriverIn(void * descr, const char * chemin);
     static void AjouterDriverOut(void * descr, const char * chemin);
@@ -119,8 +119,8 @@ private:
     static void PreparerTampon();
     static void DePreparerTampon();
 //Callbacks MIDI
-    static void WINAPI CallbackIn(uint hmi, uint msg, uint instance, uint param1, uint param2);
-    static void WINAPI CallbackCtrl(uint hmi, uint msg, uint instance, uint param1, uint param2);
+    static void WINAPI CallbackIn(uint hmi, uint msg, ulong instance, ulong param1, ulong param2);
+    static void WINAPI CallbackCtrl(uint hmi, uint msg, ulong instance, ulong param1, ulong param2);
 #endif
 //Déclarations spécifiques linux
 #ifdef LINUX
@@ -128,11 +128,12 @@ private:
     typedef struct {
         uchar tamponSysEx[MIDI_LEN_TAMPON];
         uchar tamponNormal[4];
-        bool recSysEx, recNormal;
-        uint posSysEx, posNormal;
+        bool  recSysEx, recNormal;
+        uint  posSysEx, posNormal;
+        bool  okNormal, okSysEx;
     }ReceptionStr;
 //Réception des données
-    static void RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec, bool * okNormal, bool * okSysEx);
+    static void RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec);
 //Threads MIDI
     static void * CallbackIn(void * param);
     static void * CallbackCtrl(void * param);

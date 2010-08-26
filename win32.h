@@ -59,7 +59,7 @@ extern "C"
         ushort wPid;
         uint   vDriverVersion;
         char   szPname[32];
-        uint   dwSupport;
+        ulong  dwSupport;
     } MIDIINCAPS;
 
     typedef struct
@@ -72,26 +72,26 @@ extern "C"
         ushort wVoices;
         ushort wNotes;
         ushort wChannelMask;
-        uint   dwSupport;
+        ulong  dwSupport;
     } MIDIOUTCAPS;
 
     typedef struct{
         char *lpData;
-        uint dwBufferLength;
-        uint dwBytesRecorded;
-        uint dwUser;
-        uint dwFlags;
+        ulong dwBufferLength;
+        ulong dwBytesRecorded;
+        ulong dwUser;
+        ulong dwFlags;
         void  *lpNext;
-        uint reserved;
-        uint dwOffset;
-        uint dwReserved[4];
+        ulong reserved;
+        ulong dwOffset;
+        ulong dwReserved[4];
     } MIDIHDR;
 
 //Fonctions MIDI
     uint WINAPI midiOutGetNumDevs(void);
     uint WINAPI midiInGetNumDevs(void);
-    uint WINAPI midiOutOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
-    uint WINAPI midiInOpen(uint * lphmo, uint uDeviceID, uint dwCallback, uint dwCallbackInstance, uint dwFlags);
+    uint WINAPI midiOutOpen(uint * lphmo, uint uDeviceID, ulong dwCallback, ulong dwCallbackInstance, ulong dwFlags);
+    uint WINAPI midiInOpen(uint * lphmo, uint uDeviceID, ulong dwCallback, ulong dwCallbackInstance, ulong dwFlags);
     uint WINAPI midiOutClose(uint hmo);
     uint WINAPI midiInClose(uint hmi);
     uint WINAPI midiConnect(uint hmidi, uint hmo, void * pReserved);

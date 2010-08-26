@@ -33,8 +33,8 @@ uchar MIDI::velocity    = 127;
 uchar MIDI::sysChannel  = 0;
 
 //Relai données MIDI
-bool  MIDI::relaiIN   = true;
-bool  MIDI::relaiCTRL = true;
+bool MIDI::relaiIN   = true;
+bool MIDI::relaiCTRL = true;
 
 //Gestion du tampon de réception
 uchar MIDI::tampon[MIDI_LEN_TAMPON];
@@ -234,11 +234,10 @@ void MIDI::ActiverIn(const int index)
         snd_rawmidi_close(hndIn);
         ins[indIn].handleStruct = NULL;
 #endif
+        indIn = -1;
     }
-//Quitte si désactivation
-    indIn = -1;
-    if (index < 0) return;
 //Ouvre le port en entrée
+    if (index < 0) return;
     if (index == indCtrl)
         throw MIDI_ex("Cannot select the same driver as MIDI CTRL !");
 #ifdef WIN32
@@ -274,11 +273,10 @@ void MIDI::ActiverOut(const int index)
         snd_rawmidi_close(hndOut);
         outs[indOut].handleStruct = NULL;
 #endif
+        indOut = -1;
     }
-//Quitte si désactivation
-    indOut = -1;
-    if (index < 0) return;
 //Ouvre le port en sortie
+    if (index < 0) return;
 #ifdef WIN32
     if (midiOutOpen(&outs[index].handleNum, index, 0, 0, 0) != MMSYSERR_NOERROR)
         throw MIDI_ex("Unable to open MIDI OUT !");
@@ -312,11 +310,10 @@ void MIDI::ActiverCtrl(const int index)
         snd_rawmidi_close(hndCtrl);
         ins[indCtrl].handleStruct = NULL;
 #endif
-    }
-//Quitte si désactivation
     indCtrl = -1;
-    if (index < 0) return;
+    }
 //Ouvre le port en entrée
+    if (index < 0) return;
     if (index == indIn)
         throw MIDI_ex("Cannot select the same driver as MIDI IN !");
 #ifdef WIN32
@@ -572,7 +569,7 @@ bool MIDI::BackupTampon(char * chemin)
 
 /*****************************************************************************/
 #ifdef WIN32
-void WINAPI MIDI::CallbackIn(uint hmi, uint msg, uint instance, uint param1, uint param2)
+void WINAPI MIDI::CallbackIn(uint hmi, uint msg, ulong instance, ulong param1, ulong param2)
 {
     switch(msg) {
     case MIM_LONGDATA :
@@ -580,53 +577,54 @@ void WINAPI MIDI::CallbackIn(uint hmi, uint msg, uint instance, uint param1, uin
         attente = false;
     break;
     case MIM_DATA :
-   //Relai les données
+   //Relaie les données
         if (OutOk() && relaiIN)
-            try {EnvMsg((uchar *) param1);}
+            try {EnvMsg((uchar *) &param1);}
             catch (...) { printf("MIDI IN relay exception !\n\r"); }
     break;
+    default: return;
     }
 }
 
-void WINAPI MIDI::CallbackCtrl(uint hmi, uint msg, uint instance, uint param1, uint param2)
+void WINAPI MIDI::CallbackCtrl(uint hmi, uint msg, ulong instance, ulong param1, ulong param2)
 {
     switch(msg) {
     case MIM_DATA :
     //Gère les automations
         if ((param1 & 0xF0) == 0xB0) {
+        //Interprète le CC change
             uchar CC = (param1 >> 8) & 0xFF;
             uchar valeur = (param1 >> 16) & 0xFF;
             Automation::ReagirCC(CC, valeur);
         }
-    //Relai les données
+    //Relaie les données
         if (OutOk() && relaiCTRL)
-            try {EnvMsg((uchar *) param1);}
+            try {EnvMsg((uchar *) &param1);}
             catch (...) { printf("MIDI CTRL relay exception !\n\r"); }
     break;
+    default: return;
     }
 }
 #endif
 
 /*****************************************************************************/
-
 #ifdef LINUX
 void * MIDI::CallbackIn(void * param)
 {
     ReceptionStr rec;
-    bool okSysEx, okNormal;
 //Initialise la structure
     rec.recSysEx  = false;
     rec.recNormal = false;
 //Attend les messages midi
     while (runIn) {
-        RecevoirMessages(hndIn, &rec, &okNormal, &okSysEx);
-        if (okNormal) {
-        //Relai les données
+        RecevoirMessages(hndIn, &rec);
+        if (rec->okNormal) {
+        //Relaie les données
             if (OutOk() && relaiIN)
                 try {EnvMsg(rec.tamponNormal);}
                 catch (...) { printf("MIDI IN relay exception !\n\r"); }
         }
-        if (okSysEx) {
+        if (rec->okSysEx) {
         //Recopie le sysEx et signale
             memcpy(tampon, rec.tamponSysEx, rec.posSysEx);
             attente = false;
@@ -639,21 +637,21 @@ void * MIDI::CallbackIn(void * param)
 void * MIDI::CallbackCtrl(void * param)
 {
     ReceptionStr rec;
-    bool okSysEx, okNormal;
 //Initialise la structure
     rec.recSysEx  = false;
     rec.recNormal = false;
 //Attend les messages midi
     while (runCtrl) {
-        RecevoirMessages(hndCtrl, &rec, &okNormal, &okSysEx);
-        if (okNormal) {
+        RecevoirMessages(hndCtrl, &rec);
+        if (rec->okNormal) {
         //Gère les automations
             if ((rec.tamponNormal[0] & 0xF0) == 0xB0) {
+            //Interprète le CC change
                 uchar CC = rec.tamponNormal[1];
                 uchar valeur = rec.tamponNormal[2];
                 Automation::ReagirCC(CC, valeur);
             }
-        //Relai les données
+        //Relaie les données
             if (OutOk() && relaiCTRL)
                 try {EnvMsg(rec.tamponNormal);}
                 catch (...) { printf("MIDI CTRL relay exception !\n\r"); }
@@ -664,13 +662,14 @@ void * MIDI::CallbackCtrl(void * param)
 }
 
 /*****************************************************************************/
-void MIDI::RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec, bool * okNormal, bool * okSysEx)
+void MIDI::RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec)
 {
     uchar octet;
     ssize_t res;
-//Vérifie l'handle et reset
+//Vérifie l'handle et reset certains flags
     if (handle == NULL) return;
-    * okNormal = false; * okSysEx = false;
+    rec->okNormal = false;
+    rec->okSysEx  = false;
 //Récupère les octets
     if ((res = snd_rawmidi_read(handle, &octet, 1)) == 1) {
     //Recherche un octet de statut
@@ -682,7 +681,7 @@ void MIDI::RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec, bool * o
                 rec->posSysEx = 0;
             }else if (octet == 0xF7) {
                 rec->recSysEx = false;
-                * okSysEx = true;
+                rec->okSysEx = true;
             }else{
             //Supprime les messages temps réél
                 if ((octet & 0xF0) == 0xF0) return;
@@ -706,7 +705,7 @@ void MIDI::RecevoirMessages(snd_rawmidi_t * handle, ReceptionStr * rec, bool * o
             rec->posNormal ++;
             if (rec->posNormal == 3) {
                 rec->recNormal = false;
-                * okNormal = true;
+                rec->okNormal  = true;
             }
         }
     }
