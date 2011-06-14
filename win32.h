@@ -132,6 +132,9 @@ extern "C"
     short WINAPI GetAsyncKeyState(int vKey);
     short WINAPI VkKeyScanA(char ch);
     #define VkKeyScan VkKeyScanA
+
+//Un essai
+
 }
 
 #endif
