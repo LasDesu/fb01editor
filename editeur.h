@@ -75,7 +75,9 @@ public :
     void AttribuerInstruments();
     void AttribuerVoice();
     void AttribuerOperateurs();
+//Initialisations spéciales
     void InitialiserAutomation();
+    void InitialiserArpegiateur();
 //Configuration de l'interface
     void ActiverOnglets(const bool actifs);
     void ActiverMenus(const bool actifs);
@@ -93,13 +95,15 @@ public :
     bool ActualiserSet();
     bool ActualiserVoice();
     void ActualiserAutomation();
+    void ActualiserArpegiateur();
 //Rafraichissement de l'affichage
-    void RafraichirAutomation();
     void RafraichirBanks();
     void RafraichirBank(const int bank);
     void RafraichirSet(const bool visible = false);
     void RafraichirConfig(const bool visible = false);
     void RafraichirVoice(const bool visible = false);
+    void RafraichirAutomation();
+    void RafraichirArpegiateur();
 private :
 //Fenêtre de l'éditeur
     MainWindow mainWindow;

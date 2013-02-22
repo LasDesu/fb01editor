@@ -51,6 +51,7 @@ public:
     typedef enum {
         ONGLET_CONFIG = 0,
         ONGLET_AUTOMATION,
+        ONGLET_ARPEGIATEUR,
         ONGLET_BANK,
         ONGLET_SET,
         ONGLET_VOICE,

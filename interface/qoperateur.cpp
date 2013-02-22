@@ -62,7 +62,9 @@ void QOperateur::Rafraichir()
     m_ui->cmbBox_lvlcurb->setCurrentIndex(operateur->LireParam(OPERATOR_LEVEL_CURB));
     m_ui->but_lvldph->setValue(operateur->LireParam(OPERATOR_LEVEL_DEPTH));
     m_ui->but_rtdph->setValue(operateur->LireParam(OPERATOR_RATE_DEPTH));
-    m_ui->but_fine->setValue(operateur->LireParam(OPERATOR_FINE) - 4);
+    //m_ui->but_fine->setValue(operateur->LireParam(OPERATOR_FINE) - 4);
+    if (OPERATOR_FINE < 4) m_ui->but_fine->setValue(operateur->LireParam(OPERATOR_FINE));
+    if (OPERATOR_FINE > 3) m_ui->but_fine->setValue(operateur->LireParam(4 - OPERATOR_FINE));
     m_ui->but_coarse->setValue(operateur->LireParam(OPERATOR_COARSE));
     m_ui->but_mult->setValue(operateur->LireParam(OPERATOR_MULTIPLE));
     m_ui->pshBut_carrier->setChecked(operateur->LireParam(OPERATOR_MODULATOR));
@@ -155,8 +157,10 @@ void QOperateur::on_but_coarse_valueChanged(int i)
 
 void QOperateur::on_but_fine_valueChanged(int i)
 {
-    if (!attente)
-        operateur->EcrireParam(OPERATOR_FINE, i + 4);
+    if (!attente) {
+        if (i > -1) operateur->EcrireParam(OPERATOR_FINE, i);
+        if (i < 0) operateur->EcrireParam(OPERATOR_FINE, 4 - i);
+    }
 }
 
 void QOperateur::on_but_mult_valueChanged(int i)

@@ -34,7 +34,7 @@ extern "C"
     #define stdSleep(t) Sleep(t)
 }
 
-//Inclusions relatives au MIDI
+//Inclusions MIDI
 extern "C"
 {
 //Constantes MIDI
@@ -134,6 +134,21 @@ extern "C"
     #define VkKeyScan VkKeyScanA
 
 //Un essai
+
+}
+
+//Inclusions threads
+extern "C"
+{
+//Constantes threads
+    #define THREAD_START_ROUTINE (ulong WINAPI (*)(void *))
+
+//Fonctions threads
+    //uint WINAPI  CreateThread(void * lpThreadAttributes, ulong dwStackSize, THREAD_START_ROUTINE lpStartAddress, void * lpParameter, ulong dwCreationFlags, ulong * lpThreadId);
+    void WINAPI  ExitThread(ulong dwExitCode);
+    ulong WINAPI SuspendThread(uint hThread);
+    ulong WINAPI ResumeThread(uint hThread);
+    bool WINAPI  GetExitCodeThread(uint hThread, ulong * lpExitCode);
 
 }
 

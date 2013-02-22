@@ -59,7 +59,7 @@ public:
     static bool Enregistrer(FILE * fichier);
     static bool Charger(FILE * fichier, const short version);
 private :
-//Constantes
+//Constantes automations
     #define AUTO_NB_CCS 128
     #define AUTO_NB_CBS 4
     #define AUTO_MAX_CBS 100

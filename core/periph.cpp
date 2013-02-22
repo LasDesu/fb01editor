@@ -34,10 +34,6 @@ void Periph::Initialiser(void * X11display)
 #endif
 }
 
-void Periph::Terminer()
-{
-}
-
 /*****************************************************************************/
 bool Periph::ToucheASCII(const char code)
 {

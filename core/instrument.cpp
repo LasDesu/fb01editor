@@ -176,13 +176,13 @@ void Instrument::CreerCallbacks()
     strcpy(base, "Instrument ");
     strncat(base, &num, 1);
 //Enregistre les callbacks
-    strcpy(text, base); strcat(text, " volume");
+    strcpy(text, base); strcat(text, " Volume");
     Automation::AjouterCallback(this,INSTRU_VOLUME, text);
-    strcpy(text, base); strcat(text, " pan");
+    strcpy(text, base); strcat(text, " Pan");
     Automation::AjouterCallback(this, INSTRU_PAN, text);
-    strcpy(text, base); strcat(text, " transpose");
+    strcpy(text, base); strcat(text, " Transpose");
     Automation::AjouterCallback(this, INSTRU_TRANS, text);
-    strcpy(text, base); strcat(text, " detune");
+    strcpy(text, base); strcat(text, " Detune");
     Automation::AjouterCallback(this, INSTRU_DETUNE, text);
 }
 

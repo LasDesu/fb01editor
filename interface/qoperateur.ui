@@ -727,7 +727,7 @@
      <string>0</string>
     </property>
     <property name="minValue" stdset="0">
-     <number>-4</number>
+     <number>-3</number>
     </property>
     <property name="maxValue" stdset="0">
      <number>3</number>

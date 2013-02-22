@@ -1,23 +1,19 @@
-#############################################################################
+# ############################################################################
 # FB01 Sound Editor V2.1
 # Makefile LINUX
 # Copyright Meslin FrÃ©dÃ©ric 2009 - 2010
 # This file is part of FB01 SE
-#
 # FB01 SE is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
 # FB01 SE is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
 # You should have received a copy of the GNU General Public License
 # along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
-#############################################################################
-
+# ############################################################################
 OTHER_FILES += FB01.rc
 HEADERS += types.h \
     linux.h \
@@ -49,7 +45,9 @@ HEADERS += types.h \
     excep/memory_ex.h \
     excep/midi_ex.h \
     excep/ex.h \
-    excep/automation_ex.h
+    excep/automation_ex.h \
+    interface/qarpegiateur.h \
+    core/arpegiateur.h
 SOURCES += editeur.cpp \
     core/set.cpp \
     core/midi.cpp \
@@ -76,7 +74,9 @@ SOURCES += editeur.cpp \
     excep/memory_ex.cpp \
     excep/midi_ex.cpp \
     excep/ex.cpp \
-    excep/automation_ex.cpp
+    excep/automation_ex.cpp \
+    interface/qarpegiateur.cpp \
+    core/arpegiateur.cpp
 RESOURCES += FB01.qrc
 FORMS += interface/qoperateur.ui \
     interface/qinstrument.ui \
@@ -84,22 +84,23 @@ FORMS += interface/qoperateur.ui \
     interface/mainwindow.ui \
     interface/qbank.ui \
     interface/qconfig.ui \
-    interface/qautomation.ui
+    interface/qautomation.ui \
+    interface/qarpegiateur.ui
 winnt { 
     DEFINES += WIN32
-    LIBS    += -luser32 -lwinmm
-    RC_FILE  = FB01.rc
+    LIBS += -luser32 -lwinmm
+    RC_FILE = FB01.rc
 }
 win32 { 
     DEFINES += WIN32
-    LIBS    += -luser32 -lwinmm
-    RC_FILE  = FB01.rc
+    LIBS += -luser32 -lwinmm
+    RC_FILE = FB01.rc
 }
-linux {
+linux { 
     DEFINES += LINUX
-    LIBS += -lasound
+    LIBS += -lasound -lX11
 }
 unix { 
     DEFINES += LINUX
-    LIBS += -lasound
+    LIBS += -lasound -lX11
 }

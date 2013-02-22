@@ -19,35 +19,32 @@
     along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PERIPH_H
-#define PERIPH_H
+#ifndef QARPEGIATEUR_H
+#define QARPEGIATEUR_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <QWidget>
 
-#include "../types.h"
-#include "../win32.h"
-#include "../linux.h"
+#include "ui_qarpegiateur.h"
 
-#include "../excep/memory_ex.h"
+#include "../core/midi.h"
+#include "../core/arpegiateur.h"
 
-class Periph
-{
+#include "../excep/midi_ex.h"
+
+namespace Ui {
+    class QArpegiateur;
+}
+
+/*****************************************************************************/
+class QArpegiateur : public QWidget {
+    Q_OBJECT
 public:
-//Initialisation du module
-    static void Initialiser(void * X11display);
-//Détection de touches clavier
-    static bool ToucheASCII(const char code);
-    static bool ToucheShift();
-    static bool ToucheCtrl();
-    static bool ToucheAlt();
+    QArpegiateur(QWidget *parent = 0);
+    ~QArpegiateur();
+protected:
+    void changeEvent(QEvent *e);
 private:
-//Déclarations spécifiques linux
-#ifdef LINUX
-    static Display * display;
-    static bool EtatToucheSpeciale(KeySym keysym);
-#endif
+    Ui::QArpegiateur *ui;
 };
 
-#endif // PERIPH_H
+#endif // QARPEGIATEUR_H

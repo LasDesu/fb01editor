@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>FB01 : Sound Editor V2.1</string>
+   <string>FB01 : Sound Editor V2.21</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
@@ -1805,7 +1805,7 @@ played with the computer's keyboard.</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/CLAVIER</pixmap>
+     <pixmap resource="../FB01.qrc">:/CLAVIER</pixmap>
     </property>
    </widget>
   </widget>
@@ -1815,7 +1815,7 @@ played with the computer's keyboard.</string>
      <x>0</x>
      <y>0</y>
      <width>632</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">
@@ -2145,6 +2145,8 @@ played with the computer's keyboard.</string>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../FB01.qrc"/>
+ </resources>
  <connections/>
 </ui>

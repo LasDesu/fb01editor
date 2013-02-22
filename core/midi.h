@@ -31,6 +31,7 @@
 #include "../linux.h"
 
 #include "automation.h"
+#include "arpegiateur.h"
 
 #include "../excep/midi_ex.h"
 #include "../excep/memory_ex.h"

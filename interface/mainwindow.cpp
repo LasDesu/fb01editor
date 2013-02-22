@@ -380,14 +380,16 @@ void MainWindow::on_actionAbout_FB01SE_triggered(bool checked)
 {
     QString text;
 //Informations sur le logiciel
-    text.append("FB01 Sound Editor : V2.1 (20/07/10)\n");
-    text.append("Copyright Meslin Frederic 2009 - 2010\n\n");
+    text.append("FB01 Sound Editor : V2.21 (22/02/13)\n");
+    text.append("Copyright Meslin Frederic 2009 - 2013\n\n");
+    text.append("Special thanks to Martin Tarenskeen for the tune & transpose fix.\n\n");
     text.append("This is an open source computer editor for the Yamaha FB01 sound module.\n");
     text.append("This program is under a GPL license, for legal informations, please read the COPYING file.\n\n");
     text.append("In order to support the project or download the latest release, try the following links :\n\n");
     text.append("Main website     : http://sourceforge.net/projects/fb01editor/\n");
     text.append("Developer's mail : fredericmeslin@hotmail.com\n\n");
     text.append("Thank you very much for using my programs.\n");
+
     QMessageBox::information(this, "FB01 SE :", text);
 }
 
@@ -403,16 +405,19 @@ void MainWindow::on_actionRead_this_triggered(bool checked)
 {
     QString text;
 //Informations supplémentaires
-    text.append("FB01 Sound Editor : V2.1 (20/07/10)\nCopyright Meslin Frederic 2009 - 2010\n\n");
+    text.append("FB01 Sound Editor : V2.21 (22/02/13)\nCopyright Meslin Frederic 2009 - 2013\n\n");
     text.append("This program was developped carefully but it might still contain ");
     text.append("bugs and features that need to be improved, so try to visit ");
     text.append("sometimes the main website to get the latest editor release.\n\n");
+    /*
+    Maybe one day ? ;-)
     text.append("As you can figure out, developping such a project needs a lot of time. ");
     text.append("While I am doing that, I do not work and I do not record music at all. ");
     text.append("I will release soon a CD version with the editor, a complete FM tutorial ");
     text.append("and a complete library of sounds ready to use.\n\n");
     text.append("If you want to support my work and take advantage of the tutorial and ");
     text.append("the sound library, please contact me to order this CD version.\n");
+    */
     QMessageBox::information(this, "FB01 SE :", text);
 }
 

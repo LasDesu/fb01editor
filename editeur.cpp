@@ -87,14 +87,12 @@ void Editeur::InitialiserEditeur()
     AttribuerInstruments();
     AttribuerVoice();
     AttribuerOperateurs();
-//Initialise les modules
-#ifdef WIN32
-    Periph::Initialiser(NULL);
-#endif
+//Initialise les modules spéciaux
 #ifdef LINUX
     Periph::Initialiser((void *) mainWindow.x11Info().display());
 #endif
     InitialiserAutomation();
+    InitialiserArpegiateur();
 //Sélectionne les pages
     ChoisirPageSet(0);
     ChoisirPageBank(0);
@@ -128,7 +126,6 @@ void Editeur::TerminerEditeur()
     if (copie.sysExTemp) free (copie.sysEx);
 //Réinitialise les modules
     MIDI::LibererDrivers();
-    Periph::Terminer();
 }
 
 /*****************************************************************************/
@@ -423,6 +420,20 @@ void Editeur::ActualiserAutomation()
 void Editeur::RafraichirAutomation()
 {
     mainWindow.ui->widget_automation->Rafraichir();
+}
+
+/*****************************************************************************/
+void Editeur::InitialiserArpegiateur()
+{
+}
+
+void Editeur::ActualiserArpegiateur()
+{
+    RafraichirArpegiateur();
+}
+
+void Editeur::RafraichirArpegiateur()
+{
 }
 
 /*****************************************************************************/

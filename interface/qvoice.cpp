@@ -62,7 +62,8 @@ void QVoice::Rafraichir(const bool noTexts)
     m_ui->but_PMD->setValue(voice->LireParam(VOICE_LFO_PMD));
     m_ui->but_PMS->setValue(voice->LireParam(VOICE_LFO_PMS));
     m_ui->but_AMS->setValue(voice->LireParam(VOICE_LFO_AMS));
-    m_ui->but_trans->setValue(voice->LireParam(VOICE_TRANSPOSE) - 2);
+    if (VOICE_TRANSPOSE < 128) m_ui->but_trans->setValue(voice->LireParam(VOICE_TRANSPOSE));
+    if (VOICE_TRANSPOSE > 127) m_ui->but_trans->setValue(voice->LireParam(VOICE_TRANSPOSE) - 256);
     m_ui->pshBut_poly->setChecked(!voice->LireParam(VOICE_POLY));
     m_ui->but_porta->setValue(voice->LireParam(VOICE_PORTAMENTO));
     m_ui->but_pitch->setValue(voice->LireParam(VOICE_PITCHBEND));
@@ -109,8 +110,10 @@ void QVoice::on_but_feedback_valueChanged(int i)
 
 void QVoice::on_but_trans_valueChanged(int i)
 {
-    if (!attente)
-        voice->EcrireParam(VOICE_TRANSPOSE, i + 2);
+    if (!attente) {
+        if (i > -1) voice->EcrireParam(VOICE_TRANSPOSE, i);
+        if (i < 0) voice->EcrireParam(VOICE_TRANSPOSE, i + 256);
+    }
 }
 
 void QVoice::on_pshBut_poly_clicked(bool checked)
