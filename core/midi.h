@@ -82,7 +82,7 @@ private:
     #define MIDI_PAUSE_MESSAGE 10
     #define MIDI_PAUSE_THREAD 1
 //Constantes drivers
-    #define MIDI_MAX_DRIVERS 32
+	#define MIDI_MAX_DRIVERS 64
     #define MIDI_LEN_CHEMIN 40
 //Structures des drivers
     typedef struct {

@@ -45,6 +45,8 @@ int main(int argc, char *argv[])
         QMessageBox::critical(NULL, "FB01 SE:", ex.Info());
     }catch (Memory_ex ex) {
         QMessageBox::critical(NULL, "FB01 SE:", ex.Info());
+	}catch (const char *ex) {
+		QMessageBox::critical(NULL, "FB01 SE:", ex);
     }catch (...) {
         QMessageBox::critical(NULL, "FB01 SE:", "Unknown exception occured !");
     }

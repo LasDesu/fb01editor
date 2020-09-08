@@ -508,12 +508,12 @@ void MainWindow::on_pshBut_refresh_midi_pressed()
 //Ajoute les périphériques
     int nbIns  = MIDI::NbDriversIn();
     for (int i = 0; i < nbIns; i++) {
-        ui->cmbBox_MIDICtrl->addItem((QString)MIDI::DriverIn(i), i+1);
-        ui->cmbBox_MIDIIn->addItem((QString)MIDI::DriverIn(i), i+1);
+		ui->cmbBox_MIDICtrl->addItem(MIDI::DriverIn(i), i+1);
+		ui->cmbBox_MIDIIn->addItem(MIDI::DriverIn(i), i+1);
     }
     int nbOuts = MIDI::NbDriversOut();
     for (int i = 0; i < nbOuts; i++)
-        ui->cmbBox_MIDIOut->addItem((QString)MIDI::DriverOut(i), i+1);
+		ui->cmbBox_MIDIOut->addItem(MIDI::DriverOut(i), i+1);
 }
 
 /*****************************************************************************/
