@@ -23,7 +23,7 @@
 #define QCONFIG_H
 
 #include <QWidget>
-#include "../ui_qconfig.h"
+#include "ui_qconfig.h"
 
 #include "../core/midi.h"
 #include "../core/config.h"

@@ -23,7 +23,7 @@
 #define QOPERATEUR_H
 
 #include <QWidget>
-#include "../ui_qoperateur.h"
+#include "ui_qoperateur.h"
 
 #include "../core/midi.h"
 #include "../core/operateur.h"

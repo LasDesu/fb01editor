@@ -24,9 +24,9 @@
 /*****************************************************************************/
 QClavier::QClavier(QWidget * parent, Qt::WindowFlags f) : QLabel(parent, f)
 {
-    timer = 0;
     clavierDispo = CLAVIER_AUCUNE;
     ChoisirClavier(CLAVIER_QWERTY);
+	grabKeyboard();
 }
 
 QClavier::~QClavier()
@@ -35,27 +35,30 @@ QClavier::~QClavier()
 }
 
 /*****************************************************************************/
-const char dispoQWERTY[CLAVIER_NB_TOUCHES] = {'Q', '2', 'W', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
-                                              'Z', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', 'M'};
-const char dispoAZERTY[CLAVIER_NB_TOUCHES] = {'A', '2', 'Z', '3', 'E', 'R', '5', 'T', '6', 'Y', '7', 'U',
-                                              'W', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', ','};
+const int dispoQWERTY[CLAVIER_NB_TOUCHES] = {
+	Qt::Key_Q, Qt::Key_2, Qt::Key_W, Qt::Key_3, Qt::Key_E, Qt::Key_R,
+	Qt::Key_5, Qt::Key_T, Qt::Key_6, Qt::Key_Y, Qt::Key_7, Qt::Key_U,
+	Qt::Key_Z, Qt::Key_S, Qt::Key_X, Qt::Key_D, Qt::Key_C, Qt::Key_V,
+	Qt::Key_G, Qt::Key_B, Qt::Key_H, Qt::Key_N, Qt::Key_J, Qt::Key_M
+};
+const int dispoAZERTY[CLAVIER_NB_TOUCHES] = {
+	Qt::Key_A, Qt::Key_2, Qt::Key_Z, Qt::Key_3, Qt::Key_E, Qt::Key_R,
+	Qt::Key_5, Qt::Key_T, Qt::Key_6, Qt::Key_Y, Qt::Key_7, Qt::Key_U,
+	Qt::Key_W, Qt::Key_S, Qt::Key_X, Qt::Key_D, Qt::Key_C, Qt::Key_V,
+	Qt::Key_G, Qt::Key_B, Qt::Key_H, Qt::Key_N, Qt::Key_J, Qt::Key_Comma
+};
 void QClavier::ChoisirClavier(const CLAVIER_DISPO dispo)
 {
-    const char * table;
 //Réinitialise le clavier
     if (clavierDispo == dispo) return;
     Reinitialiser();
 //Choisie la disposition des touches
     switch (dispo) {
         case CLAVIER_AUCUNE: return;
-        case CLAVIER_QWERTY: table = dispoQWERTY; break;
-        case CLAVIER_AZERTY: table = dispoAZERTY; break;
+		case CLAVIER_QWERTY: touch_table = dispoQWERTY; break;
+		case CLAVIER_AZERTY: touch_table = dispoAZERTY; break;
         default : return;
-    }
-//Effectue le mapping clavier
-    for (uint i = 0; i < CLAVIER_NB_TOUCHES; i++)
-        touches[i].touche = table[i];
-    timer = this->startTimer(CLAVIER_PAUSE_ACTU);
+	}
 }
 
 /*****************************************************************************/
@@ -64,19 +67,36 @@ void QClavier::mouseMoveEvent(QMouseEvent * event)
     if (event->buttons()) mousePressEvent(event);
 }
 
-
-void QClavier::timerEvent(QTimerEvent * event)
+void QClavier::processKey( QKeyEvent *event, bool pressed )
 {
-    for (uint i = 0; i < CLAVIER_NB_TOUCHES; i ++) {
-        bool etat = Periph::ToucheASCII(touches[i].touche);
-        if (etat != touches[i].etat) {
-            try {
-                if (etat) MIDI::NoteOn(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
-                else      MIDI::NoteOff(TrouverNoteClavier(i, Periph::ToucheShift(), Periph::ToucheCtrl()));
-                touches[i].etat = etat;
-            }catch (MIDI_ex ex) { return; }
-        }
-    }
+	int note;
+
+	for ( uint i = 0; i < CLAVIER_NB_TOUCHES; i ++ ) {
+		if ( event->key() == touch_table[i] ) {
+			note = TrouverNoteClavier( i,
+				event->modifiers() & Qt::ShiftModifier,
+				 event->modifiers() & Qt::ControlModifier );
+			try {
+				if ( pressed )
+					MIDI::NoteOn( note );
+				else
+					MIDI::NoteOff( note );
+				touches[i] = pressed;
+			} catch ( MIDI_ex ex ) {
+				return;
+			}
+		}
+	}
+}
+
+void QClavier::keyPressEvent(QKeyEvent *event)
+{
+	QClavier::processKey( event, true );
+}
+
+void QClavier::keyReleaseEvent(QKeyEvent *event)
+{
+	QClavier::processKey( event, false );
 }
 
 /*****************************************************************************/
@@ -142,9 +162,8 @@ int QClavier::TrouverNoteClavier(const int index, const bool shift, const bool c
 void QClavier::Reinitialiser()
 {
 //Réinitialise les commandes
-    if (timer != 0) this->killTimer(timer);
     for (uint i = 0; i < CLAVIER_NB_TOUCHES; i++)
-        touches[i].etat = false;
+		touches[i] = false;
     noteSouris = -1;
 //Arrête toute note jouée
     try {

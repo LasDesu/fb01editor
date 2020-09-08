@@ -618,13 +618,13 @@ void * MIDI::CallbackIn(void * param)
 //Attend les messages midi
     while (runIn) {
         RecevoirMessages(hndIn, &rec);
-        if (rec->okNormal) {
+		if (rec.okNormal) {
         //Relaie les données
             if (OutOk() && relaiIN)
                 try {EnvMsg(rec.tamponNormal);}
                 catch (...) { printf("MIDI IN relay exception !\n\r"); }
         }
-        if (rec->okSysEx) {
+		if (rec.okSysEx) {
         //Recopie le sysEx et signale
             memcpy(tampon, rec.tamponSysEx, rec.posSysEx);
             attente = false;
@@ -643,7 +643,7 @@ void * MIDI::CallbackCtrl(void * param)
 //Attend les messages midi
     while (runCtrl) {
         RecevoirMessages(hndCtrl, &rec);
-        if (rec->okNormal) {
+		if (rec.okNormal) {
         //Gère les automations
             if ((rec.tamponNormal[0] & 0xF0) == 0xB0) {
             //Interprète le CC change

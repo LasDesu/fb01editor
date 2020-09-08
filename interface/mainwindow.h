@@ -28,7 +28,7 @@
 #include <QFileDialog>
 #include <QList>
 
-#include "../ui_mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include "../core/midi.h"
 

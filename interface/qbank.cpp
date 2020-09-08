@@ -89,7 +89,7 @@ void QBank::Rafraichir()
 void QBank::on_txtEdit_bankName_textChanged()
 {
     if (attente) return;
-    bank->EcrireNom(m_ui->txtEdit_bankName->toPlainText().toAscii().data());
+	bank->EcrireNom(m_ui->txtEdit_bankName->toPlainText().toLocal8Bit().data());
 }
 
 void QBank::on_txtEdit_voiceName_textChanged()
@@ -100,7 +100,7 @@ void QBank::on_txtEdit_voiceName_textChanged()
     if (row < 0) return;
 //Modifie la voice
     voice = bank->RecupererVoice(row);
-    voice->EcrireNom(m_ui->txtEdit_voiceName->toPlainText().toAscii().data());
+	voice->EcrireNom(m_ui->txtEdit_voiceName->toPlainText().toLocal8Bit().data());
 //Actualise le nom
     QString nom = m_ui->txtEdit_voiceName->toPlainText().left(BANKVOICE_LEN_NOM);
     m_ui->listWidget_voices->item(row, 0)->setText(nom);

@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with FB01 SE.  If not, see <http://www.gnu.org/licenses/>.
 # ############################################################################
+QT += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 OTHER_FILES += FB01.rc
 HEADERS += types.h \
     linux.h \
@@ -31,7 +34,6 @@ HEADERS += types.h \
     core/bank_voice.h \
     core/automation.h \
     core/automated.h \
-    core/periph.h \
     interface/qoperateur.h \
     interface/qbutton.h \
     interface/qclavier.h \
@@ -60,7 +62,6 @@ SOURCES += editeur.cpp \
     core/edit.cpp \
     core/bank_voice.cpp \
     core/automation.cpp \
-    core/periph.cpp \
     interface/qoperateur.cpp \
     interface/qbutton.cpp \
     interface/qclavier.cpp \
@@ -96,11 +97,8 @@ win32 {
     LIBS += -luser32 -lwinmm
     RC_FILE = FB01.rc
 }
-linux { 
-    DEFINES += LINUX
-    LIBS += -lasound -lX11
-}
 unix { 
     DEFINES += LINUX
     LIBS += -lasound -lX11
+	QT += x11extras
 }

@@ -28,7 +28,10 @@ extern "C"
 {
     #include "X11/Xlib.h"
     #include "X11/keysym.h"
-    #include <unistd.h>
+	#include <unistd.h>
+	#ifdef Bool
+	#undef Bool
+	#endif
     #define stdSleep(t) usleep(t * 1000)
 }
 

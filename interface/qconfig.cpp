@@ -109,7 +109,7 @@ void QConfig::on_hzSlider_mastvolume_valueChanged(int i)
 void QConfig::on_txtEdit_name_textChanged()
 {
     if (!attente)
-        set->EcrireNom(m_ui->txtEdit_name->toPlainText().toAscii().data());
+		set->EcrireNom(m_ui->txtEdit_name->toPlainText().toLocal8Bit().data());
 }
 
 void QConfig::on_pshBut_combine_clicked(bool checked)

@@ -93,7 +93,7 @@ void QVoice::on_but_algo_valueChanged(int i)
 void QVoice::on_txtEdit_voicename_textChanged()
 {
     if (!attente)
-        voice->EcrireNom(m_ui->txtEdit_voicename->toPlainText().toAscii().data());
+		voice->EcrireNom(m_ui->txtEdit_voicename->toPlainText().toLocal8Bit().data());
 }
 
 void QVoice::on_cmbBox_style_activated(int i)
@@ -192,13 +192,13 @@ void QVoice::on_but_PMS_valueChanged(int i)
 void QVoice::on_txtEdit_author_textChanged()
 {
     if (!attente)
-        voice->EcrireAuteur(m_ui->txtEdit_author->toPlainText().toAscii().data());
+		voice->EcrireAuteur(m_ui->txtEdit_author->toPlainText().toLocal8Bit().data());
 }
 
 void QVoice::on_txtEdit_comments_textChanged()
 {
     if (!attente)
-        voice->EcrireCommentaires(m_ui->txtEdit_comments->toPlainText().toAscii().data());
+		voice->EcrireCommentaires(m_ui->txtEdit_comments->toPlainText().toLocal8Bit().data());
 }
 
 /*****************************************************************************/

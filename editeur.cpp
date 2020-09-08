@@ -89,7 +89,7 @@ void Editeur::InitialiserEditeur()
     AttribuerOperateurs();
 //Initialise les modules spéciaux
 #ifdef LINUX
-    Periph::Initialiser((void *) mainWindow.x11Info().display());
+	//Periph::Initialiser((void *) mainWindow.x11Info().display());
 #endif
     InitialiserAutomation();
     InitialiserArpegiateur();
@@ -552,7 +552,7 @@ FILE * Editeur::ChargerFichier(FICHIER_TYPE type, short * version)
     QString nom = QFileDialog::getOpenFileName(&mainWindow, ChargerTitres[type], filtre);
     if (nom.isEmpty()) return NULL;
 //Ouvre le fichier
-    fichier = fopen(nom.toAscii().data(), "rb");
+	fichier = fopen(nom.toLocal8Bit().data(), "rb");
     if (fichier == NULL) {
         QMessageBox::warning(&mainWindow, "FB01 SE :", "Unable to open the file !");
         return NULL;
@@ -599,7 +599,7 @@ FILE * Editeur::EnregistrerFichier(FICHIER_TYPE type)
     if (!nom.endsWith(ChargerExts[type], Qt::CaseInsensitive))
         nom.append(filtre.right(filtre.length() - 1));
 //Ouvre le fichier
-    fichier = fopen(nom.toAscii().data(), "wb+");
+	fichier = fopen(nom.toLocal8Bit().data(), "wb+");
     if (fichier == NULL) {
         QMessageBox::warning(&mainWindow, "FB01 SE :", "Unable to open the file !");
         return NULL;

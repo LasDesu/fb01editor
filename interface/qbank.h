@@ -23,7 +23,7 @@
 #define QBANK_H
 
 #include <QWidget>
-#include "../ui_qbank.h"
+#include "ui_qbank.h"
 
 #include "../core/midi.h"
 #include "../core/bank.h"

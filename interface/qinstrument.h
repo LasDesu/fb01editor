@@ -23,7 +23,7 @@
 #define QINSTRUMENT_H
 
 #include <QWidget>
-#include "../ui_qinstrument.h"
+#include "ui_qinstrument.h"
 
 #include "../core/midi.h"
 #include "../core/instrument.h"
